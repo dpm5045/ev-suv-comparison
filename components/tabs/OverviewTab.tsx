@@ -243,10 +243,14 @@ export default function OverviewTab() {
   async function fetchNews() {
     setNewsLoading(true)
     setNewsStatus('Searching for latest EV SUV news…')
-    const results = await Promise.allSettled([
-      fetchQuery('biggest 3-row electric SUV news this week 2026'),
-      fetchQuery('3-row electric SUV market news and trends this month 2026'),
-    ])
+    // Run sequentially to avoid hitting API rate limits
+    const r1 = await fetchQuery('biggest 3-row electric SUV news this week 2026')
+    await new Promise((res) => setTimeout(res, 5000)) // 5s gap between calls
+    const r2 = await fetchQuery('3-row electric SUV market news and trends this month 2026')
+    const results: PromiseSettledResult<NewsCard>[] = [
+      { status: 'fulfilled', value: r1 },
+      { status: 'fulfilled', value: r2 },
+    ]
     const cards: NewsCard[] = []
     for (const r of results) {
       if (r.status === 'fulfilled') cards.push(r.value)
