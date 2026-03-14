@@ -1,0 +1,93 @@
+import rawData from './ev-data.json'
+
+export interface CountRow {
+  model: string
+  y2023: number
+  y2024: number
+  y2025: number
+  y2026: number
+  total: number
+}
+
+export interface CountTotals {
+  y2023: number
+  y2024: number
+  y2025: number
+  y2026: number
+  total: number
+}
+
+export interface DetailRow {
+  name: string
+  vehicle: string
+  year: number
+  trim: string
+  seats: number | null
+  drivetrain: string
+  msrp: number | string | null
+  destination: number | null
+  otd_new: number | string | null
+  preowned_range: string
+  otd_preowned: string
+  self_driving: string
+  range_mi: number | string | null
+  hp: number | string | null
+  battery_kwh: number | string | null
+  onboard_ac_kw: number | string | null
+  l2_10_100: number | string | null
+  l2_10_80: number | string | null
+  charging_type: string
+  car_software: string
+  main_display: string
+  additional_displays: string
+  audio: string
+  driver_profiles: string
+  notes: string
+}
+
+export interface PreownedRow {
+  name: string
+  vehicle: string
+  year: number
+  trim: string
+  preowned_range: string
+  otd_preowned: string
+}
+
+export interface GlossaryRow {
+  field: string
+  meaning: string
+  notes: string
+}
+
+export interface AssumptionRow {
+  assumption: string
+  value: string
+  notes: string
+}
+
+export interface EVData {
+  scope: string
+  count_note: string
+  count_data: CountRow[]
+  count_totals: CountTotals
+  details: DetailRow[]
+  preowned: PreownedRow[]
+  glossary: GlossaryRow[]
+  assumptions: AssumptionRow[]
+}
+
+export const DATA = rawData as EVData
+
+export const VEHICLE_CLASSES: Record<string, string> = {
+  'Kia EV9': 'v-kia',
+  'Hyundai IONIQ 9': 'v-hyundai',
+  'Lucid Gravity': 'v-lucid',
+  'Rivian R1S': 'v-rivian',
+  'Tesla Model X': 'v-tesla',
+  'Tesla Model Y Long (Asia)': 'v-tesla',
+  'Toyota Highlander EV': 'v-toyota',
+  'Volkswagen ID. Buzz': 'v-vw',
+  'Volvo EX90': 'v-volvo',
+}
+
