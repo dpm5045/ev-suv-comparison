@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { DATA } from '@/lib/data'
 import VehicleBadge from '../VehicleBadge'
 
+const GLANCE_EXCLUDED = ['Tesla Model Y Long (Asia)', 'Toyota Highlander EV']
+
 /* ── helpers ── */
 
 function parsePrice(s: string): number | null {
@@ -174,6 +176,11 @@ export default function OverviewTab() {
       const hps = rows.map((r) => r.hp).filter((x) => typeof x === 'number') as number[]
       const bats = rows.map((r) => r.battery_kwh).filter((x) => typeof x === 'number') as number[]
       const types = [...new Set(rows.map((r) => r.charging_type).filter(Boolean))]
+      const preLows = rows.map((r) => parsePrice(r.otd_preowned)).filter((x) => x !== null) as number[]
+      const preHighs = rows.map((r) => {
+        const parts = r.otd_preowned.split('–')
+        return parts.length > 1 ? parsePrice(parts[1]) : parsePrice(r.otd_preowned)
+      }).filter((x) => x !== null) as number[]
       return {
         vehicle: v,
         otdLow: otds.length ? Math.min(...otds) : null,
@@ -184,6 +191,8 @@ export default function OverviewTab() {
         hpHigh: hps.length ? Math.max(...hps) : null,
         battery: bats.length ? `${Math.min(...bats)}${Math.min(...bats) !== Math.max(...bats) ? `–${Math.max(...bats)}` : ''}` : '—',
         charging: types.join(' / ') || '—',
+        preLow: preLows.length ? Math.min(...preLows) : null,
+        preHigh: preHighs.length ? Math.max(...preHighs) : null,
       }
     })
 
@@ -350,6 +359,7 @@ export default function OverviewTab() {
                 <tr>
                   <th className="col-sticky">Vehicle</th>
                   <th className="num">Est. OTD New</th>
+                  <th className="num">Est. OTD Pre-Owned</th>
                   <th className="num">Range (mi)</th>
                   <th className="num">HP</th>
                   <th className="num">Battery (kWh)</th>
@@ -357,10 +367,11 @@ export default function OverviewTab() {
                 </tr>
               </thead>
               <tbody>
-                {insights.vehicleSummaries.map((s) => (
+                {insights.vehicleSummaries.filter((s) => !GLANCE_EXCLUDED.includes(s.vehicle)).map((s) => (
                   <tr key={s.vehicle}>
                     <td className="col-sticky"><VehicleBadge vehicle={s.vehicle} /></td>
                     <td className="num">{s.otdLow !== null ? `${fmtDollarK(s.otdLow)}-${fmtDollarK(s.otdHigh!)}` : '—'}</td>
+                    <td className="num">{s.preLow !== null ? `${fmtDollarK(s.preLow)}-${fmtDollarK(s.preHigh!)}` : '—'}</td>
                     <td className="num">{rangeStr(s.rangeLow, s.rangeHigh, ' mi')}</td>
                     <td className="num">{rangeStr(s.hpLow, s.hpHigh)}</td>
                     <td className="num">{s.battery}</td>
@@ -375,7 +386,7 @@ export default function OverviewTab() {
         {/* Mobile card layout */}
         <div className={glanceView === 'cards' ? 'cmp-card-view' : 'cmp-card-view cmp-card-hidden'}>
           <div className="cmp-cards">
-            {insights.vehicleSummaries.map((s) => (
+            {insights.vehicleSummaries.filter((s) => !GLANCE_EXCLUDED.includes(s.vehicle)).map((s) => (
               <div key={s.vehicle} className="cmp-card">
                 <div className="cmp-card-header">
                   <VehicleBadge vehicle={s.vehicle} />
@@ -385,6 +396,12 @@ export default function OverviewTab() {
                     <span className="cmp-stat-label">Est. OTD New</span>
                     <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
                       {s.otdLow !== null ? `${fmtDollarK(s.otdLow)}-${fmtDollarK(s.otdHigh!)}` : '—'}
+                    </span>
+                  </div>
+                  <div className="cmp-stat">
+                    <span className="cmp-stat-label">Est. OTD Pre-Owned</span>
+                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
+                      {s.preLow !== null ? `${fmtDollarK(s.preLow)}-${fmtDollarK(s.preHigh!)}` : '—'}
                     </span>
                   </div>
                   <div className="cmp-stat">
@@ -414,6 +431,7 @@ export default function OverviewTab() {
             ))}
           </div>
         </div>
+        <p className="count-note">The Tesla Model Y Long (Asia) and Toyota Highlander EV are not yet on the US market.</p>
       </div>
 
       {/* ── Charging Landscape ── */}
