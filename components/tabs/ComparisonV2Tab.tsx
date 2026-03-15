@@ -1,10 +1,67 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import VehicleBadge from '../VehicleBadge'
 import type { ComparisonFilters } from '../Dashboard'
+
+/* ── MultiSelect dropdown ── */
+function MultiSelect({ label, allLabel, options, selected, onChange }: {
+  label: string
+  allLabel: string
+  options: string[]
+  selected: string[]
+  onChange: (vals: string[]) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => { document.removeEventListener('mousedown', handleClick); document.removeEventListener('keydown', handleKey) }
+  }, [])
+
+  function toggle(val: string) {
+    const next = selected.includes(val) ? selected.filter(v => v !== val) : [...selected, val]
+    onChange(next)
+  }
+
+  const btnLabel = selected.length === 0
+    ? allLabel
+    : selected.length === 1
+      ? selected[0]
+      : `${selected.length} ${label.toLowerCase()}s`
+
+  return (
+    <div className="multi-select" ref={ref}>
+      <button className="multi-select-btn" onClick={() => setOpen(!open)}>
+        <span className="multi-select-text">{btnLabel}</span>
+        <span className="multi-select-arrow">{open ? '\u25B4' : '\u25BE'}</span>
+      </button>
+      {open && (
+        <div className="multi-select-dropdown">
+          {selected.length > 0 && (
+            <button className="multi-select-clear" onClick={() => onChange([])}>Clear all</button>
+          )}
+          {options.map(opt => (
+            <label key={opt} className="multi-select-option">
+              <input type="checkbox" checked={selected.includes(opt)} onChange={() => toggle(opt)} />
+              <span>{opt}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 interface Props {
   filters: ComparisonFilters
@@ -24,10 +81,15 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
     [],
   )
 
+  const selectedVehicles = filters.vehicle ? filters.vehicle.split(',') : []
+  const selectedYears = filters.year ? filters.year.split(',') : []
+
   const filtered = useMemo(() => {
+    const sv = filters.vehicle ? filters.vehicle.split(',') : []
+    const sy = filters.year ? filters.year.split(',') : []
     let rows = DATA.details
-    if (filters.vehicle) rows = rows.filter((r) => r.vehicle === filters.vehicle)
-    if (filters.year) rows = rows.filter((r) => String(r.year) === filters.year)
+    if (sv.length) rows = rows.filter((r) => sv.includes(r.vehicle))
+    if (sy.length) rows = rows.filter((r) => sy.includes(String(r.year)))
     if (filters.q) {
       const q = filters.q.toLowerCase()
       rows = rows.filter((r) => JSON.stringify(r).toLowerCase().includes(q))
@@ -39,17 +101,23 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
     <div className="filters">
       <div className="filter-group">
         <span className="filter-label">Vehicle</span>
-        <select value={filters.vehicle} onChange={(e) => onFiltersChange({ vehicle: e.target.value })}>
-          <option value="">All Vehicles</option>
-          {vehicles.map((v) => <option key={v} value={v}>{v}</option>)}
-        </select>
+        <MultiSelect
+          label="Vehicle"
+          allLabel="All Vehicles"
+          options={vehicles}
+          selected={selectedVehicles}
+          onChange={(vals) => onFiltersChange({ vehicle: vals.join(',') })}
+        />
       </div>
       <div className="filter-group">
         <span className="filter-label">Year</span>
-        <select value={filters.year} onChange={(e) => onFiltersChange({ year: e.target.value })}>
-          <option value="">All Years</option>
-          {years.map((y) => <option key={y} value={String(y)}>{y}</option>)}
-        </select>
+        <MultiSelect
+          label="Year"
+          allLabel="All Years"
+          options={years.map(String)}
+          selected={selectedYears}
+          onChange={(vals) => onFiltersChange({ year: vals.join(',') })}
+        />
       </div>
       <div className="filter-group">
         <span className="filter-label">Search</span>

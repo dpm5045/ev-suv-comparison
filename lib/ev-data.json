@@ -1,5 +1,5 @@
 {
-  "scope": "Scope of Car Models Analyzed: 63 models were analyzed across four years & nine car models.",
+  "scope": "Scope of Car Models Analyzed: 67 models were analyzed across four years & nine car models.",
   "count_note": "Notes: Rivian Gen1 RS1 models were not included as they do not have the more sophisticated Gen2 hardware for self-driving. The Toyota Highlander EV and Tesla Model Y Long (Asia) are not yet available in the US, but were included for reference.",
   "count_data": [
     {
@@ -23,8 +23,8 @@
       "y2023": 0,
       "y2024": 0,
       "y2025": 0,
-      "y2026": 2,
-      "total": 2
+      "y2026": 3,
+      "total": 3
     },
     {
       "model": "Rivian R1S",
@@ -79,8 +79,8 @@
     "y2023": 4,
     "y2024": 9,
     "y2025": 25,
-    "y2026": 28,
-    "total": 66
+    "y2026": 29,
+    "total": 67
   },
   "details": [
     {
@@ -2068,7 +2068,7 @@
       "vehicle": "Lucid Gravity",
       "year": 2026,
       "trim": "Grand Touring",
-      "seats": 5,
+      "seats": 7,
       "drivetrain": "AWD",
       "msrp": 96550,
       "destination": null,
@@ -2090,7 +2090,7 @@
       "driver_profiles": "Driver profiles supported",
       "notes": "C&D lists base $96,550 and 123 kWh battery; destination fee not specified in snippet.",
       "frunk_cu_ft": 8,
-      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_3rd_cu_ft": 21,
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
       "cargo_floor_width_in": 41,
@@ -2124,6 +2124,39 @@
       "notes": "Touring price and destination per C&D/Edmunds; battery pack size varies by source (entered 89 kWh).",
       "frunk_cu_ft": 8,
       "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 25,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 41,
+      "cargo_behind_1st_cu_ft": 98
+    },
+    {
+      "name": "Lucid Gravity, 2026, Touring",
+      "vehicle": "Lucid Gravity",
+      "year": 2026,
+      "trim": "Touring",
+      "seats": 7,
+      "drivetrain": "AWD",
+      "msrp": 82800,
+      "destination": 1650,
+      "otd_new": 90448,
+      "preowned_range": "No meaningful used market yet",
+      "otd_preowned": "TBD",
+      "self_driving": "Lucid DreamDrive / DreamDrive Pro (trim/options)",
+      "range_mi": 337,
+      "hp": 560,
+      "battery_kwh": 89,
+      "onboard_ac_kw": 19.2,
+      "l2_10_100": 4.64,
+      "l2_10_80": 3.61,
+      "charging_type": "NACS",
+      "car_software": "Lucid UX (CarPlay/Android Auto availability varies)",
+      "main_display": "34\" curved OLED (reported)",
+      "additional_displays": "Pilot Panel + optional HUD (reported)",
+      "audio": "Premium audio (trim dependent)",
+      "driver_profiles": "Driver profiles supported",
+      "notes": "Touring with optional 3rd-row seat (+$2,900). Range identical to 5-seat config.",
+      "frunk_cu_ft": 8,
+      "cargo_behind_3rd_cu_ft": 21,
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
       "cargo_floor_width_in": 41,
