@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { DATA } from '@/lib/data'
 import VehicleBadge from '../VehicleBadge'
 
@@ -11,118 +11,6 @@ const GLANCE_EXCLUDED = ['Tesla Model Y Long (Asia)', 'Toyota Highlander EV']
 function parsePrice(s: string): number | null {
   const m = s.replace(/[$,]/g, '').match(/[\d.]+/)
   return m ? parseFloat(m[0]) : null
-}
-
-interface NewsCard {
-  label: string
-  body: string
-  sources: string[]
-}
-
-/** Lightweight markdown → JSX for API-returned news text */
-function renderMarkdown(text: string) {
-  const lines = text.split('\n')
-  const elements: React.ReactNode[] = []
-  let key = 0
-
-  for (const raw of lines) {
-    const line = raw.trim()
-    if (!line) continue
-    if (line === '---' || line === '***') continue // skip dividers
-
-    // Headings
-    const hMatch = line.match(/^(#{1,4})\s+(.*)/)
-    if (hMatch) {
-      const content = inlineFormat(hMatch[2])
-      elements.push(<h4 key={key++} className="news-heading">{content}</h4>)
-      continue
-    }
-
-    // Numbered list items: "1. **Title** body"
-    const liMatch = line.match(/^\d+\.\s+(.*)/)
-    if (liMatch) {
-      elements.push(<p key={key++} className="news-li">{inlineFormat(liMatch[1])}</p>)
-      continue
-    }
-
-    // Regular paragraph
-    elements.push(<p key={key++}>{inlineFormat(line)}</p>)
-  }
-  return elements
-}
-
-/** Handle **bold**, [links](url), and bare URLs */
-function inlineFormat(text: string): React.ReactNode[] {
-  // First pass: convert bare URLs (not already in markdown link) into markdown links
-  const withLinks = text.replace(
-    /(?<!\()(https?:\/\/[^\s,)]+)/g,
-    (url) => {
-      let domain = url
-      try { domain = new URL(url).hostname.replace('www.', '') } catch { /* noop */ }
-      return `[${domain}](${url})`
-    },
-  )
-
-  // Tokenize on **bold** and [text](url)
-  const parts: React.ReactNode[] = []
-  const re = /(\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)]+)\))/g
-  let last = 0
-  let match: RegExpExecArray | null
-  let k = 0
-  while ((match = re.exec(withLinks)) !== null) {
-    if (match.index > last) parts.push(withLinks.slice(last, match.index))
-    if (match[2]) {
-      // bold
-      parts.push(<strong key={k++}>{match[2]}</strong>)
-    } else if (match[3] && match[4]) {
-      // link
-      parts.push(<a key={k++} href={match[4]} target="_blank" rel="noopener noreferrer">{match[3]}</a>)
-    }
-    last = match.index + match[0].length
-  }
-  if (last < withLinks.length) parts.push(withLinks.slice(last))
-  return parts
-}
-
-async function fetchQuery(query: string): Promise<NewsCard> {
-  const label = query
-  try {
-    const res = await fetch('/api/news', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query }),
-    })
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: res.statusText }))
-      return { label, body: `API error (${res.status}): ${err.error ?? 'unknown'}`, sources: [] }
-    }
-    const data = await res.json()
-    if (!data?.content || !Array.isArray(data.content)) {
-      return { label, body: 'Unexpected response format.', sources: [] }
-    }
-    const textParts: string[] = []
-    const urls: string[] = []
-    for (const block of data.content) {
-      if (block.type === 'text') {
-        textParts.push(block.text)
-        if (Array.isArray(block.citations)) {
-          for (const c of block.citations) { if (c.url) urls.push(c.url) }
-        }
-      }
-      if (block.type === 'web_search_tool_result' && Array.isArray(block.content)) {
-        for (const r of block.content) {
-          if (r.type === 'web_search_result' && r.url) urls.push(r.url)
-        }
-      }
-    }
-    let body = textParts.join('\n').trim() || 'No content found.'
-    // Strip trailing "Sources:" section (AI sometimes appends one)
-    body = body.replace(/\n+[-*]*\s*\*{0,2}Sources:?\*{0,2}[\s\S]*$/i, '').trim()
-    const sources = [...new Set(urls)].slice(0, 4)
-    return { label, body, sources }
-  } catch {
-    return { label, body: 'Network error fetching news.', sources: [] }
-  }
 }
 
 /* ── component ── */
@@ -237,63 +125,7 @@ export default function OverviewTab() {
     return { vehicles, otdMin, otdMax, rangeLeader, hpLeader, bestNacs, preownedMin, preownedMinRow, preownedMax, preownedMaxRow, vehicleSummaries, chargingMap, largestFrunk, mostCargo2, mostCargo3 }
   }, [])
 
-  /* --- news state --- */
-  const CACHE_KEY = 'ev-news-cache'
-  const STALE_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
 
-  const [newsCards, setNewsCards] = useState<NewsCard[]>([])
-  const [newsLoading, setNewsLoading] = useState(false)
-  const [newsStatus, setNewsStatus] = useState('')
-  const [newsFetchedAt, setNewsFetchedAt] = useState<string | null>(null)
-
-  // Load cached news on mount; auto-fetch if stale or missing
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(CACHE_KEY)
-      if (raw) {
-        const cached = JSON.parse(raw) as { cards: NewsCard[]; fetchedAt: string }
-        if (cached.cards?.length) {
-          setNewsCards(cached.cards)
-          setNewsFetchedAt(cached.fetchedAt)
-          const age = Date.now() - new Date(cached.fetchedAt).getTime()
-          if (age < STALE_MS) return // fresh enough
-        }
-      }
-    } catch { /* ignore corrupt cache */ }
-    // No cache or stale — auto-fetch
-    fetchNews()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  async function fetchNews() {
-    setNewsLoading(true)
-    setNewsStatus('Searching for latest EV SUV news…')
-    // Run sequentially to avoid hitting API rate limits
-    const r1 = await fetchQuery('biggest 3-row electric SUV news this week 2026')
-    await new Promise((res) => setTimeout(res, 5000)) // 5s gap between calls
-    const r2 = await fetchQuery('3-row electric SUV market news and trends this month 2026')
-    const results: PromiseSettledResult<NewsCard>[] = [
-      { status: 'fulfilled', value: r1 },
-      { status: 'fulfilled', value: r2 },
-    ]
-    const cards: NewsCard[] = []
-    for (const r of results) {
-      if (r.status === 'fulfilled') cards.push(r.value)
-    }
-    if (cards.length > 0) {
-      cards[0].label = 'This Week'
-      if (cards[1]) cards[1].label = 'This Month'
-    }
-    const now = new Date().toISOString()
-    setNewsCards(cards)
-    setNewsFetchedAt(now)
-    setNewsStatus(cards.length ? `Loaded ${cards.length} news summaries.` : 'Failed to fetch news.')
-    setNewsLoading(false)
-    // Persist to localStorage
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ cards, fetchedAt: now }))
-    } catch { /* storage full — ignore */ }
-  }
 
   const [glanceView, setGlanceView] = useState<'cards' | 'table'>('cards')
 
@@ -505,36 +337,6 @@ export default function OverviewTab() {
         </div>
       </div>
 
-      {/* ── EV SUV News ── */}
-      <div className="card">
-        <div className="card-title">EV SUV News</div>
-        {newsFetchedAt && (
-          <p style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 12 }}>
-            News from {new Date(newsFetchedAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })} at {new Date(newsFetchedAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
-          </p>
-        )}
-        {newsLoading && (
-          <div className="news-progress" style={{ marginTop: 12 }}>
-            <div className="news-progress-bar" style={{ width: '100%', animation: 'pulse 1.5s ease-in-out infinite' }} />
-          </div>
-        )}
-        {newsStatus && <div className="news-status" style={{ marginTop: 8 }}>{newsStatus}</div>}
-
-        {newsCards.length > 0 && (
-          <div className="news-results" style={{ marginTop: 16 }}>
-            {newsCards.map((card) => (
-              <article key={card.label} className="news-card">
-                <div className="news-card-header">
-                  <strong style={{ fontSize: 14, color: 'var(--accent)' }}>{card.label}</strong>
-                </div>
-                <div className="news-card-body">
-                  {renderMarkdown(card.body)}
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </div>
     </>
   )
 }
