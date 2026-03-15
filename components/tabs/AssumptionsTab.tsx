@@ -8,9 +8,7 @@ const APPROACH_BULLETS = [
   'Prioritized manufacturer data first. OEM sources were used as the primary basis for trim structure, seating, drivetrain, range, battery, charging, displays, software, and feature availability.',
   'Used trusted third-party auto sources to close gaps. When OEM data was incomplete or inconsistent by year or trim, reputable references such as Car and Driver, Edmunds, Kelley Blue Book, and CARFAX were used to fill blanks and normalize trim naming.',
   'Separated new and pre-owned pricing methods. New pricing was estimated as Delaware County, PA out-the-door cost using MSRP, destination, and local tax/fee assumptions. Pre-owned pricing was based on used-market listings and pricing aggregators, then converted into an estimated used OTD range using the same framework.',
-  'Mapped Consumer Reports fields from the provided reference. CR score inputs were populated from the supplied screenshot rather than inferred, with unsupported entries left blank or handled conservatively.',
   'Flagged uncertainty explicitly. Vehicles that were too new, unreleased, region-specific, or lacking a meaningful used market were marked as TBD, N/A, or "No meaningful used market yet" rather than assigned weak estimates.',
-  'Refreshed the dataset iteratively to match the current schema. As the master workbook evolved, the dataset was reworked to align with the latest structure and remaining blanks were filled field-by-field using the best available published source.',
 ]
 
 export default function AssumptionsTab() {
