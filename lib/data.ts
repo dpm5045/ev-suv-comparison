@@ -43,6 +43,11 @@ export interface DetailRow {
   audio: string
   driver_profiles: string
   notes: string
+  frunk_cu_ft: number | null
+  cargo_behind_3rd_cu_ft: number | string | null
+  cargo_behind_2nd_cu_ft: number | null
+  fold_flat: string | null
+  cargo_floor_width_in: number | string | null
 }
 
 export interface PreownedRow {

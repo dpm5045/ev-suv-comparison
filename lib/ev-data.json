@@ -108,7 +108,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "8-speaker sound system w/ amp (Meridian upgrade on Land/GT-Line)",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2024, Land",
@@ -135,7 +140,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2024, GT-Line",
@@ -162,7 +172,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2025, Wind",
@@ -189,7 +204,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "8-speaker sound system w/ amp (Meridian upgrade on Land/GT-Line)",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2025, Land",
@@ -216,7 +236,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2025, GT-Line",
@@ -243,7 +268,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2026, Wind",
@@ -270,7 +300,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "8-speaker sound system w/ amp (Meridian upgrade on Land/GT-Line)",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2026, Land",
@@ -297,7 +332,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2026, GT-Line",
@@ -324,7 +364,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2024, Land + 2nd Row VIP Relaxation Package",
@@ -351,7 +396,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": "Factory option; adds VIP relaxation seats (6-pass)."
+      "notes": "Factory option; adds VIP relaxation seats (6-pass).",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2024, GT-Line + 2nd Row VIP Relaxation Package",
@@ -378,7 +428,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": "Factory option; adds VIP relaxation seats (6-pass)."
+      "notes": "Factory option; adds VIP relaxation seats (6-pass).",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2026, Land Nightfall Edition (6-pass)",
@@ -405,7 +460,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": "Nightfall package (+$1,500) with 6-pass captain chairs standard; 7-pass bench available."
+      "notes": "Nightfall package (+$1,500) with 6-pass captain chairs standard; 7-pass bench available.",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2026, Land Nightfall Edition (7-pass)",
@@ -432,7 +492,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": "Nightfall package (+$1,500) with 7-pass bench."
+      "notes": "Nightfall package (+$1,500) with 7-pass bench.",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Kia EV9, 2026, GT-Line + 2nd Row Relaxation Package",
@@ -459,7 +524,12 @@
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
       "audio": "Meridian Premium Audio (14 speakers) on Land/GT-Line; 8-speaker on lower trims",
       "driver_profiles": "Digital Key 2.0 + Fingerprint module (driver recognition/settings)",
-      "notes": "Factory option (+$2,000) for relaxation seats."
+      "notes": "Factory option (+$2,000) for relaxation seats.",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 20.2,
+      "cargo_behind_2nd_cu_ft": 43.5,
+      "fold_flat": "Partial",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, SE",
@@ -486,7 +556,12 @@
       "additional_displays": "HUD available on higher trims (reported)",
       "audio": "Bose premium audio on higher trims (reported)",
       "driver_profiles": "Driver profiles + Hyundai Digital Key (trim/market dependent)",
-      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs)."
+      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs).",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 21.9,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, SEL",
@@ -513,7 +588,12 @@
       "additional_displays": "HUD available on higher trims (reported)",
       "audio": "Bose premium audio on higher trims (reported)",
       "driver_profiles": "Driver profiles + Hyundai Digital Key (trim/market dependent)",
-      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs)."
+      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs).",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 21.9,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Limited",
@@ -540,7 +620,12 @@
       "additional_displays": "HUD available on higher trims (reported)",
       "audio": "Bose premium audio on higher trims (reported)",
       "driver_profiles": "Driver profiles + Hyundai Digital Key (trim/market dependent)",
-      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs)."
+      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs).",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 21.9,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy",
@@ -567,7 +652,12 @@
       "additional_displays": "HUD available on higher trims (reported)",
       "audio": "Bose premium audio on higher trims (reported)",
       "driver_profiles": "Driver profiles + Hyundai Digital Key (trim/market dependent)",
-      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs)."
+      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs).",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 21.9,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy Design",
@@ -594,7 +684,12 @@
       "additional_displays": "HUD available on higher trims (reported)",
       "audio": "Bose premium audio on higher trims (reported)",
       "driver_profiles": "Driver profiles + Hyundai Digital Key (trim/market dependent)",
-      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs)."
+      "notes": "Seats: base trims typically 7 (bench); higher trims often 6 (captain chairs).",
+      "frunk_cu_ft": 1.8,
+      "cargo_behind_3rd_cu_ft": 21.9,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Plus 7-Seater",
@@ -621,7 +716,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Bose (Plus) / Bowers & Wilkins option (Ultra)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.6,
+      "cargo_behind_2nd_cu_ft": 37.3,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Plus 6-Seater",
@@ -648,7 +748,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Bose (Plus) / Bowers & Wilkins option (Ultra)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.3,
+      "cargo_behind_2nd_cu_ft": 36.9,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Ultra 7-Seater",
@@ -675,7 +780,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Bose (Plus) / Bowers & Wilkins option (Ultra)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.6,
+      "cargo_behind_2nd_cu_ft": 37.3,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Ultra 6-Seater",
@@ -702,7 +812,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Bose (Plus) / Bowers & Wilkins option (Ultra)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.3,
+      "cargo_behind_2nd_cu_ft": 36.9,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Plus 7-Seater",
@@ -729,7 +844,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Bose (Plus) / Bowers & Wilkins option (Ultra)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.6,
+      "cargo_behind_2nd_cu_ft": 37.3,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Plus 6-Seater",
@@ -756,7 +876,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Bose (Plus) / Bowers & Wilkins option (Ultra)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.3,
+      "cargo_behind_2nd_cu_ft": 36.9,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Ultra 7-Seater",
@@ -783,7 +908,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Bose (Plus) / Bowers & Wilkins option (Ultra)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.6,
+      "cargo_behind_2nd_cu_ft": 37.3,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Ultra 6-Seater",
@@ -810,7 +940,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Bose (Plus) / Bowers & Wilkins option (Ultra)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.3,
+      "cargo_behind_2nd_cu_ft": 36.9,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2026, Twin Motor",
@@ -837,7 +972,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Trim dependent",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.6,
+      "cargo_behind_2nd_cu_ft": 37.3,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Volvo EX90, 2026, Twin Motor Performance",
@@ -864,7 +1004,12 @@
       "additional_displays": "Driver display + optional HUD (varies)",
       "audio": "Trim dependent",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 1.62,
+      "cargo_behind_3rd_cu_ft": 13.6,
+      "cargo_behind_2nd_cu_ft": 37.3,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 44.5
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Standard",
@@ -891,7 +1036,12 @@
       "additional_displays": "N/A",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "KBB pricing shown as 'starts at' including shipping fee."
+      "notes": "KBB pricing shown as 'starts at' including shipping fee.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Large (\"Dual Long\")",
@@ -918,7 +1068,12 @@
       "additional_displays": "N/A",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "KBB pricing shown as 'starts at' including shipping fee."
+      "notes": "KBB pricing shown as 'starts at' including shipping fee.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Max",
@@ -945,7 +1100,12 @@
       "additional_displays": "N/A",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "KBB pricing shown as 'starts at' including shipping fee."
+      "notes": "KBB pricing shown as 'starts at' including shipping fee.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2025, Performance Dual Large",
@@ -972,7 +1132,12 @@
       "additional_displays": "N/A",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "KBB pricing shown as 'starts at' including shipping fee."
+      "notes": "KBB pricing shown as 'starts at' including shipping fee.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2025, Performance Dual Max",
@@ -999,7 +1164,12 @@
       "additional_displays": "N/A",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "KBB pricing shown as 'starts at' including shipping fee."
+      "notes": "KBB pricing shown as 'starts at' including shipping fee.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2025, Ascend Tri Max",
@@ -1026,7 +1196,12 @@
       "additional_displays": "N/A",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "KBB pricing shown as 'starts at' including shipping fee."
+      "notes": "KBB pricing shown as 'starts at' including shipping fee.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2026, Dual Standard",
@@ -1053,7 +1228,12 @@
       "additional_displays": "",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "MY2026 pricing and destination per Electrek; specs TBD by Rivian closer to sales."
+      "notes": "MY2026 pricing and destination per Electrek; specs TBD by Rivian closer to sales.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2026, Dual Large",
@@ -1080,7 +1260,12 @@
       "additional_displays": "",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "MY2026 pricing and destination per Electrek; specs TBD by Rivian closer to sales."
+      "notes": "MY2026 pricing and destination per Electrek; specs TBD by Rivian closer to sales.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2026, Dual Max (\"Max Battery\")",
@@ -1107,7 +1292,12 @@
       "additional_displays": "",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "MY2026 pricing and destination per Electrek; specs TBD by Rivian closer to sales."
+      "notes": "MY2026 pricing and destination per Electrek; specs TBD by Rivian closer to sales.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Rivian R1S, 2026, Tri Max",
@@ -1134,34 +1324,12 @@
       "additional_displays": "",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "MY2026 pricing and destination per Electrek; specs TBD by Rivian closer to sales."
-    },
-    {
-      "name": "Rivian R1S, 2026, Adventure Max Battery (requested; closest match: Dual Max)",
-      "vehicle": "Rivian R1S",
-      "year": 2026,
-      "trim": "Adventure Max Battery (requested; closest match: Dual Max)",
-      "seats": 7,
-      "drivetrain": "AWD",
-      "msrp": 90990,
-      "destination": 1895,
-      "otd_new": 99363.1,
-      "preowned_range": "$80,000 - $92,000",
-      "otd_preowned": "$85,705 - $98,425",
-      "self_driving": "Rivian Autonomy+ capable hardware (availability varies)",
-      "range_mi": 410,
-      "hp": 533,
-      "battery_kwh": 141.5,
-      "onboard_ac_kw": 11.5,
-      "l2_10_100": 12.3,
-      "l2_10_80": 9.57,
-      "charging_type": "NACS (native Tesla)",
-      "car_software": "No CarPlay/Android Auto (Rivian UI)",
-      "main_display": "15.6\" center + 12.3\" driver (reported)",
-      "additional_displays": "",
-      "audio": "Premium audio (trim dependent)",
-      "driver_profiles": "User profiles in Rivian account (reported)",
-      "notes": "Added per request; Rivian no longer markets 'Adventure' for MY2026 in some sources."
+      "notes": "MY2026 pricing and destination per Electrek; specs TBD by Rivian closer to sales.",
+      "frunk_cu_ft": 11.1,
+      "cargo_behind_3rd_cu_ft": 17.7,
+      "cargo_behind_2nd_cu_ft": 46.7,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 51.1
     },
     {
       "name": "Tesla Model X, 2026, Model X (5-seat)",
@@ -1188,7 +1356,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "5-seat is typical base; 6-seat interior option priced separately."
+      "notes": "5-seat is typical base; 6-seat interior option priced separately.",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 39.2,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2026, Model X + 6-seat interior option",
@@ -1215,7 +1388,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "Adds 6-seat interior option ($6,500 per C&D)."
+      "notes": "Adds 6-seat interior option ($6,500 per C&D).",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": 14.8,
+      "cargo_behind_2nd_cu_ft": 35.2,
+      "fold_flat": "No",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2026, Model X Plaid (5-seat)",
@@ -1242,7 +1420,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 39.2,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2026, Model X Plaid + 6-seat interior option",
@@ -1269,7 +1452,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "Adds 6-seat interior option ($6,500)."
+      "notes": "Adds 6-seat interior option ($6,500).",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": 14.8,
+      "cargo_behind_2nd_cu_ft": 35.2,
+      "fold_flat": "No",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2025, Model X Standard (5-seat)",
@@ -1296,7 +1484,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "Base row; seating options available."
+      "notes": "Base row; seating options available.",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 39.2,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2025, Model X Standard + 6-seat interior option",
@@ -1323,7 +1516,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "MSRP includes assumed +$6,500 6-seat option (based on later C&D data)."
+      "notes": "MSRP includes assumed +$6,500 6-seat option (based on later C&D data).",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": 14.8,
+      "cargo_behind_2nd_cu_ft": 35.2,
+      "fold_flat": "No",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2025, Model X Plaid (5-seat)",
@@ -1350,7 +1548,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "Base row; seating options available."
+      "notes": "Base row; seating options available.",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 39.2,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2025, Model X Plaid + 6-seat interior option",
@@ -1377,7 +1580,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "MSRP includes assumed +$6,500 6-seat option (based on later C&D data)."
+      "notes": "MSRP includes assumed +$6,500 6-seat option (based on later C&D data).",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": 14.8,
+      "cargo_behind_2nd_cu_ft": 35.2,
+      "fold_flat": "No",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2024, Long Range",
@@ -1404,7 +1612,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 39.2,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2024, Plaid",
@@ -1431,7 +1644,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 39.2,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2023, Base",
@@ -1458,7 +1676,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 39.2,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model X, 2023, Plaid",
@@ -1485,7 +1708,12 @@
       "additional_displays": "Driver display + rear screen (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": ""
+      "notes": "",
+      "frunk_cu_ft": 6.5,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 39.2,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Tesla Model Y Long (Asia), 2026, Long (Asia, 3-row variant)",
@@ -1512,7 +1740,12 @@
       "additional_displays": "N/A",
       "audio": "Premium (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "Market-specific variant; specs/pricing TBD."
+      "notes": "Market-specific variant; specs/pricing TBD.",
+      "frunk_cu_ft": 4.1,
+      "cargo_behind_3rd_cu_ft": 14.8,
+      "cargo_behind_2nd_cu_ft": 38,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Lucid Gravity, 2026, Touring",
@@ -1539,7 +1772,12 @@
       "additional_displays": "Pilot Panel + optional HUD (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "Touring price and destination per C&D/Edmunds; battery pack size varies by source (entered 89 kWh)."
+      "notes": "Touring price and destination per C&D/Edmunds; battery pack size varies by source (entered 89 kWh).",
+      "frunk_cu_ft": 8,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 25,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Lucid Gravity, 2026, Grand Touring",
@@ -1566,7 +1804,12 @@
       "additional_displays": "Pilot Panel + optional HUD (reported)",
       "audio": "Premium audio (trim dependent)",
       "driver_profiles": "Driver profiles supported",
-      "notes": "C&D lists base $96,550 and 123 kWh battery; destination fee not specified in snippet."
+      "notes": "C&D lists base $96,550 and 123 kWh battery; destination fee not specified in snippet.",
+      "frunk_cu_ft": 8,
+      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_2nd_cu_ft": 25,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": "TBD / not reliably published"
     },
     {
       "name": "Volkswagen ID. Buzz, 2025, Pro S Plus with 4MOTION",
@@ -1593,7 +1836,12 @@
       "additional_displays": "5.3\" driver display + HUD",
       "audio": "Harman Kardon premium audio, 13 speakers + subwoofer + amp",
       "driver_profiles": "Yes — memory seats/mirrors",
-      "notes": "CARFAX groups Pro S Plus used pricing by trim family, so AWD-specific used band is not cleanly separable yet."
+      "notes": "CARFAX groups Pro S Plus used pricing by trim family, so AWD-specific used band is not cleanly separable yet.",
+      "frunk_cu_ft": 0,
+      "cargo_behind_3rd_cu_ft": 18.6,
+      "cargo_behind_2nd_cu_ft": 75.5,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 48.4
     },
     {
       "name": "Volkswagen ID. Buzz, 2025, 1st Edition with 4MOTION",
@@ -1620,7 +1868,12 @@
       "additional_displays": "5.3\" driver display; no separate HUD claim populated",
       "audio": "Harman Kardon premium audio, 13 speakers + subwoofer + amp",
       "driver_profiles": "Yes — memory seats/mirrors",
-      "notes": "CARFAX groups First Edition used pricing by trim family, so AWD-specific used band is not cleanly separable yet."
+      "notes": "CARFAX groups First Edition used pricing by trim family, so AWD-specific used band is not cleanly separable yet.",
+      "frunk_cu_ft": 0,
+      "cargo_behind_3rd_cu_ft": 18.6,
+      "cargo_behind_2nd_cu_ft": 75.5,
+      "fold_flat": "Yes",
+      "cargo_floor_width_in": 48.4
     },
     {
       "name": "Toyota Highlander EV, 2026, XLE (expected)",
@@ -1647,7 +1900,12 @@
       "additional_displays": "TBD",
       "audio": "TBD",
       "driver_profiles": "TBD",
-      "notes": "Toyota Highlander EV not officially launched/priced in sources used; placeholder row."
+      "notes": "Toyota Highlander EV not officially launched/priced in sources used; placeholder row.",
+      "frunk_cu_ft": null,
+      "cargo_behind_3rd_cu_ft": null,
+      "cargo_behind_2nd_cu_ft": null,
+      "fold_flat": null,
+      "cargo_floor_width_in": null
     },
     {
       "name": "Toyota Highlander EV, 2026, Limited (expected)",
@@ -1674,7 +1932,12 @@
       "additional_displays": "TBD",
       "audio": "TBD",
       "driver_profiles": "TBD",
-      "notes": "Placeholder row."
+      "notes": "Placeholder row.",
+      "frunk_cu_ft": null,
+      "cargo_behind_3rd_cu_ft": null,
+      "cargo_behind_2nd_cu_ft": null,
+      "fold_flat": null,
+      "cargo_floor_width_in": null
     }
   ],
   "preowned": [
