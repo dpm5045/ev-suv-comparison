@@ -7,6 +7,7 @@ import NavTabs, { type TabId } from './NavTabs'
 import DetailPanel from './DetailPanel'
 import OverviewTab from './tabs/OverviewTab'
 import ComparisonTab from './tabs/ComparisonV2Tab'
+import SideBySideTab from './tabs/SideBySideTab'
 import GlossaryTab from './tabs/GlossaryTab'
 import AssumptionsTab from './tabs/AssumptionsTab'
 
@@ -58,7 +59,8 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
             onRowClick={setDetailIdx}
           />
         )}
-{tab === 'glossary' && <GlossaryTab />}
+        {tab === 'sidebyside' && <SideBySideTab />}
+        {tab === 'glossary' && <GlossaryTab />}
         {tab === 'assumptions' && <AssumptionsTab />}
       </main>
       <DetailPanel idx={detailIdx} onClose={() => setDetailIdx(null)} />
