@@ -360,7 +360,7 @@ export default function OverviewTab() {
                 {insights.vehicleSummaries.map((s) => (
                   <tr key={s.vehicle}>
                     <td className="col-sticky"><VehicleBadge vehicle={s.vehicle} /></td>
-                    <td className="num">{s.otdLow !== null ? `${fmtDollar(s.otdLow)}–${fmtDollar(s.otdHigh!)}` : '—'}</td>
+                    <td className="num">{s.otdLow !== null ? `${fmtDollarK(s.otdLow)}-${fmtDollarK(s.otdHigh!)}` : '—'}</td>
                     <td className="num">{rangeStr(s.rangeLow, s.rangeHigh, ' mi')}</td>
                     <td className="num">{rangeStr(s.hpLow, s.hpHigh)}</td>
                     <td className="num">{s.battery}</td>
@@ -384,7 +384,7 @@ export default function OverviewTab() {
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">Est. OTD New</span>
                     <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
-                      {s.otdLow !== null ? `${fmtDollar(s.otdLow)}–${fmtDollar(s.otdHigh!)}` : '—'}
+                      {s.otdLow !== null ? `${fmtDollarK(s.otdLow)}-${fmtDollarK(s.otdHigh!)}` : '—'}
                     </span>
                   </div>
                   <div className="cmp-stat">
