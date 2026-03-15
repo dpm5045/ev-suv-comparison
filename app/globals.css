@@ -542,10 +542,8 @@ tr[data-clickable='true']:hover td.col-sticky {
   color: var(--text);
 }
 .cmp-card-tap-hint {
-  margin-top: 10px;
   font-size: 13px;
   color: var(--text-dim);
-  text-align: right;
 }
 
 /* ── Glossary ── */

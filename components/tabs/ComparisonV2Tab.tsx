@@ -100,7 +100,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                 <th>Trim</th>
                 <th className="num">Seats</th>
                 <th className="num">Est. OTD New</th>
-                <th>Pre-Owned Range</th>
+                <th>Est. OTD Pre-Owned</th>
                 <th className="num">Range (mi)</th>
                 <th className="num">HP</th>
                 <th className="num">Battery</th>
@@ -154,7 +154,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
               <div key={origIdx} className="cmp-card" onClick={() => onRowClick(origIdx)}>
                 <div className="cmp-card-header">
                   <VehicleBadge vehicle={r.vehicle} />
-                  <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>{r.seats} seats</span>
+                  <span className="cmp-card-tap-hint">Tap for full specs →</span>
                 </div>
                 <div className="cmp-card-year-trim">
                   {r.year} · {r.trim}
@@ -162,7 +162,17 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                 <div className="cmp-card-stats">
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">Est. OTD New</span>
-                    <span className={`cmp-stat-value ${otd.className}`}>{otd.text}</span>
+                    <span className={`cmp-stat-value ${otd.className}`} style={{ fontFamily: 'var(--mono)' }}>
+                      {typeof r.otd_new === 'number' ? `$${Math.round(r.otd_new / 1000)}k` : otd.text}
+                    </span>
+                  </div>
+                  <div className="cmp-stat">
+                    <span className="cmp-stat-label">Est. OTD Pre-Owned</span>
+                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
+                      {r.otd_preowned && !r.otd_preowned.includes('N/A') && !r.otd_preowned.includes('No ')
+                        ? r.otd_preowned.replace(/\$[\d,]+/g, (m: string) => `$${Math.round(parseInt(m.replace(/[$,]/g, '')) / 1000)}k`)
+                        : '—'}
+                    </span>
                   </div>
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">Range</span>
@@ -182,14 +192,11 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                       <span className="cmp-stat-value">{r.charging_type}</span>
                     </div>
                   )}
-                  {r.otd_preowned && (
-                    <div className="cmp-stat" style={{ gridColumn: '1 / -1' }}>
-                      <span className="cmp-stat-label">Pre-Owned Range</span>
-                      <span className="cmp-stat-value cell-range">{r.otd_preowned}</span>
-                    </div>
-                  )}
+                  <div className="cmp-stat">
+                    <span className="cmp-stat-label">Seats</span>
+                    <span className="cmp-stat-value">{r.seats}</span>
+                  </div>
                 </div>
-                <div className="cmp-card-tap-hint">Tap for full specs →</div>
               </div>
             )
           })}
