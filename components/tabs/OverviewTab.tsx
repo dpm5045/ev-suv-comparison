@@ -218,7 +218,17 @@ export default function OverviewTab() {
       chargingMap.get(category)!.push(s.vehicle)
     }
 
-    return { vehicles, otdMin, otdMax, rangeLeader, hpLeader, bestNacs, preownedMin, preownedMinRow, preownedMax, preownedMaxRow, vehicleSummaries, chargingMap }
+    // Cargo & Storage insights
+    const frunkRows = d.filter((r) => typeof r.frunk_cu_ft === 'number' && r.frunk_cu_ft > 0)
+    const largestFrunk = frunkRows.length ? frunkRows.reduce((a, b) => ((a.frunk_cu_ft as number) > (b.frunk_cu_ft as number) ? a : b)) : null
+
+    const cargo2Rows = d.filter((r) => typeof r.cargo_behind_2nd_cu_ft === 'number' && r.cargo_behind_2nd_cu_ft > 0)
+    const mostCargo2 = cargo2Rows.length ? cargo2Rows.reduce((a, b) => ((a.cargo_behind_2nd_cu_ft as number) > (b.cargo_behind_2nd_cu_ft as number) ? a : b)) : null
+
+    const cargo3Rows = d.filter((r) => typeof r.cargo_behind_3rd_cu_ft === 'number' && r.cargo_behind_3rd_cu_ft > 0)
+    const mostCargo3 = cargo3Rows.length ? cargo3Rows.reduce((a, b) => ((a.cargo_behind_3rd_cu_ft as number) > (b.cargo_behind_3rd_cu_ft as number) ? a : b)) : null
+
+    return { vehicles, otdMin, otdMax, rangeLeader, hpLeader, bestNacs, preownedMin, preownedMinRow, preownedMax, preownedMaxRow, vehicleSummaries, chargingMap, largestFrunk, mostCargo2, mostCargo3 }
   }, [])
 
   /* --- news state --- */
@@ -337,6 +347,27 @@ export default function OverviewTab() {
             <div className="overview-stat-label">Best NACS Native Value</div>
             <div className="overview-stat-value">{fmtDollarK(insights.bestNacs.otd_new)}</div>
             <div className="overview-stat-detail">{insights.bestNacs.vehicle} {insights.bestNacs.year} {insights.bestNacs.trim} — Est. New OTD Price</div>
+          </div>
+        )}
+        {insights.largestFrunk && (
+          <div className="overview-stat">
+            <div className="overview-stat-label">Largest Frunk</div>
+            <div className="overview-stat-value">{insights.largestFrunk.frunk_cu_ft} cu ft</div>
+            <div className="overview-stat-detail">{insights.largestFrunk.vehicle}</div>
+          </div>
+        )}
+        {insights.mostCargo2 && (
+          <div className="overview-stat">
+            <div className="overview-stat-label">Most Cargo (2nd Row)</div>
+            <div className="overview-stat-value">{insights.mostCargo2.cargo_behind_2nd_cu_ft} cu ft</div>
+            <div className="overview-stat-detail">{insights.mostCargo2.vehicle} — behind 2nd row, seats folded</div>
+          </div>
+        )}
+        {insights.mostCargo3 && (
+          <div className="overview-stat">
+            <div className="overview-stat-label">Most Cargo (3rd Row)</div>
+            <div className="overview-stat-value">{insights.mostCargo3.cargo_behind_3rd_cu_ft} cu ft</div>
+            <div className="overview-stat-detail">{insights.mostCargo3.vehicle} — behind 3rd row, seats up</div>
           </div>
         )}
       </div>

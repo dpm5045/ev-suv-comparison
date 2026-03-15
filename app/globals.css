@@ -238,18 +238,25 @@ th {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   padding: 10px 14px;
-  text-align: left;
+  text-align: center;
   white-space: nowrap;
   position: sticky;
   top: 0;
   z-index: 2;
   border-bottom: 1px solid var(--border);
 }
+th.col-sticky {
+  text-align: left;
+}
 td {
   padding: 10px 14px;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
   color: var(--text);
+  text-align: center;
+}
+td.col-sticky {
+  text-align: left;
 }
 tr:last-child td {
   border-bottom: none;
@@ -258,7 +265,7 @@ tr:hover td {
   background: var(--surface2);
 }
 .num {
-  text-align: right;
+  text-align: center;
   font-family: var(--mono);
   font-size: 14px;
 }
@@ -370,6 +377,12 @@ th.col-sticky {
 }
 tr:hover td.col-sticky {
   background: var(--surface2);
+}
+.sticky-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-top: 2px;
 }
 
 /* ── Clickable rows ── */
@@ -1245,6 +1258,7 @@ tr[data-clickable='true']:hover td.col-sticky {
     padding: 8px 16px;
   }
   .nav-drawer-overlay {
+    display: block;
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.3);

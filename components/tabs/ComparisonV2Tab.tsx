@@ -105,6 +105,11 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                 <th className="num">HP</th>
                 <th className="num">Battery</th>
                 <th>Charging</th>
+                <th className="num">Frunk (cu ft)</th>
+                <th className="num">Cargo B/H 3rd Row (cu ft)</th>
+                <th className="num">Cargo B/H 2nd Row (cu ft)</th>
+                <th>Fold Flat</th>
+                <th className="num">Floor Width (in)</th>
               </tr>
             </thead>
             <tbody>
@@ -114,9 +119,18 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                 const range = fmtNum(r.range_mi)
                 const hp = fmtNum(r.hp)
                 const bat = fmtNum(r.battery_kwh)
+                const dash = <span className="cell-na">—</span>
                 return (
                   <tr key={origIdx} data-clickable="true" onClick={() => onRowClick(origIdx)}>
-                    <td className="col-sticky"><VehicleBadge vehicle={r.vehicle} /></td>
+                    <td className="col-sticky">
+                      <VehicleBadge vehicle={r.vehicle} />
+                      <div className="sticky-subtitle">
+                        {r.year ? `'${String(r.year).slice(-2)}` : ''}
+                        {r.year && r.trim ? ' · ' : ''}
+                        {r.trim || ''}
+                        {r.seats ? ` · ${r.seats}-seat` : ''}
+                      </div>
+                    </td>
                     <td>{r.year || '—'}</td>
                     <td>{r.trim || ''}</td>
                     <td className="num">{r.seats ?? '—'}</td>
@@ -124,7 +138,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                     <td>
                       {r.otd_preowned
                         ? <span className="cell-range">{r.otd_preowned}</span>
-                        : <span className="cell-na">—</span>}
+                        : dash}
                     </td>
                     <td className="num"><span className={range.className}>{range.text}</span></td>
                     <td className="num"><span className={hp.className}>{hp.text}</span></td>
@@ -134,6 +148,11 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                       </span>
                     </td>
                     <td>{r.charging_type || ''}</td>
+                    <td className="num">{r.frunk_cu_ft ?? dash}</td>
+                    <td className="num">{r.cargo_behind_3rd_cu_ft ?? dash}</td>
+                    <td className="num">{r.cargo_behind_2nd_cu_ft ?? dash}</td>
+                    <td>{r.fold_flat || dash}</td>
+                    <td className="num">{r.cargo_floor_width_in ?? dash}</td>
                   </tr>
                 )
               })}
@@ -196,6 +215,36 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                     <span className="cmp-stat-label">Seats</span>
                     <span className="cmp-stat-value">{r.seats}</span>
                   </div>
+                  {r.frunk_cu_ft != null && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Frunk</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.frunk_cu_ft} cu ft</span>
+                    </div>
+                  )}
+                  {r.cargo_behind_3rd_cu_ft != null && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Cargo (3rd Row)</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.cargo_behind_3rd_cu_ft} cu ft</span>
+                    </div>
+                  )}
+                  {r.cargo_behind_2nd_cu_ft != null && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Cargo (2nd Row)</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.cargo_behind_2nd_cu_ft} cu ft</span>
+                    </div>
+                  )}
+                  {r.fold_flat && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Fold Flat</span>
+                      <span className="cmp-stat-value">{r.fold_flat}</span>
+                    </div>
+                  )}
+                  {r.cargo_floor_width_in != null && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Floor Width</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.cargo_floor_width_in}″</span>
+                    </div>
+                  )}
                 </div>
               </div>
             )
