@@ -248,6 +248,10 @@ th {
 th.col-sticky {
   text-align: left;
 }
+.glance-table th {
+  white-space: normal;
+  font-size: 13px;
+}
 td {
   padding: 10px 14px;
   border-bottom: 1px solid var(--border);
@@ -712,7 +716,7 @@ tr[data-clickable='true']:hover td.col-sticky {
 }
 @media (max-width: 600px) {
   .overview-stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 .overview-stat {

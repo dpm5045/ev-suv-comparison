@@ -102,7 +102,7 @@
       "onboard_ac_kw": 10.9,
       "l2_10_100": 8.75,
       "l2_10_80": 7.1,
-      "charging_type": "NACS native (CCS adapter supported)",
+      "charging_type": "NACS (+CCS adpt)",
       "car_software": "Android Auto + Apple CarPlay; ccNC infotainment",
       "main_display": "12.3\" display unit w/ nav + 12.3\" cluster + 5\" HVAC display",
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
@@ -113,7 +113,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2026, GT-Line + 2nd Row Relaxation Package",
@@ -134,7 +135,7 @@
       "onboard_ac_kw": 10.9,
       "l2_10_100": 8.75,
       "l2_10_80": 7.1,
-      "charging_type": "NACS native (CCS adapter supported)",
+      "charging_type": "NACS (+CCS adpt)",
       "car_software": "Android Auto + Apple CarPlay; ccNC infotainment",
       "main_display": "12.3\" display unit w/ nav + 12.3\" cluster + 5\" HVAC display",
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
@@ -145,7 +146,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2026, Land",
@@ -166,7 +168,7 @@
       "onboard_ac_kw": 10.9,
       "l2_10_100": 8.75,
       "l2_10_80": 7.1,
-      "charging_type": "NACS native (CCS adapter supported)",
+      "charging_type": "NACS (+CCS adpt)",
       "car_software": "Android Auto + Apple CarPlay; ccNC infotainment",
       "main_display": "12.3\" display unit w/ nav + 12.3\" cluster + 5\" HVAC display",
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
@@ -177,7 +179,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2026, Land Nightfall Edition (6-pass)",
@@ -198,7 +201,7 @@
       "onboard_ac_kw": 10.9,
       "l2_10_100": 8.75,
       "l2_10_80": 7.1,
-      "charging_type": "NACS native (CCS adapter supported)",
+      "charging_type": "NACS (+CCS adpt)",
       "car_software": "Android Auto + Apple CarPlay; ccNC infotainment",
       "main_display": "12.3\" display unit w/ nav + 12.3\" cluster + 5\" HVAC display",
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
@@ -209,7 +212,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2026, Land Nightfall Edition (7-pass)",
@@ -230,7 +234,7 @@
       "onboard_ac_kw": 10.9,
       "l2_10_100": 8.75,
       "l2_10_80": 7.1,
-      "charging_type": "NACS native (CCS adapter supported)",
+      "charging_type": "NACS (+CCS adpt)",
       "car_software": "Android Auto + Apple CarPlay; ccNC infotainment",
       "main_display": "12.3\" display unit w/ nav + 12.3\" cluster + 5\" HVAC display",
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
@@ -241,7 +245,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2026, Wind",
@@ -262,7 +267,7 @@
       "onboard_ac_kw": 10.9,
       "l2_10_100": 8.75,
       "l2_10_80": 7.1,
-      "charging_type": "NACS native (CCS adapter supported)",
+      "charging_type": "NACS (+CCS adpt)",
       "car_software": "Android Auto + Apple CarPlay; ccNC infotainment",
       "main_display": "12.3\" display unit w/ nav + 12.3\" cluster + 5\" HVAC display",
       "additional_displays": "12.3\" cluster + 5\" HVAC display; Full Display Mirror available on higher trims",
@@ -273,7 +278,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2025, GT-Line",
@@ -305,7 +311,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2025, Land",
@@ -337,7 +344,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2025, Wind",
@@ -369,7 +377,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2024, GT-Line",
@@ -401,7 +410,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2024, GT-Line + 2nd Row VIP Relaxation Package",
@@ -433,7 +443,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2024, Land",
@@ -465,7 +476,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2024, Land + 2nd Row VIP Relaxation Package",
@@ -497,7 +509,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Kia EV9, 2024, Wind",
@@ -529,7 +542,8 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41.5
+      "cargo_floor_width_in": 41.5,
+      "cargo_behind_1st_cu_ft": 81.7
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy",
@@ -550,7 +564,7 @@
       "onboard_ac_kw": 10.2,
       "l2_10_100": 9.7,
       "l2_10_80": 7.5,
-      "charging_type": "NACS native (CCS adapter included)",
+      "charging_type": "NACS (+CCS incl)",
       "car_software": "Wireless Apple CarPlay + Wireless Android Auto; ccNC; OTA updates",
       "main_display": "Dual 12.3\" displays (cluster + infotainment) (reported)",
       "additional_displays": "HUD available on higher trims (reported)",
@@ -561,7 +575,8 @@
       "cargo_behind_3rd_cu_ft": 21.9,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41
+      "cargo_floor_width_in": 41,
+      "cargo_behind_1st_cu_ft": 88.1
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy Design",
@@ -582,7 +597,7 @@
       "onboard_ac_kw": 10.2,
       "l2_10_100": 9.7,
       "l2_10_80": 7.5,
-      "charging_type": "NACS native (CCS adapter included)",
+      "charging_type": "NACS (+CCS incl)",
       "car_software": "Wireless Apple CarPlay + Wireless Android Auto; ccNC; OTA updates",
       "main_display": "Dual 12.3\" displays (cluster + infotainment) (reported)",
       "additional_displays": "HUD available on higher trims (reported)",
@@ -593,7 +608,8 @@
       "cargo_behind_3rd_cu_ft": 21.9,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41
+      "cargo_floor_width_in": 41,
+      "cargo_behind_1st_cu_ft": 88.1
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Limited",
@@ -614,7 +630,7 @@
       "onboard_ac_kw": 10.2,
       "l2_10_100": 9.7,
       "l2_10_80": 7.5,
-      "charging_type": "NACS native (CCS adapter included)",
+      "charging_type": "NACS (+CCS incl)",
       "car_software": "Wireless Apple CarPlay + Wireless Android Auto; ccNC; OTA updates",
       "main_display": "Dual 12.3\" displays (cluster + infotainment) (reported)",
       "additional_displays": "HUD available on higher trims (reported)",
@@ -625,7 +641,8 @@
       "cargo_behind_3rd_cu_ft": 21.9,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41
+      "cargo_floor_width_in": 41,
+      "cargo_behind_1st_cu_ft": 88.1
     },
     {
       "name": "Hyundai IONIQ 9, 2026, SE",
@@ -646,7 +663,7 @@
       "onboard_ac_kw": 10.2,
       "l2_10_100": 9.7,
       "l2_10_80": 7.5,
-      "charging_type": "NACS native (CCS adapter included)",
+      "charging_type": "NACS (+CCS incl)",
       "car_software": "Wireless Apple CarPlay + Wireless Android Auto; ccNC; OTA updates",
       "main_display": "Dual 12.3\" displays (cluster + infotainment) (reported)",
       "additional_displays": "HUD available on higher trims (reported)",
@@ -657,7 +674,8 @@
       "cargo_behind_3rd_cu_ft": 21.9,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41
+      "cargo_floor_width_in": 41,
+      "cargo_behind_1st_cu_ft": 85.4
     },
     {
       "name": "Hyundai IONIQ 9, 2026, SEL",
@@ -678,7 +696,7 @@
       "onboard_ac_kw": 10.2,
       "l2_10_100": 9.7,
       "l2_10_80": 7.5,
-      "charging_type": "NACS native (CCS adapter included)",
+      "charging_type": "NACS (+CCS incl)",
       "car_software": "Wireless Apple CarPlay + Wireless Android Auto; ccNC; OTA updates",
       "main_display": "Dual 12.3\" displays (cluster + infotainment) (reported)",
       "additional_displays": "HUD available on higher trims (reported)",
@@ -689,7 +707,8 @@
       "cargo_behind_3rd_cu_ft": 21.9,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41
+      "cargo_floor_width_in": 41,
+      "cargo_behind_1st_cu_ft": 85.4
     },
     {
       "name": "Volvo EX90, 2026, Twin Motor",
@@ -710,7 +729,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -721,7 +740,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2026, Twin Motor Performance",
@@ -742,7 +762,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -753,7 +773,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Plus 6-Seater",
@@ -774,7 +795,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -785,7 +806,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 24,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Plus 7-Seater",
@@ -806,7 +828,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -817,7 +839,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Ultra 6-Seater",
@@ -838,7 +861,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -849,7 +872,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 24,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Ultra 7-Seater",
@@ -870,7 +894,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -881,7 +905,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Plus 6-Seater",
@@ -902,7 +927,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -913,7 +938,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 24,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Plus 7-Seater",
@@ -934,7 +960,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -945,7 +971,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Ultra 6-Seater",
@@ -966,7 +993,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -977,7 +1004,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 24,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Ultra 7-Seater",
@@ -998,7 +1026,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS (NACS access varies / adapter expected)",
+      "charging_type": "CCS (+NACS adpt)",
       "car_software": "Google built-in; Apple CarPlay availability varies by market",
       "main_display": "14.5\" center display (reported)",
       "additional_displays": "Driver display + optional HUD (varies)",
@@ -1009,7 +1037,8 @@
       "cargo_behind_3rd_cu_ft": 11,
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 44.5
+      "cargo_floor_width_in": 44.5,
+      "cargo_behind_1st_cu_ft": 67.6
     },
     {
       "name": "Rivian R1S, 2026, Dual Large",
@@ -1030,7 +1059,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 9.51,
       "l2_10_80": 7.4,
-      "charging_type": "NACS (native Tesla)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "",
@@ -1041,7 +1070,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2026, Dual Max (\"Max Battery\")",
@@ -1062,7 +1092,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 12.3,
       "l2_10_80": 9.57,
-      "charging_type": "NACS (native Tesla)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "",
@@ -1073,7 +1103,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2026, Dual Standard",
@@ -1094,7 +1125,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 8.04,
       "l2_10_80": 6.25,
-      "charging_type": "NACS (native Tesla)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "",
@@ -1105,7 +1136,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2026, Tri Max",
@@ -1126,7 +1158,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 12.3,
       "l2_10_80": 9.57,
-      "charging_type": "NACS (native Tesla)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "",
@@ -1137,7 +1169,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Large (\"Dual Long\")",
@@ -1158,7 +1191,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 9.51,
       "l2_10_80": 7.4,
-      "charging_type": "NACS (adapter/port depends on build year)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "N/A",
@@ -1169,7 +1202,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Max",
@@ -1190,7 +1224,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 12.3,
       "l2_10_80": 9.57,
-      "charging_type": "NACS (adapter/port depends on build year)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "N/A",
@@ -1201,7 +1235,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Standard",
@@ -1222,7 +1257,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 9.51,
       "l2_10_80": 7.4,
-      "charging_type": "NACS (adapter/port depends on build year)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "N/A",
@@ -1233,7 +1268,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2025, Ascend Tri Max",
@@ -1254,7 +1290,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 12.3,
       "l2_10_80": 9.57,
-      "charging_type": "NACS (adapter/port depends on build year)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "N/A",
@@ -1265,7 +1301,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2025, Performance Dual Large",
@@ -1286,7 +1323,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 9.51,
       "l2_10_80": 7.4,
-      "charging_type": "NACS (adapter/port depends on build year)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "N/A",
@@ -1297,7 +1334,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Rivian R1S, 2025, Performance Dual Max",
@@ -1318,7 +1356,7 @@
       "onboard_ac_kw": 11.5,
       "l2_10_100": 12.3,
       "l2_10_80": 9.57,
-      "charging_type": "NACS (adapter/port depends on build year)",
+      "charging_type": "NACS",
       "car_software": "No CarPlay/Android Auto (Rivian UI)",
       "main_display": "15.6\" center + 12.3\" driver (reported)",
       "additional_displays": "N/A",
@@ -1329,7 +1367,8 @@
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 51.1
+      "cargo_floor_width_in": 51.1,
+      "cargo_behind_1st_cu_ft": 104.7
     },
     {
       "name": "Tesla Model X, 2026, Base",
@@ -1361,7 +1400,8 @@
       "cargo_behind_3rd_cu_ft": "N/A",
       "cargo_behind_2nd_cu_ft": 39.2,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 87.3
     },
     {
       "name": "Tesla Model X, 2026, Base",
@@ -1393,7 +1433,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 35.2,
       "fold_flat": "No",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 88
     },
     {
       "vehicle": "Tesla Model X",
@@ -1425,7 +1466,8 @@
       "hp": 670,
       "l2_10_100": 12.6,
       "l2_10_80": 6.8,
-      "notes": "MSRP for 7-seat row estimated as 5-seat MSRP + $3,500."
+      "notes": "MSRP for 7-seat row estimated as 5-seat MSRP + $3,500.",
+      "cargo_behind_1st_cu_ft": null
     },
     {
       "name": "Tesla Model X, 2026, Plaid",
@@ -1457,7 +1499,8 @@
       "cargo_behind_3rd_cu_ft": "N/A",
       "cargo_behind_2nd_cu_ft": 39.2,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 87.3
     },
     {
       "name": "Tesla Model X, 2026, Plaid",
@@ -1489,7 +1532,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 35.2,
       "fold_flat": "No",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 88
     },
     {
       "vehicle": "Tesla Model X",
@@ -1521,7 +1565,8 @@
       "hp": 1020,
       "l2_10_100": 10.8,
       "l2_10_80": 6.8,
-      "notes": "MSRP for 7-seat row estimated as 5-seat MSRP + $3,500. Note: Model X Plaid seating availability has changed over time."
+      "notes": "MSRP for 7-seat row estimated as 5-seat MSRP + $3,500. Note: Model X Plaid seating availability has changed over time.",
+      "cargo_behind_1st_cu_ft": null
     },
     {
       "name": "Tesla Model X, 2025, Base",
@@ -1553,7 +1598,8 @@
       "cargo_behind_3rd_cu_ft": "N/A",
       "cargo_behind_2nd_cu_ft": 39.2,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 87.3
     },
     {
       "name": "Tesla Model X, 2025, Base",
@@ -1585,7 +1631,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 35.2,
       "fold_flat": "No",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 88
     },
     {
       "vehicle": "Tesla Model X",
@@ -1617,7 +1664,8 @@
       "hp": 670,
       "l2_10_100": 14,
       "l2_10_80": 10.9,
-      "notes": "MSRP for 7-seat row estimated as 5-seat MSRP + $3,500."
+      "notes": "MSRP for 7-seat row estimated as 5-seat MSRP + $3,500.",
+      "cargo_behind_1st_cu_ft": null
     },
     {
       "name": "Tesla Model X, 2025, Plaid",
@@ -1649,7 +1697,8 @@
       "cargo_behind_3rd_cu_ft": "N/A",
       "cargo_behind_2nd_cu_ft": 39.2,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 87.3
     },
     {
       "name": "Tesla Model X, 2025, Plaid",
@@ -1681,7 +1730,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 35.2,
       "fold_flat": "No",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 88
     },
     {
       "vehicle": "Tesla Model X",
@@ -1713,7 +1763,8 @@
       "hp": 1020,
       "l2_10_100": 14,
       "l2_10_80": 10.9,
-      "notes": "MSRP for 7-seat row estimated as 5-seat MSRP + $3,500. Note: Model X Plaid seating availability has changed over time."
+      "notes": "MSRP for 7-seat row estimated as 5-seat MSRP + $3,500. Note: Model X Plaid seating availability has changed over time.",
+      "cargo_behind_1st_cu_ft": null
     },
     {
       "name": "Tesla Model X, 2024, Base",
@@ -1745,7 +1796,8 @@
       "cargo_behind_3rd_cu_ft": "N/A",
       "cargo_behind_2nd_cu_ft": 39.2,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 87.3
     },
     {
       "name": "Tesla Model X, 2024, Base",
@@ -1777,7 +1829,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 35.2,
       "fold_flat": "No",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 88
     },
     {
       "vehicle": "Tesla Model X",
@@ -1809,7 +1862,8 @@
       "hp": 670,
       "l2_10_100": 9.45,
       "l2_10_80": 7.35,
-      "notes": ""
+      "notes": "",
+      "cargo_behind_1st_cu_ft": null
     },
     {
       "name": "Tesla Model X, 2024, Plaid",
@@ -1841,7 +1895,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 35.2,
       "fold_flat": "No",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 88
     },
     {
       "name": "Tesla Model X, 2023, Base",
@@ -1873,7 +1928,8 @@
       "cargo_behind_3rd_cu_ft": "N/A",
       "cargo_behind_2nd_cu_ft": 39.2,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 87.3
     },
     {
       "name": "Tesla Model X, 2023, Base",
@@ -1905,7 +1961,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 35.2,
       "fold_flat": "No",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 88
     },
     {
       "vehicle": "Tesla Model X",
@@ -1937,7 +1994,8 @@
       "hp": 670,
       "l2_10_100": 12.6,
       "l2_10_80": 9.8,
-      "notes": ""
+      "notes": "",
+      "cargo_behind_1st_cu_ft": null
     },
     {
       "name": "Tesla Model X, 2023, Plaid",
@@ -1969,7 +2027,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 35.2,
       "fold_flat": "No",
-      "cargo_floor_width_in": 39
+      "cargo_floor_width_in": 39,
+      "cargo_behind_1st_cu_ft": 88
     },
     {
       "name": "Tesla Model Y Long (Asia), 2026, Long (Asia, 3-row variant)",
@@ -1990,7 +2049,7 @@
       "onboard_ac_kw": "TBD",
       "l2_10_100": "TBD",
       "l2_10_80": "TBD",
-      "charging_type": "NACS/GB-T varies by market",
+      "charging_type": "NACS / GB-T",
       "car_software": "Tesla OS",
       "main_display": "15\" center (reported)",
       "additional_displays": "N/A",
@@ -2001,7 +2060,8 @@
       "cargo_behind_3rd_cu_ft": 14.8,
       "cargo_behind_2nd_cu_ft": 38,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": null
+      "cargo_floor_width_in": null,
+      "cargo_behind_1st_cu_ft": 85.6
     },
     {
       "name": "Lucid Gravity, 2026, Grand Touring",
@@ -2033,7 +2093,8 @@
       "cargo_behind_3rd_cu_ft": "N/A",
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41
+      "cargo_floor_width_in": 41,
+      "cargo_behind_1st_cu_ft": 98
     },
     {
       "name": "Lucid Gravity, 2026, Touring",
@@ -2065,7 +2126,8 @@
       "cargo_behind_3rd_cu_ft": "N/A",
       "cargo_behind_2nd_cu_ft": 25,
       "fold_flat": "Yes",
-      "cargo_floor_width_in": 41
+      "cargo_floor_width_in": 41,
+      "cargo_behind_1st_cu_ft": 98
     },
     {
       "name": "Volkswagen ID. Buzz, 2025, 1st Edition with 4MOTION",
@@ -2086,7 +2148,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS1 native; NACS DC adapter supported for compatible Tesla Superchargers",
+      "charging_type": "CCS1 (+NACS adpt)",
       "car_software": "Wireless App-Connect (Apple CarPlay/Android Auto); myVW+; Wi-Fi hotspot; Premium Navigation EV / Premium Speech on equipped trims",
       "main_display": "12.9\" touchscreen",
       "additional_displays": "5.3\" driver display; no separate HUD claim populated",
@@ -2097,7 +2159,8 @@
       "cargo_behind_3rd_cu_ft": 18.6,
       "cargo_behind_2nd_cu_ft": 75.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 48.4
+      "cargo_floor_width_in": 48.4,
+      "cargo_behind_1st_cu_ft": 145.5
     },
     {
       "name": "Volkswagen ID. Buzz, 2025, Pro S Plus with 4MOTION",
@@ -2118,7 +2181,7 @@
       "onboard_ac_kw": 11,
       "l2_10_100": 9,
       "l2_10_80": 7,
-      "charging_type": "CCS1 native; NACS DC adapter supported for compatible Tesla Superchargers",
+      "charging_type": "CCS1 (+NACS adpt)",
       "car_software": "Wireless App-Connect (Apple CarPlay/Android Auto); myVW+; Wi-Fi hotspot; Premium Navigation EV / Premium Speech on equipped trims",
       "main_display": "12.9\" touchscreen",
       "additional_displays": "5.3\" driver display + HUD",
@@ -2129,7 +2192,8 @@
       "cargo_behind_3rd_cu_ft": 18.6,
       "cargo_behind_2nd_cu_ft": 75.5,
       "fold_flat": "Partial",
-      "cargo_floor_width_in": 48.4
+      "cargo_floor_width_in": 48.4,
+      "cargo_behind_1st_cu_ft": 145.5
     },
     {
       "name": "Toyota Highlander EV, 2026, Limited (expected)",
@@ -2161,7 +2225,8 @@
       "cargo_behind_3rd_cu_ft": null,
       "cargo_behind_2nd_cu_ft": null,
       "fold_flat": null,
-      "cargo_floor_width_in": null
+      "cargo_floor_width_in": null,
+      "cargo_behind_1st_cu_ft": null
     },
     {
       "name": "Toyota Highlander EV, 2026, XLE (expected)",
@@ -2193,7 +2258,8 @@
       "cargo_behind_3rd_cu_ft": null,
       "cargo_behind_2nd_cu_ft": null,
       "fold_flat": null,
-      "cargo_floor_width_in": null
+      "cargo_floor_width_in": null,
+      "cargo_behind_1st_cu_ft": null
     }
   ],
   "preowned": [
@@ -2875,14 +2941,19 @@
       "notes": "A storage compartment under the front hood, made possible by the absence of a combustion engine. Size varies widely — from minimal (1–2 cu ft) to large enough for a carry-on suitcase (11+ cu ft)."
     },
     {
-      "field": "Cargo Behind 3rd Row (cu ft)",
+      "field": "Behind 3rd Row (cu ft)",
       "meaning": "The trunk/cargo volume behind the third row of seats when all seats are upright, measured in cubic feet.",
       "notes": "This is the everyday usable trunk space with all rows occupied. Typically the smallest cargo measurement since it only counts the area behind the rearmost seats."
     },
     {
-      "field": "Cargo Behind 2nd Row (cu ft)",
+      "field": "Behind 2nd Row (cu ft)",
       "meaning": "The cargo volume behind the second row of seats when the third row is folded down or removed, measured in cubic feet.",
       "notes": "A substantially larger cargo area created by folding the 3rd row flat. Useful for bulky items like strollers, luggage, or furniture. Vehicles without a 3rd row (5-seat configurations) may not have this measurement."
+    },
+    {
+      "field": "Behind 1st Row (cu ft)",
+      "meaning": "The maximum cargo volume with all rear seats folded, measured from behind the front seats to the tailgate, in cubic feet.",
+      "notes": "The largest possible cargo configuration. Useful for moving furniture, large appliances, or maximizing hauling capacity. This completes the cargo measurement trio: behind 3rd row (trunk), behind 2nd row (3rd folded), behind 1st row (everything folded)."
     },
     {
       "field": "Fold Flat",

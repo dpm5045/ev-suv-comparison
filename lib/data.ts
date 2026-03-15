@@ -46,6 +46,7 @@ export interface DetailRow {
   frunk_cu_ft: number | null
   cargo_behind_3rd_cu_ft: number | string | null
   cargo_behind_2nd_cu_ft: number | null
+  cargo_behind_1st_cu_ft: number | null
   fold_flat: string | null
   cargo_floor_width_in: number | string | null
 }

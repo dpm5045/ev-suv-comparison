@@ -181,6 +181,8 @@ export default function OverviewTab() {
         const parts = r.otd_preowned.split('–')
         return parts.length > 1 ? parsePrice(parts[1]) : parsePrice(r.otd_preowned)
       }).filter((x) => x !== null) as number[]
+      const cargo3s = rows.map((r) => r.cargo_behind_3rd_cu_ft).filter((x) => typeof x === 'number') as number[]
+      const cargo2s = rows.map((r) => r.cargo_behind_2nd_cu_ft).filter((x) => typeof x === 'number') as number[]
       return {
         vehicle: v,
         otdLow: otds.length ? Math.min(...otds) : null,
@@ -193,6 +195,10 @@ export default function OverviewTab() {
         charging: types.join(' / ') || '—',
         preLow: preLows.length ? Math.min(...preLows) : null,
         preHigh: preHighs.length ? Math.max(...preHighs) : null,
+        cargo3Low: cargo3s.length ? Math.min(...cargo3s) : null,
+        cargo3High: cargo3s.length ? Math.max(...cargo3s) : null,
+        cargo2Low: cargo2s.length ? Math.min(...cargo2s) : null,
+        cargo2High: cargo2s.length ? Math.max(...cargo2s) : null,
       }
     })
 
@@ -222,7 +228,7 @@ export default function OverviewTab() {
     const frunkRows = d.filter((r) => typeof r.frunk_cu_ft === 'number' && r.frunk_cu_ft > 0)
     const largestFrunk = frunkRows.length ? frunkRows.reduce((a, b) => ((a.frunk_cu_ft as number) > (b.frunk_cu_ft as number) ? a : b)) : null
 
-    const cargo2Rows = d.filter((r) => typeof r.cargo_behind_2nd_cu_ft === 'number' && r.cargo_behind_2nd_cu_ft > 0)
+    const cargo2Rows = d.filter((r) => typeof r.cargo_behind_2nd_cu_ft === 'number' && r.cargo_behind_2nd_cu_ft > 0 && r.vehicle !== 'Volkswagen ID. Buzz')
     const mostCargo2 = cargo2Rows.length ? cargo2Rows.reduce((a, b) => ((a.cargo_behind_2nd_cu_ft as number) > (b.cargo_behind_2nd_cu_ft as number) ? a : b)) : null
 
     const cargo3Rows = d.filter((r) => typeof r.cargo_behind_3rd_cu_ft === 'number' && r.cargo_behind_3rd_cu_ft > 0)
@@ -331,15 +337,15 @@ export default function OverviewTab() {
         {insights.otdMin && (
           <div className="overview-stat">
             <div className="overview-stat-label">New OTD Price Range</div>
-            <div className="overview-stat-value">{fmtDollarK(insights.otdMin.otd_new as number)} to {fmtDollarK(insights.otdMax.otd_new as number)}</div>
-            <div className="overview-stat-detail">{insights.otdMin.vehicle} to {insights.otdMax.vehicle}</div>
+            <div className="overview-stat-value">{fmtDollarK(insights.otdMin.otd_new as number)}-{fmtDollarK(insights.otdMax.otd_new as number)}</div>
+            <div className="overview-stat-detail">{insights.otdMin.vehicle} - {insights.otdMax.vehicle}</div>
           </div>
         )}
         {insights.preownedMin !== null && (
           <div className="overview-stat">
             <div className="overview-stat-label">Pre-Owned OTD Range</div>
-            <div className="overview-stat-value">{fmtDollarK(insights.preownedMin)} to {fmtDollarK(insights.preownedMax!)}</div>
-            <div className="overview-stat-detail">{insights.preownedMinRow?.vehicle} to {insights.preownedMaxRow?.vehicle}</div>
+            <div className="overview-stat-value">{fmtDollarK(insights.preownedMin)}-{fmtDollarK(insights.preownedMax!)}</div>
+            <div className="overview-stat-detail">{insights.preownedMinRow?.vehicle} - {insights.preownedMaxRow?.vehicle}</div>
           </div>
         )}
         {insights.bestNacs && (
@@ -358,14 +364,14 @@ export default function OverviewTab() {
         )}
         {insights.mostCargo2 && (
           <div className="overview-stat">
-            <div className="overview-stat-label">Most Cargo (2nd Row)</div>
+            <div className="overview-stat-label">Most Cargo (Behind 2nd Row)</div>
             <div className="overview-stat-value">{insights.mostCargo2.cargo_behind_2nd_cu_ft} cu ft</div>
             <div className="overview-stat-detail">{insights.mostCargo2.vehicle} — behind 2nd row, seats folded</div>
           </div>
         )}
         {insights.mostCargo3 && (
           <div className="overview-stat">
-            <div className="overview-stat-label">Most Cargo (3rd Row)</div>
+            <div className="overview-stat-label">Most Cargo (Behind 3rd Row)</div>
             <div className="overview-stat-value">{insights.mostCargo3.cargo_behind_3rd_cu_ft} cu ft</div>
             <div className="overview-stat-detail">{insights.mostCargo3.vehicle} — behind 3rd row, seats up</div>
           </div>
@@ -385,7 +391,7 @@ export default function OverviewTab() {
         {/* Desktop table (+ mobile when Table toggled) */}
         <div className={glanceView === 'table' ? 'cmp-table-view cmp-table-forced' : 'cmp-table-view'}>
           <div className="table-wrap">
-            <table>
+            <table className="glance-table">
               <thead>
                 <tr>
                   <th className="col-sticky">Vehicle</th>
@@ -394,7 +400,9 @@ export default function OverviewTab() {
                   <th className="num">Range (mi)</th>
                   <th className="num">HP</th>
                   <th className="num">Battery (kWh)</th>
-                  <th>Charging</th>
+                  <th>Charge Tech</th>
+                  <th className="num">Behind 3rd Row (cu ft)</th>
+                  <th className="num">Behind 2nd Row (cu ft)</th>
                 </tr>
               </thead>
               <tbody>
@@ -403,10 +411,12 @@ export default function OverviewTab() {
                     <td className="col-sticky"><VehicleBadge vehicle={s.vehicle} /></td>
                     <td className="num">{s.otdLow !== null ? `${fmtDollarK(s.otdLow)}-${fmtDollarK(s.otdHigh!)}` : '—'}</td>
                     <td className="num">{s.preLow !== null ? `${fmtDollarK(s.preLow)}-${fmtDollarK(s.preHigh!)}` : '—'}</td>
-                    <td className="num">{rangeStr(s.rangeLow, s.rangeHigh, ' mi')}</td>
+                    <td className="num">{rangeStr(s.rangeLow, s.rangeHigh)}</td>
                     <td className="num">{rangeStr(s.hpLow, s.hpHigh)}</td>
                     <td className="num">{s.battery}</td>
                     <td>{s.charging}</td>
+                    <td className="num">{rangeStr(s.cargo3Low, s.cargo3High)}</td>
+                    <td className="num">{rangeStr(s.cargo2Low, s.cargo2High)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -457,6 +467,18 @@ export default function OverviewTab() {
                     <span className="cmp-stat-label">Charging</span>
                     <span className="cmp-stat-value">{s.charging}</span>
                   </div>
+                  {s.cargo3Low !== null && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Behind 3rd Row</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{rangeStr(s.cargo3Low, s.cargo3High)} cu ft</span>
+                    </div>
+                  )}
+                  {s.cargo2Low !== null && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Behind 2nd Row</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{rangeStr(s.cargo2Low, s.cargo2High)} cu ft</span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

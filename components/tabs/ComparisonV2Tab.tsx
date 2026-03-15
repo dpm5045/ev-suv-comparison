@@ -106,8 +106,9 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                 <th className="num">Battery</th>
                 <th>Charging</th>
                 <th className="num">Frunk (cu ft)</th>
-                <th className="num">Cargo B/H 3rd Row (cu ft)</th>
-                <th className="num">Cargo B/H 2nd Row (cu ft)</th>
+                <th className="num">Behind 3rd Row (cu ft)</th>
+                <th className="num">Behind 2nd Row (cu ft)</th>
+                <th className="num">Behind 1st Row (cu ft)</th>
                 <th>Fold Flat</th>
                 <th className="num">Floor Width (in)</th>
               </tr>
@@ -151,6 +152,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                     <td className="num">{r.frunk_cu_ft ?? dash}</td>
                     <td className="num">{r.cargo_behind_3rd_cu_ft ?? dash}</td>
                     <td className="num">{r.cargo_behind_2nd_cu_ft ?? dash}</td>
+                    <td className="num">{r.cargo_behind_1st_cu_ft ?? dash}</td>
                     <td>{r.fold_flat || dash}</td>
                     <td className="num">{r.cargo_floor_width_in ?? dash}</td>
                   </tr>
@@ -223,14 +225,20 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                   )}
                   {r.cargo_behind_3rd_cu_ft != null && (
                     <div className="cmp-stat">
-                      <span className="cmp-stat-label">Cargo (3rd Row)</span>
+                      <span className="cmp-stat-label">Behind 3rd Row</span>
                       <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.cargo_behind_3rd_cu_ft} cu ft</span>
                     </div>
                   )}
                   {r.cargo_behind_2nd_cu_ft != null && (
                     <div className="cmp-stat">
-                      <span className="cmp-stat-label">Cargo (2nd Row)</span>
+                      <span className="cmp-stat-label">Behind 2nd Row</span>
                       <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.cargo_behind_2nd_cu_ft} cu ft</span>
+                    </div>
+                  )}
+                  {r.cargo_behind_1st_cu_ft != null && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Behind 1st Row</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.cargo_behind_1st_cu_ft} cu ft</span>
                     </div>
                   )}
                   {r.fold_flat && (
