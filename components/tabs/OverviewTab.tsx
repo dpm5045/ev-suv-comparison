@@ -294,14 +294,14 @@ export default function OverviewTab() {
     <>
       <h2 className="section-title">Key Insights</h2>
       <p className="section-desc">
-        Key insights from 59 3-Row AWD electric SUV configurations across 9 models.
+        Key insights from 66 3-Row AWD electric SUV configurations across 9 models.
       </p>
 
       {/* ── At a Glance ── */}
       <div className="overview-stats">
         <div className="overview-stat">
           <div className="overview-stat-label">Models Analyzed</div>
-          <div className="overview-stat-value">59</div>
+          <div className="overview-stat-value">66</div>
           <div className="overview-stat-detail">{insights.vehicles.length} vehicles, 4 model years</div>
         </div>
         {insights.rangeLeader && (
