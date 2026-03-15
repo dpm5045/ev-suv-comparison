@@ -333,12 +333,118 @@ Look for new entrants from manufacturers like Subaru, Mercedes, BMW, Cadillac, F
   }
 }
 
+// ── Phase 5: Gap Filling ──
+// Scans every entry for null/empty fields that should have data and asks Claude to research them.
+async function phaseGapFilling() {
+  log('phase5', 'Scanning for data gaps (null/empty fields)...')
+
+  const fillableFields = [
+    'onboard_ac_kw', 'l2_10_100', 'l2_10_80', 'charging_type',
+    'frunk_cu_ft', 'cargo_behind_3rd_cu_ft', 'cargo_behind_2nd_cu_ft',
+    'cargo_behind_1st_cu_ft', 'fold_flat', 'cargo_floor_width_in',
+    'self_driving', 'car_software', 'main_display', 'additional_displays',
+    'audio', 'hp', 'battery_kwh', 'range_mi', 'seats',
+  ]
+
+  // Find rows with gaps
+  const gapRows = []
+  for (const row of data.details) {
+    const gaps = fillableFields.filter((f) => {
+      const val = row[f]
+      return val === null || val === '' || (typeof val === 'string' && val === 'TBD')
+    })
+    if (gaps.length > 0) {
+      gapRows.push({ name: row.name, vehicle: row.vehicle, year: row.year, trim: row.trim, gaps })
+    }
+  }
+
+  if (gapRows.length === 0) {
+    log('phase5', 'No gaps found')
+    return
+  }
+
+  log('phase5', `Found ${gapRows.length} entries with data gaps`)
+
+  // Only send rows that have gaps worth researching (more than just cargo_floor_width_in)
+  const worthResearching = gapRows.filter((r) =>
+    r.gaps.some((g) => g !== 'cargo_floor_width_in')
+  )
+
+  if (worthResearching.length === 0) {
+    log('phase5', 'All gaps are non-critical (cargo_floor_width_in only), skipping')
+    return
+  }
+
+  const gapSummary = worthResearching.map((r) =>
+    `${r.name}\n  Missing: ${r.gaps.join(', ')}`
+  ).join('\n\n')
+
+  try {
+    const { json, inputTokens, outputTokens } = await callClaude({
+      systemPrompt: `You are an EV spec research assistant filling in missing data. You MUST output ONLY a JSON code block with no other text.
+
+Response schema — a JSON object keyed by vehicle name:
+{
+  "<exact name>": { "<field>": <value>, ... },
+  ...
+}
+
+Rules:
+- Only include fields where you found CONFIRMED data from official sources.
+- Numeric fields (onboard_ac_kw, l2_10_100, l2_10_80, frunk_cu_ft, cargo volumes, cargo_floor_width_in, hp, battery_kwh, range_mi, seats) must be numbers.
+- frunk_cu_ft should be null (not 0) if the vehicle has no frunk.
+- cargo_behind_3rd_cu_ft should be "N/A" for 5-seat vehicles with no 3rd row.
+- fold_flat should be "Yes" or "No".
+- charging_type should use the format: "PORT (+ALT detail)" e.g. "NACS (+CCS adpt)" or "CCS (+NACS adpt)".
+- L2 charging times (l2_10_100 and l2_10_80) are in hours as decimal numbers.
+- If you cannot find reliable data for a field, do NOT include it.
+- The "name" key must EXACTLY match the name from the input.`,
+
+      userMessage: `Search the web to fill in missing specifications for these AWD 3-row electric SUVs. Check manufacturer websites, EPA.gov, Edmunds, Car and Driver, and MotorTrend.
+
+Entries with missing data:
+${gapSummary}`,
+
+      maxTokens: 4000,
+    })
+
+    totalInputTokens += inputTokens
+    totalOutputTokens += outputTokens
+
+    if (typeof json !== 'object' || Array.isArray(json)) {
+      log('phase5', 'Unexpected response format, skipping')
+      return
+    }
+
+    let fillCount = 0
+    for (const [name, updates] of Object.entries(json)) {
+      const row = data.details.find((r) => r.name === name)
+      if (!row) continue
+      for (const [field, value] of Object.entries(updates)) {
+        if (value != null && row[field] !== undefined && fillableFields.includes(field)) {
+          const oldVal = row[field]
+          // Only fill if currently null, empty, or TBD
+          if (oldVal === null || oldVal === '' || oldVal === 'TBD') {
+            row[field] = value
+            fillCount++
+            log('phase5', `  ${name}: ${field} = ${value}`)
+          }
+        }
+      }
+    }
+
+    log('phase5', `Filled ${fillCount} data gaps`)
+  } catch (err) {
+    log('phase5', `FAILED: ${err.message} — skipping phase`)
+  }
+}
+
 // ── Main pipeline ──
 async function main() {
   log('main', DRY_RUN ? 'DRY RUN MODE — no git/PR operations' : 'Full run')
   log('main', `Dataset: ${data.details.length} details, ${data.preowned.length} preowned`)
 
-  // Run all 4 phases sequentially with delays between API calls
+  // Run all 5 phases sequentially with delays between API calls
   await phasePreownedPricing()
   await delayCalls()
   await phaseTbdResolution()
@@ -346,6 +452,8 @@ async function main() {
   await phaseSpecCorrections()
   await delayCalls()
   await phaseNewVehicles()
+  await delayCalls()
+  await phaseGapFilling()
 
   // Recalculate all OTD values
   log('otd', 'Recalculating all OTD values...')
@@ -376,14 +484,14 @@ async function main() {
   // Check for changes
   const changelog = buildChangelog(originalData, data)
   const totalChanges = changelog.pricing.length + changelog.specs.length +
-    changelog.newVehicles.length + changelog.tbdResolved.length
+    changelog.newVehicles.length + changelog.tbdResolved.length + changelog.gapsFilled.length
 
   if (totalChanges === 0 && changelog.otdRecalculated === 0) {
     log('main', 'No changes detected. Nothing to do.')
     return
   }
 
-  log('main', `Changes: ${changelog.pricing.length} pricing, ${changelog.specs.length} specs, ${changelog.tbdResolved.length} TBD resolved, ${changelog.newVehicles.length} new vehicles, ${changelog.otdRecalculated} OTD recalculated`)
+  log('main', `Changes: ${changelog.pricing.length} pricing, ${changelog.specs.length} specs, ${changelog.tbdResolved.length} TBD resolved, ${changelog.gapsFilled.length} gaps filled, ${changelog.newVehicles.length} new vehicles, ${changelog.otdRecalculated} OTD recalculated`)
 
   // Estimate cost (Sonnet: $3/MTok input, $15/MTok output + ~$0.01/search)
   const estimatedCost = (totalInputTokens / 1_000_000) * 3 + (totalOutputTokens / 1_000_000) * 15 + 0.30

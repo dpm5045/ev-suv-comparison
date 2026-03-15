@@ -11,7 +11,7 @@ import { join } from 'path'
  * Build a structured changelog by comparing old and new data.
  * @param {object} oldData
  * @param {object} newData
- * @returns {{ pricing: string[], specs: string[], newVehicles: string[], tbdResolved: string[], otdRecalculated: number }}
+ * @returns {{ pricing: string[], specs: string[], newVehicles: string[], tbdResolved: string[], gapsFilled: string[], otdRecalculated: number }}
  */
 export function buildChangelog(oldData, newData) {
   const changes = {
@@ -19,13 +19,16 @@ export function buildChangelog(oldData, newData) {
     specs: [],
     newVehicles: [],
     tbdResolved: [],
+    gapsFilled: [],
     otdRecalculated: 0,
   }
 
   const oldByName = Object.fromEntries(oldData.details.map((r) => [r.name, r]))
   const specFields = ['msrp', 'range_mi', 'hp', 'battery_kwh', 'seats', 'charging_type',
     'frunk_cu_ft', 'cargo_behind_3rd_cu_ft', 'cargo_behind_2nd_cu_ft',
-    'cargo_behind_1st_cu_ft', 'cargo_floor_width_in', 'fold_flat']
+    'cargo_behind_1st_cu_ft', 'cargo_floor_width_in', 'fold_flat',
+    'onboard_ac_kw', 'l2_10_100', 'l2_10_80', 'self_driving',
+    'car_software', 'main_display', 'additional_displays', 'audio']
 
   for (const row of newData.details) {
     const old = oldByName[row.name]
@@ -44,8 +47,11 @@ export function buildChangelog(oldData, newData) {
     // Spec changes
     for (const field of specFields) {
       if (JSON.stringify(row[field]) !== JSON.stringify(old[field])) {
+        const wasEmpty = old[field] === null || old[field] === ''
         const isTbdResolved = isTbdLike(old[field]) && !isTbdLike(row[field])
-        if (isTbdResolved) {
+        if (wasEmpty && !isTbdLike(row[field])) {
+          changes.gapsFilled.push(`**${row.name}**: \`${field}\` filled → ${row[field]}`)
+        } else if (isTbdResolved) {
           changes.tbdResolved.push(`**${row.name}**: \`${field}\` resolved to ${row[field]}`)
         } else {
           changes.specs.push(`**${row.name}**: \`${field}\` ${old[field]} -> ${row[field]}`)
@@ -98,6 +104,9 @@ export function formatPrBody(changes, cost) {
   }
   if (changes.specs.length) {
     sections.push(`### Spec Corrections\n${changes.specs.map((c) => `- ${c}`).join('\n')}`)
+  }
+  if (changes.gapsFilled.length) {
+    sections.push(`### Data Gaps Filled\n${changes.gapsFilled.map((c) => `- ${c}`).join('\n')}`)
   }
   if (changes.newVehicles.length) {
     sections.push(`### New Vehicles Detected\n${changes.newVehicles.map((c) => `- ${c}`).join('\n')}`)

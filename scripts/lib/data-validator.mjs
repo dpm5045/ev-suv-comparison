@@ -113,5 +113,26 @@ export function validateData(data, originalData) {
     }
   }
 
+  // 9. Data completeness — flag entries with many null/empty fields
+  const completenessFields = [
+    'onboard_ac_kw', 'l2_10_100', 'l2_10_80', 'charging_type',
+    'frunk_cu_ft', 'cargo_behind_3rd_cu_ft', 'cargo_behind_2nd_cu_ft',
+    'cargo_behind_1st_cu_ft', 'fold_flat', 'hp', 'battery_kwh', 'range_mi',
+    'self_driving', 'car_software', 'main_display',
+  ]
+  for (const row of data.details) {
+    const nullCount = completenessFields.filter((f) => {
+      const val = row[f]
+      return val === null || val === '' || (typeof val === 'string' && val === 'TBD')
+    }).length
+    if (nullCount >= 5) {
+      const missing = completenessFields.filter((f) => {
+        const val = row[f]
+        return val === null || val === '' || (typeof val === 'string' && val === 'TBD')
+      })
+      warnings.push(`${row.name}: ${nullCount} missing fields (${missing.join(', ')})`)
+    }
+  }
+
   return { errors, warnings }
 }

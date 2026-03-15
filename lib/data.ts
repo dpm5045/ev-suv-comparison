@@ -95,5 +95,9 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'Toyota Highlander EV': 'v-toyota',
   'Volkswagen ID. Buzz': 'v-vw',
   'Volvo EX90': 'v-volvo',
+  'Cadillac Escalade IQ': 'v-cadillac',
+  'Cadillac VISTIQ': 'v-cadillac',
+  'Mercedes-Benz EQS SUV': 'v-mercedes',
+  'Subaru 3-Row EV': 'v-subaru',
 }
 
