@@ -2,11 +2,12 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export type TabId = 'overview' | 'comparison' | 'sidebyside' | 'glossary' | 'assumptions'
+export type TabId = 'overview' | 'comparison' | 'trimlibrary' | 'sidebyside' | 'glossary' | 'assumptions'
 
 const TABS: { id: TabId; label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'comparison', label: 'Detailed Comparison' },
+  { id: 'trimlibrary', label: 'Trim Library' },
   { id: 'sidebyside', label: 'Side-by-Side' },
   { id: 'assumptions', label: 'Approach & Assumptions' },
   { id: 'glossary', label: 'Glossary' },
