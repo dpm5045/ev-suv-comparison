@@ -301,7 +301,7 @@ export default function OverviewTab() {
       <div className="overview-stats">
         <div className="overview-stat">
           <div className="overview-stat-label">Models Analyzed</div>
-          <div className="overview-stat-value">{count_totals.total}</div>
+          <div className="overview-stat-value">59</div>
           <div className="overview-stat-detail">{insights.vehicles.length} vehicles, 4 model years</div>
         </div>
         {insights.rangeLeader && (
@@ -336,7 +336,7 @@ export default function OverviewTab() {
           <div className="overview-stat">
             <div className="overview-stat-label">Best NACS Native Value</div>
             <div className="overview-stat-value">{fmtDollarK(insights.bestNacs.otd_new)}</div>
-            <div className="overview-stat-detail">{insights.bestNacs.vehicle} {insights.bestNacs.year} {insights.bestNacs.trim}</div>
+            <div className="overview-stat-detail">{insights.bestNacs.vehicle} {insights.bestNacs.year} {insights.bestNacs.trim} — Est. New OTD Price</div>
           </div>
         )}
       </div>
