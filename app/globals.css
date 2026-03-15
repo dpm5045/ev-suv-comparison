@@ -151,7 +151,7 @@ body {
   margin-bottom: 6px;
 }
 .section-desc {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text-muted);
   margin-bottom: 24px;
   max-width: 720px;
@@ -166,7 +166,7 @@ body {
   margin-bottom: 20px;
 }
 .card-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -183,13 +183,13 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 15px;
 }
 th {
   background: var(--surface2);
   color: var(--text-muted);
   font-weight: 600;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   padding: 10px 14px;
@@ -215,7 +215,7 @@ tr:hover td {
 .num {
   text-align: right;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
 }
 .total-row td {
   font-weight: 700;
@@ -228,15 +228,15 @@ tr:hover td {
 .cell-price {
   color: var(--green);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
 }
 .cell-range {
   color: var(--teal);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
 }
 .cell-note {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   max-width: 260px;
 }
@@ -244,9 +244,9 @@ tr:hover td {
 /* ── Vehicle badge colors ── */
 .vehicle-badge {
   display: inline-block;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: 4px;
   white-space: nowrap;
 }
@@ -273,7 +273,7 @@ tr:hover td {
   gap: 4px;
 }
 .filter-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
@@ -282,7 +282,7 @@ tr:hover td {
 select,
 .search-input {
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 15px;
   background: var(--surface2);
   color: var(--text);
   border: 1px solid var(--border);
@@ -410,21 +410,21 @@ tr[data-clickable='true']:hover td.col-sticky {
   padding: 12px;
 }
 .detail-stat-label {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 4px;
 }
 .detail-stat-value {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
 }
 .detail-section {
   margin-bottom: 16px;
 }
 .detail-section-title {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
@@ -438,7 +438,7 @@ tr[data-clickable='true']:hover td.col-sticky {
   justify-content: space-between;
   padding: 6px 0;
   border-bottom: 1px solid rgba(42, 51, 71, 0.5);
-  font-size: 13px;
+  font-size: 15px;
 }
 .detail-row-label {
   color: var(--text-muted);
@@ -476,7 +476,7 @@ tr[data-clickable='true']:hover td.col-sticky {
 }
 .view-toggle-btn {
   font-family: var(--font);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   padding: 5px 14px;
   border: none;
@@ -516,7 +516,7 @@ tr[data-clickable='true']:hover td.col-sticky {
   margin-bottom: 6px;
 }
 .cmp-card-year-trim {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
   margin-bottom: 10px;
 }
@@ -531,19 +531,19 @@ tr[data-clickable='true']:hover td.col-sticky {
   gap: 2px;
 }
 .cmp-stat-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 .cmp-stat-value {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text);
 }
 .cmp-card-tap-hint {
   margin-top: 10px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-dim);
   text-align: right;
 }
@@ -556,33 +556,71 @@ tr[data-clickable='true']:hover td.col-sticky {
 .glossary-field {
   font-weight: 600;
   color: var(--accent);
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 4px;
 }
 .glossary-meaning {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text);
   margin-bottom: 4px;
 }
 .glossary-notes {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
-/* ── Approach ── */
-.approach-list {
-  margin: 0;
-  padding: 0 0 0 20px;
-  list-style: disc;
+/* ── Approach Accordions ── */
+.approach-accordions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-.approach-list li {
-  font-size: 14px;
-  line-height: 1.7;
-  margin-bottom: 12px;
+.approach-accordion {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.6;
+  transition: border-color 0.15s, background 0.15s;
+}
+.approach-accordion:hover {
+  border-color: var(--border-light);
+}
+.approach-accordion.open {
+  background: var(--surface);
+}
+.approach-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.approach-accordion-header strong {
   color: var(--text);
 }
-.approach-list li:last-child {
-  margin-bottom: 0;
+.approach-chevron {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+.approach-chevron.open {
+  transform: rotate(180deg);
+}
+.approach-accordion-body {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.7;
 }
 
 /* ── Assumptions ── */
@@ -596,16 +634,16 @@ tr[data-clickable='true']:hover td.col-sticky {
 .assumption-name {
   font-weight: 600;
   min-width: 260px;
-  font-size: 14px;
+  font-size: 16px;
 }
 .assumption-val {
   font-family: var(--mono);
   color: var(--accent);
-  font-size: 14px;
+  font-size: 16px;
   min-width: 80px;
 }
 .assumption-note {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -690,7 +728,7 @@ tr[data-clickable='true']:hover td.col-sticky {
   transition: width 0.4s ease;
 }
 .news-status {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-dim);
   margin-bottom: 16px;
 }
@@ -713,7 +751,7 @@ tr[data-clickable='true']:hover td.col-sticky {
   margin-bottom: 12px;
 }
 .news-card-body {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.7;
   color: var(--text);
 }
@@ -728,7 +766,7 @@ tr[data-clickable='true']:hover td.col-sticky {
   text-decoration: underline;
 }
 .news-heading {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--accent);
   margin: 16px 0 8px;
@@ -758,7 +796,7 @@ tr[data-clickable='true']:hover td.col-sticky {
 /* ── Count note ── */
 .count-note {
   margin-top: 16px;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
   line-height: 1.7;
 }
@@ -766,7 +804,7 @@ tr[data-clickable='true']:hover td.col-sticky {
 /* ── Result count ── */
 .result-count {
   margin-top: 12px;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-dim);
 }
 

@@ -166,13 +166,13 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                   </div>
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">Range</span>
-                    <span className="cmp-stat-value" style={{ color: 'var(--teal)', fontFamily: 'var(--mono)', fontSize: 12 }}>
+                    <span className="cmp-stat-value" style={{ color: 'var(--teal)', fontFamily: 'var(--mono)' }}>
                       {range.text}{typeof r.range_mi === 'number' ? ' mi' : ''}
                     </span>
                   </div>
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">Battery</span>
-                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)', fontSize: 12 }}>
+                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
                       {bat.text}{typeof r.battery_kwh === 'number' ? ' kWh' : ''}
                     </span>
                   </div>

@@ -383,25 +383,25 @@ export default function OverviewTab() {
                 <div className="cmp-card-stats">
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">Est. OTD New</span>
-                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)', fontSize: 12 }}>
+                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
                       {s.otdLow !== null ? `${fmtDollar(s.otdLow)}–${fmtDollar(s.otdHigh!)}` : '—'}
                     </span>
                   </div>
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">Range</span>
-                    <span className="cmp-stat-value" style={{ color: 'var(--teal)', fontFamily: 'var(--mono)', fontSize: 12 }}>
+                    <span className="cmp-stat-value" style={{ color: 'var(--teal)', fontFamily: 'var(--mono)' }}>
                       {rangeStr(s.rangeLow, s.rangeHigh, ' mi')}
                     </span>
                   </div>
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">HP</span>
-                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)', fontSize: 12 }}>
+                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
                       {rangeStr(s.hpLow, s.hpHigh)}
                     </span>
                   </div>
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">Battery</span>
-                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)', fontSize: 12 }}>
+                    <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
                       {s.battery} kWh
                     </span>
                   </div>
