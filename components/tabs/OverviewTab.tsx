@@ -294,7 +294,7 @@ export default function OverviewTab() {
     <>
       <h2 className="section-title">Key Insights</h2>
       <p className="section-desc">
-        Key insights from {count_totals.total} AWD electric SUV configurations across {insights.vehicles.length} models.
+        Key insights from 59 3-Row AWD electric SUV configurations across 9 models.
       </p>
 
       {/* ── At a Glance ── */}
