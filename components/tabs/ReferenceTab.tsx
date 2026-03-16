@@ -11,8 +11,8 @@ const APPROACH_BULLETS = [
   'Flagged uncertainty explicitly. Vehicles that were too new, unreleased, region-specific, or lacking a meaningful used market were marked as TBD, N/A, or "No meaningful used market yet" rather than assigned weak estimates.',
 ]
 
-export default function AssumptionsTab() {
-  const { count_data, count_totals, count_note } = DATA
+export default function ReferenceTab() {
+  const { count_data, count_totals, count_note, glossary } = DATA
   const [open, setOpen] = useState<Set<number>>(new Set())
 
   function toggle(i: number) {
@@ -26,7 +26,7 @@ export default function AssumptionsTab() {
 
   return (
     <>
-      <h2 className="section-title">Approach & Assumptions</h2>
+      <h2 className="section-title">Reference</h2>
 
       {/* ── Approach ── */}
       <div className="card">
@@ -102,6 +102,18 @@ export default function AssumptionsTab() {
         <p className="count-note">{count_note}</p>
       </div>
 
+      {/* ── Glossary ── */}
+      <div className="card">
+        <div className="card-title">Glossary</div>
+        <p className="section-desc" style={{ marginBottom: '1rem' }}>Definitions for all fields used in the comparison tables.</p>
+        {glossary.map((g) => (
+          <div key={g.field} className="glossary-item">
+            <div className="glossary-field">{g.field}</div>
+            <div className="glossary-meaning">{g.meaning}</div>
+            {g.notes && <div className="glossary-notes">{g.notes}</div>}
+          </div>
+        ))}
+      </div>
     </>
   )
 }

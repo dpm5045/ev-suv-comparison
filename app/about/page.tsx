@@ -66,7 +66,7 @@ export default function AboutPage() {
             </p>
             <p>
               For a detailed breakdown of our data assumptions and methodology, see
-              the <Link href="/?tab=assumptions" className="info-link">Approach &amp; Assumptions</Link> tab
+              the <Link href="/?tab=reference" className="info-link">Reference</Link> tab
               on the main comparison tool.
             </p>
           </section>
