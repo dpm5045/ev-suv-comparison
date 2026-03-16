@@ -6,8 +6,8 @@
 const API_URL = 'https://api.anthropic.com/v1/messages'
 const MODEL = 'claude-sonnet-4-6'
 const MAX_RETRIES = 2
-const RETRY_DELAY_MS = 30_000
-const CALL_DELAY_MS = 5_000
+const RETRY_DELAY_MS = 60_000
+const CALL_DELAY_MS = 65_000
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))

@@ -142,6 +142,16 @@ export function createPR(jsonPath, prBody) {
     // May already be configured
   }
 
+  // Clean up any existing branch (from a previous failed run)
+  try {
+    run(`git branch -D ${branch}`)
+    console.log(`Deleted existing local branch: ${branch}`)
+  } catch { /* branch doesn't exist locally — fine */ }
+  try {
+    run(`git push origin --delete ${branch}`)
+    console.log(`Deleted existing remote branch: ${branch}`)
+  } catch { /* branch doesn't exist on remote — fine */ }
+
   console.log(`Creating branch: ${branch}`)
   run(`git checkout -b ${branch}`)
 
