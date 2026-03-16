@@ -191,9 +191,17 @@ Rules:
 - MSRP changes must reflect the current official price, not sale prices or incentives.
 - Range values must be EPA-rated, not manufacturer-estimated.
 - If no corrections are needed, return an empty array: []
-- The "name" field must EXACTLY match the name from the input data.`,
+- The "name" field must EXACTLY match the name from the input data.
+
+CRITICAL — seat configurations:
+- This dataset uses SEPARATE ROWS for each seat configuration of the same vehicle (e.g. "Tesla Model X, 2026, Base (5-seat)" and "Tesla Model X, 2026, Base (6-seat)" are two different entries).
+- NEVER change the "seats" field. Each row's seat count is intentionally set and defines that configuration.
+- NEVER change "cargo_behind_3rd_cu_ft", "cargo_behind_2nd_cu_ft", "cargo_behind_1st_cu_ft", or "fold_flat" — these are specific to each seat configuration and are correct as-is.
+- Only correct fields like msrp, range_mi, hp, battery_kwh, and charging_type.`,
 
       userMessage: `Cross-check the following EV specs against current manufacturer websites and EPA data. Return corrections ONLY for values that are clearly wrong. These are AWD 3-row electric SUVs.
+
+Note: This dataset tracks multiple seat configurations per vehicle as separate rows (e.g. 5-seat, 6-seat, 7-seat). Do NOT suggest changes to seats or cargo fields — those are intentionally different per configuration.
 
 Current specs:
 ${specSummary}`,
@@ -209,10 +217,20 @@ ${specSummary}`,
       return
     }
 
+    // Fields that must never be changed by the pipeline (seat-config-specific)
+    const PROTECTED_FIELDS = new Set([
+      'seats', 'cargo_behind_3rd_cu_ft', 'cargo_behind_2nd_cu_ft',
+      'cargo_behind_1st_cu_ft', 'fold_flat', 'cargo_floor_width_in',
+    ])
+
     let updateCount = 0
     for (const correction of json) {
       const row = data.details.find((r) => r.name === correction.name)
       if (!row || !correction.field || correction.new_value === undefined) continue
+      if (PROTECTED_FIELDS.has(correction.field)) {
+        log('phase3', `  SKIPPED (protected field): ${correction.name}: ${correction.field} ${correction.old_value} -> ${correction.new_value}`)
+        continue
+      }
       if (row[correction.field] !== undefined) {
         row[correction.field] = correction.new_value
         updateCount++
@@ -338,12 +356,15 @@ Look for new entrants from manufacturers like Subaru, Mercedes, BMW, Cadillac, F
 async function phaseGapFilling() {
   log('phase5', 'Scanning for data gaps (null/empty fields)...')
 
+  // Note: 'seats' excluded — seat count is set at entry creation and defines the configuration.
+  // Cargo/fold fields are included here because Phase 5 only fills genuinely empty fields (null/TBD),
+  // not overwrite existing values.
   const fillableFields = [
     'onboard_ac_kw', 'l2_10_100', 'l2_10_80', 'charging_type',
     'frunk_cu_ft', 'cargo_behind_3rd_cu_ft', 'cargo_behind_2nd_cu_ft',
     'cargo_behind_1st_cu_ft', 'fold_flat', 'cargo_floor_width_in',
     'self_driving', 'car_software', 'main_display', 'additional_displays',
-    'audio', 'hp', 'battery_kwh', 'range_mi', 'seats',
+    'audio', 'hp', 'battery_kwh', 'range_mi',
   ]
 
   // Find rows with gaps

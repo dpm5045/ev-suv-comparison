@@ -323,8 +323,8 @@
       "msrp": 73900,
       "destination": 1495,
       "otd_new": 80823.7,
-      "preowned_range": "$42,000 - $70,000",
-      "otd_preowned": "$45,425 - $75,105",
+      "preowned_range": "$48,000 - $65,000",
+      "otd_preowned": "$51,785 - $69,805",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
       "range_mi": 270,
       "hp": 379,
@@ -356,8 +356,8 @@
       "msrp": 69900,
       "destination": 1495,
       "otd_new": 76583.7,
-      "preowned_range": "$42,000 - $47,000",
-      "otd_preowned": "$45,425 - $50,725",
+      "preowned_range": "$44,000 - $51,000",
+      "otd_preowned": "$47,545 - $54,965",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
       "range_mi": 280,
       "hp": 379,
@@ -389,8 +389,8 @@
       "msrp": 63900,
       "destination": 1495,
       "otd_new": 70223.7,
-      "preowned_range": "$38,000 - $45,000",
-      "otd_preowned": "$41,185 - $48,605",
+      "preowned_range": "$40,000 - $47,000",
+      "otd_preowned": "$43,305 - $50,725",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
       "range_mi": 280,
       "hp": 379,
@@ -422,8 +422,8 @@
       "msrp": "N/A - Not New",
       "destination": 1495,
       "otd_new": "-",
-      "preowned_range": "$35,900 - $56,300",
-      "otd_preowned": "$38,959 - $60,583",
+      "preowned_range": "$37,000 - $46,000",
+      "otd_preowned": "$40,125 - $49,665",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
       "range_mi": 270,
       "hp": 379,
@@ -488,8 +488,8 @@
       "msrp": "N/A - Not New",
       "destination": 1495,
       "otd_new": "-",
-      "preowned_range": "$38,000 - $44,000",
-      "otd_preowned": "$41,185 - $47,545",
+      "preowned_range": "$34,000 - $40,000",
+      "otd_preowned": "$36,945 - $43,305",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
       "range_mi": 280,
       "hp": 379,
@@ -554,8 +554,8 @@
       "msrp": "N/A - Not New",
       "destination": 1495,
       "otd_new": "-",
-      "preowned_range": "$32,000 - $38,000",
-      "otd_preowned": "$34,825 - $41,185",
+      "preowned_range": "$33,000 - $37,000",
+      "otd_preowned": "$35,885 - $40,125",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
       "range_mi": 280,
       "hp": 379,
@@ -587,8 +587,8 @@
       "msrp": 74990,
       "destination": 1600,
       "otd_new": 82090.4,
-      "preowned_range": "$57,090 - $60,755",
-      "otd_preowned": "$61,420 - $65,305",
+      "preowned_range": "$57,000 - $63,000",
+      "otd_preowned": "$61,325 - $67,685",
       "self_driving": "Hyundai Highway Driving Assist (ADAS)",
       "range_mi": 311,
       "hp": 422,
@@ -620,8 +620,8 @@
       "msrp": 76490,
       "destination": 1600,
       "otd_new": 83680.4,
-      "preowned_range": "$59,500 - $63,500",
-      "otd_preowned": "$63,975 - $68,215",
+      "preowned_range": "$59,000 - $65,000",
+      "otd_preowned": "$63,445 - $69,805",
       "self_driving": "Hyundai Highway Driving Assist (ADAS)",
       "range_mi": 311,
       "hp": 422,
@@ -653,8 +653,8 @@
       "msrp": 71250,
       "destination": 1600,
       "otd_new": 78126,
-      "preowned_range": "$54,995 - $59,999",
-      "otd_preowned": "$59,200 - $64,504",
+      "preowned_range": "$55,000 - $62,000",
+      "otd_preowned": "$59,205 - $66,625",
       "self_driving": "Hyundai Highway Driving Assist (ADAS)",
       "range_mi": 311,
       "hp": 422,
@@ -686,8 +686,8 @@
       "msrp": 62765,
       "destination": 1600,
       "otd_new": 69131.9,
-      "preowned_range": "$46,600 - $60,000",
-      "otd_preowned": "$50,301 - $64,505",
+      "preowned_range": "$48,000 - $56,000",
+      "otd_preowned": "$51,785 - $60,265",
       "self_driving": "Hyundai Highway Driving Assist (ADAS)",
       "range_mi": 320,
       "hp": 303,
@@ -719,8 +719,8 @@
       "msrp": 66320,
       "destination": 1600,
       "otd_new": 72900.2,
-      "preowned_range": "$46,600 - $60,000",
-      "otd_preowned": "$50,301 - $64,505",
+      "preowned_range": "$49,000 - $58,000",
+      "otd_preowned": "$52,845 - $62,385",
       "self_driving": "Hyundai Highway Driving Assist (ADAS)",
       "range_mi": 320,
       "hp": 303,
@@ -818,8 +818,8 @@
       "msrp": 85495,
       "destination": null,
       "otd_new": 91529.7,
-      "preowned_range": "$58,500 - $69,500",
-      "otd_preowned": "$62,915 - $74,575",
+      "preowned_range": "$63,000 - $72,000",
+      "otd_preowned": "$67,685 - $77,225",
       "self_driving": "Volvo Pilot Assist / ADAS",
       "range_mi": 300,
       "hp": 509,
@@ -851,8 +851,8 @@
       "msrp": 84995,
       "destination": null,
       "otd_new": 90999.7,
-      "preowned_range": "$58,500 - $69,500",
-      "otd_preowned": "$62,915 - $74,575",
+      "preowned_range": "$63,000 - $72,000",
+      "otd_preowned": "$67,685 - $77,225",
       "self_driving": "Volvo Pilot Assist / ADAS",
       "range_mi": 300,
       "hp": 509,
@@ -884,8 +884,8 @@
       "msrp": 89845,
       "destination": null,
       "otd_new": 96140.7,
-      "preowned_range": "$65,000 - $78,000",
-      "otd_preowned": "$69,805 - $83,585",
+      "preowned_range": "$70,000 - $82,000",
+      "otd_preowned": "$75,105 - $87,825",
       "self_driving": "Volvo Pilot Assist / ADAS",
       "range_mi": 310,
       "hp": 509,
@@ -917,8 +917,8 @@
       "msrp": 89345,
       "destination": null,
       "otd_new": 95610.7,
-      "preowned_range": "$65,000 - $78,000",
-      "otd_preowned": "$69,805 - $83,585",
+      "preowned_range": "$70,000 - $82,000",
+      "otd_preowned": "$75,105 - $87,825",
       "self_driving": "Volvo Pilot Assist / ADAS",
       "range_mi": 310,
       "hp": 509,
@@ -950,8 +950,8 @@
       "msrp": 80495,
       "destination": null,
       "otd_new": 86229.7,
-      "preowned_range": "$47,800 - $55,000",
-      "otd_preowned": "$51,573 - $59,205",
+      "preowned_range": "$60,000 - $68,000",
+      "otd_preowned": "$64,505 - $72,985",
       "self_driving": "Volvo Pilot Assist / ADAS",
       "range_mi": 300,
       "hp": 402,
@@ -983,8 +983,8 @@
       "msrp": 79995,
       "destination": null,
       "otd_new": 85699.7,
-      "preowned_range": "$47,800 - $55,000",
-      "otd_preowned": "$51,573 - $59,205",
+      "preowned_range": "$60,000 - $68,000",
+      "otd_preowned": "$64,505 - $72,985",
       "self_driving": "Volvo Pilot Assist / ADAS",
       "range_mi": 300,
       "hp": 402,
@@ -1016,8 +1016,8 @@
       "msrp": 84845,
       "destination": null,
       "otd_new": 90840.7,
-      "preowned_range": "$60,993 - $78,000",
-      "otd_preowned": "$65,558 - $83,585",
+      "preowned_range": "$66,000 - $76,000",
+      "otd_preowned": "$70,865 - $81,465",
       "self_driving": "Volvo Pilot Assist / ADAS",
       "range_mi": 310,
       "hp": 402,
@@ -1049,8 +1049,8 @@
       "msrp": 84345,
       "destination": null,
       "otd_new": 90310.7,
-      "preowned_range": "$60,993 - $78,000",
-      "otd_preowned": "$65,558 - $83,585",
+      "preowned_range": "$66,000 - $76,000",
+      "otd_preowned": "$70,865 - $81,465",
       "self_driving": "Volvo Pilot Assist / ADAS",
       "range_mi": 310,
       "hp": 402,
@@ -1082,8 +1082,8 @@
       "msrp": 83990,
       "destination": 1895,
       "otd_new": 91943.1,
-      "preowned_range": "$74,000 - $85,000",
-      "otd_preowned": "$79,345 - $91,005",
+      "preowned_range": "$76,000 - $88,000",
+      "otd_preowned": "$81,465 - $94,185",
       "self_driving": "Rivian Autonomy+ capable hardware (availability varies)",
       "range_mi": 330,
       "hp": 533,
@@ -1115,8 +1115,8 @@
       "msrp": 90990,
       "destination": 1895,
       "otd_new": 99363.1,
-      "preowned_range": "$80,000 - $92,000",
-      "otd_preowned": "$85,705 - $98,425",
+      "preowned_range": "$84,000 - $95,000",
+      "otd_preowned": "$89,945 - $101,605",
       "self_driving": "Rivian Autonomy+ capable hardware (availability varies)",
       "range_mi": 410,
       "hp": 533,
@@ -1148,8 +1148,8 @@
       "msrp": 76990,
       "destination": 1895,
       "otd_new": 84523.1,
-      "preowned_range": "$71,000 - $79,000",
-      "otd_preowned": "$76,165 - $84,645",
+      "preowned_range": "$68,000 - $76,000",
+      "otd_preowned": "$72,985 - $81,465",
       "self_driving": "Rivian Autonomy+ capable hardware (availability varies)",
       "range_mi": 258,
       "hp": 533,
@@ -1214,8 +1214,8 @@
       "msrp": 84700,
       "destination": 0,
       "otd_new": 90687,
-      "preowned_range": "$68,000 - $73,000",
-      "otd_preowned": "$72,985 - $78,285",
+      "preowned_range": "$62,000 - $70,000",
+      "otd_preowned": "$66,625 - $75,105",
       "self_driving": "Rivian Driver+ / Autonomy+ (availability varies)",
       "range_mi": 330,
       "hp": 665,
@@ -1247,8 +1247,8 @@
       "msrp": 91700,
       "destination": 0,
       "otd_new": 98107,
-      "preowned_range": "$73,000 - $79,000",
-      "otd_preowned": "$78,285 - $84,645",
+      "preowned_range": "$70,000 - $78,000",
+      "otd_preowned": "$75,105 - $83,585",
       "self_driving": "Rivian Driver+ / Autonomy+ (availability varies)",
       "range_mi": 410,
       "hp": 655,
@@ -1280,8 +1280,8 @@
       "msrp": 77700,
       "destination": 0,
       "otd_new": 83267,
-      "preowned_range": "$66,000 - $70,000",
-      "otd_preowned": "$70,865 - $75,105",
+      "preowned_range": "$58,000 - $65,000",
+      "otd_preowned": "$62,385 - $69,805",
       "self_driving": "Rivian Driver+ / Autonomy+ (availability varies)",
       "range_mi": 270,
       "hp": 533,
@@ -1313,8 +1313,8 @@
       "msrp": 107700,
       "destination": 0,
       "otd_new": 115067,
-      "preowned_range": "$89,000 - $97,000",
-      "otd_preowned": "$95,245 - $103,725",
+      "preowned_range": "$88,000 - $96,000",
+      "otd_preowned": "$94,185 - $102,665",
       "self_driving": "Rivian Driver+ / Autonomy+ (availability varies)",
       "range_mi": 371,
       "hp": 850,
@@ -1346,8 +1346,8 @@
       "msrp": 89700,
       "destination": 0,
       "otd_new": 95987,
-      "preowned_range": "$74,000 - $80,000",
-      "otd_preowned": "$79,345 - $85,705",
+      "preowned_range": "$70,000 - $78,000",
+      "otd_preowned": "$75,105 - $83,585",
       "self_driving": "Rivian Driver+ / Autonomy+ (availability varies)",
       "range_mi": 330,
       "hp": 665,
@@ -1379,8 +1379,8 @@
       "msrp": 96700,
       "destination": 0,
       "otd_new": 103407,
-      "preowned_range": "$77,000 - $85,000",
-      "otd_preowned": "$82,525 - $91,005",
+      "preowned_range": "$74,000 - $83,000",
+      "otd_preowned": "$79,345 - $88,885",
       "self_driving": "Rivian Driver+ / Autonomy+ (availability varies)",
       "range_mi": 410,
       "hp": 655,
@@ -1907,8 +1907,8 @@
       "msrp": "N/A - Not New",
       "destination": null,
       "otd_new": "-",
-      "preowned_range": "$80,000 - $94,000",
-      "otd_preowned": "$85,705 - $100,545",
+      "preowned_range": "$78,000 - $90,000",
+      "otd_preowned": "$83,585 - $96,305",
       "self_driving": "Tesla Autopilot / Full Self-Driving (optional)",
       "range_mi": 333,
       "hp": 1020,
@@ -2039,8 +2039,8 @@
       "msrp": "N/A - Not New",
       "destination": null,
       "otd_new": "-",
-      "preowned_range": "$65,495 - $79,998",
-      "otd_preowned": "$70,330 - $85,703",
+      "preowned_range": "$66,000 - $76,000",
+      "otd_preowned": "$70,865 - $81,465",
       "self_driving": "Tesla Autopilot / Full Self-Driving (optional)",
       "range_mi": 333,
       "hp": 1020,
@@ -2597,80 +2597,80 @@
       "vehicle": "Kia EV9",
       "year": 2024,
       "trim": "Light SR",
-      "preowned_range": "$31,000 - $35,000",
-      "otd_preowned": "$33,765 - $38,005"
+      "preowned_range": "$33,000 - $37,000",
+      "otd_preowned": "$35,885 - $40,125"
     },
     {
       "name": "Kia EV9, 2024, Light Long Range",
       "vehicle": "Kia EV9",
       "year": 2024,
       "trim": "Light Long Range",
-      "preowned_range": "$33,000 - $37,000",
-      "otd_preowned": "$35,885 - $40,125"
+      "preowned_range": "$34,000 - $38,000",
+      "otd_preowned": "$36,945 - $41,185"
     },
     {
       "name": "Kia EV9, 2024, Wind",
       "vehicle": "Kia EV9",
       "year": 2024,
       "trim": "Wind",
-      "preowned_range": "$32,000 - $38,000",
-      "otd_preowned": "$34,825 - $41,185"
+      "preowned_range": "$33,000 - $37,000",
+      "otd_preowned": "$35,885 - $40,125"
     },
     {
       "name": "Kia EV9, 2024, Land",
       "vehicle": "Kia EV9",
       "year": 2024,
       "trim": "Land",
-      "preowned_range": "$38,000 - $44,000",
-      "otd_preowned": "$41,185 - $47,545"
+      "preowned_range": "$34,000 - $40,000",
+      "otd_preowned": "$36,945 - $43,305"
     },
     {
       "name": "Kia EV9, 2024, GT-Line",
       "vehicle": "Kia EV9",
       "year": 2024,
       "trim": "GT-Line",
-      "preowned_range": "$35,900 - $56,300",
-      "otd_preowned": "$38,959 - $60,583"
+      "preowned_range": "$37,000 - $46,000",
+      "otd_preowned": "$40,125 - $49,665"
     },
     {
       "name": "Kia EV9, 2025, Light SR",
       "vehicle": "Kia EV9",
       "year": 2025,
       "trim": "Light SR",
-      "preowned_range": "$36,000 - $40,000",
-      "otd_preowned": "$39,065 - $43,305"
+      "preowned_range": "$38,000 - $43,000",
+      "otd_preowned": "$41,185 - $46,485"
     },
     {
       "name": "Kia EV9, 2025, Light Long Range",
       "vehicle": "Kia EV9",
       "year": 2025,
       "trim": "Light Long Range",
-      "preowned_range": "$38,000 - $42,000",
-      "otd_preowned": "$41,185 - $45,425"
+      "preowned_range": "$40,000 - $45,000",
+      "otd_preowned": "$43,305 - $48,605"
     },
     {
       "name": "Kia EV9, 2025, Wind",
       "vehicle": "Kia EV9",
       "year": 2025,
       "trim": "Wind",
-      "preowned_range": "$38,000 - $45,000",
-      "otd_preowned": "$41,185 - $48,605"
+      "preowned_range": "$40,000 - $47,000",
+      "otd_preowned": "$43,305 - $50,725"
     },
     {
       "name": "Kia EV9, 2025, Land",
       "vehicle": "Kia EV9",
       "year": 2025,
       "trim": "Land",
-      "preowned_range": "$42,000 - $47,000",
-      "otd_preowned": "$45,425 - $50,725"
+      "preowned_range": "$44,000 - $51,000",
+      "otd_preowned": "$47,545 - $54,965"
     },
     {
       "name": "Kia EV9, 2025, GT-Line",
       "vehicle": "Kia EV9",
       "year": 2025,
       "trim": "GT-Line",
-      "preowned_range": "$42,000 - $70,000",
-      "otd_preowned": "$45,425 - $75,105"
+      "preowned_range": "$48,000 - $65,000",
+      "otd_preowned": "$51,785 - $69,805"
     },
     {
       "name": "Kia EV9, 2026, Light SR",
@@ -2757,48 +2757,48 @@
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "S",
-      "preowned_range": "$43,500 - $47,500",
-      "otd_preowned": "$47,015 - $51,255"
+      "preowned_range": "$46,000 - $52,000",
+      "otd_preowned": "$49,665 - $56,025"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, SE",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "SE",
-      "preowned_range": "$46,600 - $60,000",
-      "otd_preowned": "$50,301 - $64,505"
+      "preowned_range": "$48,000 - $56,000",
+      "otd_preowned": "$51,785 - $60,265"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, SEL",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "SEL",
-      "preowned_range": "$46,600 - $60,000",
-      "otd_preowned": "$50,301 - $64,505"
+      "preowned_range": "$49,000 - $58,000",
+      "otd_preowned": "$52,845 - $62,385"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Limited",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "Performance Limited",
-      "preowned_range": "$54,995 - $59,999",
-      "otd_preowned": "$59,200 - $64,504"
+      "preowned_range": "$55,000 - $62,000",
+      "otd_preowned": "$59,205 - $66,625"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "Performance Calligraphy",
-      "preowned_range": "$57,090 - $60,755",
-      "otd_preowned": "$61,420 - $65,305"
+      "preowned_range": "$57,000 - $63,000",
+      "otd_preowned": "$61,325 - $67,685"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy Design",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "Performance Calligraphy Design",
-      "preowned_range": "$59,500 - $63,500",
-      "otd_preowned": "$63,975 - $68,215"
+      "preowned_range": "$59,000 - $65,000",
+      "otd_preowned": "$63,445 - $69,805"
     },
     {
       "name": "Hyundai IONIQ 9, 2025, N/A (first model year is 2026 in US)",
@@ -2813,64 +2813,64 @@
       "vehicle": "Volvo EX90",
       "year": 2025,
       "trim": "Twin Motor Plus 7-Seater",
-      "preowned_range": "$47,800 - $55,000",
-      "otd_preowned": "$51,573 - $59,205"
+      "preowned_range": "$60,000 - $68,000",
+      "otd_preowned": "$64,505 - $72,985"
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Plus 6-Seater",
       "vehicle": "Volvo EX90",
       "year": 2025,
       "trim": "Twin Motor Plus 6-Seater",
-      "preowned_range": "$47,800 - $55,000",
-      "otd_preowned": "$51,573 - $59,205"
+      "preowned_range": "$60,000 - $68,000",
+      "otd_preowned": "$64,505 - $72,985"
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Ultra 7-Seater",
       "vehicle": "Volvo EX90",
       "year": 2025,
       "trim": "Twin Motor Ultra 7-Seater",
-      "preowned_range": "$60,993 - $78,000",
-      "otd_preowned": "$65,558 - $83,585"
+      "preowned_range": "$66,000 - $76,000",
+      "otd_preowned": "$70,865 - $81,465"
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Ultra 6-Seater",
       "vehicle": "Volvo EX90",
       "year": 2025,
       "trim": "Twin Motor Ultra 6-Seater",
-      "preowned_range": "$60,993 - $78,000",
-      "otd_preowned": "$65,558 - $83,585"
+      "preowned_range": "$66,000 - $76,000",
+      "otd_preowned": "$70,865 - $81,465"
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Plus 7-Seater",
       "vehicle": "Volvo EX90",
       "year": 2025,
       "trim": "Twin Motor Performance Plus 7-Seater",
-      "preowned_range": "$58,500 - $69,500",
-      "otd_preowned": "$62,915 - $74,575"
+      "preowned_range": "$63,000 - $72,000",
+      "otd_preowned": "$67,685 - $77,225"
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Plus 6-Seater",
       "vehicle": "Volvo EX90",
       "year": 2025,
       "trim": "Twin Motor Performance Plus 6-Seater",
-      "preowned_range": "$58,500 - $69,500",
-      "otd_preowned": "$62,915 - $74,575"
+      "preowned_range": "$63,000 - $72,000",
+      "otd_preowned": "$67,685 - $77,225"
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Ultra 7-Seater",
       "vehicle": "Volvo EX90",
       "year": 2025,
       "trim": "Twin Motor Performance Ultra 7-Seater",
-      "preowned_range": "$65,000 - $78,000",
-      "otd_preowned": "$69,805 - $83,585"
+      "preowned_range": "$70,000 - $82,000",
+      "otd_preowned": "$75,105 - $87,825"
     },
     {
       "name": "Volvo EX90, 2025, Twin Motor Performance Ultra 6-Seater",
       "vehicle": "Volvo EX90",
       "year": 2025,
       "trim": "Twin Motor Performance Ultra 6-Seater",
-      "preowned_range": "$65,000 - $78,000",
-      "otd_preowned": "$69,805 - $83,585"
+      "preowned_range": "$70,000 - $82,000",
+      "otd_preowned": "$75,105 - $87,825"
     },
     {
       "name": "Volvo EX90, 2026, Single Motor",
@@ -2901,80 +2901,80 @@
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Adventure Dual Standard",
-      "preowned_range": "$66,000 - $70,000",
-      "otd_preowned": "$70,865 - $75,105"
+      "preowned_range": "$58,000 - $65,000",
+      "otd_preowned": "$62,385 - $69,805"
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Large (\"Dual Long\")",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Adventure Dual Large (\"Dual Long\")",
-      "preowned_range": "$68,000 - $73,000",
-      "otd_preowned": "$72,985 - $78,285"
+      "preowned_range": "$62,000 - $70,000",
+      "otd_preowned": "$66,625 - $75,105"
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Max",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Adventure Dual Max",
-      "preowned_range": "$73,000 - $79,000",
-      "otd_preowned": "$78,285 - $84,645"
+      "preowned_range": "$70,000 - $78,000",
+      "otd_preowned": "$75,105 - $83,585"
     },
     {
       "name": "Rivian R1S, 2025, Performance Dual Large",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Performance Dual Large",
-      "preowned_range": "$74,000 - $80,000",
-      "otd_preowned": "$79,345 - $85,705"
+      "preowned_range": "$70,000 - $78,000",
+      "otd_preowned": "$75,105 - $83,585"
     },
     {
       "name": "Rivian R1S, 2025, Performance Dual Max",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Performance Dual Max",
-      "preowned_range": "$77,000 - $85,000",
-      "otd_preowned": "$82,525 - $91,005"
+      "preowned_range": "$74,000 - $83,000",
+      "otd_preowned": "$79,345 - $88,885"
     },
     {
       "name": "Rivian R1S, 2025, Ascend Tri Max",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Ascend Tri Max",
-      "preowned_range": "$89,000 - $97,000",
-      "otd_preowned": "$95,245 - $103,725"
+      "preowned_range": "$88,000 - $96,000",
+      "otd_preowned": "$94,185 - $102,665"
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Long (requested; closest match: Adventure Dual Large)",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Adventure Dual Long (requested; closest match: Adventure Dual Large)",
-      "preowned_range": "$68,000 - $73,000",
-      "otd_preowned": "$72,985 - $78,285"
+      "preowned_range": "$62,000 - $70,000",
+      "otd_preowned": "$66,625 - $75,105"
     },
     {
       "name": "Rivian R1S, 2026, Dual Standard",
       "vehicle": "Rivian R1S",
       "year": 2026,
       "trim": "Dual Standard",
-      "preowned_range": "$71,000 - $79,000",
-      "otd_preowned": "$76,165 - $84,645"
+      "preowned_range": "$68,000 - $76,000",
+      "otd_preowned": "$72,985 - $81,465"
     },
     {
       "name": "Rivian R1S, 2026, Dual Large",
       "vehicle": "Rivian R1S",
       "year": 2026,
       "trim": "Dual Large",
-      "preowned_range": "$74,000 - $85,000",
-      "otd_preowned": "$79,345 - $91,005"
+      "preowned_range": "$76,000 - $88,000",
+      "otd_preowned": "$81,465 - $94,185"
     },
     {
       "name": "Rivian R1S, 2026, Dual Max (\"Max Battery\")",
       "vehicle": "Rivian R1S",
       "year": 2026,
       "trim": "Dual Max (\"Max Battery\")",
-      "preowned_range": "$80,000 - $92,000",
-      "otd_preowned": "$85,705 - $98,425"
+      "preowned_range": "$84,000 - $95,000",
+      "otd_preowned": "$89,945 - $101,605"
     },
     {
       "name": "Rivian R1S, 2026, Tri Max",
@@ -2989,8 +2989,8 @@
       "vehicle": "Rivian R1S",
       "year": 2026,
       "trim": "Adventure Max Battery (requested; closest match: Dual Max)",
-      "preowned_range": "$80,000 - $92,000",
-      "otd_preowned": "$85,705 - $98,425"
+      "preowned_range": "$84,000 - $95,000",
+      "otd_preowned": "$89,945 - $101,605"
     },
     {
       "name": "Tesla Model X, 2026, Model X (5-seat)",
@@ -3029,32 +3029,32 @@
       "vehicle": "Tesla Model X",
       "year": 2024,
       "trim": "Long Range",
-      "preowned_range": "$63,000 - $79,000",
-      "otd_preowned": "$67,685 - $84,645"
+      "preowned_range": "$67,000 - $76,000",
+      "otd_preowned": "$71,925 - $81,465"
     },
     {
       "name": "Tesla Model X, 2024, Plaid",
       "vehicle": "Tesla Model X",
       "year": 2024,
       "trim": "Plaid",
-      "preowned_range": "$80,000 - $94,000",
-      "otd_preowned": "$85,705 - $100,545"
+      "preowned_range": "$78,000 - $90,000",
+      "otd_preowned": "$83,585 - $96,305"
     },
     {
       "name": "Tesla Model X, 2023, Base",
       "vehicle": "Tesla Model X",
       "year": 2023,
       "trim": "Base",
-      "preowned_range": "$33,000 - $62,500",
-      "otd_preowned": "$35,885 - $67,155"
+      "preowned_range": "$51,000 - $66,000",
+      "otd_preowned": "$54,965 - $70,865"
     },
     {
       "name": "Tesla Model X, 2023, Plaid",
       "vehicle": "Tesla Model X",
       "year": 2023,
       "trim": "Plaid",
-      "preowned_range": "$65,495 - $79,998",
-      "otd_preowned": "$70,330 - $85,703"
+      "preowned_range": "$66,000 - $76,000",
+      "otd_preowned": "$70,865 - $81,465"
     },
     {
       "name": "Lucid Gravity, 2026, Touring",
@@ -3125,32 +3125,32 @@
       "vehicle": "Tesla Model X",
       "year": 2025,
       "trim": "Model X Standard (5-seat)",
-      "preowned_range": "$75,000 - $85,000",
-      "otd_preowned": "$80,405 - $91,005"
+      "preowned_range": "$76,000 - $85,000",
+      "otd_preowned": "$81,465 - $91,005"
     },
     {
       "name": "Tesla Model X, 2025, Model X Standard + 6-seat interior option",
       "vehicle": "Tesla Model X",
       "year": 2025,
       "trim": "Model X Standard + 6-seat interior option",
-      "preowned_range": "$75,000 - $85,000",
-      "otd_preowned": "$80,405 - $91,005"
+      "preowned_range": "$76,000 - $85,000",
+      "otd_preowned": "$81,465 - $91,005"
     },
     {
       "name": "Tesla Model X, 2025, Model X Plaid (5-seat)",
       "vehicle": "Tesla Model X",
       "year": 2025,
       "trim": "Model X Plaid (5-seat)",
-      "preowned_range": "$94,494 - $98,988",
-      "otd_preowned": "$101,069 - $105,832"
+      "preowned_range": "$90,000 - $100,000",
+      "otd_preowned": "$96,305 - $106,905"
     },
     {
       "name": "Tesla Model X, 2025, Model X Plaid + 6-seat interior option",
       "vehicle": "Tesla Model X",
       "year": 2025,
       "trim": "Model X Plaid + 6-seat interior option",
-      "preowned_range": "$94,494 - $98,988",
-      "otd_preowned": "$101,069 - $105,832"
+      "preowned_range": "$90,000 - $100,000",
+      "otd_preowned": "$96,305 - $106,905"
     },
     {
       "name": "Cadillac Escalade IQ, 2026, Luxury",
