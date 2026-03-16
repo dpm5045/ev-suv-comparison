@@ -13,6 +13,7 @@ import ReferenceTab from './tabs/ReferenceTab'
 export interface ComparisonFilters {
   vehicle: string
   year: string
+  trim: string
   q: string
   drivetrain: string
   seats: string
@@ -35,6 +36,7 @@ export default function Dashboard() {
   const cmpVehicle = searchParams.get('vehicle') ?? ''
   const cmpYear = searchParams.get('year') ?? ''
   const cmpQ = searchParams.get('q') ?? ''
+  const cmpTrim = searchParams.get('trim') ?? ''
   const cmpDrivetrain = searchParams.get('drivetrain') ?? ''
   const cmpSeats = searchParams.get('seats') ?? ''
   const cmpCharging = searchParams.get('charging') ?? ''
@@ -60,6 +62,7 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
     if ('vehicle' in f) updates.vehicle = f.vehicle ?? ''
     if ('year' in f) updates.year = f.year ?? ''
     if ('q' in f) updates.q = f.q ?? ''
+    if ('trim' in f) updates.trim = f.trim ?? ''
     if ('drivetrain' in f) updates.drivetrain = f.drivetrain ?? ''
     if ('seats' in f) updates.seats = f.seats ?? ''
     if ('charging' in f) updates.charging = f.charging ?? ''
@@ -94,7 +97,7 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
         )}
         {tab === 'comparison' && (
           <ComparisonTab
-            filters={{ vehicle: cmpVehicle, year: cmpYear, q: cmpQ, drivetrain: cmpDrivetrain, seats: cmpSeats, charging: cmpCharging, foldFlat: cmpFoldFlat }}
+            filters={{ vehicle: cmpVehicle, year: cmpYear, trim: cmpTrim, q: cmpQ, drivetrain: cmpDrivetrain, seats: cmpSeats, charging: cmpCharging, foldFlat: cmpFoldFlat }}
             onFiltersChange={setCmpFilters}
             onRowClick={setDetailIdx}
           />
