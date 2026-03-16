@@ -9,7 +9,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'specselect', label: 'Spec & Select' },
   { id: 'sidebyside', label: 'Side-by-Side' },
-  { id: 'comparison', label: 'Detailed Comparison' },
+  { id: 'comparison', label: 'The Full Monty' },
   { id: 'reference', label: 'Reference' },
 ]
 
