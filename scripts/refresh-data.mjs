@@ -61,7 +61,7 @@ Rules:
 - If you cannot find reliable data for a vehicle, omit it entirely.
 - The "name" field must EXACTLY match the name from the input data.`,
 
-      userMessage: `Search the web for current pre-owned/used pricing for the following electric vehicles. These are AWD 3-row electric SUVs. Return updated price ranges ONLY where they differ significantly (>$2,000 change) from the current values.
+      userMessage: `Search the web for current pre-owned/used pricing for the following electric vehicles. These are 3-row fully electric vehicles (all drivetrains). Return updated price ranges ONLY where they differ significantly (>$2,000 change) from the current values.
 
 Current pre-owned data:
 ${vehicleSummary}`,
@@ -136,7 +136,7 @@ Rules:
 - Use the exact name from the input as the key.
 - Numeric values should be numbers, not strings.`,
 
-      userMessage: `Search the web for any newly released or confirmed specs for the following electric vehicles that currently have TBD (To Be Determined) values. These are AWD 3-row electric SUVs in the US market.
+      userMessage: `Search the web for any newly released or confirmed specs for the following electric vehicles that currently have TBD (To Be Determined) values. These are 3-row fully electric vehicles in the US market.
 
 Vehicles with TBD fields:
 ${tbdSummary}`,
@@ -199,7 +199,7 @@ CRITICAL — seat configurations:
 - NEVER change "cargo_behind_3rd_cu_ft", "cargo_behind_2nd_cu_ft", "cargo_behind_1st_cu_ft", or "fold_flat" — these are specific to each seat configuration and are correct as-is.
 - Only correct fields like msrp, range_mi, hp, battery_kwh, and charging_type.`,
 
-      userMessage: `Cross-check the following EV specs against current manufacturer websites and EPA data. Return corrections ONLY for values that are clearly wrong. These are AWD 3-row electric SUVs.
+      userMessage: `Cross-check the following EV specs against current manufacturer websites and EPA data. Return corrections ONLY for values that are clearly wrong. These are 3-row fully electric vehicles (includes RWD, AWD, and 4WD variants).
 
 Note: This dataset tracks multiple seat configurations per vehicle as separate rows (e.g. 5-seat, 6-seat, 7-seat). Do NOT suggest changes to seats or cargo fields — those are intentionally different per configuration.
 
@@ -258,19 +258,19 @@ Response schema — a JSON array of new vehicles:
 [{
   "vehicle": "<full vehicle name>",
   "year": <model year>,
-  "trims": [{ "trim": "<trim name>", "msrp": <number or null>, "range_mi": <number or null>, "hp": <number or null>, "battery_kwh": <number or null>, "seats": <number or null> }],
+  "trims": [{ "trim": "<trim name>", "drivetrain": "<RWD|AWD|4WD>", "msrp": <number or null>, "range_mi": <number or null>, "hp": <number or null>, "battery_kwh": <number or null>, "seats": <number or null> }],
   "confidence": "high" | "medium",
   "source": "<where you found this>"
 }]
 
 Rules:
-- Only include vehicles that are AWD, 3-row, fully electric SUVs available or officially announced for the US market.
+- Only include vehicles that are 3-row, fully electric vehicles (any drivetrain: RWD, AWD, 4WD) available or officially announced for the US market.
 - Do NOT include vehicles already in the tracked list.
 - Do NOT include plug-in hybrids (PHEV) — only fully electric (BEV).
 - Only include vehicles with at least a "medium" confidence level (officially announced with some specs).
 - If no new vehicles are found, return an empty array: []`,
 
-      userMessage: `Search the web for any 3-row all-wheel-drive fully electric SUVs that are newly announced, upcoming, or recently released for the US market that are NOT in this list:
+      userMessage: `Search the web for any 3-row fully electric vehicles (any drivetrain: RWD, AWD, 4WD) that are newly announced, upcoming, or recently released for the US market that are NOT in this list:
 
 Currently tracked: ${currentVehicles.join(', ')}
 
@@ -304,7 +304,7 @@ Look for new entrants from manufacturers like Subaru, Mercedes, BMW, Cadillac, F
           year: vehicle.year,
           trim: trim.trim || 'Base',
           seats: trim.seats ?? null,
-          drivetrain: 'AWD',
+          drivetrain: trim.drivetrain || 'TBD',
           msrp: trim.msrp ?? 'TBD',
           destination: null,
           otd_new: 'TBD',
@@ -339,7 +339,7 @@ Look for new entrants from manufacturers like Subaru, Mercedes, BMW, Cadillac, F
       if (!data.count_data.find((c) => c.model === vehicle.vehicle)) {
         data.count_data.push({
           model: vehicle.vehicle,
-          y2023: 0, y2024: 0, y2025: 0, y2026: 0,
+          y2021: 0, y2022: 0, y2023: 0, y2024: 0, y2025: 0, y2026: 0,
           total: 0,
         })
       }
@@ -421,7 +421,7 @@ Rules:
 - If you cannot find reliable data for a field, do NOT include it.
 - The "name" key must EXACTLY match the name from the input.`,
 
-      userMessage: `Search the web to fill in missing specifications for these AWD 3-row electric SUVs. Check manufacturer websites, EPA.gov, Edmunds, Car and Driver, and MotorTrend.
+      userMessage: `Search the web to fill in missing specifications for these 3-row fully electric vehicles. Check manufacturer websites, EPA.gov, Edmunds, Car and Driver, and MotorTrend.
 
 Entries with missing data:
 ${gapSummary}`,
@@ -481,7 +481,7 @@ async function main() {
   recalculateAllOtd(data)
 
   // Update count totals
-  const yearKeys = ['y2023', 'y2024', 'y2025', 'y2026']
+  const yearKeys = ['y2021', 'y2022', 'y2023', 'y2024', 'y2025', 'y2026']
   for (const key of yearKeys) {
     data.count_totals[key] = data.count_data.reduce((sum, r) => sum + (r[key] || 0), 0)
   }

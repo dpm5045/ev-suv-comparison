@@ -167,8 +167,8 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                 <th>Year</th>
                 <th>Trim</th>
                 <th className="num">Seats</th>
-                <th className="num">Est. OTD New</th>
-                <th>Est. OTD Pre-Owned</th>
+                <th className="num">MSRP</th>
+                <th>Pre-Owned Price</th>
                 <th className="num">Range (mi)</th>
                 <th className="num">HP</th>
                 <th className="num">Battery</th>
@@ -184,7 +184,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
             <tbody>
               {filtered.map((r) => {
                 const origIdx = DATA.details.indexOf(r)
-                const otd = fmtMoney(r.otd_new)
+                const msrp = fmtMoney(r.msrp)
                 const range = fmtNum(r.range_mi)
                 const hp = fmtNum(r.hp)
                 const bat = fmtNum(r.battery_kwh)
@@ -203,10 +203,10 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                     <td>{r.year || '—'}</td>
                     <td>{r.trim || ''}</td>
                     <td className="num">{r.seats ?? '—'}</td>
-                    <td className="num"><span className={otd.className}>{otd.text}</span></td>
+                    <td className="num"><span className={msrp.className}>{msrp.text}</span></td>
                     <td>
-                      {r.otd_preowned
-                        ? <span className="cell-range">{r.otd_preowned}</span>
+                      {r.preowned_range && !r.preowned_range.includes('N/A') && !r.preowned_range.includes('No ')
+                        ? <span className="cell-range">{r.preowned_range}</span>
                         : dash}
                     </td>
                     <td className="num"><span className={range.className}>{range.text}</span></td>
@@ -236,7 +236,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
         <div className="cmp-cards">
           {filtered.map((r) => {
             const origIdx = DATA.details.indexOf(r)
-            const otd = fmtMoney(r.otd_new)
+            const msrp = fmtMoney(r.msrp)
             const range = fmtNum(r.range_mi)
             const bat = fmtNum(r.battery_kwh)
             return (
@@ -250,16 +250,16 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                 </div>
                 <div className="cmp-card-stats">
                   <div className="cmp-stat">
-                    <span className="cmp-stat-label">Est. OTD New</span>
-                    <span className={`cmp-stat-value ${otd.className}`} style={{ fontFamily: 'var(--mono)' }}>
-                      {typeof r.otd_new === 'number' ? `$${Math.round(r.otd_new / 1000)}k` : otd.text}
+                    <span className="cmp-stat-label">MSRP</span>
+                    <span className={`cmp-stat-value ${msrp.className}`} style={{ fontFamily: 'var(--mono)' }}>
+                      {typeof r.msrp === 'number' ? `$${Math.round(r.msrp / 1000)}k` : msrp.text}
                     </span>
                   </div>
                   <div className="cmp-stat">
-                    <span className="cmp-stat-label">Est. OTD Pre-Owned</span>
+                    <span className="cmp-stat-label">Pre-Owned Price</span>
                     <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
-                      {r.otd_preowned && !r.otd_preowned.includes('N/A') && !r.otd_preowned.includes('No ')
-                        ? r.otd_preowned.replace(/\$[\d,]+/g, (m: string) => `$${Math.round(parseInt(m.replace(/[$,]/g, '')) / 1000)}k`)
+                      {r.preowned_range && !r.preowned_range.includes('N/A') && !r.preowned_range.includes('No ')
+                        ? r.preowned_range.replace(/\$[\d,]+/g, (m: string) => `$${Math.round(parseInt(m.replace(/[$,]/g, '')) / 1000)}k`)
                         : '—'}
                     </span>
                   </div>

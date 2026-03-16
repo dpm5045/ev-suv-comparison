@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { DATA, VEHICLE_CLASSES } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import VehicleBadge from './VehicleBadge'
+import SpecSection from './SpecSection'
 
 interface Props {
   idx: number | null
@@ -39,9 +40,7 @@ export default function DetailPanel({ idx, onClose }: Props) {
             <div className="detail-grid">
               {([
                 ['MSRP', (() => { const f = fmtMoney(r.msrp); return <span className={f.className}>{f.text}</span> })()],
-                ['Est. OTD New', (() => { const f = fmtMoney(r.otd_new); return <span className={f.className}>{f.text}</span> })()],
-                ['Pre-Owned Range', r.preowned_range || '—'],
-                ['Est. OTD Pre-Owned', r.otd_preowned || '—'],
+                ['Pre-Owned Price', r.preowned_range || '—'],
                 ['EPA Range', (() => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') })()],
                 ['Horsepower', (() => { const f = fmtNum(r.hp); return f.text + (typeof r.hp === 'number' ? ' hp' : '') })()],
                 ['Battery', (() => { const f = fmtNum(r.battery_kwh); return f.text + (typeof r.battery_kwh === 'number' ? ' kWh' : '') })()],
@@ -54,16 +53,15 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ))}
             </div>
 
-            <Section title="Drivetrain & Charging" rows={[
+            <SpecSection title="Drivetrain & Charging" rows={[
               ['Drivetrain', r.drivetrain],
               ['Charging Type', r.charging_type],
               ['Onboard AC', r.onboard_ac_kw ? `${r.onboard_ac_kw} kW` : '—'],
               ['L2 10–80%', r.l2_10_80 ? `${r.l2_10_80} hrs` : '—'],
               ['L2 10–100%', r.l2_10_100 ? `${r.l2_10_100} hrs` : '—'],
-              ['Destination Fee', (r.destination && r.destination !== 0) ? `$${Number(r.destination).toLocaleString()}` : '—'],
             ]} />
 
-            <Section title="Technology & Features" rows={[
+            <SpecSection title="Technology & Features" rows={[
               ['Self Driving', r.self_driving],
               ['Car Software', r.car_software],
               ['Main Display', r.main_display],
@@ -72,7 +70,7 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ['Driver Profiles', r.driver_profiles],
             ]} />
 
-            <Section title="Cargo & Storage" rows={[
+            <SpecSection title="Cargo & Storage" rows={[
               ['Frunk', typeof r.frunk_cu_ft === 'number' ? `${r.frunk_cu_ft} cu ft` : r.frunk_cu_ft],
               ['Behind 3rd Row', typeof r.cargo_behind_3rd_cu_ft === 'number' ? `${r.cargo_behind_3rd_cu_ft} cu ft` : r.cargo_behind_3rd_cu_ft],
               ['Behind 2nd Row', typeof r.cargo_behind_2nd_cu_ft === 'number' ? `${r.cargo_behind_2nd_cu_ft} cu ft` : r.cargo_behind_2nd_cu_ft],
@@ -93,16 +91,3 @@ export default function DetailPanel({ idx, onClose }: Props) {
   )
 }
 
-function Section({ title, rows }: { title: string; rows: [string, string | number | null | undefined][] }) {
-  return (
-    <div className="detail-section">
-      <div className="detail-section-title">{title}</div>
-      {rows.map(([label, val]) => (
-        <div key={label} className="detail-row">
-          <span className="detail-row-label">{label}</span>
-          <span className="detail-row-value">{val || '—'}</span>
-        </div>
-      ))}
-    </div>
-  )
-}

@@ -23,10 +23,10 @@ export default function OverviewTab() {
     const d = DATA.details
     const vehicles = [...new Set(d.map((r) => r.vehicle))].sort()
 
-    // OTD new price range
-    const otdNums = d.filter((r) => typeof r.otd_new === 'number') as (typeof d[number] & { otd_new: number })[]
-    const otdMin = otdNums.reduce((a, b) => (a.otd_new < b.otd_new ? a : b), otdNums[0])
-    const otdMax = otdNums.reduce((a, b) => (a.otd_new > b.otd_new ? a : b), otdNums[0])
+    // MSRP price range
+    const msrpNums = d.filter((r) => typeof r.msrp === 'number') as (typeof d[number] & { msrp: number })[]
+    const msrpMin = msrpNums.reduce((a, b) => (a.msrp < b.msrp ? a : b), msrpNums[0])
+    const msrpMax = msrpNums.reduce((a, b) => (a.msrp > b.msrp ? a : b), msrpNums[0])
 
     // Range leader
     const rangeNums = d.filter((r) => typeof r.range_mi === 'number') as (typeof d[number] & { range_mi: number })[]
@@ -36,19 +36,19 @@ export default function OverviewTab() {
     const hpNums = d.filter((r) => typeof r.hp === 'number') as (typeof d[number] & { hp: number })[]
     const hpLeader = hpNums.reduce((a, b) => (a.hp > b.hp ? a : b), hpNums[0])
 
-    // Pre-owned OTD range
-    const preowned = d.map((r) => ({ row: r, low: parsePrice(r.otd_preowned) })).filter((x) => x.low !== null) as { row: typeof d[number]; low: number }[]
+    // Pre-owned price range
+    const preowned = d.map((r) => ({ row: r, low: parsePrice(r.preowned_range) })).filter((x) => x.low !== null) as { row: typeof d[number]; low: number }[]
 
-    // Best NACS native value (cheapest OTD new with native NACS port)
-    const nacsNative = otdNums.filter((r) => {
+    // Best NACS native value (cheapest MSRP with native NACS port)
+    const nacsNative = msrpNums.filter((r) => {
       const c = r.charging_type.toLowerCase()
       return c.includes('nacs') && !c.startsWith('ccs')
     })
-    const bestNacs = nacsNative.length ? nacsNative.reduce((a, b) => (a.otd_new < b.otd_new ? a : b)) : null
-    // Parse high values from ranges like "$38,005–$52,115"
+    const bestNacs = nacsNative.length ? nacsNative.reduce((a, b) => (a.msrp < b.msrp ? a : b)) : null
+    // Parse high values from ranges like "$52,000 - $56,000"
     const preownedWithHigh = d.map((r) => {
-      const parts = r.otd_preowned.split('–')
-      const high = parts.length > 1 ? parsePrice(parts[1]) : parsePrice(r.otd_preowned)
+      const parts = r.preowned_range.split(/\s*[-–]\s*/)
+      const high = parts.length > 1 ? parsePrice(parts[1]) : parsePrice(r.preowned_range)
       return { row: r, high }
     }).filter((x) => x.high !== null) as { row: typeof d[number]; high: number }[]
     const preownedMin = preowned.length ? Math.min(...preowned.map((p) => p.low)) : null
@@ -59,22 +59,22 @@ export default function OverviewTab() {
     // Per-vehicle summary
     const vehicleSummaries = vehicles.map((v) => {
       const rows = d.filter((r) => r.vehicle === v)
-      const otds = rows.map((r) => r.otd_new).filter((x) => typeof x === 'number') as number[]
+      const msrps = rows.map((r) => r.msrp).filter((x) => typeof x === 'number') as number[]
       const ranges = rows.map((r) => r.range_mi).filter((x) => typeof x === 'number') as number[]
       const hps = rows.map((r) => r.hp).filter((x) => typeof x === 'number') as number[]
       const bats = rows.map((r) => r.battery_kwh).filter((x) => typeof x === 'number') as number[]
       const types = [...new Set(rows.map((r) => r.charging_type).filter(Boolean))]
-      const preLows = rows.map((r) => parsePrice(r.otd_preowned)).filter((x) => x !== null) as number[]
+      const preLows = rows.map((r) => parsePrice(r.preowned_range)).filter((x) => x !== null) as number[]
       const preHighs = rows.map((r) => {
-        const parts = r.otd_preowned.split('–')
-        return parts.length > 1 ? parsePrice(parts[1]) : parsePrice(r.otd_preowned)
+        const parts = r.preowned_range.split(/\s*[-–]\s*/)
+        return parts.length > 1 ? parsePrice(parts[1]) : parsePrice(r.preowned_range)
       }).filter((x) => x !== null) as number[]
       const cargo3s = rows.map((r) => r.cargo_behind_3rd_cu_ft).filter((x) => typeof x === 'number') as number[]
       const cargo2s = rows.map((r) => r.cargo_behind_2nd_cu_ft).filter((x) => typeof x === 'number') as number[]
       return {
         vehicle: v,
-        otdLow: otds.length ? Math.min(...otds) : null,
-        otdHigh: otds.length ? Math.max(...otds) : null,
+        msrpLow: msrps.length ? Math.min(...msrps) : null,
+        msrpHigh: msrps.length ? Math.max(...msrps) : null,
         rangeLow: ranges.length ? Math.min(...ranges) : null,
         rangeHigh: ranges.length ? Math.max(...ranges) : null,
         hpLow: hps.length ? Math.min(...hps) : null,
@@ -122,7 +122,7 @@ export default function OverviewTab() {
     const cargo3Rows = d.filter((r) => typeof r.cargo_behind_3rd_cu_ft === 'number' && r.cargo_behind_3rd_cu_ft > 0)
     const mostCargo3 = cargo3Rows.length ? cargo3Rows.reduce((a, b) => ((a.cargo_behind_3rd_cu_ft as number) > (b.cargo_behind_3rd_cu_ft as number) ? a : b)) : null
 
-    return { vehicles, otdMin, otdMax, rangeLeader, hpLeader, bestNacs, preownedMin, preownedMinRow, preownedMax, preownedMaxRow, vehicleSummaries, chargingMap, largestFrunk, mostCargo2, mostCargo3 }
+    return { vehicles, msrpMin, msrpMax, rangeLeader, hpLeader, bestNacs, preownedMin, preownedMinRow, preownedMax, preownedMaxRow, vehicleSummaries, chargingMap, largestFrunk, mostCargo2, mostCargo3 }
   }, [])
 
 
@@ -142,7 +142,7 @@ export default function OverviewTab() {
     <>
       <h2 className="section-title">Key Insights</h2>
       <p className="section-desc">
-        Key insights from {DATA.details.length} 3-Row AWD electric SUV configurations across {insights.vehicles.length} models.
+        Key insights from {DATA.details.length} 3-row electric vehicle configurations across {insights.vehicles.length} models.
       </p>
 
       {/* ── At a Glance ── */}
@@ -166,25 +166,25 @@ export default function OverviewTab() {
             <div className="overview-stat-detail">{insights.hpLeader.vehicle} {insights.hpLeader.trim}</div>
           </div>
         )}
-        {insights.otdMin && (
+        {insights.msrpMin && (
           <div className="overview-stat">
-            <div className="overview-stat-label">New OTD Price Range</div>
-            <div className="overview-stat-value">{fmtDollarK(insights.otdMin.otd_new as number)}-{fmtDollarK(insights.otdMax.otd_new as number)}</div>
-            <div className="overview-stat-detail">{insights.otdMin.vehicle} - {insights.otdMax.vehicle}</div>
+            <div className="overview-stat-label">New MSRP Range</div>
+            <div className="overview-stat-value">{fmtDollarK(insights.msrpMin.msrp as number)}-{fmtDollarK(insights.msrpMax.msrp as number)}</div>
+            <div className="overview-stat-detail">{insights.msrpMin.vehicle} - {insights.msrpMax.vehicle}</div>
           </div>
         )}
         {insights.preownedMin !== null && (
           <div className="overview-stat">
-            <div className="overview-stat-label">Pre-Owned OTD Range</div>
+            <div className="overview-stat-label">Pre-Owned Price Range</div>
             <div className="overview-stat-value">{fmtDollarK(insights.preownedMin)}-{fmtDollarK(insights.preownedMax!)}</div>
             <div className="overview-stat-detail">{insights.preownedMinRow?.vehicle} - {insights.preownedMaxRow?.vehicle}</div>
           </div>
         )}
         {insights.bestNacs && (
           <div className="overview-stat">
-            <div className="overview-stat-label">Best NACS Native Value</div>
-            <div className="overview-stat-value">{fmtDollarK(insights.bestNacs.otd_new)}</div>
-            <div className="overview-stat-detail">{insights.bestNacs.vehicle} {insights.bestNacs.year} {insights.bestNacs.trim} — Est. New OTD Price</div>
+            <div className="overview-stat-label">Best NACS Value</div>
+            <div className="overview-stat-value">{fmtDollarK(insights.bestNacs.msrp)}</div>
+            <div className="overview-stat-detail">{insights.bestNacs.vehicle} {insights.bestNacs.year} {insights.bestNacs.trim} — MSRP</div>
           </div>
         )}
         {insights.largestFrunk && (
@@ -227,8 +227,8 @@ export default function OverviewTab() {
               <thead>
                 <tr>
                   <th className="col-sticky">Vehicle</th>
-                  <th className="num">Est. OTD New</th>
-                  <th className="num">Est. OTD Pre-Owned</th>
+                  <th className="num">MSRP</th>
+                  <th className="num">Pre-Owned Price</th>
                   <th className="num">Range (mi)</th>
                   <th className="num">HP</th>
                   <th className="num">Battery (kWh)</th>
@@ -241,7 +241,7 @@ export default function OverviewTab() {
                 {insights.vehicleSummaries.filter((s) => !GLANCE_EXCLUDED.includes(s.vehicle)).map((s) => (
                   <tr key={s.vehicle}>
                     <td className="col-sticky"><VehicleBadge vehicle={s.vehicle} /></td>
-                    <td className="num">{s.otdLow !== null ? `${fmtDollarK(s.otdLow)}-${fmtDollarK(s.otdHigh!)}` : '—'}</td>
+                    <td className="num">{s.msrpLow !== null ? `${fmtDollarK(s.msrpLow)}-${fmtDollarK(s.msrpHigh!)}` : '—'}</td>
                     <td className="num">{s.preLow !== null ? `${fmtDollarK(s.preLow)}-${fmtDollarK(s.preHigh!)}` : '—'}</td>
                     <td className="num">{rangeStr(s.rangeLow, s.rangeHigh)}</td>
                     <td className="num">{rangeStr(s.hpLow, s.hpHigh)}</td>
@@ -266,13 +266,13 @@ export default function OverviewTab() {
                 </div>
                 <div className="cmp-card-stats">
                   <div className="cmp-stat">
-                    <span className="cmp-stat-label">Est. OTD New</span>
+                    <span className="cmp-stat-label">MSRP</span>
                     <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
-                      {s.otdLow !== null ? `${fmtDollarK(s.otdLow)}-${fmtDollarK(s.otdHigh!)}` : '—'}
+                      {s.msrpLow !== null ? `${fmtDollarK(s.msrpLow)}-${fmtDollarK(s.msrpHigh!)}` : '—'}
                     </span>
                   </div>
                   <div className="cmp-stat">
-                    <span className="cmp-stat-label">Est. OTD Pre-Owned</span>
+                    <span className="cmp-stat-label">Pre-Owned Price</span>
                     <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
                       {s.preLow !== null ? `${fmtDollarK(s.preLow)}-${fmtDollarK(s.preHigh!)}` : '—'}
                     </span>

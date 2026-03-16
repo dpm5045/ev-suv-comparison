@@ -43,6 +43,8 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
     if ('year' in f) updates.year = f.year ?? ''
     if ('q' in f) updates.q = f.q ?? ''
     updateParams(updates)
+  // Intentionally omit updateParams — it's stable but derived from router/searchParams,
+  // and including it causes infinite re-render loops with router.push().
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
 

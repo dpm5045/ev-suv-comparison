@@ -34,8 +34,8 @@ const SECTIONS: SectionDef[] = [
   {
     title: 'Key Stats',
     metrics: [
-      { label: 'Est. OTD New', render: r => fmtMoney(r.otd_new).text, rawNum: r => nv(r.otd_new), higherIsBetter: false },
-      { label: 'Est. OTD Pre-Owned', render: r => r.otd_preowned || '—' },
+      { label: 'MSRP', render: r => fmtMoney(r.msrp).text, rawNum: r => nv(r.msrp), higherIsBetter: false },
+      { label: 'Pre-Owned Price', render: r => r.preowned_range || '—' },
       { label: 'Seats', render: r => r.seats != null ? String(r.seats) : '—', rawNum: r => r.seats, higherIsBetter: true },
       { label: 'Drivetrain', render: r => r.drivetrain || '—' },
       {
@@ -62,7 +62,6 @@ const SECTIONS: SectionDef[] = [
       { label: 'Onboard AC', render: r => r.onboard_ac_kw ? `${r.onboard_ac_kw} kW` : '—', rawNum: r => nv(r.onboard_ac_kw), higherIsBetter: true },
       { label: 'L2 10–80%', render: r => r.l2_10_80 ? `${r.l2_10_80} hrs` : '—', rawNum: r => nv(r.l2_10_80), higherIsBetter: false },
       { label: 'L2 10–100%', render: r => r.l2_10_100 ? `${r.l2_10_100} hrs` : '—', rawNum: r => nv(r.l2_10_100), higherIsBetter: false },
-      { label: 'Destination Fee', render: r => (r.destination && r.destination !== 0) ? `$${Number(r.destination).toLocaleString()}` : '—', rawNum: r => nv(r.destination), higherIsBetter: false },
     ],
   },
   {

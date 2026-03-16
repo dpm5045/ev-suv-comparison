@@ -2,6 +2,8 @@ import rawData from './ev-data.json'
 
 export interface CountRow {
   model: string
+  y2021: number
+  y2022: number
   y2023: number
   y2024: number
   y2025: number
@@ -10,6 +12,8 @@ export interface CountRow {
 }
 
 export interface CountTotals {
+  y2021: number
+  y2022: number
   y2023: number
   y2024: number
   y2025: number

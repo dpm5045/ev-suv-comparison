@@ -83,7 +83,7 @@ export function validateData(data, originalData) {
 
   // 6. Count totals consistency
   if (data.count_data && data.count_totals) {
-    for (const yearKey of ['y2023', 'y2024', 'y2025', 'y2026']) {
+    for (const yearKey of ['y2021', 'y2022', 'y2023', 'y2024', 'y2025', 'y2026']) {
       const sum = data.count_data.reduce((acc, r) => acc + (r[yearKey] || 0), 0)
       if (sum !== data.count_totals[yearKey]) {
         errors.push(`count_totals.${yearKey}: ${data.count_totals[yearKey]} != sum ${sum}`)

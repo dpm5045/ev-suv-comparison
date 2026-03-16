@@ -7,7 +7,7 @@ import VehicleBadge from '../VehicleBadge'
 const APPROACH_BULLETS = [
   'Prioritized manufacturer data first. OEM sources were used as the primary basis for trim structure, seating, drivetrain, range, battery, charging, displays, software, and feature availability.',
   'Used trusted third-party auto sources to close gaps. When OEM data was incomplete or inconsistent by year or trim, reputable references such as Car and Driver, Edmunds, Kelley Blue Book, and CARFAX were used to fill blanks and normalize trim naming.',
-  'Separated new and pre-owned pricing methods. New pricing was estimated as Delaware County, PA out-the-door cost using MSRP, destination, and local tax/fee assumptions. Pre-owned pricing was based on used-market listings and pricing aggregators, then converted into an estimated used OTD range using the same framework.',
+  'Separated new and pre-owned pricing. New pricing reflects MSRP as published by the manufacturer. Pre-owned pricing is based on used-market listings and pricing aggregators.',
   'Flagged uncertainty explicitly. Vehicles that were too new, unreleased, region-specific, or lacking a meaningful used market were marked as TBD, N/A, or "No meaningful used market yet" rather than assigned weak estimates.',
 ]
 
@@ -64,6 +64,8 @@ export default function AssumptionsTab() {
             <thead>
               <tr>
                 <th>Car Model</th>
+                <th className="num">2021</th>
+                <th className="num">2022</th>
                 <th className="num">2023</th>
                 <th className="num">2024</th>
                 <th className="num">2025</th>
@@ -75,6 +77,8 @@ export default function AssumptionsTab() {
               {count_data.map((r) => (
                 <tr key={r.model}>
                   <td><VehicleBadge vehicle={r.model} /></td>
+                  <td className="num">{r.y2021 || <span className="cell-na">—</span>}</td>
+                  <td className="num">{r.y2022 || <span className="cell-na">—</span>}</td>
                   <td className="num">{r.y2023 || <span className="cell-na">—</span>}</td>
                   <td className="num">{r.y2024 || <span className="cell-na">—</span>}</td>
                   <td className="num">{r.y2025 || <span className="cell-na">—</span>}</td>
@@ -84,6 +88,8 @@ export default function AssumptionsTab() {
               ))}
               <tr className="total-row">
                 <td style={{ fontWeight: 700 }}>Grand Total</td>
+                <td className="num">{count_totals.y2021}</td>
+                <td className="num">{count_totals.y2022}</td>
                 <td className="num">{count_totals.y2023}</td>
                 <td className="num">{count_totals.y2024}</td>
                 <td className="num">{count_totals.y2025}</td>
@@ -96,20 +102,6 @@ export default function AssumptionsTab() {
         <p className="count-note">{count_note}</p>
       </div>
 
-      {/* ── Assumptions ── */}
-      <div className="card">
-        <div className="card-title">Pricing Assumptions</div>
-        <p className="section-desc" style={{ margin: '0 0 16px' }}>
-          Values used to estimate out-the-door pricing for Delaware County, PA.
-        </p>
-        {DATA.assumptions.map((a) => (
-          <div key={a.assumption} className="assumption-row">
-            <span className="assumption-name">{a.assumption}</span>
-            <span className="assumption-val">{a.value}</span>
-            <span className="assumption-note">{a.notes || ''}</span>
-          </div>
-        ))}
-      </div>
     </>
   )
 }
