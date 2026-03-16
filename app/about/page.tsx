@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <Header />
+      <Header activeTab="about" />
       <main className="info-page">
         <Breadcrumb items={[
           { label: 'Home', href: '/' },

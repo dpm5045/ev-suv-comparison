@@ -19,7 +19,7 @@ This is a **Next.js 14 App Router** app (TypeScript, no testing framework) focus
 ### Data flow
 
 All vehicle data lives in **`lib/ev-data.json`** and is typed + exported via **`lib/data.ts`** as a single `DATA` object with four keys:
-- `DATA.details` — array of `DetailRow` (one entry per trim, 59 total)
+- `DATA.details` — array of `DetailRow` (one entry per trim)
 - `DATA.counts` / `DATA.count_totals` — sales counts by model year
 - `DATA.glossary` — field definitions
 - `DATA.preowned` — pre-owned price rows
@@ -33,10 +33,10 @@ All vehicle data lives in **`lib/ev-data.json`** and is typed + exported via **`
 Dashboard (state + URL routing)
 ├── Header
 ├── NavTabs            — tab switcher; active tab stored in ?tab= URL param
-├── OverviewTab        — key insights stats, glance table/cards, charging standards, AI news
+├── OverviewTab        — key insights stats, glance table/cards, charging standards
 ├── ComparisonV2Tab    — filterable table + mobile cards; filters in URL params (?vehicle=, ?year=, ?q=)
-├── GlossaryTab
-├── AssumptionsTab
+├── SideBySideTab      — side-by-side comparison of up to 3 trims
+├── ReferenceTab       — approach/methodology, models analyzed, glossary
 └── DetailPanel        — slide-in sidebar for full specs; opened via row/card click
 ```
 
@@ -51,6 +51,15 @@ Both `OverviewTab` and `ComparisonV2Tab` use a dual-render pattern: a desktop `<
 ### API route
 
 `app/api/news/route.ts` — POST endpoint that proxies to the Anthropic API (`claude-sonnet-4-6` with `web_search` tool) to fetch live EV news summaries. Requires `ANTHROPIC_API_KEY` in `.env.local`. News results are cached in `localStorage` for 7 days.
+
+## Approved web sources for data research
+
+When refreshing or auditing vehicle data, Claude is pre-approved to fetch from these sources without requiring per-site confirmation:
+
+- **OEM sites**: rivian.com, tesla.com, kia.com, hyundaiusa.com, cadillac.com, mbusa.com, volvocars.com, lucidmotors.com, vw.com, subaru.com, toyota.com
+- **Automotive reference**: edmunds.com, kbb.com, cars.com, caranddriver.com, truecar.com, carfax.com, carbuzz.com, insideevs.com, electrek.co, topspeed.com
+- **Specs databases**: evkx.net, evspecifications.com, fueleconomy.gov
+- **General reference**: en.wikipedia.org, usnews.com (cars section)
 
 # Git workflow
 

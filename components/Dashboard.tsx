@@ -3,11 +3,12 @@
 import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from './Header'
-import NavTabs, { type TabId } from './NavTabs'
+import type { TabId } from './Header'
 import DetailPanel from './DetailPanel'
 import OverviewTab from './tabs/OverviewTab'
 import ComparisonTab from './tabs/ComparisonV2Tab'
 import SideBySideTab from './tabs/SideBySideTab'
+import SpecSelectTab from './tabs/SpecSelectTab'
 import ReferenceTab from './tabs/ReferenceTab'
 
 export interface ComparisonFilters {
@@ -22,6 +23,7 @@ export interface ComparisonFilters {
 }
 
 export interface InsightFilters {
+  condition: string
   budget: string
   pref1: string
   pref2: string
@@ -41,6 +43,7 @@ export default function Dashboard() {
   const cmpSeats = searchParams.get('seats') ?? ''
   const cmpCharging = searchParams.get('charging') ?? ''
   const cmpFoldFlat = searchParams.get('foldFlat') ?? ''
+  const insightCondition = searchParams.get('condition') ?? ''
   const insightBudget = searchParams.get('budget') ?? ''
   const insightPref1 = searchParams.get('pref1') ?? ''
   const insightPref2 = searchParams.get('pref2') ?? ''
@@ -75,6 +78,7 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
 
   const setInsightFilters = useCallback((f: Partial<InsightFilters>, replace = false) => {
     const updates: Record<string, string> = {}
+    if ('condition' in f) updates.condition = f.condition ?? ''
     if ('budget' in f) updates.budget = f.budget ?? ''
     if ('pref1' in f) updates.pref1 = f.pref1 ?? ''
     if ('pref2' in f) updates.pref2 = f.pref2 ?? ''
@@ -84,11 +88,11 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
 
   return (
     <>
-      <Header />
-      <NavTabs activeTab={tab} />
+      <Header activeTab={tab} />
       <main className="main">
         {tab === 'overview' && (
           <OverviewTab
+            condition={insightCondition}
             budget={insightBudget}
             pref1={insightPref1}
             pref2={insightPref2}
@@ -102,6 +106,7 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
             onRowClick={setDetailIdx}
           />
         )}
+        {tab === 'specselect' && <SpecSelectTab onRowClick={setDetailIdx} />}
         {tab === 'sidebyside' && <SideBySideTab />}
         {tab === 'reference' && <ReferenceTab />}
       </main>

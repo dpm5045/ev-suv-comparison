@@ -1,11 +1,45 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import VehicleBadge from '../VehicleBadge'
 import type { ComparisonFilters } from '../Dashboard'
+
+/* ── Range bucket definitions ── */
+
+interface Bucket { label: string; test: (v: number) => boolean }
+
+const MSRP_BUCKETS: Bucket[] = [
+  { label: 'Under $60k', test: (v) => v < 60000 },
+  { label: '$60k\u2013$90k', test: (v) => v >= 60000 && v <= 90000 },
+  { label: '$90k+', test: (v) => v > 90000 },
+]
+const HP_BUCKETS: Bucket[] = [
+  { label: 'Under 400', test: (v) => v < 400 },
+  { label: '400\u2013650', test: (v) => v >= 400 && v <= 650 },
+  { label: '650+', test: (v) => v > 650 },
+]
+const RANGE_BUCKETS: Bucket[] = [
+  { label: 'Under 275 mi', test: (v) => v < 275 },
+  { label: '275\u2013325 mi', test: (v) => v >= 275 && v <= 325 },
+  { label: '325+ mi', test: (v) => v > 325 },
+]
+const BATTERY_BUCKETS: Bucket[] = [
+  { label: 'Under 90', test: (v) => v < 90 },
+  { label: '90\u2013110', test: (v) => v >= 90 && v <= 110 },
+  { label: '110+', test: (v) => v > 110 },
+]
+
+function matchesBuckets(value: number | string | null | undefined, buckets: Bucket[], selectedLabels: string[]): boolean {
+  if (selectedLabels.length === 0) return true
+  if (typeof value !== 'number') return false
+  return selectedLabels.some(label => {
+    const bucket = buckets.find(b => b.label === label)
+    return bucket ? bucket.test(value) : false
+  })
+}
 
 /* ── FilterableHeader — renders dropdown via portal to avoid overflow clipping ── */
 
@@ -30,7 +64,6 @@ function FilterableHeader({ label, options, selected, onChange, className, isOpe
     }
   }, [isOpen])
 
-  // Close on outside click
   useEffect(() => {
     if (!isOpen) return
     function handleClick(e: MouseEvent) {
@@ -67,7 +100,7 @@ function FilterableHeader({ label, options, selected, onChange, className, isOpe
           style={{ position: 'fixed', top: pos.top, left: pos.left }}
         >
           {selected.length > 0 && (
-            <button className="multi-select-clear" onClick={() => onChange([])}>Clear all</button>
+            <button className="multi-select-clear" onClick={() => onChange([])}>Select all</button>
           )}
           {options.map(opt => (
             <label key={opt} className="multi-select-option">
@@ -126,7 +159,7 @@ function MultiSelect({ label, allLabel, options, selected, onChange }: {
       {open && (
         <div className="multi-select-dropdown">
           {selected.length > 0 && (
-            <button className="multi-select-clear" onClick={() => onChange([])}>Clear all</button>
+            <button className="multi-select-clear" onClick={() => onChange([])}>Select all</button>
           )}
           {options.map(opt => (
             <label key={opt} className="multi-select-option">
@@ -151,10 +184,11 @@ interface Props {
 export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }: Props) {
   const [mobileView, setMobileView] = useState<'cards' | 'table'>('cards')
   const [openFilter, setOpenFilter] = useState<string | null>(null)
+  const [bucketFilters, setBucketFilters] = useState<Record<string, string[]>>({})
 
   const vehicles = useMemo(() => [...new Set(DATA.details.map((d) => d.vehicle))].sort(), [])
   const years = useMemo(() => [...new Set(DATA.details.map((d) => d.year).filter(Boolean))].sort() as number[], [])
-  const trims = useMemo(() => [...new Set(DATA.details.map((d) => d.trim).filter(Boolean))].sort(), [])
+  const trimOptions = useMemo(() => [...new Set(DATA.details.map((d) => d.trim).filter(Boolean))].sort(), [])
   const drivetrains = useMemo(() => [...new Set(DATA.details.map((d) => d.drivetrain).filter(Boolean))].sort(), [])
   const seatOptions = useMemo(() => [...new Set(DATA.details.map((d) => d.seats).filter((s): s is number => s != null))].sort((a, b) => a - b).map(String), [])
   const chargingOptions = useMemo(() => [...new Set(DATA.details.map((d) => d.charging_type).filter(Boolean))].sort(), [])
@@ -167,6 +201,10 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
   const selectedSeats = filters.seats ? filters.seats.split(',') : []
   const selectedCharging = filters.charging ? filters.charging.split(',') : []
   const selectedFoldFlat = filters.foldFlat ? filters.foldFlat.split(',') : []
+
+  const updateBucket = useCallback((key: string, vals: string[]) => {
+    setBucketFilters(prev => ({ ...prev, [key]: vals }))
+  }, [])
 
   const filtered = useMemo(() => {
     const sv = filters.vehicle ? filters.vehicle.split(',') : []
@@ -184,20 +222,31 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
     if (ss.length) rows = rows.filter((r) => ss.includes(String(r.seats)))
     if (sc.length) rows = rows.filter((r) => sc.includes(r.charging_type))
     if (sf.length) rows = rows.filter((r) => sf.includes(r.fold_flat || ''))
+    // Bucket filters (local state)
+    if (bucketFilters.msrp?.length) rows = rows.filter((r) => matchesBuckets(r.msrp, MSRP_BUCKETS, bucketFilters.msrp))
+    if (bucketFilters.hp?.length) rows = rows.filter((r) => matchesBuckets(r.hp, HP_BUCKETS, bucketFilters.hp))
+    if (bucketFilters.range?.length) rows = rows.filter((r) => matchesBuckets(r.range_mi, RANGE_BUCKETS, bucketFilters.range))
+    if (bucketFilters.battery?.length) rows = rows.filter((r) => matchesBuckets(r.battery_kwh, BATTERY_BUCKETS, bucketFilters.battery))
     if (filters.q) {
       const q = filters.q.toLowerCase()
       rows = rows.filter((r) => JSON.stringify(r).toLowerCase().includes(q))
     }
     return rows
-  }, [filters])
+  }, [filters, bucketFilters])
 
+  const bucketFilterCount = Object.values(bucketFilters).filter(a => a.length > 0).length
   const activeFilterCount = [
     selectedVehicles, selectedYears, selectedTrims, selectedDrivetrains,
     selectedSeats, selectedCharging, selectedFoldFlat
-  ].filter(a => a.length > 0).length + (filters.q ? 1 : 0)
+  ].filter(a => a.length > 0).length + bucketFilterCount + (filters.q ? 1 : 0)
 
   function toggleFilter(id: string) {
     setOpenFilter(openFilter === id ? null : id)
+  }
+
+  function clearAllFilters() {
+    onFiltersChange({ vehicle: '', year: '', trim: '', drivetrain: '', seats: '', charging: '', foldFlat: '', q: '' })
+    setBucketFilters({})
   }
 
   return (
@@ -225,11 +274,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
           />
         </div>
         {activeFilterCount > 0 && (
-          <button
-            className="multi-select-clear"
-            style={{ whiteSpace: 'nowrap' }}
-            onClick={() => onFiltersChange({ vehicle: '', year: '', trim: '', drivetrain: '', seats: '', charging: '', foldFlat: '', q: '' })}
-          >
+          <button className="multi-select-clear" style={{ whiteSpace: 'nowrap' }} onClick={clearAllFilters}>
             Clear all filters
           </button>
         )}
@@ -252,14 +297,14 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
               <tr>
                 <FilterableHeader label="Vehicle" options={vehicles} selected={selectedVehicles} onChange={(vals) => onFiltersChange({ vehicle: vals.join(',') })} className="col-sticky" isOpen={openFilter === 'vehicle'} onToggle={() => toggleFilter('vehicle')} />
                 <FilterableHeader label="Year" options={years.map(String)} selected={selectedYears} onChange={(vals) => onFiltersChange({ year: vals.join(',') })} isOpen={openFilter === 'year'} onToggle={() => toggleFilter('year')} />
-                <FilterableHeader label="Trim" options={trims} selected={selectedTrims} onChange={(vals) => onFiltersChange({ trim: vals.join(',') })} isOpen={openFilter === 'trim'} onToggle={() => toggleFilter('trim')} />
+                <FilterableHeader label="Trim" options={trimOptions} selected={selectedTrims} onChange={(vals) => onFiltersChange({ trim: vals.join(',') })} isOpen={openFilter === 'trim'} onToggle={() => toggleFilter('trim')} />
                 <FilterableHeader label="Drivetrain" options={drivetrains} selected={selectedDrivetrains} onChange={(vals) => onFiltersChange({ drivetrain: vals.join(',') })} isOpen={openFilter === 'drivetrain'} onToggle={() => toggleFilter('drivetrain')} />
                 <FilterableHeader label="Seats" options={seatOptions} selected={selectedSeats} onChange={(vals) => onFiltersChange({ seats: vals.join(',') })} className="num" isOpen={openFilter === 'seats'} onToggle={() => toggleFilter('seats')} />
-                <th className="num">MSRP</th>
+                <FilterableHeader label="MSRP" options={MSRP_BUCKETS.map(b => b.label)} selected={bucketFilters.msrp || []} onChange={(vals) => updateBucket('msrp', vals)} className="num" isOpen={openFilter === 'msrp'} onToggle={() => toggleFilter('msrp')} />
                 <th>Pre-Owned Price</th>
-                <th className="num">Range (mi)</th>
-                <th className="num">HP</th>
-                <th className="num">Battery</th>
+                <FilterableHeader label="Range (mi)" options={RANGE_BUCKETS.map(b => b.label)} selected={bucketFilters.range || []} onChange={(vals) => updateBucket('range', vals)} className="num" isOpen={openFilter === 'range'} onToggle={() => toggleFilter('range')} />
+                <FilterableHeader label="HP" options={HP_BUCKETS.map(b => b.label)} selected={bucketFilters.hp || []} onChange={(vals) => updateBucket('hp', vals)} className="num" isOpen={openFilter === 'hp'} onToggle={() => toggleFilter('hp')} />
+                <FilterableHeader label="Battery (kWh)" options={BATTERY_BUCKETS.map(b => b.label)} selected={bucketFilters.battery || []} onChange={(vals) => updateBucket('battery', vals)} className="num" isOpen={openFilter === 'battery'} onToggle={() => toggleFilter('battery')} />
                 <FilterableHeader label="Charging" options={chargingOptions} selected={selectedCharging} onChange={(vals) => onFiltersChange({ charging: vals.join(',') })} isOpen={openFilter === 'charging'} onToggle={() => toggleFilter('charging')} />
                 <th className="num">Frunk (cu ft)</th>
                 <th className="num">Behind 3rd Row (cu ft)</th>
@@ -300,11 +345,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                     </td>
                     <td className="num"><span className={range.className}>{range.text}</span></td>
                     <td className="num"><span className={hp.className}>{hp.text}</span></td>
-                    <td className="num">
-                      <span className={bat.className}>
-                        {bat.text}{typeof r.battery_kwh === 'number' ? ' kWh' : ''}
-                      </span>
-                    </td>
+                    <td className="num"><span className={bat.className}>{bat.text}</span></td>
                     <td>{r.charging_type || ''}</td>
                     <td className="num">{r.frunk_cu_ft ?? dash}</td>
                     <td className="num">{r.cargo_behind_3rd_cu_ft ?? dash}</td>
@@ -359,9 +400,9 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                     </span>
                   </div>
                   <div className="cmp-stat">
-                    <span className="cmp-stat-label">Battery</span>
+                    <span className="cmp-stat-label">Battery (kWh)</span>
                     <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
-                      {bat.text}{typeof r.battery_kwh === 'number' ? ' kWh' : ''}
+                      {bat.text}
                     </span>
                   </div>
                   {r.charging_type && (
