@@ -53,12 +53,30 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ))}
             </div>
 
+            <SpecSection title="Performance" rows={[
+              ['Torque', typeof r.torque_lb_ft === 'number' ? `${r.torque_lb_ft} lb-ft` : r.torque_lb_ft],
+              ['0–60 mph', typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec} sec` : r.zero_to_60_sec],
+              ['Curb Weight', typeof r.curb_weight_lbs === 'number' ? `${r.curb_weight_lbs.toLocaleString()} lbs` : r.curb_weight_lbs],
+              ['Towing Capacity', typeof r.towing_lbs === 'number' ? `${r.towing_lbs.toLocaleString()} lbs` : r.towing_lbs],
+            ]} />
+
             <SpecSection title="Drivetrain & Charging" rows={[
               ['Drivetrain', r.drivetrain],
               ['Charging Type', r.charging_type],
+              ['DC Fast Charge', typeof r.dc_fast_charge_kw === 'number' ? `${r.dc_fast_charge_kw} kW` : r.dc_fast_charge_kw],
+              ['DC 10–80%', typeof r.dc_fast_charge_10_80_min === 'number' ? `${r.dc_fast_charge_10_80_min} min` : r.dc_fast_charge_10_80_min],
               ['Onboard AC', r.onboard_ac_kw ? `${r.onboard_ac_kw} kW` : '—'],
               ['L2 10–80%', r.l2_10_80 ? `${r.l2_10_80} hrs` : '—'],
               ['L2 10–100%', r.l2_10_100 ? `${r.l2_10_100} hrs` : '—'],
+            ]} />
+
+            <SpecSection title="Dimensions" rows={[
+              ['Length', typeof r.length_in === 'number' ? `${r.length_in} in` : r.length_in],
+              ['Width', typeof r.width_in === 'number' ? `${r.width_in} in` : r.width_in],
+              ['Height', typeof r.height_in === 'number' ? `${r.height_in} in` : r.height_in],
+              ['Ground Clearance', typeof r.ground_clearance_in === 'number' ? `${r.ground_clearance_in} in` : r.ground_clearance_in],
+              ['3rd Row Legroom', typeof r.third_row_legroom_in === 'number' ? `${r.third_row_legroom_in} in` : r.third_row_legroom_in],
+              ['3rd Row Headroom', typeof r.third_row_headroom_in === 'number' ? `${r.third_row_headroom_in} in` : r.third_row_headroom_in],
             ]} />
 
             <SpecSection title="Technology & Features" rows={[
