@@ -64,7 +64,8 @@ body {
   padding: 0 32px;
   display: flex;
   align-items: stretch;
-  gap: 0;
+  justify-content: center;
+  position: relative;
 }
 .header-brand {
   font-size: 18px;
@@ -75,15 +76,15 @@ body {
   display: flex;
   align-items: center;
   padding: 14px 0;
-  margin-right: 24px;
   white-space: nowrap;
+  position: absolute;
+  left: 32px;
 }
 .header-brand:hover { opacity: 0.85; }
 .header-nav {
   display: flex;
   align-items: stretch;
   gap: 2px;
-  margin-left: auto;
 }
 
 /* ── Nav Tabs (inside header) ── */
@@ -185,9 +186,9 @@ body {
   line-height: 1.2;
 }
 .overview-hero-image {
-  max-width: 720px;
-  margin: 1.5rem auto 0;
-  aspect-ratio: 3 / 1;
+  width: 100%;
+  margin: 2rem auto 0;
+  aspect-ratio: 16 / 9;
   border-radius: 12px;
   /* Placeholder styling — remove when real image added */
   background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
