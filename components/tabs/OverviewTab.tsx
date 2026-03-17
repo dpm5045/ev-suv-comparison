@@ -517,7 +517,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                     : !vehiclesInBudget.has(s.vehicle)
                   return (
                     <tr key={s.vehicle} className={dimmed ? 'glance-row-dimmed' : ''}>
-                      <td className="col-sticky"><VehicleBadge vehicle={s.vehicle} /></td>
+                      <td className="col-sticky"><Link href={`/vehicles/${toSlug(s.vehicle)}`}><VehicleBadge vehicle={s.vehicle} /></Link></td>
                       <td className="num">
                         {isPreowned
                           ? (s.preLow !== null ? `${fmtDollarK(s.preLow)}-${fmtDollarK(s.preHigh!)}` : '\u2014')
