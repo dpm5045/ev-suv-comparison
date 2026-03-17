@@ -150,6 +150,14 @@ export default async function VehiclePage({ params }: Props) {
         <div className="vehicle-hero">
           <span className={`vehicle-badge ${cls}`}>{vehicle}</span>
           <p className="vehicle-hero-sub">{yearRange} &middot; {trims.length} trim{trims.length !== 1 ? 's' : ''} &middot; {seats.join(' or ')}-seat</p>
+          <div className="vehicle-hero-actions">
+            <Link href={`/?tab=comparison&vehicle=${encodeURIComponent(vehicle)}`}>
+              Compare trims →
+            </Link>
+            <Link href={`/?tab=sidebyside&v1=${encodeURIComponent(vehicle)}`}>
+              Side-by-side →
+            </Link>
+          </div>
         </div>
 
         {/* Quick stats */}
@@ -275,8 +283,22 @@ export default async function VehiclePage({ params }: Props) {
           </>
         )}
 
-        <div style={{ marginTop: '2rem' }}>
-          <Link href="/" className="back-link">&larr; Back to comparison tool</Link>
+        <div className="vehicle-cta-section">
+          <h2>Keep Exploring</h2>
+          <div className="vehicle-cta-buttons">
+            <Link
+              href={`/?tab=comparison&vehicle=${encodeURIComponent(vehicle)}`}
+              className="vehicle-cta-btn"
+            >
+              Compare all {vehicle} trims
+            </Link>
+            <Link
+              href={`/?tab=sidebyside&v1=${encodeURIComponent(vehicle)}`}
+              className="vehicle-cta-btn secondary"
+            >
+              Compare {vehicle} side-by-side
+            </Link>
+          </div>
         </div>
       </main>
     </>
