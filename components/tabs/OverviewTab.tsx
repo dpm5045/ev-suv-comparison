@@ -387,8 +387,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         <h1 className="overview-hero-title">Find Your Perfect 3-Row EV</h1>
         <p className="overview-hero-sub">Compare specs, pricing, and features</p>
         <div className="overview-hero-image">
-          {/* Placeholder — replace with <Image> when artwork is ready */}
-          {/* Expected: public/hero-sketch-dark.png at ~2160×720 */}
+          <img src="/hero-sketch-dark.png" alt="3-Row EV concept sketch" />
         </div>
       </div>
 

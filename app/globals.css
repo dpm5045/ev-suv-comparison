@@ -186,9 +186,10 @@ body {
   line-height: 1.2;
 }
 .overview-hero-image {
+  position: relative;
   width: 100%;
   margin: 2rem auto 0;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 5 / 2;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -198,6 +199,18 @@ body {
   object-fit: cover;
   object-position: center;
   display: block;
+}
+.overview-hero-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right,
+    var(--bg) 0%,
+    transparent 15%,
+    transparent 85%,
+    var(--bg) 100%
+  );
+  pointer-events: none;
 }
 .overview-hero-sub {
   font-size: 17px;
