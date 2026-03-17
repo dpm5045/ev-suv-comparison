@@ -248,78 +248,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
     ],
   },
   {
-    title: 'Seating',
-    filters: [
-      {
-        key: 'seats',
-        label: 'Seats',
-        options: [
-          { id: '5', label: '5-seat' },
-          { id: '6', label: '6-seat' },
-          { id: '7', label: '7-seat' },
-        ],
-        test: (r, sel) => {
-          if (!sel.length) return true
-          return sel.includes(String(r.seats))
-        },
-      },
-      {
-        key: 'foldFlat',
-        label: 'Fold Flat',
-        options: [
-          { id: 'Yes', label: 'Yes' },
-          { id: 'No', label: 'No' },
-          { id: 'Partial', label: 'Partial' },
-        ],
-        test: (r, sel) => {
-          if (!sel.length) return true
-          return sel.includes(r.fold_flat || '')
-        },
-      },
-    ],
-  },
-  {
-    title: 'Cargo',
-    filters: [
-      {
-        key: 'cargo2',
-        label: 'Cargo (2nd Row Folded)',
-        options: [
-          { id: '40plus', label: '40+ cu ft' },
-          { id: '55plus', label: '55+ cu ft' },
-        ],
-        test: (r, sel) => {
-          if (!sel.length) return true
-          const v = r.cargo_behind_2nd_cu_ft
-          if (typeof v !== 'number') return false
-          return sel.some(id => {
-            if (id === '40plus') return v >= 40
-            if (id === '55plus') return v >= 55
-            return false
-          })
-        },
-      },
-      {
-        key: 'frunk',
-        label: 'Frunk',
-        options: [
-          { id: 'has', label: 'Has Frunk' },
-          { id: 'no', label: 'No Frunk' },
-        ],
-        test: (r, sel) => {
-          if (!sel.length) return true
-          const hasFrunk = typeof r.frunk_cu_ft === 'number' && r.frunk_cu_ft > 0
-          return sel.some(id => {
-            if (id === 'has') return hasFrunk
-            if (id === 'no') return !hasFrunk
-            return false
-          })
-        },
-      },
-    ],
-  },
-  {
-    title: 'Towing & Size',
+    title: 'Vehicle',
     filters: [
       {
         key: 'towing',
@@ -383,11 +312,79 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
           })
         },
       },
-    ],
-  },
-  {
-    title: 'Technology',
-    filters: [
+      {
+        key: 'seats',
+        label: 'Seats',
+        options: [
+          { id: '5', label: '5-seat' },
+          { id: '6', label: '6-seat' },
+          { id: '7', label: '7-seat' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          return sel.includes(String(r.seats))
+        },
+      },
+      {
+        key: 'drivetrain',
+        label: 'Drivetrain',
+        options: [
+          { id: 'AWD', label: 'AWD' },
+          { id: 'RWD', label: 'RWD' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          return sel.some(id => r.drivetrain.includes(id))
+        },
+      },
+      {
+        key: 'foldFlat',
+        label: 'Fold Flat',
+        options: [
+          { id: 'Yes', label: 'Yes' },
+          { id: 'No', label: 'No' },
+          { id: 'Partial', label: 'Partial' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          return sel.includes(r.fold_flat || '')
+        },
+      },
+      {
+        key: 'cargo2',
+        label: 'Cargo (2nd Row Folded)',
+        options: [
+          { id: '40plus', label: '40+ cu ft' },
+          { id: '55plus', label: '55+ cu ft' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const v = r.cargo_behind_2nd_cu_ft
+          if (typeof v !== 'number') return false
+          return sel.some(id => {
+            if (id === '40plus') return v >= 40
+            if (id === '55plus') return v >= 55
+            return false
+          })
+        },
+      },
+      {
+        key: 'frunk',
+        label: 'Frunk',
+        options: [
+          { id: 'has', label: 'Has Frunk' },
+          { id: 'no', label: 'No Frunk' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const hasFrunk = typeof r.frunk_cu_ft === 'number' && r.frunk_cu_ft > 0
+          return sel.some(id => {
+            if (id === 'has') return hasFrunk
+            if (id === 'no') return !hasFrunk
+            return false
+          })
+        },
+      },
       {
         key: 'software',
         label: 'Infotainment',
