@@ -2,6 +2,7 @@
 
 import { DATA } from '@/lib/data'
 import VehicleBadge from '../VehicleBadge'
+import { GLOSSARY_AMAZON_LINKS, amazonSearchUrl, AFFILIATE_DISCLOSURE } from '@/lib/affiliate'
 
 const CHARGING_STANDARDS = [
   {
@@ -68,11 +69,25 @@ export default function GlossaryTab() {
         <div className="glossary-items">
           {CHARGING_STANDARDS.map((s) => (
             <div key={s.abbr} className="glossary-item">
-              <div className="glossary-field">{s.abbr} <span className="glossary-full-name">&mdash; {s.name}</span></div>
+              <div className="glossary-field">
+                {s.abbr} <span className="glossary-full-name">&mdash; {s.name}</span>
+                {GLOSSARY_AMAZON_LINKS[s.abbr] && (
+                  <a
+                    href={amazonSearchUrl(GLOSSARY_AMAZON_LINKS[s.abbr].query)}
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    className="affiliate-link"
+                    style={{ marginLeft: 10, verticalAlign: 'middle' }}
+                  >
+                    <span className="affiliate-link-amazon">Amazon</span> {GLOSSARY_AMAZON_LINKS[s.abbr].text} <span className="affiliate-link-arrow" aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </div>
               <div className="glossary-meaning">{s.detail}</div>
             </div>
           ))}
         </div>
+        <p className="affiliate-disclosure">{AFFILIATE_DISCLOSURE}</p>
       </div>
 
       {/* ── Charging Notation in Our Tables ── */}
