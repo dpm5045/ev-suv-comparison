@@ -303,7 +303,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   }, [filteredDetails, activePref1, activePref2, isPreowned])
 
   /* --- vehicle summaries + budget flags for glance table --- */
-  const { vehicleSummaries, vehiclesInBudget, chargingMap } = useMemo(() => {
+  const { vehicleSummaries, vehiclesInBudget } = useMemo(() => {
     const d = DATA.details
     const allVehicles = [...new Set(d.map((r) => r.vehicle))].sort()
 
@@ -344,26 +344,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       }
     })
 
-    const chargingMap = new Map<string, string[]>()
-    for (const s of vehicleSummaries) {
-      const rows = d.filter((r) => r.vehicle === s.vehicle)
-      const types = rows.map((r) => r.charging_type.toLowerCase())
-      const hasNacsNative = types.some((t) => t.startsWith('nacs'))
-      const hasCcsNative = types.some((t) => t.startsWith('ccs'))
-      let category: string
-      if (s.charging === '\u2014' || types.every((t) => t === 'tbd')) category = 'TBD'
-      else if (hasNacsNative && hasCcsNative) category = 'CCS1 + NACS (transitioning)'
-      else if (hasNacsNative) {
-        const mentionsCcsAdapter = types.some((t) => t.includes('ccs adapter'))
-        category = mentionsCcsAdapter ? 'CCS1 + NACS (transitioning)' : 'NACS'
-      }
-      else if (hasCcsNative) category = 'CCS1'
-      else category = s.charging
-      if (!chargingMap.has(category)) chargingMap.set(category, [])
-      chargingMap.get(category)!.push(s.vehicle)
-    }
-
-    return { vehicleSummaries, vehiclesInBudget: inBudget, chargingMap }
+    return { vehicleSummaries, vehiclesInBudget: inBudget }
   }, [filteredDetails])
 
   const [glanceView, setGlanceView] = useState<'cards' | 'table'>('cards')
@@ -405,6 +386,10 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       <div className="overview-hero">
         <h1 className="overview-hero-title">Find Your Perfect 3-Row EV</h1>
         <p className="overview-hero-sub">Compare specs, pricing, and features</p>
+        <div className="overview-hero-image">
+          {/* Placeholder — replace with <Image> when artwork is ready */}
+          {/* Expected: public/hero-sketch-dark.png at ~2160×720 */}
+        </div>
       </div>
 
       <h2 className="section-title">Let&apos;s Go Speed Dating</h2>
@@ -593,23 +578,6 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         <p className="count-note">The Tesla Model Y Long (Asia) and Toyota Highlander EV are not yet on the US market.</p>
       </div>
 
-      {/* ── Charging Landscape ── */}
-      <div className="card">
-        <div className="card-title">Charging Standards</div>
-        <div className="charging-cards">
-          {[...chargingMap.entries()].map(([standard, vehicles]) => (
-            <div key={standard} className="charging-card">
-              <div className="charging-card-label">{standard}</div>
-              <div className="charging-card-vehicles">
-                {vehicles.map((v) => (
-                  <VehicleBadge key={v} vehicle={v} />
-                ))}
-              </div>
-              <div className="charging-card-count">{vehicles.length} {vehicles.length === 1 ? 'vehicle' : 'vehicles'}</div>
-            </div>
-          ))}
-        </div>
-      </div>
 
     </>
   )
