@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { DATA } from '@/lib/data'
 import type { InsightFilters } from '../Dashboard'
+import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
+import { toSlug } from '@/lib/slugs'
 
 const WATCHLIST_VEHICLES = [
   'Toyota Highlander EV',
@@ -548,6 +550,14 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                 <div key={s.vehicle} className={`cmp-card glance-accordion${dimmed ? ' glance-row-dimmed' : ''}${expanded ? ' expanded' : ''}`}>
                   <div className="cmp-card-header" onClick={() => setExpandedVehicle(expanded ? null : s.vehicle)}>
                     <VehicleBadge vehicle={s.vehicle} />
+                    <Link
+                      href={`/vehicles/${toSlug(s.vehicle)}`}
+                      className="card-page-link"
+                      aria-label={`View ${s.vehicle} full page`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span aria-hidden="true">↗</span>
+                    </Link>
                     <span className="accordion-chevron" />
                   </div>
                   <div className="cmp-card-stats">
