@@ -6880,7 +6880,7 @@
     {
       "field": "Pre-Owned Price Range",
       "meaning": "Estimated used-market listing price range",
-      "notes": "Estimated used-market listing price range from pricing aggregators such as Kelley Blue Book and Edmunds."
+      "notes": "Estimated used-market listing price range based on publicly available pricing data."
     },
     {
       "field": "Self Driving",
