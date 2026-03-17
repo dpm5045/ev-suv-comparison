@@ -259,7 +259,10 @@ th {
   z-index: 2;
   border-bottom: 1px solid var(--border);
 }
-/* Full Monty table: sticky headers below site header */
+/* Full Monty table: sticky headers below site header, no rounded top */
+.cmp-table-view .table-wrap {
+  border-radius: 0;
+}
 .cmp-table-view th {
   top: 49px;
   z-index: 4;
