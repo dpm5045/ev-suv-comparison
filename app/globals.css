@@ -795,6 +795,38 @@ tr[data-clickable='true']:hover td.col-sticky {
   font-style: italic;
 }
 
+/* ── Accessories tab ── */
+.accessories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.accessories-card {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.accessories-card-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+.accessories-card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.accessories-filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
 /* ── Comparison v2 card layout ── */
 .cmp-table-view { display: block; }
 .cmp-card-view  { display: none;  }
@@ -1158,6 +1190,22 @@ tr[data-clickable='true']:hover td.col-sticky {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 10px;
+}
+.spec-section-title.collapsible {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+.spec-section-title.collapsible:hover {
+  color: var(--text-muted);
+}
+.spec-section-chevron {
+  transition: transform 0.2s;
+  font-size: 14px;
+}
+.spec-section-chevron.open {
+  transform: rotate(180deg);
 }
 .spec-section-body {
   display: flex;
