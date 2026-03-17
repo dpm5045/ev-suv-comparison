@@ -170,9 +170,66 @@ export default async function ComparePage({ params }: Props) {
     ],
   }
 
+  // FAQ JSON-LD for comparison
+  const nv = (v: number | string | null | undefined) => typeof v === 'number' ? v : null
+  const faqEntries: { q: string; a: string }[] = []
+
+  // Price comparison
+  const priceA = nv(repA.msrp)
+  const priceB = nv(repB.msrp)
+  if (priceA && priceB) {
+    const cheaper = priceA < priceB ? nameA : nameB
+    const diff = Math.abs(priceA - priceB)
+    faqEntries.push({ q: `Which is cheaper, the ${nameA} or ${nameB}?`, a: `The ${cheaper} starts at a lower MSRP, approximately $${diff.toLocaleString()} less when comparing representative trims.` })
+  }
+
+  // Range comparison
+  const rangeA = nv(repA.range_mi)
+  const rangeB = nv(repB.range_mi)
+  if (rangeA && rangeB) {
+    const longer = rangeA > rangeB ? nameA : nameB
+    const longerMi = Math.max(rangeA, rangeB)
+    const shorterMi = Math.min(rangeA, rangeB)
+    faqEntries.push({ q: `Which has more range, the ${nameA} or ${nameB}?`, a: `The ${longer} has a longer EPA-estimated range at ${longerMi} miles compared to ${shorterMi} miles for representative trims.` })
+  }
+
+  // Cargo comparison
+  const cargo3A = nv(repA.cargo_behind_3rd_cu_ft)
+  const cargo3B = nv(repB.cargo_behind_3rd_cu_ft)
+  if (cargo3A && cargo3B) {
+    const more = cargo3A > cargo3B ? nameA : nameB
+    faqEntries.push({ q: `Which has more cargo space, the ${nameA} or ${nameB}?`, a: `The ${more} offers more cargo space behind the third row (${Math.max(cargo3A, cargo3B)} vs ${Math.min(cargo3A, cargo3B)} cu ft).` })
+  }
+
+  // Towing comparison
+  const towA = nv(repA.towing_lbs)
+  const towB = nv(repB.towing_lbs)
+  if (towA && towB) {
+    const stronger = towA > towB ? nameA : nameB
+    faqEntries.push({ q: `Which can tow more, the ${nameA} or ${nameB}?`, a: `The ${stronger} has a higher towing capacity at ${Math.max(towA, towB).toLocaleString()} lbs compared to ${Math.min(towA, towB).toLocaleString()} lbs.` })
+  }
+
+  // Seats
+  const seatsA = repA.seats
+  const seatsB = repB.seats
+  if (seatsA && seatsB) {
+    faqEntries.push({ q: `How many seats do the ${nameA} and ${nameB} have?`, a: `The ${nameA} seats ${seatsA} and the ${nameB} seats ${seatsB} in their representative configurations. Both are available in multiple seating layouts.` })
+  }
+
+  const faqJsonLd = faqEntries.length ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqEntries.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  } : null
+
   return (
     <>
       <JsonLd data={jsonLd} />
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
       <Header />
       <main className="compare-page">
         <Breadcrumb items={[

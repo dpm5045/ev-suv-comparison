@@ -74,7 +74,12 @@ export default async function VehiclePage({ params }: Props) {
   const vehicleSlug = toSlug(vehicle)
   const related = allPairs.filter(p => p.slugA === vehicleSlug || p.slugB === vehicleSlug)
 
-  // JSON-LD
+  // Charging types
+  const chargingTypes = [...new Set(trims.map(t => t.charging_type).filter(Boolean))]
+  const cargo3s = trims.map(t => t.cargo_behind_3rd_cu_ft).filter((c): c is number => typeof c === 'number')
+  const towing = trims.map(t => t.towing_lbs).filter((t): t is number => typeof t === 'number')
+
+  // JSON-LD Product
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -93,9 +98,47 @@ export default async function VehiclePage({ params }: Props) {
     }
   }
 
+  // JSON-LD FAQ
+  const faqEntries: { q: string; a: string }[] = []
+  if (prices.length) {
+    const lo = `$${Math.min(...prices).toLocaleString()}`
+    const hi = `$${Math.max(...prices).toLocaleString()}`
+    faqEntries.push({ q: `How much does the ${vehicle} cost?`, a: `The ${yearRange} ${vehicle} starts at ${lo} MSRP and goes up to ${hi} depending on trim and configuration.` })
+  }
+  if (ranges.length) {
+    const maxR = Math.max(...ranges)
+    const minR = Math.min(...ranges)
+    faqEntries.push({ q: `What is the range of the ${vehicle}?`, a: `The ${yearRange} ${vehicle} has an EPA-estimated range of ${minR === maxR ? `${maxR} miles` : `${minR} to ${maxR} miles`} depending on trim and battery configuration.` })
+  }
+  if (seats.length) {
+    faqEntries.push({ q: `How many seats does the ${vehicle} have?`, a: `The ${vehicle} is available in ${seats.join(' and ')}-seat configurations across its trim lineup.` })
+  }
+  if (chargingTypes.length) {
+    faqEntries.push({ q: `What charging connector does the ${vehicle} use?`, a: `The ${vehicle} uses ${chargingTypes.join(' or ')}. ${chargingTypes.some(t => t.toLowerCase().includes('nacs')) ? 'NACS provides access to the Tesla Supercharger network.' : ''}`.trim() })
+  }
+  if (cargo3s.length) {
+    const maxCargo = Math.max(...cargo3s)
+    faqEntries.push({ q: `How much cargo space does the ${vehicle} have?`, a: `The ${vehicle} offers up to ${maxCargo} cubic feet of cargo space behind the third row with all seats upright.` })
+  }
+  if (towing.length) {
+    const maxTow = Math.max(...towing)
+    faqEntries.push({ q: `Can the ${vehicle} tow?`, a: `Yes, the ${vehicle} has a maximum towing capacity of ${maxTow.toLocaleString()} lbs.` })
+  }
+
+  const faqJsonLd = faqEntries.length ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqEntries.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  } : null
+
   return (
     <>
       <JsonLd data={jsonLd} />
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
       <Header />
       <main className="vehicle-page">
         <Breadcrumb items={[
