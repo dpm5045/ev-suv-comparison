@@ -10,6 +10,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'sidebyside', label: 'Side-by-Side' },
   { id: 'comparison', label: 'The Full Monty' },
   { id: 'glossary', label: 'Glossary' },
+  { id: 'accessories', label: 'Accessories' },
 ]
 
 interface Props {
