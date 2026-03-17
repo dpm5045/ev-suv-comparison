@@ -541,6 +541,16 @@ export default function SpecSelectTab({ onRowClick }: Props) {
 
   const activeFilterCount = Object.values(filters).filter(a => a.length > 0).length
 
+  // Accordion state for filter sections — Pricing & Year always open
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({ 'Pricing & Year': true })
+  function toggleSection(title: string) {
+    setOpenSections(prev => ({ ...prev, [title]: !prev[title] }))
+  }
+  // Count active filters per section
+  function sectionFilterCount(section: typeof SECTIONS[number]): number {
+    return section.filters.filter(f => (filters[f.key] || []).length > 0).length
+  }
+
   const filtered = useMemo(() => {
     let rows = DATA.details as Row[]
     for (const section of SECTIONS) {
@@ -586,26 +596,38 @@ export default function SpecSelectTab({ onRowClick }: Props) {
             return true
           })
           if (!sectionFilters.length) return null
+          const isAlwaysOpen = section.title === 'Pricing & Year'
+          const isOpen = isAlwaysOpen || (openSections[section.title] ?? false)
+          const activeCount = sectionFilterCount(section)
           return (
-            <div key={section.title} className="spec-section">
-              <div className="spec-section-title">{section.title}</div>
-              <div className="spec-section-body">
-                {sectionFilters.map(f => {
-                  const sel = filters[f.key] || []
-                  return (
-                    <div key={f.key} className="spec-filter-row">
-                      <span className="spec-filter-label">{f.label}</span>
-                      <MultiSelect
-                        label={f.label}
-                        allLabel={`All`}
-                        options={f.options}
-                        selected={sel}
-                        onChange={(vals) => updateFilter(f.key, vals)}
-                      />
-                    </div>
-                  )
-                })}
+            <div key={section.title} className={`spec-section${isOpen ? ' open' : ''}`}>
+              <div
+                className={`spec-section-title${isAlwaysOpen ? '' : ' collapsible'}`}
+                onClick={isAlwaysOpen ? undefined : () => toggleSection(section.title)}
+                style={isAlwaysOpen ? undefined : { cursor: 'pointer' }}
+              >
+                <span>{section.title}{!isAlwaysOpen && activeCount > 0 ? ` (${activeCount})` : ''}</span>
+                {!isAlwaysOpen && <span className={`spec-section-chevron${isOpen ? ' open' : ''}`}>▾</span>}
               </div>
+              {isOpen && (
+                <div className="spec-section-body">
+                  {sectionFilters.map(f => {
+                    const sel = filters[f.key] || []
+                    return (
+                      <div key={f.key} className="spec-filter-row">
+                        <span className="spec-filter-label">{f.label}</span>
+                        <MultiSelect
+                          label={f.label}
+                          allLabel={`All`}
+                          options={f.options}
+                          selected={sel}
+                          onChange={(vals) => updateFilter(f.key, vals)}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           )
         })}
