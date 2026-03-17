@@ -72,7 +72,7 @@ export default function AccessoriesTab() {
     <>
       <h2 className="section-title">Accessories</h2>
       <p className="section-desc">
-        Curated accessories for 3-row electric SUVs. Shop by vehicle or browse must-haves for any EV.
+        Curated accessories for 3-row electric SUVs. Shop by vehicle or browse EV must-haves.
       </p>
 
       {/* ── Filter bar ── */}
