@@ -92,8 +92,12 @@ Replace stacked trim cards with a **trim comparison table** on desktop and **acc
 - Frunk
 - Behind 3rd Row
 - Behind 2nd Row
+- Behind 1st Row
 - Fold Flat
 - Floor Width (Wheel Wells)
+
+**Notes:**
+- If a trim has a `notes` field, display it as a full-width row spanning all columns at the bottom of that trim's data (desktop), or as a final section in the card (mobile)
 
 ### Styling
 
@@ -101,6 +105,16 @@ Replace stacked trim cards with a **trim comparison table** on desktop and **acc
 - First column sticky with `.col-sticky` pattern
 - Section header rows use `.compare-section-row` styling (uppercase, accent color)
 - Standard `var(--border)` grid lines
+- Trim columns get a `min-width` (e.g., 140px) to prevent cramped cells on wide tables
+
+### Edge Cases
+
+- **Single-trim vehicles:** Table renders with just two columns (spec label + one trim). Still useful — shows all specs in a clean layout.
+- **Many trims (8+):** Table may exceed viewport width. Horizontal scroll with sticky first column handles this gracefully — same pattern as the comparison tab.
+
+### Formatting
+
+Spec values use the same formatting logic as the current trim cards and DetailPanel: `fmtMoney()` for prices, `fmtNum()` for numeric values with units, dash for missing values. This logic is passed into the client component as pre-formatted data or kept in the server component where the table is rendered statically.
 
 ---
 
@@ -116,7 +130,7 @@ Replace stacked trim cards with a **trim comparison table** on desktop and **acc
 
 - **Card header (always visible):**
   - Year + Trim name
-  - Key stats: MSRP, Range, HP (compact, one line)
+  - Key stats: MSRP, Range, HP, Seats (compact, one line)
 - **5 collapsible sections** (all collapsed by default):
   - Performance
   - Drivetrain & Charging
