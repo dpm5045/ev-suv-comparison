@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "refresh": "node scripts/refresh-data.mjs",
-    "refresh:dry-run": "DRY_RUN=1 node scripts/refresh-data.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "14.2.29",

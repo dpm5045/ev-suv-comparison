@@ -330,7 +330,10 @@ export default function SideBySideTab() {
                       <div className="sbs-mobile-metric-label">{metric.label}</div>
                       {populatedEntries.map(({ row, i }) => (
                         <div key={i} className="sbs-mobile-row">
-                          <VehicleBadge vehicle={slots[i].vehicle} style={{ fontSize: 12, padding: '2px 7px' }} />
+                          <div className="sbs-mobile-id">
+                            <VehicleBadge vehicle={slots[i].vehicle} style={{ fontSize: 12, padding: '2px 7px' }} />
+                            <span className="sbs-mobile-trim">{slots[i].year} · {slots[i].seats}-seat · {slots[i].trim}</span>
+                          </div>
                           <span className={`sbs-mobile-val ${cellClasses[i]}`}>
                             {metric.render(row!)}
                           </span>

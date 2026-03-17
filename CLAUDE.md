@@ -52,6 +52,31 @@ Both `OverviewTab` and `ComparisonV2Tab` use a dual-render pattern: a desktop `<
 
 `app/api/news/route.ts` — POST endpoint that proxies to the Anthropic API (`claude-sonnet-4-6` with `web_search` tool) to fetch live EV news summaries. Requires `ANTHROPIC_API_KEY` in `.env.local`. News results are cached in `localStorage` for 7 days.
 
+## Data editing checklist
+
+When modifying `lib/ev-data.json`, always verify:
+- `details` and `preowned` arrays are in sync (matching `name`, matching `preowned_range`)
+- `count_data` row totals match actual detail entries per vehicle/year
+- `count_totals` sums match `count_data` column sums
+- OTD values recalculated if `msrp`, `destination`, or `preowned_range` changed
+- `VEHICLE_CLASSES` in `data.ts` has entry for any new vehicle
+- CSS class exists in `globals.css` for any new vehicle class
+- No hardcoded model/vehicle counts anywhere (always derive from DATA at runtime)
+
+### OTD formula
+
+```
+otd_new      = (msrp + destination) * 1.06 + 905
+otd_preowned = price * 1.06 + 905
+```
+
+Assumptions (from `ev-data.json` → `assumptions` array): PA sales tax 6%, doc fee $422, title+reg $233, EV road-use fee $250. Total fees = $905.
+
+### Protected fields
+
+Never auto-modify these — they are intentionally set per seat configuration:
+`seats`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `cargo_floor_width_in`
+
 ## Approved web sources for data research
 
 When refreshing or auditing vehicle data, Claude is pre-approved to fetch from these sources without requiring per-site confirmation:

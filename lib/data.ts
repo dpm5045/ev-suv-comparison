@@ -8,6 +8,7 @@ export interface CountRow {
   y2024: number
   y2025: number
   y2026: number
+  y2027: number
   total: number
 }
 
@@ -18,6 +19,7 @@ export interface CountTotals {
   y2024: number
   y2025: number
   y2026: number
+  y2027: number
   total: number
 }
 
@@ -118,5 +120,7 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'Cadillac VISTIQ': 'v-cadillac',
   'Mercedes-Benz EQS SUV': 'v-mercedes',
   'Subaru 3-Row EV': 'v-subaru',
+  'BMW iX7': 'v-bmw',
+  'Genesis GV90': 'v-genesis',
 }
 

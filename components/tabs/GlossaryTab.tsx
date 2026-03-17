@@ -118,6 +118,7 @@ export default function GlossaryTab() {
                 <th className="num">2024</th>
                 <th className="num">2025</th>
                 <th className="num">2026</th>
+                <th className="num">2027</th>
                 <th className="num">Total</th>
               </tr>
             </thead>
@@ -131,6 +132,7 @@ export default function GlossaryTab() {
                   <td className="num">{r.y2024 || <span className="cell-na">&mdash;</span>}</td>
                   <td className="num">{r.y2025 || <span className="cell-na">&mdash;</span>}</td>
                   <td className="num">{r.y2026 || <span className="cell-na">&mdash;</span>}</td>
+                  <td className="num">{r.y2027 || <span className="cell-na">&mdash;</span>}</td>
                   <td className="num" style={{ fontWeight: 700, color: 'var(--accent)' }}>{r.total}</td>
                 </tr>
               ))}
@@ -142,6 +144,7 @@ export default function GlossaryTab() {
                 <td className="num">{count_totals.y2024}</td>
                 <td className="num">{count_totals.y2025}</td>
                 <td className="num">{count_totals.y2026}</td>
+                <td className="num">{count_totals.y2027}</td>
                 <td className="num" style={{ color: 'var(--accent)' }}>{count_totals.total}</td>
               </tr>
             </tbody>

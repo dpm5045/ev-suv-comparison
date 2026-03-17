@@ -5,7 +5,13 @@ import { DATA } from '@/lib/data'
 import type { InsightFilters } from '../Dashboard'
 import VehicleBadge from '../VehicleBadge'
 
-const GLANCE_EXCLUDED = ['Tesla Model Y Long (Asia)', 'Toyota Highlander EV']
+const WATCHLIST_VEHICLES = [
+  'Toyota Highlander EV',
+  'Subaru 3-Row EV',
+  'BMW iX7',
+  'Genesis GV90',
+  'Tesla Model Y Long (Asia)',
+]
 
 /* ── helpers ── */
 
@@ -57,6 +63,7 @@ interface Tile {
   label: string
   value: string
   detail: string
+  category?: string
 }
 
 /* ── tile generators (2 per preference) ── */
@@ -266,6 +273,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         label: 'Pre-Owned Trims',
         value: `${d.length}`,
         detail: `across ${vehicles.length} vehicle${vehicles.length === 1 ? '' : 's'}`,
+        category: 'count',
       })
       const prices = d.map((r) => parsePrice(r.preowned_range)).filter((p): p is number => p !== null && p > 0)
       if (prices.length) {
@@ -273,6 +281,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
           label: 'Pre-Owned Price Range',
           value: `$${Math.round(Math.min(...prices) / 1000)}k\u2013$${Math.round(Math.max(...prices) / 1000)}k`,
           detail: 'listing price range',
+          category: 'count',
         })
       }
     } else {
@@ -280,6 +289,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         label: 'Trims in Budget',
         value: `${d.length}`,
         detail: `across ${vehicles.length} vehicle${vehicles.length === 1 ? '' : 's'}`,
+        category: 'count',
       })
       const msrpNums = numericRows(d, 'msrp')
       if (msrpNums.length) {
@@ -289,13 +299,14 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
           label: 'MSRP Range',
           value: `$${Math.round(min.msrp / 1000)}k\u2013$${Math.round(max.msrp / 1000)}k`,
           detail: `${min.vehicle} \u2013 ${max.vehicle}`,
+          category: 'count',
         })
       }
     }
 
     for (const pref of [activePref1, activePref2]) {
       if (pref && TILE_GENERATORS[pref]) {
-        result.push(...TILE_GENERATORS[pref](d, isPreowned))
+        result.push(...TILE_GENERATORS[pref](d, isPreowned).map((t) => ({ ...t, category: pref })))
       }
     }
 
@@ -347,7 +358,19 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
     return { vehicleSummaries, vehiclesInBudget: inBudget }
   }, [filteredDetails])
 
-  const [glanceView, setGlanceView] = useState<'cards' | 'table'>('cards')
+  /* --- watchlist entries --- */
+  const watchlistEntries = useMemo(() => {
+    return WATCHLIST_VEHICLES.map((v) => {
+      const rows = DATA.details.filter((r) => r.vehicle === v)
+      if (!rows.length) return { vehicle: v, summary: 'Details TBD.' }
+      const first = rows[0]
+      const notes = first.notes || ''
+      const summary = notes.split('. ').slice(0, 3).join('. ').replace(/\.?$/, '.')
+      return { vehicle: v, summary }
+    })
+  }, [])
+
+  const [expandedVehicle, setExpandedVehicle] = useState<string | null>(null)
 
   const fmt = (n: number) => Math.round(n).toLocaleString()
   const fmtDollarK = (n: number) => `$${Math.round(n / 1000)}k`
@@ -387,7 +410,10 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         <h1 className="overview-hero-title">Find Your Perfect 3-Row EV</h1>
         <p className="overview-hero-sub">Compare specs, pricing, and features</p>
         <div className="overview-hero-image">
-          <img src="/hero-sketch-dark.png" alt="3-Row EV concept sketch" />
+          <picture>
+            <source media="(max-width: 767px)" srcSet="/hero-sketch-mobile.png" />
+            <img src="/hero-sketch-dark.png" alt="3-Row EV concept sketch" />
+          </picture>
         </div>
       </div>
 
@@ -427,6 +453,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
               <button
                 key={p.id}
                 className={`insight-pill${activePref1 === p.id || activePref2 === p.id ? ' active' : ''}`}
+                data-category={p.id}
                 onClick={() => handlePref(p.id)}
               >
                 {p.label}
@@ -440,7 +467,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       {tiles.length > 0 ? (
         <div className="overview-stats">
           {tiles.map((t, i) => (
-            <div key={i} className="overview-stat">
+            <div key={i} className="overview-stat" data-category={t.category} style={{ animationDelay: `${i * 0.07}s` }}>
               <div className="overview-stat-label">{t.label}</div>
               <div className="overview-stat-value">{t.value}</div>
               <div className="overview-stat-detail">{t.detail}</div>
@@ -458,18 +485,12 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
 
       {/* ── Vehicle Comparison Summary ── */}
       <div className="card">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-          <div className="card-title" style={{ marginBottom: 0 }}>Vehicle Comparison at a Glance</div>
-          <div className="mobile-view-toggle">
-            <button className={`view-toggle-btn${glanceView === 'cards' ? ' active' : ''}`} onClick={() => setGlanceView('cards')}>Cards</button>
-            <button className={`view-toggle-btn${glanceView === 'table' ? ' active' : ''}`} onClick={() => setGlanceView('table')}>Table</button>
-          </div>
-        </div>
+        <div className="card-title">Speed Dating Results</div>
         {showBudgetNote && <p className="count-note" style={{ marginBottom: 8 }}>Vehicles outside your {isPreowned ? 'price range' : 'budget'} are dimmed.</p>}
         {isPreowned && <p className="count-note" style={{ marginBottom: 8 }}>Showing pre-owned pricing. Vehicles without pre-owned data are dimmed.</p>}
 
         {/* Desktop table */}
-        <div className={glanceView === 'table' ? 'cmp-table-view cmp-table-forced' : 'cmp-table-view'}>
+        <div className="cmp-table-view">
           <div className="table-wrap">
             <table className="glance-table">
               <thead>
@@ -485,7 +506,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                 </tr>
               </thead>
               <tbody>
-                {vehicleSummaries.filter((s) => !GLANCE_EXCLUDED.includes(s.vehicle)).map((s) => {
+                {vehicleSummaries.filter((s) => !WATCHLIST_VEHICLES.includes(s.vehicle)).map((s) => {
                   const dimmed = isPreowned
                     ? !s.hasPreowned || !vehiclesInBudget.has(s.vehicle)
                     : !vehiclesInBudget.has(s.vehicle)
@@ -513,16 +534,18 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         </div>
 
         {/* Mobile card layout */}
-        <div className={glanceView === 'cards' ? 'cmp-card-view' : 'cmp-card-view cmp-card-hidden'}>
+        <div className="cmp-card-view">
           <div className="cmp-cards">
-            {vehicleSummaries.filter((s) => !GLANCE_EXCLUDED.includes(s.vehicle)).map((s) => {
+            {vehicleSummaries.filter((s) => !WATCHLIST_VEHICLES.includes(s.vehicle)).map((s) => {
               const dimmed = isPreowned
                 ? !s.hasPreowned || !vehiclesInBudget.has(s.vehicle)
                 : !vehiclesInBudget.has(s.vehicle)
+              const expanded = expandedVehicle === s.vehicle
               return (
-                <div key={s.vehicle} className={`cmp-card${dimmed ? ' glance-row-dimmed' : ''}`}>
-                  <div className="cmp-card-header">
+                <div key={s.vehicle} className={`cmp-card glance-accordion${dimmed ? ' glance-row-dimmed' : ''}${expanded ? ' expanded' : ''}`}>
+                  <div className="cmp-card-header" onClick={() => setExpandedVehicle(expanded ? null : s.vehicle)}>
                     <VehicleBadge vehicle={s.vehicle} />
+                    <span className="accordion-chevron" />
                   </div>
                   <div className="cmp-card-stats">
                     <div className="cmp-stat">
@@ -574,9 +597,23 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
             })}
           </div>
         </div>
-        <p className="count-note">The Tesla Model Y Long (Asia) and Toyota Highlander EV are not yet on the US market.</p>
       </div>
 
+      {/* ── Watchlist ── */}
+      <div className="card watchlist-card">
+        <div className="card-title">Watchlist</div>
+        <p className="count-note" style={{ marginBottom: 16 }}>
+          These 3-row electric SUVs are announced but not yet available in the US market.
+        </p>
+        <div className="watchlist">
+          {watchlistEntries.map((w) => (
+            <div key={w.vehicle} className="watchlist-item">
+              <VehicleBadge vehicle={w.vehicle} />
+              <span className="watchlist-summary">{w.summary}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
     </>
   )

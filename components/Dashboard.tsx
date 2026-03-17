@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from './Header'
 import type { TabId } from './Header'
@@ -48,6 +48,7 @@ export default function Dashboard() {
   const insightPref1 = searchParams.get('pref1') ?? ''
   const insightPref2 = searchParams.get('pref2') ?? ''
 const [detailIdx, setDetailIdx] = useState<number | null>(null)
+  const [, startTransition] = useTransition()
 
   function updateParams(updates: Record<string, string>, replace = false) {
     const params = new URLSearchParams(searchParams.toString())
@@ -56,8 +57,10 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
       else params.delete(k)
     }
     const url = `?${params.toString()}`
-    if (replace) router.replace(url, { scroll: false })
-    else router.push(url, { scroll: false })
+    startTransition(() => {
+      if (replace) router.replace(url, { scroll: false })
+      else router.push(url, { scroll: false })
+    })
   }
 
   const setCmpFilters = useCallback((f: Partial<ComparisonFilters>) => {
