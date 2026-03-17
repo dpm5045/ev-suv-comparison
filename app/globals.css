@@ -1515,7 +1515,8 @@ tr[data-clickable='true']:hover td.col-sticky {
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .site-header .header-inner { padding: 0 16px; }
+  .site-header .header-inner { padding: 0 16px; justify-content: flex-start; }
+  .header-brand { position: static; padding: 12px 0; }
   .header-nav { display: none !important; }
   .nav-mobile-bar {
     display: flex;
@@ -1544,6 +1545,7 @@ tr[data-clickable='true']:hover td.col-sticky {
   .main { padding: 16px; }
   .overview-hero { padding: 1.5rem 0 1rem; }
   .overview-hero-title { font-size: 24px; }
+  .overview-hero-image { aspect-ratio: 4 / 3; }
   .filters { flex-direction: column; }
   .detail-grid { grid-template-columns: 1fr; }
   .assumption-row { flex-direction: column; gap: 4px; }
