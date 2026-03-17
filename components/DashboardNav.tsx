@@ -58,7 +58,7 @@ export default function DashboardNav({ activeTab }: Props) {
       {/* Mobile drawer */}
       {drawerOpen && <div className="nav-drawer-overlay" onClick={() => setDrawerOpen(false)} />}
       <div className={`nav-drawer${drawerOpen ? ' open' : ''}`}>
-        {TABS.map(t => (
+        {TABS.filter(t => t.id !== 'comparison').map(t => (
           <button
             key={t.id}
             className={`nav-drawer-item${activeTab === t.id ? ' active' : ''}`}
