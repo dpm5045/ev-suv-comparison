@@ -30,7 +30,8 @@ Create a single source of truth for affiliate link generation. Both GlossaryTab 
 - `AMAZON_TAG` — `"threerowev-20"`
 - `amazonSearchUrl(query: string): string` — builds the full Amazon search URL with tag
 - `AFFILIATE_DISCLOSURE` — `"As an Amazon Associate, we earn from qualifying purchases."`
-- Product category constants mapping category keys to search terms (e.g., `nacs_adapter` → `"NACS to CCS adapter EV"`)
+- Product category constants mapping category keys to search terms
+- `getAdapterLinks(chargingType: string)` — returns the appropriate adapter links based on charging type (see matching rules in Section 3)
 
 ---
 
@@ -65,19 +66,30 @@ New section after "Cargo & Storage", before "Notes".
 
 ### Contextual Links (based on `charging_type`)
 
+**Matching rules for `charging_type` field:**
+- **NACS vehicle:** `charging_type.startsWith("NACS")` — matches `"NACS"`, `"NACS (+CCS adpt)"`, `"NACS (+CCS incl)"`, `"NACS / GB-T"`. Does NOT match `"Tesla (pre-NACS)"`.
+- **CCS vehicle:** `charging_type.startsWith("CCS")` — matches `"CCS1"`, `"CCS"`, `"CCS1 (+NACS adpt)"`, `"CCS (+NACS adpt)"`.
+- **Pre-NACS Tesla:** `charging_type.includes("pre-NACS")` — show Tesla-specific adapter link instead.
+- **TBD / unknown:** If `charging_type` starts with `"TBD"` or is empty, show no adapter links (only the "always" links below).
+
 | Condition | Link Text | Search Query |
 |-----------|-----------|-------------|
-| charging_type includes "NACS" | NACS to CCS Adapter | `NACS to CCS adapter EV` |
-| charging_type includes "CCS" | CCS to NACS Adapter | `CCS to NACS adapter EV` |
+| NACS vehicle | CCS to NACS Adapter | `CCS to NACS adapter EV` |
+| CCS vehicle | NACS to CCS Adapter | `NACS to CCS adapter EV` |
+| Pre-NACS Tesla | Tesla to J1772 Adapter | `Tesla to J1772 adapter` |
 | Always | Portable EV Charger | `portable EV charger` |
 | Always | Level 2 Home Charger | `Level 2 EV home charger` |
 
+> **Note on adapter direction:** The adapter converts the *station's* plug to fit the *vehicle's* port. A NACS vehicle at a CCS station needs a "CCS to NACS" adapter. A CCS vehicle at a Supercharger needs a "NACS to CCS" adapter.
+
 ### Generic Accessory Links (always shown)
+
+Uses `vehicle` field (e.g., "Kia EV9") plus year from `year` field for vehicle-specific searches.
 
 | Link Text | Search Query |
 |-----------|-------------|
-| Cargo Organizers | `EV cargo organizer` |
-| All-Weather Floor Mats | `{vehicle name} floor mats` (e.g., `Kia EV9 floor mats`) |
+| Cargo Organizers | `{vehicle} cargo organizer` (e.g., `Kia EV9 cargo organizer`) |
+| All-Weather Floor Mats | `{year} {vehicle} floor mats` (e.g., `2026 Kia EV9 floor mats`) |
 
 ### Layout
 - Links rendered as subtle pill/button elements in a flex-wrap row
