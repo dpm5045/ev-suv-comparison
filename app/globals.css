@@ -184,6 +184,16 @@ body {
   margin-bottom: 0.5rem;
   line-height: 1.2;
 }
+.overview-hero-image {
+  max-width: 720px;
+  margin: 1.5rem auto 0;
+  aspect-ratio: 3 / 1;
+  border-radius: 12px;
+  /* Placeholder styling — remove when real image added */
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+  border: 1px dashed var(--border);
+  opacity: 0.5;
+}
 .overview-hero-sub {
   font-size: 17px;
   color: var(--text-muted);
@@ -248,6 +258,14 @@ th {
   top: 0;
   z-index: 2;
   border-bottom: 1px solid var(--border);
+}
+/* Full Monty table: sticky headers below site header */
+.cmp-table-view th {
+  top: 49px;
+  z-index: 4;
+}
+.cmp-table-view th.col-sticky {
+  z-index: 5;
 }
 th.col-sticky {
   text-align: left;

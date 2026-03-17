@@ -227,10 +227,6 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
     if (bucketFilters.hp?.length) rows = rows.filter((r) => matchesBuckets(r.hp, HP_BUCKETS, bucketFilters.hp))
     if (bucketFilters.range?.length) rows = rows.filter((r) => matchesBuckets(r.range_mi, RANGE_BUCKETS, bucketFilters.range))
     if (bucketFilters.battery?.length) rows = rows.filter((r) => matchesBuckets(r.battery_kwh, BATTERY_BUCKETS, bucketFilters.battery))
-    if (filters.q) {
-      const q = filters.q.toLowerCase()
-      rows = rows.filter((r) => JSON.stringify(r).toLowerCase().includes(q))
-    }
     return rows
   }, [filters, bucketFilters])
 
@@ -238,14 +234,14 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
   const activeFilterCount = [
     selectedVehicles, selectedYears, selectedTrims, selectedDrivetrains,
     selectedSeats, selectedCharging, selectedFoldFlat
-  ].filter(a => a.length > 0).length + bucketFilterCount + (filters.q ? 1 : 0)
+  ].filter(a => a.length > 0).length + bucketFilterCount
 
   function toggleFilter(id: string) {
     setOpenFilter(openFilter === id ? null : id)
   }
 
   function clearAllFilters() {
-    onFiltersChange({ vehicle: '', year: '', trim: '', drivetrain: '', seats: '', charging: '', foldFlat: '', q: '' })
+    onFiltersChange({ vehicle: '', year: '', trim: '', drivetrain: '', seats: '', charging: '', foldFlat: '' })
     setBucketFilters({})
   }
 
@@ -262,23 +258,13 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
         Click any column header to filter. Click any row or card to view complete specs.
       </p>
 
-      {/* ── Search bar (desktop + mobile) ── */}
-      <div className="filters">
-        <div className="filter-group" style={{ flex: 1 }}>
-          <input
-            className="search-input"
-            value={filters.q}
-            placeholder="Search e.g. Plaid, 7-seat, NACS…"
-            onChange={(e) => onFiltersChange({ q: e.target.value })}
-            style={{ width: '100%' }}
-          />
-        </div>
-        {activeFilterCount > 0 && (
+      {activeFilterCount > 0 && (
+        <div className="filters">
           <button className="multi-select-clear" style={{ whiteSpace: 'nowrap' }} onClick={clearAllFilters}>
             Clear all filters
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* ── Mobile filter bar (hidden on desktop via CSS) ── */}
       <div className="mobile-filters">
@@ -291,7 +277,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
 
       {/* ── Desktop: table with filterable headers ── */}
       <div className={mobileView === 'table' ? 'cmp-table-view cmp-table-forced' : 'cmp-table-view'}>
-        <div className="table-wrap" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+        <div className="table-wrap">
           <table>
             <thead>
               <tr>
@@ -306,6 +292,18 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                 <FilterableHeader label="HP" options={HP_BUCKETS.map(b => b.label)} selected={bucketFilters.hp || []} onChange={(vals) => updateBucket('hp', vals)} className="num" isOpen={openFilter === 'hp'} onToggle={() => toggleFilter('hp')} />
                 <FilterableHeader label="Battery (kWh)" options={BATTERY_BUCKETS.map(b => b.label)} selected={bucketFilters.battery || []} onChange={(vals) => updateBucket('battery', vals)} className="num" isOpen={openFilter === 'battery'} onToggle={() => toggleFilter('battery')} />
                 <FilterableHeader label="Charging" options={chargingOptions} selected={selectedCharging} onChange={(vals) => onFiltersChange({ charging: vals.join(',') })} isOpen={openFilter === 'charging'} onToggle={() => toggleFilter('charging')} />
+                <th className="num">Torque (lb-ft)</th>
+                <th className="num">0–60 (sec)</th>
+                <th className="num">Curb Wt (lbs)</th>
+                <th className="num">Towing (lbs)</th>
+                <th className="num">DC kW</th>
+                <th className="num">DC 10–80%</th>
+                <th className="num">Length (in)</th>
+                <th className="num">Width (in)</th>
+                <th className="num">Height (in)</th>
+                <th className="num">Clearance (in)</th>
+                <th className="num">3rd Row Leg (in)</th>
+                <th className="num">3rd Row Head (in)</th>
                 <th className="num">Frunk (cu ft)</th>
                 <th className="num">Behind 3rd Row (cu ft)</th>
                 <th className="num">Behind 2nd Row (cu ft)</th>
@@ -347,6 +345,18 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                     <td className="num"><span className={hp.className}>{hp.text}</span></td>
                     <td className="num"><span className={bat.className}>{bat.text}</span></td>
                     <td>{r.charging_type || ''}</td>
+                    <td className="num">{typeof r.torque_lb_ft === 'number' ? r.torque_lb_ft.toLocaleString() : dash}</td>
+                    <td className="num">{typeof r.zero_to_60_sec === 'number' ? r.zero_to_60_sec : dash}</td>
+                    <td className="num">{typeof r.curb_weight_lbs === 'number' ? r.curb_weight_lbs.toLocaleString() : dash}</td>
+                    <td className="num">{typeof r.towing_lbs === 'number' ? r.towing_lbs.toLocaleString() : dash}</td>
+                    <td className="num">{typeof r.dc_fast_charge_kw === 'number' ? r.dc_fast_charge_kw : dash}</td>
+                    <td className="num">{typeof r.dc_fast_charge_10_80_min === 'number' ? `${r.dc_fast_charge_10_80_min}m` : dash}</td>
+                    <td className="num">{typeof r.length_in === 'number' ? r.length_in : dash}</td>
+                    <td className="num">{typeof r.width_in === 'number' ? r.width_in : dash}</td>
+                    <td className="num">{typeof r.height_in === 'number' ? r.height_in : dash}</td>
+                    <td className="num">{typeof r.ground_clearance_in === 'number' ? r.ground_clearance_in : dash}</td>
+                    <td className="num">{typeof r.third_row_legroom_in === 'number' ? r.third_row_legroom_in : dash}</td>
+                    <td className="num">{typeof r.third_row_headroom_in === 'number' ? r.third_row_headroom_in : dash}</td>
                     <td className="num">{r.frunk_cu_ft ?? dash}</td>
                     <td className="num">{r.cargo_behind_3rd_cu_ft ?? dash}</td>
                     <td className="num">{r.cargo_behind_2nd_cu_ft ?? dash}</td>
@@ -415,6 +425,30 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                     <span className="cmp-stat-label">Seats</span>
                     <span className="cmp-stat-value">{r.seats}</span>
                   </div>
+                  {typeof r.torque_lb_ft === 'number' && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Torque</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.torque_lb_ft.toLocaleString()} lb-ft</span>
+                    </div>
+                  )}
+                  {typeof r.zero_to_60_sec === 'number' && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">0–60</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.zero_to_60_sec}s</span>
+                    </div>
+                  )}
+                  {typeof r.towing_lbs === 'number' && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Towing</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.towing_lbs.toLocaleString()} lbs</span>
+                    </div>
+                  )}
+                  {typeof r.dc_fast_charge_kw === 'number' && (
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">DC Fast</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{r.dc_fast_charge_kw} kW</span>
+                    </div>
+                  )}
                   {r.frunk_cu_ft != null && (
                     <div className="cmp-stat">
                       <span className="cmp-stat-label">Frunk</span>
