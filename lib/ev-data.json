@@ -6860,7 +6860,7 @@
     {
       "field": "Drivetrain",
       "meaning": "Drive layout and motor configuration",
-      "notes": "Example: RWD, AWD, Dual Motor AWD, etc."
+      "notes": "RWD (Rear-Wheel Drive) sends power to the rear wheels only — typically the most efficient layout with the longest range. AWD (All-Wheel Drive) uses two or more motors to power both axles, offering better traction, faster acceleration, and improved regen braking on both axles, at the cost of slightly reduced range. Tri-Motor AWD adds a third motor for even more power and torque distribution."
     },
     {
       "field": "MSRP ($)",
@@ -6871,6 +6871,11 @@
       "field": "Destination ($)",
       "meaning": "Factory destination / delivery charge",
       "notes": "Standard manufacturer freight/delivery fee added to MSRP on new vehicles."
+    },
+    {
+      "field": "OTD Price (Out The Door)",
+      "meaning": "Estimated total purchase price including all fees and taxes",
+      "notes": "Calculated as MSRP + destination + sales tax + doc fee + title/registration + annual EV road-use fee. This is the approximate amount you'd actually pay to drive off the lot. Does not include dealer markups, optional packages, or available incentives/rebates. See the Assumptions tab for the specific tax rate and fee estimates used."
     },
     {
       "field": "Pre-Owned Price Range",
@@ -6885,7 +6890,7 @@
     {
       "field": "EPA/Est Range (mi)",
       "meaning": "EPA-rated or estimated driving range in miles",
-      "notes": "Uses EPA range where available; otherwise estimated / reported range if EPA data is not yet available."
+      "notes": "Uses EPA range where available; otherwise estimated / reported range if EPA data is not yet available. Real-world range is typically 15–25% lower than the EPA number, especially in cold weather, at highway speeds, or with heavy cargo and climate control use."
     },
     {
       "field": "Horsepower (hp)",
