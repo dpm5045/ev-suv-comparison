@@ -39,7 +39,12 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
           { id: 'new', label: 'New' },
           { id: 'preowned', label: 'Pre-Owned' },
         ],
-        test: () => true, // handled separately in filtering logic
+        test: (r, sel) => {
+          if (!sel.length) return true
+          if (sel.includes('new')) return typeof r.msrp === 'number'
+          if (sel.includes('preowned')) return hasPreowned(r)
+          return true
+        },
       },
       {
         key: 'msrp',
@@ -390,9 +395,6 @@ export default function SpecSelectTab({ onRowClick }: Props) {
 
   const filtered = useMemo(() => {
     let rows = DATA.details as Row[]
-    if (isPreowned) {
-      rows = rows.filter(hasPreowned)
-    }
     for (const section of SECTIONS) {
       for (const f of section.filters) {
         if (f.key === 'msrp' && isPreowned) continue
