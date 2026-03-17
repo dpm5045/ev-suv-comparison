@@ -68,7 +68,7 @@ export default function GlossaryTab() {
         <div className="glossary-items">
           {CHARGING_STANDARDS.map((s) => (
             <div key={s.abbr} className="glossary-item">
-              <div className="glossary-field">{s.abbr} <span className="glossary-full-name">\u2014 {s.name}</span></div>
+              <div className="glossary-field">{s.abbr} <span className="glossary-full-name">&mdash; {s.name}</span></div>
               <div className="glossary-meaning">{s.detail}</div>
             </div>
           ))}
