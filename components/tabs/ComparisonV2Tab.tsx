@@ -4,7 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
+import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
+import { toSlug } from '@/lib/slugs'
 import type { ComparisonFilters } from '../Dashboard'
 
 /* ── Range bucket definitions ── */
@@ -496,6 +498,14 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
               <div key={origIdx} className="cmp-card" onClick={() => onRowClick(origIdx)}>
                 <div className="cmp-card-header">
                   <VehicleBadge vehicle={r.vehicle} />
+                  <Link
+                    href={`/vehicles/${toSlug(r.vehicle)}`}
+                    className="card-page-link"
+                    aria-label={`View ${r.vehicle} full page`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <span aria-hidden="true">↗</span>
+                  </Link>
                   <span className="cmp-card-tap-hint">Tap for full specs →</span>
                 </div>
                 <div className="cmp-card-year-trim">
