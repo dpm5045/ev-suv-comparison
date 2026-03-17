@@ -27,6 +27,7 @@ Add bidirectional links between the dashboard and standalone vehicle pages acros
 - **Target:** `/vehicles/[slug]`
 - **Tap target:** Must be visually and spatially distinct from the card's main tap area (which opens DetailPanel)
 - **Behavior:** `e.stopPropagation()` to prevent the card click handler from also firing
+- **Accessibility:** `aria-label="View {vehicle name} full page"`, icon marked `aria-hidden="true"`
 
 ### 3. OverviewTab Speed Dating Cards
 
@@ -34,6 +35,11 @@ Add bidirectional links between the dashboard and standalone vehicle pages acros
 - **Element:** Small ↗ icon link (same pattern as ComparisonV2Tab cards)
 - **Target:** `/vehicles/[slug]`
 - **Behavior:** `e.stopPropagation()` to prevent accordion toggle from firing
+- **Accessibility:** Same `aria-label` pattern as ComparisonV2Tab
+
+### 4. SpecSelectTab — Intentionally Excluded
+
+SpecSelectTab shares the same `onRowClick` handler but is a niche power-user surface. Cross-links can be added later if needed but are out of scope for this iteration.
 
 ---
 
@@ -44,7 +50,7 @@ Add bidirectional links between the dashboard and standalone vehicle pages acros
 - **Location:** In the hero/header section of `/vehicles/[slug]` pages, near the breadcrumb area
 - **Links:**
   - "Compare trims" → `/?tab=comparison&vehicle={URL-encoded vehicle name}`
-  - "Side-by-side" → `/?tab=sidebyside&vehicle={URL-encoded vehicle name}`
+  - "Side-by-side" → `/?tab=sidebyside&v1={URL-encoded vehicle name}`
 - **Styling:** Inline text links, secondary style, compact
 
 ### 2. Bottom Section (Prominent CTAs)
@@ -53,7 +59,7 @@ Add bidirectional links between the dashboard and standalone vehicle pages acros
 - **Section heading:** "Keep Exploring" or similar
 - **CTAs:**
   - "Compare all {Vehicle} trims" → `/?tab=comparison&vehicle={URL-encoded vehicle name}`
-  - "Compare {Vehicle} side-by-side" → `/?tab=sidebyside&vehicle={URL-encoded vehicle name}`
+  - "Compare {Vehicle} side-by-side" → `/?tab=sidebyside&v1={URL-encoded vehicle name}`
 - **Styling:** Styled CTA buttons, visually prominent
 
 ### 3. Replace Generic Back Link
@@ -67,9 +73,9 @@ Add bidirectional links between the dashboard and standalone vehicle pages acros
 
 ### Side-by-Side Pre-Selection
 
-- `SideBySideTab` must read an incoming `?vehicle=` URL param when `tab=sidebyside`
-- On mount, if `vehicle` param is present, auto-select that vehicle as the first pick
-- This is a small addition to the existing URL-driven filter state in `Dashboard`
+- `SideBySideTab` already reads `v1` from URL params (its existing scheme uses `v1`, `y1`, `s1`, `t1` for slot 1)
+- The reverse link uses `/?tab=sidebyside&v1={vehicle name}` which maps directly to the existing param scheme
+- No code changes needed in `SideBySideTab` — it will auto-populate slot 1 from the `v1` param on mount
 
 ### Comparison Tab (Already Supported)
 
@@ -102,6 +108,5 @@ Add bidirectional links between the dashboard and standalone vehicle pages acros
 | `components/tabs/ComparisonV2Tab.tsx` | Add ↗ icon link next to badge in mobile cards |
 | `components/tabs/OverviewTab.tsx` | Add ↗ icon link next to badge in Speed Dating cards |
 | `app/vehicles/[slug]/page.tsx` | Add header links + bottom CTA section, remove generic back link |
-| `components/Dashboard.tsx` | Pass `vehicle` param to SideBySideTab for pre-selection |
-| `components/tabs/SideBySideTab.tsx` | Read `vehicle` param and auto-select on mount |
+| `components/tabs/SideBySideTab.tsx` | No changes — already reads `v1` from URL params |
 | `app/globals.css` | Styles for new link elements and CTA section |
