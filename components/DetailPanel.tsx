@@ -3,6 +3,8 @@
 import { useEffect } from 'react'
 import { DATA, VEHICLE_CLASSES } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
+import Link from 'next/link'
+import { toSlug } from '@/lib/slugs'
 import VehicleBadge from './VehicleBadge'
 import SpecSection from './SpecSection'
 
@@ -36,6 +38,12 @@ export default function DetailPanel({ idx, onClose }: Props) {
               <VehicleBadge vehicle={r.vehicle} style={{ fontSize: 14, padding: '4px 12px' }} />
             </div>
             <div className="detail-trim">{r.year} {r.trim}</div>
+            <Link
+              href={`/vehicles/${toSlug(r.vehicle)}`}
+              className="detail-fullpage-link"
+            >
+              View full page <span aria-hidden="true">↗</span>
+            </Link>
 
             <div className="detail-grid">
               {([
