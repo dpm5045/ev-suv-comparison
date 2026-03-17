@@ -368,17 +368,16 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
           <button className={`view-toggle-btn${mobileView === 'table' ? ' active' : ''}`} onClick={() => setMobileView('table')}>Table</button>
         </div>
       </div>
-      <p className="section-desc">
-        Click any column header to filter. Click any row or card to view complete specs.
-      </p>
-
-      {activeFilterCount > 0 && (
-        <div className="filters">
-          <button className="multi-select-clear" style={{ whiteSpace: 'nowrap' }} onClick={clearAllFilters}>
-            Clear all filters
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <p className="section-desc" style={{ marginBottom: 0 }}>
+          Click any column header to filter. Click any row or card to view complete specs.
+        </p>
+        {activeFilterCount > 0 && (
+          <button className="multi-select-clear" style={{ whiteSpace: 'nowrap', flexShrink: 0 }} onClick={clearAllFilters}>
+            Clear all filters ({activeFilterCount})
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* ── Mobile filter bar (hidden on desktop via CSS) ── */}
       <div className="mobile-filters">
