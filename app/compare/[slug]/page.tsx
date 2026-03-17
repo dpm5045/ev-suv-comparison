@@ -80,13 +80,35 @@ function buildMetrics(a: DetailRow, b: DetailRow): { section: string; metrics: M
       ],
     },
     {
+      section: 'Performance',
+      metrics: [
+        { label: 'Torque', valueA: typeof a.torque_lb_ft === 'number' ? `${a.torque_lb_ft.toLocaleString()} lb-ft` : '—', valueB: typeof b.torque_lb_ft === 'number' ? `${b.torque_lb_ft.toLocaleString()} lb-ft` : '—', numA: nv(a.torque_lb_ft), numB: nv(b.torque_lb_ft), higherIsBetter: true },
+        { label: '0–60 mph', valueA: typeof a.zero_to_60_sec === 'number' ? `${a.zero_to_60_sec} sec` : '—', valueB: typeof b.zero_to_60_sec === 'number' ? `${b.zero_to_60_sec} sec` : '—', numA: nv(a.zero_to_60_sec), numB: nv(b.zero_to_60_sec), higherIsBetter: false },
+        { label: 'Curb Weight', valueA: typeof a.curb_weight_lbs === 'number' ? `${a.curb_weight_lbs.toLocaleString()} lbs` : '—', valueB: typeof b.curb_weight_lbs === 'number' ? `${b.curb_weight_lbs.toLocaleString()} lbs` : '—', numA: nv(a.curb_weight_lbs), numB: nv(b.curb_weight_lbs), higherIsBetter: false },
+        { label: 'Towing', valueA: typeof a.towing_lbs === 'number' ? `${a.towing_lbs.toLocaleString()} lbs` : '—', valueB: typeof b.towing_lbs === 'number' ? `${b.towing_lbs.toLocaleString()} lbs` : '—', numA: nv(a.towing_lbs), numB: nv(b.towing_lbs), higherIsBetter: true },
+      ],
+    },
+    {
       section: 'Drivetrain & Charging',
       metrics: [
         { label: 'Drivetrain', valueA: a.drivetrain || '—', valueB: b.drivetrain || '—' },
         { label: 'Charging Type', valueA: a.charging_type || '—', valueB: b.charging_type || '—' },
+        { label: 'DC Fast Charge', valueA: typeof a.dc_fast_charge_kw === 'number' ? `${a.dc_fast_charge_kw} kW` : '—', valueB: typeof b.dc_fast_charge_kw === 'number' ? `${b.dc_fast_charge_kw} kW` : '—', numA: nv(a.dc_fast_charge_kw), numB: nv(b.dc_fast_charge_kw), higherIsBetter: true },
+        { label: 'DC 10–80%', valueA: typeof a.dc_fast_charge_10_80_min === 'number' ? `${a.dc_fast_charge_10_80_min} min` : '—', valueB: typeof b.dc_fast_charge_10_80_min === 'number' ? `${b.dc_fast_charge_10_80_min} min` : '—', numA: nv(a.dc_fast_charge_10_80_min), numB: nv(b.dc_fast_charge_10_80_min), higherIsBetter: false },
         { label: 'Onboard AC', valueA: a.onboard_ac_kw ? `${a.onboard_ac_kw} kW` : '—', valueB: b.onboard_ac_kw ? `${b.onboard_ac_kw} kW` : '—', numA: nv(a.onboard_ac_kw), numB: nv(b.onboard_ac_kw), higherIsBetter: true },
         { label: 'L2 10–80%', valueA: a.l2_10_80 ? `${a.l2_10_80} hrs` : '—', valueB: b.l2_10_80 ? `${b.l2_10_80} hrs` : '—', numA: nv(a.l2_10_80), numB: nv(b.l2_10_80), higherIsBetter: false },
         { label: 'L2 10–100%', valueA: a.l2_10_100 ? `${a.l2_10_100} hrs` : '—', valueB: b.l2_10_100 ? `${b.l2_10_100} hrs` : '—', numA: nv(a.l2_10_100), numB: nv(b.l2_10_100), higherIsBetter: false },
+      ],
+    },
+    {
+      section: 'Dimensions',
+      metrics: [
+        { label: 'Length', valueA: typeof a.length_in === 'number' ? `${a.length_in} in` : '—', valueB: typeof b.length_in === 'number' ? `${b.length_in} in` : '—' },
+        { label: 'Width', valueA: typeof a.width_in === 'number' ? `${a.width_in} in` : '—', valueB: typeof b.width_in === 'number' ? `${b.width_in} in` : '—' },
+        { label: 'Height', valueA: typeof a.height_in === 'number' ? `${a.height_in} in` : '—', valueB: typeof b.height_in === 'number' ? `${b.height_in} in` : '—' },
+        { label: 'Ground Clearance', valueA: typeof a.ground_clearance_in === 'number' ? `${a.ground_clearance_in} in` : '—', valueB: typeof b.ground_clearance_in === 'number' ? `${b.ground_clearance_in} in` : '—', numA: nv(a.ground_clearance_in), numB: nv(b.ground_clearance_in), higherIsBetter: true },
+        { label: '3rd Row Legroom', valueA: typeof a.third_row_legroom_in === 'number' ? `${a.third_row_legroom_in} in` : '—', valueB: typeof b.third_row_legroom_in === 'number' ? `${b.third_row_legroom_in} in` : '—', numA: nv(a.third_row_legroom_in), numB: nv(b.third_row_legroom_in), higherIsBetter: true },
+        { label: '3rd Row Headroom', valueA: typeof a.third_row_headroom_in === 'number' ? `${a.third_row_headroom_in} in` : '—', valueB: typeof b.third_row_headroom_in === 'number' ? `${b.third_row_headroom_in} in` : '—', numA: nv(a.third_row_headroom_in), numB: nv(b.third_row_headroom_in), higherIsBetter: true },
       ],
     },
     {

@@ -6835,7 +6835,7 @@
     {
       "field": "Make/Model",
       "meaning": "Short standardized vehicle name",
-      "notes": "Used as a compact grouping label, such as “Tesla Model X” or “Kia EV9.”"
+      "notes": "Used as a compact grouping label, such as \"Tesla Model X\" or \"Kia EV9.\""
     },
     {
       "field": "Vehicle",
@@ -6845,7 +6845,7 @@
     {
       "field": "Model Year",
       "meaning": "Vehicle model year",
-      "notes": "Example: 2023, 2024, 2025, 2026. This is the manufacturer’s model year, not the calendar year of sale."
+      "notes": "Example: 2023, 2024, 2025, 2026. This is the manufacturer's model year, not the calendar year of sale."
     },
     {
       "field": "Trim",
@@ -6864,7 +6864,7 @@
     },
     {
       "field": "MSRP ($)",
-      "meaning": "Manufacturer’s Suggested Retail Price",
+      "meaning": "Manufacturer's Suggested Retail Price",
       "notes": "Base sticker price before destination, taxes, dealer fees, incentives, or markups."
     },
     {
@@ -6880,7 +6880,7 @@
     {
       "field": "Self Driving",
       "meaning": "Plain-English summary of driver assistance / autonomy capability",
-      "notes": "General description of the vehicle’s most advanced available hands-free / supervised driving system."
+      "notes": "General description of the vehicle's most advanced available hands-free / supervised driving system."
     },
     {
       "field": "EPA/Est Range (mi)",
@@ -6900,7 +6900,7 @@
     {
       "field": "Onboard AC (kW)",
       "meaning": "Maximum onboard AC charging power",
-      "notes": "Shows the car’s AC charging hardware capability, which affects home / Level 2 charging speed."
+      "notes": "Shows the car's AC charging hardware capability, which affects home / Level 2 charging speed."
     },
     {
       "field": "L2 10–80% (hrs.)",
@@ -6910,7 +6910,7 @@
     {
       "field": "Charging Type",
       "meaning": "Native charging connector standard",
-      "notes": "Example: NACS or CCS. Reflects the vehicle’s native port, not just adapter compatibility."
+      "notes": "Example: NACS or CCS. Reflects the vehicle's native port, not just adapter compatibility."
     },
     {
       "field": "Car Software",
@@ -6930,7 +6930,7 @@
     {
       "field": "Audio",
       "meaning": "Audio / speaker system",
-      "notes": "Describes the vehicle’s sound system branding or speaker setup, where known."
+      "notes": "Describes the vehicle's sound system branding or speaker setup, where known."
     },
     {
       "field": "Driver Profiles",
@@ -6970,12 +6970,72 @@
     {
       "field": "Sources",
       "meaning": "Source links used for that row",
-      "notes": "URL list or source references used to build the row’s data. Useful for validation and traceability."
+      "notes": "URL list or source references used to build the row's data. Useful for validation and traceability."
     },
     {
       "field": "Notes",
       "meaning": "Extra context / caveats",
-      "notes": "Used for things like “not yet released,” “market data thin,” “seat package optional,” or other row-specific caveats."
+      "notes": "Used for things like 'not yet released,' 'market data thin,' 'seat package optional,' or other row-specific caveats."
+    },
+    {
+      "field": "Towing Capacity",
+      "meaning": "Maximum trailer weight the vehicle can tow (lbs)",
+      "notes": "Based on manufacturer-rated braked towing capacity. Varies by drivetrain and equipment."
+    },
+    {
+      "field": "DC Fast Charge (kW)",
+      "meaning": "Maximum DC fast charging power the vehicle supports (kilowatts)",
+      "notes": "Peak rate achievable at compatible stations (e.g., Supercharger, EA). Actual speed depends on battery state-of-charge and temperature."
+    },
+    {
+      "field": "DC Fast Charge 10–80%",
+      "meaning": "Time to charge from 10% to 80% on a DC fast charger (minutes)",
+      "notes": "Measured at or near the vehicle's peak charging rate. Real-world times may vary."
+    },
+    {
+      "field": "Curb Weight",
+      "meaning": "Weight of the vehicle with standard equipment and full fluids, no passengers or cargo (lbs)",
+      "notes": "Varies slightly by seating configuration and options."
+    },
+    {
+      "field": "Length",
+      "meaning": "Overall bumper-to-bumper length of the vehicle (inches)",
+      "notes": ""
+    },
+    {
+      "field": "Width",
+      "meaning": "Overall width of the vehicle excluding side mirrors (inches)",
+      "notes": ""
+    },
+    {
+      "field": "Height",
+      "meaning": "Overall height of the vehicle at standard ride height (inches)",
+      "notes": "Vehicles with air suspension may have adjustable height."
+    },
+    {
+      "field": "Ground Clearance",
+      "meaning": "Distance from the lowest point of the vehicle to the ground (inches)",
+      "notes": "Measured at standard ride height. Vehicles with air suspension may have adjustable clearance."
+    },
+    {
+      "field": "3rd Row Legroom",
+      "meaning": "Available legroom in the third row of seats (inches)",
+      "notes": "Key metric for 3-row vehicles. Measured with 2nd row in standard position."
+    },
+    {
+      "field": "3rd Row Headroom",
+      "meaning": "Available headroom in the third row of seats (inches)",
+      "notes": ""
+    },
+    {
+      "field": "Torque",
+      "meaning": "Maximum rotational force produced by the motor(s) (lb-ft)",
+      "notes": "Electric motors deliver peak torque instantly. Relevant for towing and acceleration."
+    },
+    {
+      "field": "0–60 mph",
+      "meaning": "Time to accelerate from 0 to 60 miles per hour (seconds)",
+      "notes": "Manufacturer-claimed or independently tested. Lower is faster."
     }
   ],
   "assumptions": [

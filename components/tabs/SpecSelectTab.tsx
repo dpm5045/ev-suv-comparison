@@ -144,6 +144,26 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
         },
       },
       {
+        key: 'zeroto60',
+        label: '0–60 mph',
+        options: [
+          { id: 'under4', label: 'Under 4 sec' },
+          { id: '4to6', label: '4\u20136 sec' },
+          { id: '6plus', label: '6+ sec' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const v = r.zero_to_60_sec
+          if (typeof v !== 'number') return false
+          return sel.some(id => {
+            if (id === 'under4') return v < 4
+            if (id === '4to6') return v >= 4 && v <= 6
+            if (id === '6plus') return v > 6
+            return false
+          })
+        },
+      },
+      {
         key: 'battery',
         label: 'Battery',
         options: [
@@ -181,6 +201,26 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
           return sel.some(id => {
             if (id === 'nacs') return c.startsWith('nacs') || c.includes('tesla')
             if (id === 'ccs') return c.startsWith('ccs')
+            return false
+          })
+        },
+      },
+      {
+        key: 'dcspeed',
+        label: 'DC Fast Charge (10\u201380%)',
+        options: [
+          { id: 'under25', label: 'Under 25 min' },
+          { id: '25to35', label: '25\u201335 min' },
+          { id: '35plus', label: '35+ min' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const v = r.dc_fast_charge_10_80_min
+          if (typeof v !== 'number') return false
+          return sel.some(id => {
+            if (id === 'under25') return v < 25
+            if (id === '25to35') return v >= 25 && v <= 35
+            if (id === '35plus') return v > 35
             return false
           })
         },
@@ -272,6 +312,73 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
           return sel.some(id => {
             if (id === 'has') return hasFrunk
             if (id === 'no') return !hasFrunk
+            return false
+          })
+        },
+      },
+    ],
+  },
+  {
+    title: 'Towing & Size',
+    filters: [
+      {
+        key: 'towing',
+        label: 'Towing Capacity',
+        options: [
+          { id: 'under3500', label: 'Under 3,500 lbs' },
+          { id: '3500to5000', label: '3,500\u20135,000 lbs' },
+          { id: '5000plus', label: '5,000+ lbs' },
+          { id: '7000plus', label: '7,000+ lbs' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const v = r.towing_lbs
+          if (typeof v !== 'number') return false
+          return sel.some(id => {
+            if (id === 'under3500') return v < 3500
+            if (id === '3500to5000') return v >= 3500 && v <= 5000
+            if (id === '5000plus') return v >= 5000
+            if (id === '7000plus') return v >= 7000
+            return false
+          })
+        },
+      },
+      {
+        key: 'weight',
+        label: 'Curb Weight',
+        options: [
+          { id: 'under5500', label: 'Under 5,500 lbs' },
+          { id: '5500to6500', label: '5,500\u20136,500 lbs' },
+          { id: '6500plus', label: '6,500+ lbs' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const v = r.curb_weight_lbs
+          if (typeof v !== 'number') return false
+          return sel.some(id => {
+            if (id === 'under5500') return v < 5500
+            if (id === '5500to6500') return v >= 5500 && v <= 6500
+            if (id === '6500plus') return v > 6500
+            return false
+          })
+        },
+      },
+      {
+        key: 'clearance',
+        label: 'Ground Clearance',
+        options: [
+          { id: 'under7', label: 'Under 7"' },
+          { id: '7to8', label: '7\u20138"' },
+          { id: '8plus', label: '8"+' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const v = r.ground_clearance_in
+          if (typeof v !== 'number') return false
+          return sel.some(id => {
+            if (id === 'under7') return v < 7
+            if (id === '7to8') return v >= 7 && v <= 8
+            if (id === '8plus') return v > 8
             return false
           })
         },
@@ -527,6 +634,14 @@ export default function SpecSelectTab({ onRowClick }: Props) {
                   <div className="spec-card-stat">
                     <span className="spec-card-stat-label">Drivetrain</span>
                     <span className="spec-card-stat-value">{r.drivetrain || '\u2014'}</span>
+                  </div>
+                  <div className="spec-card-stat">
+                    <span className="spec-card-stat-label">Towing</span>
+                    <span className="spec-card-stat-value">{typeof r.towing_lbs === 'number' ? `${r.towing_lbs.toLocaleString()}` : '\u2014'}</span>
+                  </div>
+                  <div className="spec-card-stat">
+                    <span className="spec-card-stat-label">0\u201360</span>
+                    <span className="spec-card-stat-value">{typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec}s` : '\u2014'}</span>
                   </div>
                 </div>
               </div>
