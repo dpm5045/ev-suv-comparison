@@ -9,7 +9,7 @@ import OverviewTab from './tabs/OverviewTab'
 import ComparisonTab from './tabs/ComparisonV2Tab'
 import SideBySideTab from './tabs/SideBySideTab'
 import SpecSelectTab from './tabs/SpecSelectTab'
-import ReferenceTab from './tabs/ReferenceTab'
+import GlossaryTab from './tabs/GlossaryTab'
 
 export interface ComparisonFilters {
   vehicle: string
@@ -108,7 +108,7 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
         )}
         {tab === 'specselect' && <SpecSelectTab onRowClick={setDetailIdx} />}
         {tab === 'sidebyside' && <SideBySideTab />}
-        {tab === 'reference' && <ReferenceTab />}
+        {tab === 'glossary' && <GlossaryTab />}
       </main>
       <DetailPanel idx={detailIdx} onClose={() => setDetailIdx(null)} />
     </>

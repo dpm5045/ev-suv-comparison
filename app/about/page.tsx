@@ -64,9 +64,16 @@ export default function AboutPage() {
               and verified press materials. We update our database regularly as new models
               are announced and existing models receive updates.
             </p>
+            <h3>Our Approach</h3>
+            <ul>
+              <li><strong>Manufacturer data first.</strong> OEM sources are the primary basis for trim structure, seating, drivetrain, range, battery, charging, displays, software, and feature availability.</li>
+              <li><strong>Trusted third-party sources to close gaps.</strong> When OEM data is incomplete or inconsistent by year or trim, reputable references such as Car and Driver, Edmunds, Kelley Blue Book, and CARFAX are used to fill blanks and normalize trim naming.</li>
+              <li><strong>New and pre-owned pricing separated.</strong> New pricing reflects MSRP as published by the manufacturer. Pre-owned pricing is based on used-market listings and pricing aggregators.</li>
+              <li><strong>Uncertainty flagged explicitly.</strong> Vehicles that are too new, unreleased, region-specific, or lacking a meaningful used market are marked as TBD, N/A, or &ldquo;No meaningful used market yet&rdquo; rather than assigned weak estimates.</li>
+            </ul>
             <p>
-              For a detailed breakdown of our data assumptions and methodology, see
-              the <Link href="/?tab=reference" className="info-link">Reference</Link> tab
+              For charging terminology and field definitions, see
+              the <Link href="/?tab=glossary" className="info-link">Glossary</Link> tab
               on the main comparison tool.
             </p>
           </section>

@@ -777,6 +777,11 @@ tr[data-clickable='true']:hover td.col-sticky {
   font-size: 15px;
   color: var(--text-muted);
 }
+.glossary-full-name {
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--text-muted);
+}
 
 /* ── Approach Accordions ── */
 .approach-accordions {
