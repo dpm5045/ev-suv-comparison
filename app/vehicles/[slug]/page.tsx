@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -9,7 +10,7 @@ import { VEHICLE_CLASSES } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import Header from '@/components/Header'
 import Breadcrumb from '@/components/Breadcrumb'
-import SpecSection from '@/components/SpecSection'
+import VehicleTrimSection from '@/components/VehicleTrimSection'
 import JsonLd from '@/components/JsonLd'
 
 interface Props {
@@ -78,6 +79,107 @@ export default async function VehiclePage({ params }: Props) {
   const chargingTypes = [...new Set(trims.map(t => t.charging_type).filter(Boolean))]
   const cargo3s = trims.map(t => t.cargo_behind_3rd_cu_ft).filter((c): c is number => typeof c === 'number')
   const towing = trims.map(t => t.towing_lbs).filter((t): t is number => typeof t === 'number')
+
+  // Formatting helpers for comparison table
+  function fv(val: number | string | null | undefined, unit?: string): string {
+    if (val === null || val === undefined) return '—'
+    if (typeof val === 'number') return unit ? `${val.toLocaleString()} ${unit}` : val.toLocaleString()
+    return val || '—'
+  }
+  function fm(val: number | string | null | undefined): string {
+    if (val === null || val === undefined) return '—'
+    if (typeof val === 'number') return `$${val.toLocaleString()}`
+    return val || '—'
+  }
+
+  // Spec sections for comparison table
+  const specSections: { title: string; rows: { label: string; values: string[] }[] }[] = [
+    {
+      title: 'Key Stats',
+      rows: [
+        { label: 'MSRP', values: trims.map(r => fm(r.msrp)) },
+        { label: 'Pre-Owned Price', values: trims.map(r => r.preowned_range || '—') },
+        { label: 'EPA Range', values: trims.map(r => fv(r.range_mi, 'mi')) },
+        { label: 'Horsepower', values: trims.map(r => fv(r.hp, 'hp')) },
+        { label: 'Battery', values: trims.map(r => fv(r.battery_kwh, 'kWh')) },
+        { label: 'Seats', values: trims.map(r => r.seats != null ? String(r.seats) : '—') },
+      ],
+    },
+    {
+      title: 'Performance',
+      rows: [
+        { label: 'Torque', values: trims.map(r => fv(r.torque_lb_ft, 'lb-ft')) },
+        { label: '0–60 mph', values: trims.map(r => fv(r.zero_to_60_sec, 'sec')) },
+        { label: 'Curb Weight', values: trims.map(r => fv(r.curb_weight_lbs, 'lbs')) },
+        { label: 'Towing Capacity', values: trims.map(r => fv(r.towing_lbs, 'lbs')) },
+      ],
+    },
+    {
+      title: 'Drivetrain & Charging',
+      rows: [
+        { label: 'Drivetrain', values: trims.map(r => r.drivetrain || '—') },
+        { label: 'Charging Type', values: trims.map(r => r.charging_type || '—') },
+        { label: 'DC Fast Charge', values: trims.map(r => fv(r.dc_fast_charge_kw, 'kW')) },
+        { label: 'DC 10–80%', values: trims.map(r => fv(r.dc_fast_charge_10_80_min, 'min')) },
+        { label: 'Onboard AC', values: trims.map(r => r.onboard_ac_kw ? `${r.onboard_ac_kw} kW` : '—') },
+        { label: 'L2 10–80%', values: trims.map(r => r.l2_10_80 ? `${r.l2_10_80} hrs` : '—') },
+        { label: 'L2 10–100%', values: trims.map(r => r.l2_10_100 ? `${r.l2_10_100} hrs` : '—') },
+      ],
+    },
+    {
+      title: 'Dimensions',
+      rows: [
+        { label: 'Length', values: trims.map(r => fv(r.length_in, 'in')) },
+        { label: 'Width', values: trims.map(r => fv(r.width_in, 'in')) },
+        { label: 'Height', values: trims.map(r => fv(r.height_in, 'in')) },
+        { label: 'Ground Clearance', values: trims.map(r => fv(r.ground_clearance_in, 'in')) },
+        { label: '3rd Row Legroom', values: trims.map(r => fv(r.third_row_legroom_in, 'in')) },
+        { label: '3rd Row Headroom', values: trims.map(r => fv(r.third_row_headroom_in, 'in')) },
+      ],
+    },
+    {
+      title: 'Technology & Features',
+      rows: [
+        { label: 'Self Driving', values: trims.map(r => r.self_driving || '—') },
+        { label: 'Car Software', values: trims.map(r => r.car_software || '—') },
+        { label: 'Main Display', values: trims.map(r => r.main_display || '—') },
+        { label: 'Additional Displays', values: trims.map(r => r.additional_displays || '—') },
+        { label: 'Audio', values: trims.map(r => r.audio || '—') },
+        { label: 'Driver Profiles', values: trims.map(r => r.driver_profiles || '—') },
+      ],
+    },
+    {
+      title: 'Cargo & Storage',
+      rows: [
+        { label: 'Frunk', values: trims.map(r => fv(r.frunk_cu_ft, 'cu ft')) },
+        { label: 'Behind 3rd Row', values: trims.map(r => fv(r.cargo_behind_3rd_cu_ft, 'cu ft')) },
+        { label: 'Behind 2nd Row', values: trims.map(r => fv(r.cargo_behind_2nd_cu_ft, 'cu ft')) },
+        { label: 'Behind 1st Row', values: trims.map(r => fv(r.cargo_behind_1st_cu_ft, 'cu ft')) },
+        { label: 'Fold Flat', values: trims.map(r => r.fold_flat || '—') },
+        { label: 'Floor Width', values: trims.map(r => fv(r.cargo_floor_width_in, 'in')) },
+      ],
+    },
+  ]
+
+  // Pre-format trim data for the mobile client component
+  // Filter out 'Key Stats' since those values are already in the card header
+  const trimDataForMobile = trims.map((r, i) => ({
+    id: `trim-${i}`,
+    year: r.year,
+    trim: r.trim,
+    msrp: fm(r.msrp),
+    range: fv(r.range_mi, 'mi'),
+    hp: fv(r.hp, 'hp'),
+    seats: r.seats != null ? `${r.seats}-seat` : '—',
+    notes: r.notes || '',
+    sections: specSections.filter(sec => sec.title !== 'Key Stats').map(sec => ({
+      title: sec.title,
+      rows: sec.rows.map(row => ({
+        label: row.label,
+        value: row.values[i],
+      })),
+    })),
+  }))
 
   // JSON-LD Product
   const jsonLd: Record<string, unknown> = {
@@ -188,81 +290,66 @@ export default async function VehiclePage({ params }: Props) {
           )}
         </div>
 
-        {/* Trim-by-trim breakdown */}
+        {/* Trim comparison section */}
         <h2 className="section-title" style={{ marginTop: '2rem' }}>All Trims</h2>
-        {trims.map((r, i) => (
-          <div key={i} className="trim-card">
-            <div className="trim-card-header">
-              <span className={`vehicle-badge ${cls}`} style={{ fontSize: 13, padding: '3px 10px' }}>{r.vehicle}</span>
-              <span className="trim-card-name">{r.year} {r.trim}</span>
-            </div>
 
-            <div className="detail-grid">
-              {([
-                ['MSRP', (() => { const f = fmtMoney(r.msrp); return f.text })()],
-                ['EPA Range', (() => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') })()],
-                ['Horsepower', (() => { const f = fmtNum(r.hp); return f.text + (typeof r.hp === 'number' ? ' hp' : '') })()],
-                ['Battery', (() => { const f = fmtNum(r.battery_kwh); return f.text + (typeof r.battery_kwh === 'number' ? ' kWh' : '') })()],
-                ['Seats', r.seats ?? '—'],
-              ] as [string, React.ReactNode][]).map(([label, val]) => (
-                <div key={label} className="detail-stat">
-                  <div className="detail-stat-label">{label}</div>
-                  <div className="detail-stat-value">{val}</div>
-                </div>
-              ))}
-            </div>
-
-            <SpecSection title="Performance" rows={[
-              ['Torque', typeof r.torque_lb_ft === 'number' ? `${r.torque_lb_ft} lb-ft` : r.torque_lb_ft],
-              ['0–60 mph', typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec} sec` : r.zero_to_60_sec],
-              ['Curb Weight', typeof r.curb_weight_lbs === 'number' ? `${r.curb_weight_lbs.toLocaleString()} lbs` : r.curb_weight_lbs],
-              ['Towing Capacity', typeof r.towing_lbs === 'number' ? `${r.towing_lbs.toLocaleString()} lbs` : r.towing_lbs],
-            ]} />
-
-            <SpecSection title="Drivetrain & Charging" rows={[
-              ['Drivetrain', r.drivetrain],
-              ['Charging Type', r.charging_type],
-              ['DC Fast Charge', typeof r.dc_fast_charge_kw === 'number' ? `${r.dc_fast_charge_kw} kW` : r.dc_fast_charge_kw],
-              ['DC 10–80%', typeof r.dc_fast_charge_10_80_min === 'number' ? `${r.dc_fast_charge_10_80_min} min` : r.dc_fast_charge_10_80_min],
-              ['Onboard AC', r.onboard_ac_kw ? `${r.onboard_ac_kw} kW` : '—'],
-              ['L2 10–80%', r.l2_10_80 ? `${r.l2_10_80} hrs` : '—'],
-              ['L2 10–100%', r.l2_10_100 ? `${r.l2_10_100} hrs` : '—'],
-            ]} />
-
-            <SpecSection title="Dimensions" rows={[
-              ['Length', typeof r.length_in === 'number' ? `${r.length_in} in` : r.length_in],
-              ['Width', typeof r.width_in === 'number' ? `${r.width_in} in` : r.width_in],
-              ['Height', typeof r.height_in === 'number' ? `${r.height_in} in` : r.height_in],
-              ['Ground Clearance', typeof r.ground_clearance_in === 'number' ? `${r.ground_clearance_in} in` : r.ground_clearance_in],
-              ['3rd Row Legroom', typeof r.third_row_legroom_in === 'number' ? `${r.third_row_legroom_in} in` : r.third_row_legroom_in],
-              ['3rd Row Headroom', typeof r.third_row_headroom_in === 'number' ? `${r.third_row_headroom_in} in` : r.third_row_headroom_in],
-            ]} />
-
-            <SpecSection title="Technology & Features" rows={[
-              ['Self Driving', r.self_driving],
-              ['Car Software', r.car_software],
-              ['Main Display', r.main_display],
-              ['Additional Displays', r.additional_displays],
-              ['Audio', r.audio],
-              ['Driver Profiles', r.driver_profiles],
-            ]} />
-
-            <SpecSection title="Cargo & Storage" rows={[
-              ['Frunk', typeof r.frunk_cu_ft === 'number' ? `${r.frunk_cu_ft} cu ft` : r.frunk_cu_ft],
-              ['Behind 3rd Row', typeof r.cargo_behind_3rd_cu_ft === 'number' ? `${r.cargo_behind_3rd_cu_ft} cu ft` : r.cargo_behind_3rd_cu_ft],
-              ['Behind 2nd Row', typeof r.cargo_behind_2nd_cu_ft === 'number' ? `${r.cargo_behind_2nd_cu_ft} cu ft` : r.cargo_behind_2nd_cu_ft],
-              ['Fold Flat', r.fold_flat],
-              ['Floor Width (Wheel Wells)', typeof r.cargo_floor_width_in === 'number' ? `${r.cargo_floor_width_in} in` : r.cargo_floor_width_in],
-            ]} />
-
-            {r.notes && (
-              <div className="detail-section">
-                <div className="detail-section-title">Notes</div>
-                <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>{r.notes}</p>
-              </div>
-            )}
+        {/* Desktop: trim navigator + comparison table */}
+        <div className="cmp-table-view">
+          <div className="trim-nav">
+            {trims.map((t, i) => (
+              <span key={i} className="trim-nav-pill">
+                {t.year} {t.trim}
+              </span>
+            ))}
           </div>
-        ))}
+          <div className="table-wrap">
+            <table className="trim-compare-table">
+              <thead>
+                <tr>
+                  <th className="col-sticky">Spec</th>
+                  {trims.map((t, i) => (
+                    <th key={i}>{t.year} {t.trim}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {specSections.map(sec => (
+                  <Fragment key={sec.title}>
+                    <tr className="compare-section-row">
+                      <td colSpan={trims.length + 1}>{sec.title}</td>
+                    </tr>
+                    {sec.rows.map(row => (
+                      <tr key={row.label}>
+                        <td className="col-sticky compare-metric-label">{row.label}</td>
+                        {row.values.map((val, j) => (
+                          <td key={j}>{val}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </Fragment>
+                ))}
+                {trims.some(t => t.notes) && (
+                  <>
+                    <tr className="compare-section-row">
+                      <td colSpan={trims.length + 1}>Notes</td>
+                    </tr>
+                    {trims.map((t, i) => t.notes ? (
+                      <tr key={i} className="notes-row">
+                        <td className="col-sticky compare-metric-label">{t.year} {t.trim}</td>
+                        <td colSpan={trims.length}>{t.notes}</td>
+                      </tr>
+                    ) : null)}
+                  </>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Mobile: trim navigator + accordion cards */}
+        <div className="cmp-card-view">
+          <VehicleTrimSection trims={trimDataForMobile} />
+        </div>
 
         {/* Related comparisons */}
         {related.length > 0 && (
