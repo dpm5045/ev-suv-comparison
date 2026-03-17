@@ -6,7 +6,6 @@ import Link from 'next/link'
 import type { TabId } from './Header'
 
 const TABS: { id: TabId; label: string }[] = [
-  { id: 'overview', label: 'Overview' },
   { id: 'specselect', label: 'Spec & Select' },
   { id: 'sidebyside', label: 'Side-by-Side' },
   { id: 'comparison', label: 'The Full Monty' },
@@ -22,7 +21,7 @@ export default function DashboardNav({ activeTab }: Props) {
   const searchParams = useSearchParams()
   const [drawerOpen, setDrawerOpen] = useState(false)
 
-  const activeTabLabel = TABS.find(t => t.id === activeTab)?.label ?? 'Menu'
+  const activeTabLabel = TABS.find(t => t.id === activeTab)?.label ?? 'Home'
 
   function handleTab(id: TabId) {
     const params = new URLSearchParams(searchParams.toString())
@@ -35,6 +34,7 @@ export default function DashboardNav({ activeTab }: Props) {
     <>
       {/* Desktop tabs */}
       <nav className="header-nav">
+        <Link href="/" className={`nav-tab nav-tab-brand${activeTab === 'overview' ? ' active' : ''}`}>3RowEV</Link>
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -58,6 +58,7 @@ export default function DashboardNav({ activeTab }: Props) {
       {/* Mobile drawer */}
       {drawerOpen && <div className="nav-drawer-overlay" onClick={() => setDrawerOpen(false)} />}
       <div className={`nav-drawer${drawerOpen ? ' open' : ''}`}>
+        <Link href="/" className={`nav-drawer-item${activeTab === 'overview' ? ' active' : ''}`} onClick={() => setDrawerOpen(false)}>Home</Link>
         {TABS.filter(t => t.id !== 'comparison').map(t => (
           <button
             key={t.id}

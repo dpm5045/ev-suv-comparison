@@ -11,7 +11,7 @@ interface Props {
 function NavFallback() {
   return (
     <nav className="header-nav">
-      <Link href="/" className="nav-tab">Overview</Link>
+      <Link href="/" className="nav-tab nav-tab-brand">3RowEV</Link>
       <Link href="/about" className="nav-tab">About</Link>
     </nav>
   )
