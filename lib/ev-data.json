@@ -1,6 +1,6 @@
 {
-  "scope": "Scope of Car Models Analyzed: 134 trims were analyzed across six years & 13 car models.",
-  "count_note": "Notes: The Toyota Highlander EV and Tesla Model Y Long (Asia) are not yet available in the US, but were included for reference. Rivian R1S Gen1 (2022–2024) and Gen2 (2025+) models are both included.",
+  "scope": "Scope of Car Models Analyzed: 135 trims were analyzed across six years & 14 car models.",
+  "count_note": "Notes: The Toyota Highlander EV and Tesla Model Y Long (Asia) are not yet available in the US, but were included for reference. The Tesla Model Y (3-Row) has a child-sized third row. Rivian R1S Gen1 (2022–2024) and Gen2 (2025+) models are both included.",
   "count_data": [
     {
       "model": "Hyundai IONIQ 9",
@@ -54,6 +54,16 @@
     },
     {
       "model": "Tesla Model Y Long (Asia)",
+      "y2021": 0,
+      "y2022": 0,
+      "y2023": 0,
+      "y2024": 0,
+      "y2025": 0,
+      "y2026": 1,
+      "total": 1
+    },
+    {
+      "model": "Tesla Model Y (3-Row)",
       "y2021": 0,
       "y2022": 0,
       "y2023": 0,
@@ -139,8 +149,8 @@
     "y2023": 10,
     "y2024": 23,
     "y2025": 38,
-    "y2026": 47,
-    "total": 134
+    "y2026": 48,
+    "total": 135
   },
   "details": [
     {
@@ -4564,6 +4574,39 @@
       "cargo_behind_2nd_cu_ft": 25,
       "cargo_behind_1st_cu_ft": 67.6,
       "notes": "AWD performance dual motor. Ultra trim."
+    },
+    {
+      "vehicle": "Tesla Model Y (3-Row)",
+      "year": 2026,
+      "seats": 7,
+      "onboard_ac_kw": 11.5,
+      "l2_10_80": 5.6,
+      "l2_10_100": 7.2,
+      "charging_type": "NACS",
+      "car_software": "Tesla OS (no native CarPlay/Android Auto)",
+      "self_driving": "Tesla Autopilot / Full Self-Driving (optional)",
+      "main_display": "16\" center touchscreen",
+      "additional_displays": "None",
+      "fold_flat": "Yes",
+      "driver_profiles": "Driver profiles supported",
+      "frunk_cu_ft": 4.1,
+      "cargo_floor_width_in": null,
+      "otd_new": 55484.4,
+      "preowned_range": "N/A - No meaningful used market yet",
+      "otd_preowned": "N/A - No meaningful used market yet",
+      "name": "Tesla Model Y (3-Row), 2026, Long Range AWD",
+      "trim": "Long Range AWD",
+      "drivetrain": "AWD",
+      "msrp": 51490,
+      "destination": 0,
+      "battery_kwh": 78.4,
+      "range_mi": 327,
+      "hp": 384,
+      "audio": "Premium audio (15 speakers)",
+      "cargo_behind_3rd_cu_ft": 12.8,
+      "cargo_behind_2nd_cu_ft": 26.6,
+      "cargo_behind_1st_cu_ft": 67.9,
+      "notes": "7-seat option ($2,500) available only on Long Range AWD Premium trim. Third row designed for children with limited legroom (~28 inches). Destination fee included in Tesla MSRP."
     }
   ],
   "preowned": [

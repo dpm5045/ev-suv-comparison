@@ -53,6 +53,19 @@ export interface DetailRow {
   cargo_behind_1st_cu_ft: number | null
   fold_flat: string | null
   cargo_floor_width_in: number | string | null
+  // Tier 1 + select Tier 2 fields (added March 2026 audit)
+  towing_lbs: number | string | null
+  dc_fast_charge_kw: number | string | null
+  dc_fast_charge_10_80_min: number | string | null
+  curb_weight_lbs: number | string | null
+  length_in: number | string | null
+  width_in: number | string | null
+  height_in: number | string | null
+  third_row_legroom_in: number | string | null
+  third_row_headroom_in: number | string | null
+  torque_lb_ft: number | string | null
+  zero_to_60_sec: number | string | null
+  ground_clearance_in: number | string | null
 }
 
 export interface PreownedRow {
@@ -96,6 +109,7 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'Rivian R1S': 'v-rivian',
   'Tesla Model X': 'v-tesla',
   'Tesla Model Y Long (Asia)': 'v-tesla',
+  'Tesla Model Y (3-Row)': 'v-tesla',
   'Toyota Highlander EV': 'v-toyota',
   'Volkswagen ID. Buzz': 'v-vw',
   'Volvo EX90': 'v-volvo',
