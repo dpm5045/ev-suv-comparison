@@ -7,7 +7,8 @@ import VehicleBadge from '../VehicleBadge'
 
 /* ── helpers ── */
 
-function parsePrice(s: string): number | null {
+function parsePrice(s: string | null | undefined): number | null {
+  if (!s) return null
   const m = s.replace(/[$,]/g, '').match(/[\d.]+/)
   return m ? parseFloat(m[0]) : null
 }
@@ -397,8 +398,12 @@ export default function SpecSelectTab({ onRowClick }: Props) {
     let rows = DATA.details as Row[]
     for (const section of SECTIONS) {
       for (const f of section.filters) {
-        if (f.key === 'msrp' && isPreowned) continue
-        if (f.key === 'preowned' && !isPreowned) continue
+        const conditionSel = filters.condition || []
+        const isNew = conditionSel.includes('new')
+        const isPre = conditionSel.includes('preowned')
+        // Only apply the price filter that matches the selected condition
+        if (f.key === 'msrp' && !isNew) continue
+        if (f.key === 'preowned' && !isPre) continue
         const sel = filters[f.key] || []
         if (sel.length) {
           rows = rows.filter(r => f.test(r, sel, isPreowned))
@@ -425,9 +430,12 @@ export default function SpecSelectTab({ onRowClick }: Props) {
       {/* ── Filter sections with dropdowns ── */}
       <div className="spec-sections">
         {SECTIONS.map(section => {
+          const conditionSel = filters.condition || []
+          const isNew = conditionSel.includes('new')
+          const isPre = conditionSel.includes('preowned')
           const sectionFilters = section.filters.filter(f => {
-            if (f.key === 'msrp' && isPreowned) return false
-            if (f.key === 'preowned' && !isPreowned) return false
+            if (f.key === 'msrp' && !isNew) return false
+            if (f.key === 'preowned' && !isPre) return false
             return true
           })
           if (!sectionFilters.length) return null
@@ -506,7 +514,7 @@ export default function SpecSelectTab({ onRowClick }: Props) {
                     <span className="spec-card-stat-value">{r.charging_type || '\u2014'}</span>
                   </div>
                   <div className="spec-card-stat">
-                    <span className="spec-card-stat-label">{r.drivetrain || 'DT'}</span>
+                    <span className="spec-card-stat-label">Drivetrain</span>
                     <span className="spec-card-stat-value">{r.drivetrain || '\u2014'}</span>
                   </div>
                 </div>
