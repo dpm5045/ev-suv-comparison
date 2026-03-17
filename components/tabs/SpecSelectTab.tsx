@@ -101,7 +101,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
     ],
   },
   {
-    title: 'Performance & Range',
+    title: 'Performance',
     filters: [
       {
         key: 'range',
@@ -145,7 +145,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
       },
       {
         key: 'zeroto60',
-        label: '0–60 mph',
+        label: '0\u201360 mph',
         options: [
           { id: 'under4', label: 'Under 4 sec' },
           { id: '4to6', label: '4\u20136 sec' },
@@ -183,6 +183,40 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
           })
         },
       },
+      {
+        key: 'towing',
+        label: 'Towing',
+        options: [
+          { id: 'under3500', label: 'Under 3,500 lbs' },
+          { id: '3500to5000', label: '3,500\u20135,000 lbs' },
+          { id: '5000plus', label: '5,000+ lbs' },
+          { id: '7000plus', label: '7,000+ lbs' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const v = r.towing_lbs
+          if (typeof v !== 'number') return false
+          return sel.some(id => {
+            if (id === 'under3500') return v < 3500
+            if (id === '3500to5000') return v >= 3500 && v <= 5000
+            if (id === '5000plus') return v >= 5000
+            if (id === '7000plus') return v >= 7000
+            return false
+          })
+        },
+      },
+      {
+        key: 'drivetrain',
+        label: 'Drivetrain',
+        options: [
+          { id: 'AWD', label: 'AWD' },
+          { id: 'RWD', label: 'RWD' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          return sel.some(id => r.drivetrain.includes(id))
+        },
+      },
     ],
   },
   {
@@ -207,7 +241,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
       },
       {
         key: 'dcspeed',
-        label: 'DC Fast Charge (10\u201380%)',
+        label: 'DC 10\u201380%',
         options: [
           { id: 'under25', label: 'Under 25 min' },
           { id: '25to35', label: '25\u201335 min' },
@@ -227,7 +261,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
       },
       {
         key: 'l2speed',
-        label: 'L2 Charge (10\u201380%)',
+        label: 'L2 10\u201380%',
         options: [
           { id: 'under5', label: 'Under 5 hrs' },
           { id: '5to8', label: '5\u20138 hrs' },
@@ -248,28 +282,19 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
     ],
   },
   {
-    title: 'Vehicle',
+    title: 'Size & Weight',
     filters: [
       {
-        key: 'towing',
-        label: 'Towing Capacity',
+        key: 'seats',
+        label: 'Seats',
         options: [
-          { id: 'under3500', label: 'Under 3,500 lbs' },
-          { id: '3500to5000', label: '3,500\u20135,000 lbs' },
-          { id: '5000plus', label: '5,000+ lbs' },
-          { id: '7000plus', label: '7,000+ lbs' },
+          { id: '5', label: '5-seat' },
+          { id: '6', label: '6-seat' },
+          { id: '7', label: '7-seat' },
         ],
         test: (r, sel) => {
           if (!sel.length) return true
-          const v = r.towing_lbs
-          if (typeof v !== 'number') return false
-          return sel.some(id => {
-            if (id === 'under3500') return v < 3500
-            if (id === '3500to5000') return v >= 3500 && v <= 5000
-            if (id === '5000plus') return v >= 5000
-            if (id === '7000plus') return v >= 7000
-            return false
-          })
+          return sel.includes(String(r.seats))
         },
       },
       {
@@ -310,31 +335,6 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
             if (id === '8plus') return v > 8
             return false
           })
-        },
-      },
-      {
-        key: 'seats',
-        label: 'Seats',
-        options: [
-          { id: '5', label: '5-seat' },
-          { id: '6', label: '6-seat' },
-          { id: '7', label: '7-seat' },
-        ],
-        test: (r, sel) => {
-          if (!sel.length) return true
-          return sel.includes(String(r.seats))
-        },
-      },
-      {
-        key: 'drivetrain',
-        label: 'Drivetrain',
-        options: [
-          { id: 'AWD', label: 'AWD' },
-          { id: 'RWD', label: 'RWD' },
-        ],
-        test: (r, sel) => {
-          if (!sel.length) return true
-          return sel.some(id => r.drivetrain.includes(id))
         },
       },
       {
@@ -385,6 +385,11 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
           })
         },
       },
+    ],
+  },
+  {
+    title: 'Technology',
+    filters: [
       {
         key: 'software',
         label: 'Infotainment',
@@ -408,15 +413,42 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
         },
       },
       {
-        key: 'drivetrain',
-        label: 'Drivetrain',
+        key: 'displaySize',
+        label: 'Main Display',
         options: [
-          { id: 'AWD', label: 'AWD' },
-          { id: 'RWD', label: 'RWD' },
+          { id: 'under13', label: 'Under 13"' },
+          { id: '13to15', label: '13\u201315"' },
+          { id: '15plus', label: '15"+' },
         ],
         test: (r, sel) => {
           if (!sel.length) return true
-          return sel.some(id => r.drivetrain.includes(id))
+          const m = r.main_display.match(/([\d.]+)[""\u201D]/)
+          const size = m ? parseFloat(m[1]) : null
+          if (size === null) return false
+          return sel.some(id => {
+            if (id === 'under13') return size < 13
+            if (id === '13to15') return size >= 13 && size <= 15
+            if (id === '15plus') return size > 15
+            return false
+          })
+        },
+      },
+      {
+        key: 'rearDisplay',
+        label: '2nd Row Display',
+        options: [
+          { id: 'yes', label: 'Yes' },
+          { id: 'no', label: 'No' },
+        ],
+        test: (r, sel) => {
+          if (!sel.length) return true
+          const ad = (r.additional_displays || '').toLowerCase()
+          const hasRear = ad.includes('rear') || ad.includes('entertainment') || ad.includes('tablet') || /\d+[""\u201D]\s*rear/.test(ad)
+          return sel.some(id => {
+            if (id === 'yes') return hasRear
+            if (id === 'no') return !hasRear
+            return false
+          })
         },
       },
     ],
