@@ -363,21 +363,21 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
     <>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6, flexWrap: 'wrap', gap: 8 }}>
         <h2 className="section-title" style={{ marginBottom: 0 }}>Detailed Comparison</h2>
-        <div className="mobile-view-toggle">
-          <button className={`view-toggle-btn${mobileView === 'cards' ? ' active' : ''}`} onClick={() => setMobileView('cards')}>Cards</button>
-          <button className={`view-toggle-btn${mobileView === 'table' ? ' active' : ''}`} onClick={() => setMobileView('table')}>Table</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {activeFilterCount > 0 && (
+            <button className="multi-select-clear" style={{ whiteSpace: 'nowrap', flexShrink: 0 }} onClick={clearAllFilters}>
+              Clear all filters ({activeFilterCount})
+            </button>
+          )}
+          <div className="mobile-view-toggle">
+            <button className={`view-toggle-btn${mobileView === 'cards' ? ' active' : ''}`} onClick={() => setMobileView('cards')}>Cards</button>
+            <button className={`view-toggle-btn${mobileView === 'table' ? ' active' : ''}`} onClick={() => setMobileView('table')}>Table</button>
+          </div>
         </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-        <p className="section-desc" style={{ marginBottom: 0 }}>
-          Click any column header to filter. Click any row or card to view complete specs.
-        </p>
-        {activeFilterCount > 0 && (
-          <button className="multi-select-clear" style={{ whiteSpace: 'nowrap', flexShrink: 0 }} onClick={clearAllFilters}>
-            Clear all filters ({activeFilterCount})
-          </button>
-        )}
-      </div>
+      <p className="section-desc" style={{ marginBottom: 8 }}>
+        Click any column header to filter. Click any row or card to view complete specs.
+      </p>
 
       {/* ── Mobile filter bar (hidden on desktop via CSS) ── */}
       <div className="mobile-filters">
