@@ -29,9 +29,11 @@ interface FilterDef {
   test: (r: Row, selected: string[], isPreowned: boolean) => boolean
 }
 
+const YEAR_OPTIONS = [...new Set(DATA.details.map((d) => d.year).filter(Boolean))].sort().map(y => ({ id: String(y), label: String(y) }))
+
 const SECTIONS: { title: string; filters: FilterDef[] }[] = [
   {
-    title: 'Pricing',
+    title: 'Pricing & Year',
     filters: [
       {
         key: 'condition',
@@ -45,6 +47,15 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
           if (sel.includes('new')) return typeof r.msrp === 'number'
           if (sel.includes('preowned')) return hasPreowned(r)
           return true
+        },
+      },
+      {
+        key: 'year',
+        label: 'Model Year',
+        options: YEAR_OPTIONS,
+        test: (r, sel) => {
+          if (!sel.length) return true
+          return sel.includes(String(r.year))
         },
       },
       {
