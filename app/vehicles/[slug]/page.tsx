@@ -241,7 +241,7 @@ export default async function VehiclePage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       {faqJsonLd && <JsonLd data={faqJsonLd} />}
-      <Header />
+      <Header activeTab="overview" />
       <main className="vehicle-page">
         <Breadcrumb items={[
           { label: 'Home', href: '/' },
@@ -293,15 +293,8 @@ export default async function VehiclePage({ params }: Props) {
         {/* Trim comparison section */}
         <h2 className="section-title" style={{ marginTop: '2rem' }}>All Trims</h2>
 
-        {/* Desktop: trim navigator + comparison table */}
+        {/* Desktop: comparison table */}
         <div className="cmp-table-view">
-          <div className="trim-nav">
-            {trims.map((t, i) => (
-              <span key={i} className="trim-nav-pill">
-                {t.year} {t.trim}
-              </span>
-            ))}
-          </div>
           <div className="table-wrap">
             <table className="trim-compare-table">
               <thead>

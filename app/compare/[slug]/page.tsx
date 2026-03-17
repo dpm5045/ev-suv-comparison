@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -73,7 +74,7 @@ function buildMetrics(a: DetailRow, b: DetailRow): { section: string; metrics: M
       section: 'Key Stats',
       metrics: [
         { label: 'MSRP', valueA: fmtMoney(a.msrp).text, valueB: fmtMoney(b.msrp).text, numA: nv(a.msrp), numB: nv(b.msrp), higherIsBetter: false },
-        { label: 'Seats', valueA: a.seats != null ? String(a.seats) : '—', valueB: b.seats != null ? String(b.seats) : '—', numA: a.seats, numB: b.seats, higherIsBetter: true },
+        { label: 'Seats', valueA: a.seats != null ? String(a.seats) : '—', valueB: b.seats != null ? String(b.seats) : '—', numA: null, numB: null, higherIsBetter: true },
         { label: 'EPA Range', valueA: fmtNum(a.range_mi).text + (typeof a.range_mi === 'number' ? ' mi' : ''), valueB: fmtNum(b.range_mi).text + (typeof b.range_mi === 'number' ? ' mi' : ''), numA: nv(a.range_mi), numB: nv(b.range_mi), higherIsBetter: true },
         { label: 'Horsepower', valueA: fmtNum(a.hp).text + (typeof a.hp === 'number' ? ' hp' : ''), valueB: fmtNum(b.hp).text + (typeof b.hp === 'number' ? ' hp' : ''), numA: nv(a.hp), numB: nv(b.hp), higherIsBetter: true },
         { label: 'Battery', valueA: fmtNum(a.battery_kwh).text + (typeof a.battery_kwh === 'number' ? ' kWh' : ''), valueB: fmtNum(b.battery_kwh).text + (typeof b.battery_kwh === 'number' ? ' kWh' : ''), numA: nv(a.battery_kwh), numB: nv(b.battery_kwh), higherIsBetter: true },
@@ -106,7 +107,7 @@ function buildMetrics(a: DetailRow, b: DetailRow): { section: string; metrics: M
         { label: 'Length', valueA: typeof a.length_in === 'number' ? `${a.length_in} in` : '—', valueB: typeof b.length_in === 'number' ? `${b.length_in} in` : '—' },
         { label: 'Width', valueA: typeof a.width_in === 'number' ? `${a.width_in} in` : '—', valueB: typeof b.width_in === 'number' ? `${b.width_in} in` : '—' },
         { label: 'Height', valueA: typeof a.height_in === 'number' ? `${a.height_in} in` : '—', valueB: typeof b.height_in === 'number' ? `${b.height_in} in` : '—' },
-        { label: 'Ground Clearance', valueA: typeof a.ground_clearance_in === 'number' ? `${a.ground_clearance_in} in` : '—', valueB: typeof b.ground_clearance_in === 'number' ? `${b.ground_clearance_in} in` : '—', numA: nv(a.ground_clearance_in), numB: nv(b.ground_clearance_in), higherIsBetter: true },
+        { label: 'Ground Clearance', valueA: typeof a.ground_clearance_in === 'number' ? `${a.ground_clearance_in} in` : '—', valueB: typeof b.ground_clearance_in === 'number' ? `${b.ground_clearance_in} in` : '—' },
         { label: '3rd Row Legroom', valueA: typeof a.third_row_legroom_in === 'number' ? `${a.third_row_legroom_in} in` : '—', valueB: typeof b.third_row_legroom_in === 'number' ? `${b.third_row_legroom_in} in` : '—', numA: nv(a.third_row_legroom_in), numB: nv(b.third_row_legroom_in), higherIsBetter: true },
         { label: '3rd Row Headroom', valueA: typeof a.third_row_headroom_in === 'number' ? `${a.third_row_headroom_in} in` : '—', valueB: typeof b.third_row_headroom_in === 'number' ? `${b.third_row_headroom_in} in` : '—', numA: nv(a.third_row_headroom_in), numB: nv(b.third_row_headroom_in), higherIsBetter: true },
       ],
@@ -230,7 +231,7 @@ export default async function ComparePage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       {faqJsonLd && <JsonLd data={faqJsonLd} />}
-      <Header />
+      <Header activeTab="overview" />
       <main className="compare-page">
         <Breadcrumb items={[
           { label: 'Home', href: '/' },
@@ -248,37 +249,63 @@ export default async function ComparePage({ params }: Props) {
           Comparing {repA.year} {repA.trim} vs {repB.year} {repB.trim} (representative trims)
         </p>
 
-        {/* Comparison table */}
-        <div className="compare-table-wrap">
-          <table className="compare-table">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>
-                  <span className={`vehicle-badge ${clsA}`} style={{ fontSize: 12, padding: '2px 8px' }}>{nameA}</span>
-                </th>
-                <th>
-                  <span className={`vehicle-badge ${clsB}`} style={{ fontSize: 12, padding: '2px 8px' }}>{nameB}</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sections.map(sec => (
-                <>
-                  <tr key={sec.section} className="compare-section-row">
-                    <td colSpan={3}>{sec.section}</td>
-                  </tr>
-                  {sec.metrics.map(m => (
-                    <tr key={`${sec.section}-${m.label}`}>
-                      <td className="compare-metric-label">{m.label}</td>
-                      <td className={cellClass(m, 'A')}>{m.valueA}</td>
-                      <td className={cellClass(m, 'B')}>{m.valueB}</td>
+        {/* Desktop: Comparison table */}
+        <div className="cmp-table-view">
+          <div className="compare-table-wrap">
+            <table className="compare-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>
+                    <span className={`vehicle-badge ${clsA}`} style={{ fontSize: 12, padding: '2px 8px' }}>{nameA}</span>
+                  </th>
+                  <th>
+                    <span className={`vehicle-badge ${clsB}`} style={{ fontSize: 12, padding: '2px 8px' }}>{nameB}</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sections.map(sec => (
+                  <Fragment key={sec.section}>
+                    <tr className="compare-section-row">
+                      <td colSpan={3}>{sec.section}</td>
                     </tr>
-                  ))}
-                </>
+                    {sec.metrics.map(m => (
+                      <tr key={`${sec.section}-${m.label}`}>
+                        <td className="compare-metric-label">{m.label}</td>
+                        <td className={cellClass(m, 'A')}>{m.valueA}</td>
+                        <td className={cellClass(m, 'B')}>{m.valueB}</td>
+                      </tr>
+                    ))}
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Mobile: Stacked comparison cards */}
+        <div className="cmp-card-view">
+          {sections.map(sec => (
+            <div key={sec.section} className="compare-mobile-section">
+              <div className="compare-mobile-section-title">{sec.section}</div>
+              {sec.metrics.map(m => (
+                <div key={m.label} className="compare-mobile-metric">
+                  <div className="compare-mobile-metric-label">{m.label}</div>
+                  <div className="compare-mobile-values">
+                    <div className={`compare-mobile-value ${cellClass(m, 'A')}`}>
+                      <span className={`vehicle-badge ${clsA}`} style={{ fontSize: 11, padding: '2px 8px' }}>{nameA}</span>
+                      <span>{m.valueA}</span>
+                    </div>
+                    <div className={`compare-mobile-value ${cellClass(m, 'B')}`}>
+                      <span className={`vehicle-badge ${clsB}`} style={{ fontSize: 11, padding: '2px 8px' }}>{nameB}</span>
+                      <span>{m.valueB}</span>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          ))}
         </div>
 
         {/* Links to individual pages */}

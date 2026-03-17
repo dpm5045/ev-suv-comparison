@@ -1911,6 +1911,50 @@ tr[data-clickable='true']:hover td.col-sticky {
   color: var(--text-muted) !important;
   font-size: 14px;
 }
+
+/* Mobile comparison cards */
+.compare-mobile-section {
+  margin-bottom: 16px;
+}
+.compare-mobile-section-title {
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.compare-mobile-metric {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.compare-mobile-metric-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.compare-mobile-values {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.compare-mobile-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.compare-mobile-value.compare-cell-best {
+  background: rgba(16, 185, 129, 0.1);
+}
+.compare-mobile-value.compare-cell-worst {
+  background: rgba(239, 68, 68, 0.06);
+}
+
 .compare-cell-best {
   color: var(--green) !important;
   font-weight: 600;
