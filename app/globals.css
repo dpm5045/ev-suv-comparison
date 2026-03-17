@@ -743,6 +743,50 @@ tr[data-clickable='true']:hover td.col-sticky {
   max-width: 280px;
 }
 
+/* ── Affiliate links ── */
+.affiliate-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.affiliate-link:hover {
+  background: var(--surface3);
+  color: var(--text);
+}
+.affiliate-link-amazon {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.5;
+  margin-right: 2px;
+}
+.affiliate-link-arrow {
+  font-size: 10px;
+  opacity: 0.6;
+}
+.affiliate-links-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.affiliate-disclosure {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 10px;
+  font-style: italic;
+}
+
 /* ── Comparison v2 card layout ── */
 .cmp-table-view { display: block; }
 .cmp-card-view  { display: none;  }
@@ -1765,25 +1809,6 @@ tr[data-clickable='true']:hover td.col-sticky {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
-/* Trim cards */
-.trim-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 16px;
-}
-.trim-card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.trim-card-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-}
 
 /* Related links */
 .related-links,
