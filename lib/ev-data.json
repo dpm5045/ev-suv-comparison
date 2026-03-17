@@ -7138,16 +7138,6 @@
   ],
   "glossary": [
     {
-      "field": "Make/Model",
-      "meaning": "Short standardized vehicle name",
-      "notes": "Used as a compact grouping label, such as \"Tesla Model X\" or \"Kia EV9.\""
-    },
-    {
-      "field": "Vehicle",
-      "meaning": "Full vehicle/program label",
-      "notes": "Usually the broader vehicle family name used for grouping rows across years/trims."
-    },
-    {
       "field": "Model Year",
       "meaning": "Vehicle model year",
       "notes": "Example: 2023, 2024, 2025, 2026. This is the manufacturer's model year, not the calendar year of sale."
@@ -7176,11 +7166,6 @@
       "field": "Destination ($)",
       "meaning": "Factory destination / delivery charge",
       "notes": "Standard manufacturer freight/delivery fee added to MSRP on new vehicles."
-    },
-    {
-      "field": "OTD Price (Out The Door)",
-      "meaning": "Estimated total purchase price including all fees and taxes",
-      "notes": "Calculated as MSRP + destination + sales tax + doc fee + title/registration + annual EV road-use fee. This is the approximate amount you'd actually pay to drive off the lot. Does not include dealer markups, optional packages, or available incentives/rebates. See the Assumptions tab for the specific tax rate and fee estimates used."
     },
     {
       "field": "Pre-Owned Price Range",
