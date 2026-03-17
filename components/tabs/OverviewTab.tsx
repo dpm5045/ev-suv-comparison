@@ -259,8 +259,11 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         rows = rows.filter((r) => typeof r.msrp === 'number' && bucketFilter(r.msrp as number))
       }
     }
+    if (activePref1 === 'sixseat' || activePref2 === 'sixseat') {
+      rows = rows.filter((r) => r.seats === 6)
+    }
     return rows
-  }, [activeCondition, activeBudget, bucketFilter, isPreowned])
+  }, [activeCondition, activeBudget, bucketFilter, isPreowned, activePref1, activePref2])
 
   /* --- dynamic tiles --- */
   const tiles = useMemo(() => {
