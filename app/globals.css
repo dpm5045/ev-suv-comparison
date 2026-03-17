@@ -1752,6 +1752,15 @@ tr[data-clickable='true']:hover td.col-sticky {
   color: var(--text-muted);
   font-size: 15px;
 }
+.vehicle-hero-trims {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.vehicle-hero-trims-sep {
+  opacity: 0.4;
+}
 .vehicle-stats-grid {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
@@ -2110,4 +2119,142 @@ tr[data-clickable='true']:hover td.col-sticky {
 .vehicle-cta-btn.secondary:hover {
   background: var(--teal);
   color: var(--bg);
+}
+
+/* ── Vehicle page trim comparison ── */
+.trim-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+.trim-nav-pill {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.trim-nav-pill:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+/* Desktop pills are non-interactive — suppress hover */
+.cmp-table-view .trim-nav-pill {
+  cursor: default;
+}
+.cmp-table-view .trim-nav-pill:hover {
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+.trim-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.trim-compare-table thead th {
+  background: var(--surface2);
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  min-width: 140px;
+}
+.trim-compare-table thead th:first-child {
+  min-width: auto;
+}
+.trim-compare-table tbody td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+.trim-compare-table .compare-section-row td {
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent) !important;
+  padding: 10px 14px !important;
+}
+.trim-compare-table .compare-metric-label {
+  color: var(--text-muted) !important;
+  font-size: 14px;
+}
+.trim-compare-table .notes-row td {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Mobile trim accordion cards */
+.trim-accordion-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.trim-accordion-header {
+  padding: 16px;
+}
+.trim-accordion-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.trim-accordion-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.trim-accordion-stats span {
+  white-space: nowrap;
+}
+.trim-section-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--surface2);
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.trim-section-toggle .chevron {
+  transition: transform 0.2s;
+}
+.trim-section-toggle.open .chevron {
+  transform: rotate(180deg);
+}
+.trim-section-content {
+  display: none;
+  padding: 0 16px 12px;
+}
+.trim-section-content.open {
+  display: block;
+}
+.trim-section-content .detail-row {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.trim-section-content .detail-row:last-child {
+  border-bottom: none;
 }
