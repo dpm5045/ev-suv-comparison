@@ -214,9 +214,10 @@ interface OverviewTabProps {
   pref1: string
   pref2: string
   onFiltersChange: (f: Partial<InsightFilters>, replace?: boolean) => void
+  onVehicleClick?: (vehicle: string) => void
 }
 
-export default function OverviewTab({ condition, budget, pref1, pref2, onFiltersChange }: OverviewTabProps) {
+export default function OverviewTab({ condition, budget, pref1, pref2, onFiltersChange, onVehicleClick }: OverviewTabProps) {
   const [initialized, setInitialized] = useState(false)
   useEffect(() => {
     if (initialized) return
@@ -517,7 +518,12 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                     : !vehiclesInBudget.has(s.vehicle)
                   return (
                     <tr key={s.vehicle} className={dimmed ? 'glance-row-dimmed' : ''}>
-                      <td className="col-sticky"><Link href={`/vehicles/${toSlug(s.vehicle)}`}><VehicleBadge vehicle={s.vehicle} /></Link></td>
+                      <td className="col-sticky">
+                        {onVehicleClick
+                          ? <span style={{ cursor: 'pointer' }} onClick={() => onVehicleClick(s.vehicle)}><VehicleBadge vehicle={s.vehicle} /></span>
+                          : <Link href={`/vehicles/${toSlug(s.vehicle)}`}><VehicleBadge vehicle={s.vehicle} /></Link>
+                        }
+                      </td>
                       <td className="num">
                         {isPreowned
                           ? (s.preLow !== null ? `${fmtDollarK(s.preLow)}-${fmtDollarK(s.preHigh!)}` : '\u2014')
