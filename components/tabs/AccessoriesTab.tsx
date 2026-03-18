@@ -6,15 +6,15 @@ import { amazonSearchUrl, getChargingLinks, AFFILIATE_DISCLOSURE } from '@/lib/a
 
 // ── Must-Have categories (always shown) ──────────────────────────────────────
 
-const MUST_HAVES: { title: string; desc: string; query: string }[] = [
-  { title: 'Level 2 Home Charger', desc: 'Charge overnight at home with a 240V Level 2 charger.', query: 'Level 2 EV home charger 240V' },
-  { title: 'Portable EV Charger', desc: 'Plug into any outlet on the go — essential for road trips.', query: 'portable EV charger Level 1 Level 2' },
-  { title: 'Charging Adapters', desc: 'NACS, CCS, and J1772 adapters for universal charging access.', query: 'EV charging adapter NACS CCS' },
-  { title: 'All-Weather Floor Mats', desc: 'Protect your interior from mud, snow, and spills.', query: '3 row SUV all-weather floor mats' },
-  { title: 'Cargo Organizers', desc: 'Keep your trunk tidy with collapsible organizers and nets.', query: 'SUV cargo organizer trunk' },
-  { title: 'Cargo Liner', desc: 'Full-coverage trunk protection for hauling gear.', query: '3 row SUV cargo liner' },
-  { title: 'Sunshades & Window Covers', desc: 'Keep your cabin cool and protect the interior.', query: 'SUV windshield sunshade' },
-  { title: 'Tire Inflator', desc: 'Portable tire inflator — a must for any EV without a spare.', query: 'portable tire inflator car' },
+const MUST_HAVES: { title: string; desc: string; query: string; category: string }[] = [
+  { title: 'Level 2 Home Charger', desc: 'Charge overnight at home with a 240V Level 2 charger.', query: 'Level 2 EV home charger 240V', category: 'charging' },
+  { title: 'Portable EV Charger', desc: 'Plug into any outlet on the go — essential for road trips.', query: 'portable EV charger Level 1 Level 2', category: 'charging' },
+  { title: 'Charging Adapters', desc: 'NACS, CCS, and J1772 adapters for universal charging access.', query: 'EV charging adapter NACS CCS', category: 'charging' },
+  { title: 'All-Weather Floor Mats', desc: 'Protect your interior from mud, snow, and spills.', query: '3 row SUV all-weather floor mats', category: 'protection' },
+  { title: 'Cargo Organizers', desc: 'Keep your trunk tidy with collapsible organizers and nets.', query: 'SUV cargo organizer trunk', category: 'organization' },
+  { title: 'Cargo Liner', desc: 'Full-coverage trunk protection for hauling gear.', query: '3 row SUV cargo liner', category: 'protection' },
+  { title: 'Sunshades & Window Covers', desc: 'Keep your cabin cool and protect the interior.', query: 'SUV windshield sunshade', category: 'protection' },
+  { title: 'Tire Inflator', desc: 'Portable tire inflator — a must for any EV without a spare.', query: 'portable tire inflator car', category: 'essentials' },
 ]
 
 // ── Vehicle-specific category templates ──────────────────────────────────────
@@ -100,26 +100,26 @@ export default function AccessoriesTab() {
           <p className="section-desc">Accessories designed to fit your {av}.</p>
           <div className="accessories-grid">
             {getVehicleCategories(av, ay).map(cat => (
-              <div key={cat.title} className="accessories-card">
+              <div key={cat.title} className="accessories-card" data-category="vehicle">
                 <div className="accessories-card-title">{cat.title}</div>
                 <a
                   href={amazonSearchUrl(cat.query)}
                   target="_blank"
                   rel="noopener noreferrer sponsored"
-                  className="affiliate-link"
+                  className="affiliate-link accessories-cta"
                 >
                   <span className="affiliate-link-amazon">Amazon</span> Shop {cat.title} <span className="affiliate-link-arrow" aria-hidden="true">↗</span>
                 </a>
               </div>
             ))}
             {adapterLink && (
-              <div className="accessories-card">
+              <div className="accessories-card" data-category="vehicle">
                 <div className="accessories-card-title">Charging Adapter</div>
                 <a
                   href={adapterLink.url}
                   target="_blank"
                   rel="noopener noreferrer sponsored"
-                  className="affiliate-link"
+                  className="affiliate-link accessories-cta"
                 >
                   <span className="affiliate-link-amazon">Amazon</span> {adapterLink.text} <span className="affiliate-link-arrow" aria-hidden="true">↗</span>
                 </a>
@@ -134,14 +134,14 @@ export default function AccessoriesTab() {
       <p className="section-desc">Top-rated accessories for any 3-row electric SUV.</p>
       <div className="accessories-grid">
         {MUST_HAVES.map(cat => (
-          <div key={cat.title} className="accessories-card">
+          <div key={cat.title} className="accessories-card" data-category={cat.category}>
             <div className="accessories-card-title">{cat.title}</div>
             <div className="accessories-card-desc">{cat.desc}</div>
             <a
               href={amazonSearchUrl(cat.query)}
               target="_blank"
               rel="noopener noreferrer sponsored"
-              className="affiliate-link"
+              className="affiliate-link accessories-cta"
             >
               <span className="affiliate-link-amazon">Amazon</span> Shop {cat.title} <span className="affiliate-link-arrow" aria-hidden="true">↗</span>
             </a>
