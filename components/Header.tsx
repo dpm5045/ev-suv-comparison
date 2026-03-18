@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import DashboardNav from './DashboardNav'
 
-export type TabId = 'overview' | 'specselect' | 'comparison' | 'sidebyside' | 'glossary' | 'accessories' | 'about'
+export type TabId = 'overview' | 'specselect' | 'comparison' | 'sidebyside' | 'glossary' | 'about'
 
 interface Props {
   activeTab?: TabId

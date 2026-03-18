@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { toSlug } from '@/lib/slugs'
 import VehicleBadge from './VehicleBadge'
 import SpecSection from './SpecSection'
-import { getChargingLinks, getAccessoryLinks, AFFILIATE_DISCLOSURE } from '@/lib/affiliate'
 
 interface Props {
   idx: number | null
@@ -105,34 +104,6 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ['Floor Width (Wheel Wells)', typeof r.cargo_floor_width_in === 'number' ? `${r.cargo_floor_width_in} in` : r.cargo_floor_width_in],
             ]} />
 
-            <div className="detail-section">
-              <div className="detail-section-title">Shop Compatible Accessories</div>
-              <div className="affiliate-links-wrap">
-                {getChargingLinks(r.charging_type ?? '').map((link) => (
-                  <a
-                    key={link.text}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer sponsored"
-                    className="affiliate-link"
-                  >
-                    <span className="affiliate-link-amazon">Amazon</span> {link.text} <span className="affiliate-link-arrow" aria-hidden="true">↗</span>
-                  </a>
-                ))}
-                {getAccessoryLinks(r.vehicle, r.year).map((link) => (
-                  <a
-                    key={link.text}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer sponsored"
-                    className="affiliate-link"
-                  >
-                    <span className="affiliate-link-amazon">Amazon</span> {link.text} <span className="affiliate-link-arrow" aria-hidden="true">↗</span>
-                  </a>
-                ))}
-              </div>
-              <p className="affiliate-disclosure">{AFFILIATE_DISCLOSURE}</p>
-            </div>
 
             {r.notes && (
               <div className="detail-section">
