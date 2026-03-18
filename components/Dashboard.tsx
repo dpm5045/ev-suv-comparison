@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Header from './Header'
 import type { TabId } from './Header'
 import DetailPanel from './DetailPanel'
+import VehicleSummaryPanel from './VehicleSummaryPanel'
 import OverviewTab from './tabs/OverviewTab'
 import ComparisonTab from './tabs/ComparisonV2Tab'
 import SideBySideTab from './tabs/SideBySideTab'
@@ -49,6 +50,19 @@ export default function Dashboard() {
   const insightPref1 = searchParams.get('pref1') ?? ''
   const insightPref2 = searchParams.get('pref2') ?? ''
 const [detailIdx, setDetailIdx] = useState<number | null>(null)
+  const [summaryVehicle, setSummaryVehicle] = useState<string | null>(null)
+
+  // Mutual exclusion: only one panel open at a time
+  const openSummary = useCallback((vehicle: string) => {
+    setDetailIdx(null)
+    setSummaryVehicle(vehicle)
+  }, [])
+
+  const openDetail = useCallback((idx: number) => {
+    setSummaryVehicle(null)
+    setDetailIdx(idx)
+  }, [])
+
   const [, startTransition] = useTransition()
 
   function updateParams(updates: Record<string, string>, replace = false) {
@@ -101,21 +115,23 @@ const [detailIdx, setDetailIdx] = useState<number | null>(null)
             pref1={insightPref1}
             pref2={insightPref2}
             onFiltersChange={setInsightFilters}
+            onVehicleClick={openSummary}
           />
         )}
         {tab === 'comparison' && (
           <ComparisonTab
             filters={{ vehicle: cmpVehicle, year: cmpYear, trim: cmpTrim, q: cmpQ, drivetrain: cmpDrivetrain, seats: cmpSeats, charging: cmpCharging, foldFlat: cmpFoldFlat }}
             onFiltersChange={setCmpFilters}
-            onRowClick={setDetailIdx}
+            onRowClick={openDetail}
           />
         )}
-        {tab === 'specselect' && <SpecSelectTab onRowClick={setDetailIdx} />}
+        {tab === 'specselect' && <SpecSelectTab onRowClick={openDetail} />}
         {tab === 'sidebyside' && <SideBySideTab />}
         {tab === 'glossary' && <GlossaryTab />}
         {tab === 'accessories' && <AccessoriesTab />}
       </main>
       <DetailPanel idx={detailIdx} onClose={() => setDetailIdx(null)} />
+      <VehicleSummaryPanel vehicle={summaryVehicle} onClose={() => setSummaryVehicle(null)} />
     </>
   )
 }
