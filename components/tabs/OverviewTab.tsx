@@ -492,8 +492,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       {/* ── Vehicle Comparison Summary ── */}
       <div className="card">
         <div className="card-title">Speed Dating Results</div>
-        {showBudgetNote && <p className="count-note" style={{ marginBottom: 8 }}>Vehicles outside your {isPreowned ? 'price range' : 'budget'} are dimmed.</p>}
-        {isPreowned && <p className="count-note" style={{ marginBottom: 8 }}>Showing pre-owned pricing. Vehicles without pre-owned data are dimmed.</p>}
+        {showBudgetNote && <p className="count-note" style={{ marginBottom: 8 }}>Your best matches are highlighted.</p>}
+        {isPreowned && <p className="count-note" style={{ marginBottom: 8 }}>Showing pre-owned pricing. Your best matches are highlighted.</p>}
 
         {/* Desktop table */}
         <div className="cmp-table-view">
