@@ -13,6 +13,7 @@ out/
 # misc
 .DS_Store
 *.pem
+*.csv
 npm-debug.log*
 
 # data refresh dry-run output
