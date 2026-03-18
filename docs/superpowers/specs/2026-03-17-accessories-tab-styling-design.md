@@ -16,12 +16,14 @@ Refresh the Accessories tab's visual design to break up the monotone card grid w
 
 Each Must-Have card gets a **3px colored left border** and a **subtle background tint** based on its category group.
 
-| Category Group | Cards | CSS Variable | Tint |
-|---------------|-------|-------------|------|
-| Charging | Level 2 Home Charger, Portable EV Charger, Charging Adapters | `--amber` | `rgba(251, 191, 36, 0.06)` |
-| Protection | All-Weather Floor Mats, Cargo Liner, Sunshades & Window Covers | `--teal` | `rgba(45, 212, 191, 0.06)` |
-| Organization | Cargo Organizers | `--green` | `rgba(74, 222, 128, 0.06)` |
-| Essentials | Tire Inflator | `--orange` | `rgba(251, 146, 60, 0.06)` |
+
+| Category Group | Cards                                                          | CSS Variable | Tint                       |
+| -------------- | -------------------------------------------------------------- | ------------ | -------------------------- |
+| Charging       | Level 2 Home Charger, Portable EV Charger, Charging Adapters   | `--amber`    | `rgba(251, 191, 36, 0.06)` |
+| Protection     | All-Weather Floor Mats, Cargo Liner, Sunshades & Window Covers | `--teal`     | `rgba(45, 212, 191, 0.06)` |
+| Organization   | Cargo Organizers                                               | `--green`    | `rgba(74, 222, 128, 0.06)` |
+| Essentials     | Tire Inflator                                                  | `--orange`   | `rgba(251, 146, 60, 0.06)` |
+
 
 ### Implementation
 
@@ -67,16 +69,18 @@ Category-specific rules only set the custom properties:
 
 Add a `category` field to each entry in the `MUST_HAVES` array:
 
-| Card | Category |
-|------|----------|
-| Level 2 Home Charger | `charging` |
-| Portable EV Charger | `charging` |
-| Charging Adapters | `charging` |
-| All-Weather Floor Mats | `protection` |
-| Cargo Organizers | `organization` |
-| Cargo Liner | `protection` |
-| Sunshades & Window Covers | `protection` |
-| Tire Inflator | `essentials` |
+
+| Card                      | Category       |
+| ------------------------- | -------------- |
+| Level 2 Home Charger      | `charging`     |
+| Portable EV Charger       | `charging`     |
+| Charging Adapters         | `charging`     |
+| All-Weather Floor Mats    | `protection`   |
+| Cargo Organizers          | `organization` |
+| Cargo Liner               | `protection`   |
+| Sunshades & Window Covers | `protection`   |
+| Tire Inflator             | `essentials`   |
+
 
 ---
 
@@ -100,9 +104,11 @@ Add `data-category="vehicle"` to all vehicle-specific card divs, including the c
 Replace the small inline affiliate pill with a wider button that spans the card width. This is the primary action on a tab whose purpose is driving Amazon clicks.
 
 ### Current state
+
 - 12px font, inline pill, `--text-muted` color, `--surface2` background
 
 ### New state
+
 - 13px font, full card width (`width: 100%`, `justify-content: center`)
 - Slightly taller padding (`8px 16px` instead of `5px 12px`)
 - On hover: subtle warm tint (`rgba(251, 191, 36, 0.1)` background) to evoke Amazon's brand without being garish
@@ -130,6 +136,7 @@ New class `.accessories-cta` that extends `.affiliate-link`. **Must appear after
 ```
 
 Notes:
+
 - `margin-top: auto` pushes the button to the bottom of the card (since `.accessories-card` is `display: flex; flex-direction: column`), keeping buttons aligned across cards of varying content height.
 - `white-space: normal` overrides the base `.affiliate-link` `nowrap` to handle long product names (e.g., "Sunshades & Window Covers") on narrow screens.
 - `transition` adds `border-color` to the transition list so the hover border change is smooth.
@@ -138,10 +145,12 @@ Notes:
 
 ## 4. Files Affected
 
-| File | Change |
-|------|--------|
+
+| File                                 | Change                                                                                                                                             |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `components/tabs/AccessoriesTab.tsx` | Add `category` field to `MUST_HAVES`, add `data-category` attributes to card divs, change affiliate-link class to `affiliate-link accessories-cta` |
-| `app/globals.css` | Add category color rules, `.accessories-cta` styles |
+| `app/globals.css`                    | Add category color rules, `.accessories-cta` styles                                                                                                |
+
 
 ---
 
@@ -152,3 +161,4 @@ Notes:
 - URL params or filter behavior — no changes
 - Must-Have/vehicle-specific product lists — no changes to categories or Amazon queries
 - Card grid layout (`.accessories-grid`) — unchanged
+
