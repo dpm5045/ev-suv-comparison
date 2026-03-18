@@ -690,6 +690,83 @@ tr[data-clickable='true']:hover td.col-sticky {
 .overlay.open {
   display: block;
 }
+/* ── Vehicle Summary Panel ── */
+.vehicle-summary-panel {
+  position: fixed;
+  top: 0;
+  right: -560px;
+  z-index: 200;
+  width: 540px;
+  max-width: 90vw;
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  padding: 24px;
+}
+.vehicle-summary-panel.open {
+  right: 0;
+}
+.vsp-header {
+  margin-bottom: 20px;
+}
+.vsp-fullpage-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--teal);
+  text-decoration: none;
+  margin-top: 6px;
+}
+.vsp-fullpage-link:hover {
+  text-decoration: underline;
+}
+.vsp-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.vsp-stat {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 12px;
+}
+.vsp-stat-label {
+  font-size: 14px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.vsp-stat-value {
+  font-size: 18px;
+  font-weight: 600;
+}
+.vsp-trim-selector {
+  margin-bottom: 20px;
+}
+.vsp-trim-selector label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.vsp-trim-selector select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+}
+.vsp-trim-detail {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
 .detail-vehicle-name {
   font-size: 20px;
   font-weight: 700;
