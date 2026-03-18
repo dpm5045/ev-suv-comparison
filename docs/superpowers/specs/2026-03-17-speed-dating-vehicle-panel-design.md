@@ -60,7 +60,7 @@ interface Props {
    - Drivetrain / charging standard (e.g. "AWD / NACS")
 3. **Trim Selector** — Dropdown: "Select a year & trim for detailed specs" with options like "2026 Long Range Plus (6-seat)"
 4. **Trim Detail Section** (conditionally rendered when a trim is selected) — Includes these sections, reusing the `SpecSection` component from DetailPanel:
-   - Performance (0-60, top speed, hp, torque)
+   - Performance (0-60, hp, torque, curb weight, towing)
    - Drivetrain & Charging
    - Dimensions
    - Cargo & Storage
