@@ -804,9 +804,12 @@ tr[data-clickable='true']:hover td.col-sticky {
 }
 .accessories-card {
   padding: 16px;
-  background: var(--surface);
+  --card-accent: transparent;
+  --card-tint: transparent;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-left: 3px solid var(--card-accent);
+  background: linear-gradient(var(--card-tint), var(--card-tint)), var(--surface);
+  border-radius: 2px 10px 10px 2px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -825,6 +828,40 @@ tr[data-clickable='true']:hover td.col-sticky {
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 24px;
+}
+.accessories-card[data-category="charging"] {
+  --card-accent: var(--amber);
+  --card-tint: rgba(251, 191, 36, 0.06);
+}
+.accessories-card[data-category="protection"] {
+  --card-accent: var(--teal);
+  --card-tint: rgba(45, 212, 191, 0.06);
+}
+.accessories-card[data-category="organization"] {
+  --card-accent: var(--green);
+  --card-tint: rgba(74, 222, 128, 0.06);
+}
+.accessories-card[data-category="essentials"] {
+  --card-accent: var(--orange);
+  --card-tint: rgba(251, 146, 60, 0.06);
+}
+.accessories-card[data-category="vehicle"] {
+  --card-accent: var(--accent);
+  --card-tint: rgba(91, 164, 245, 0.06);
+}
+.accessories-cta {
+  width: 100%;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  margin-top: auto;
+  white-space: normal;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.accessories-cta:hover {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.25);
+  color: var(--text);
 }
 
 /* ── Comparison v2 card layout ── */
