@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { DATA, VEHICLE_CLASSES } from '@/lib/data'
+import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import Link from 'next/link'
 import { toSlug } from '@/lib/slugs'
