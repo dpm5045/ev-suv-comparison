@@ -707,8 +707,6 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
           }
           return null
         })()}
-        {showBudgetNote && <p className="count-note" style={{ marginBottom: 8 }}>Your best matches are highlighted.</p>}
-        {isPreowned && <p className="count-note" style={{ marginBottom: 8 }}>Showing pre-owned pricing.</p>}
 
         {/* Desktop table */}
         <div className="cmp-table-view">
