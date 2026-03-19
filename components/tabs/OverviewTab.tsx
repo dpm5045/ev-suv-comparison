@@ -665,8 +665,20 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       {/* ── Vehicle Comparison Summary ── */}
       <div className="card">
         <div className="card-title">Speed Dating Results</div>
+        {(activePref1 || activePref2) && (() => {
+          const effectivePrefs: string[] = []
+          if (activePref1 && activePref1 !== 'sixseat') effectivePrefs.push(activePref1)
+          if (activePref2 && activePref2 !== 'sixseat') effectivePrefs.push(activePref2)
+          const prefLabel = (id: string) => PREFERENCE_OPTIONS.find((p) => p.id === id)?.label ?? id
+          if (effectivePrefs.length === 2) {
+            return <p className="count-note" style={{ marginBottom: 8 }}>Ranked by {prefLabel(effectivePrefs[0])} (primary) and {prefLabel(effectivePrefs[1])} (secondary)</p>
+          } else if (effectivePrefs.length === 1) {
+            return <p className="count-note" style={{ marginBottom: 8 }}>Ranked by {prefLabel(effectivePrefs[0])}</p>
+          }
+          return null
+        })()}
         {showBudgetNote && <p className="count-note" style={{ marginBottom: 8 }}>Your best matches are highlighted.</p>}
-        {isPreowned && <p className="count-note" style={{ marginBottom: 8 }}>Showing pre-owned pricing. Your best matches are highlighted.</p>}
+        {isPreowned && <p className="count-note" style={{ marginBottom: 8 }}>Showing pre-owned pricing.</p>}
 
         {/* Desktop table */}
         <div className="cmp-table-view">
@@ -679,8 +691,9 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                   <th className="num">Range (mi)</th>
                   <th className="num">HP</th>
                   <th className="num">Battery (kWh)</th>
+                  <th className="num">DC 10–80%</th>
+                  <th>Self-Driving Tier</th>
                   <th className="num">Behind 3rd Row (cu ft)</th>
-                  <th className="num">Behind 2nd Row (cu ft)</th>
                 </tr>
               </thead>
               <tbody>
@@ -691,10 +704,15 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                   return (
                     <tr key={s.vehicle} className={dimmed ? 'glance-row-dimmed' : ''}>
                       <td className="col-sticky">
-                        {onVehicleClick
-                          ? <span style={{ cursor: 'pointer' }} onClick={() => onVehicleClick(s.vehicle)}><VehicleBadge vehicle={s.vehicle} /></span>
-                          : <Link href={`/vehicles/${toSlug(s.vehicle)}`}><VehicleBadge vehicle={s.vehicle} /></Link>
-                        }
+                        <div className="col-sticky-ranked">
+                          {ranks.get(s.vehicle) !== undefined && (
+                            <span className="rank-badge">#{ranks.get(s.vehicle)}</span>
+                          )}
+                          {onVehicleClick
+                            ? <span style={{ cursor: 'pointer' }} onClick={() => onVehicleClick(s.vehicle)}><VehicleBadge vehicle={s.vehicle} /></span>
+                            : <Link href={`/vehicles/${toSlug(s.vehicle)}`}><VehicleBadge vehicle={s.vehicle} /></Link>
+                          }
+                        </div>
                       </td>
                       <td className="num">
                         {isPreowned
@@ -705,8 +723,9 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                       <td className="num">{rangeStr(s.rangeLow, s.rangeHigh)}</td>
                       <td className="num">{rangeStr(s.hpLow, s.hpHigh)}</td>
                       <td className="num">{s.battery}</td>
+                      <td className="num">{s.dcChargeMin !== null ? `${s.dcChargeMin} min` : '\u2014'}</td>
+                      <td>{s.selfDrivingLabel}</td>
                       <td className="num">{rangeStr(s.cargo3Low, s.cargo3High)}</td>
-                      <td className="num">{rangeStr(s.cargo2Low, s.cargo2High)}</td>
                     </tr>
                   )
                 })}
@@ -726,6 +745,9 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
               return (
                 <div key={s.vehicle} className={`cmp-card glance-accordion${dimmed ? ' glance-row-dimmed' : ''}${expanded ? ' expanded' : ''}`}>
                   <div className="cmp-card-header" onClick={() => setExpandedVehicle(expanded ? null : s.vehicle)}>
+                    {ranks.get(s.vehicle) !== undefined && (
+                      <span className="rank-badge">#{ranks.get(s.vehicle)}</span>
+                    )}
                     <VehicleBadge vehicle={s.vehicle} />
                     <Link
                       href={`/vehicles/${toSlug(s.vehicle)}`}
@@ -765,16 +787,20 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                         {s.battery} kWh
                       </span>
                     </div>
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">DC 10–80%</span>
+                      <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
+                        {s.dcChargeMin !== null ? `${s.dcChargeMin} min` : '\u2014'}
+                      </span>
+                    </div>
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">Self-Driving</span>
+                      <span className="cmp-stat-value">{s.selfDrivingLabel}</span>
+                    </div>
                     {s.cargo3Low !== null && (
                       <div className="cmp-stat">
                         <span className="cmp-stat-label">Behind 3rd Row</span>
                         <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{rangeStr(s.cargo3Low, s.cargo3High)} cu ft</span>
-                      </div>
-                    )}
-                    {s.cargo2Low !== null && (
-                      <div className="cmp-stat">
-                        <span className="cmp-stat-label">Behind 2nd Row</span>
-                        <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{rangeStr(s.cargo2Low, s.cargo2High)} cu ft</span>
                       </div>
                     )}
                   </div>
