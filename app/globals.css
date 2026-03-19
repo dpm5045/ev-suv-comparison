@@ -107,6 +107,28 @@ body {
   left: 32px;
 }
 .header-brand:hover { opacity: 0.85; }
+.theme-toggle {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text-muted);
+  transition: border-color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-toggle:hover {
+  border-color: var(--border-light);
+  background: var(--surface2);
+}
 .nav-tab-brand {
   font-weight: 700;
   letter-spacing: -0.02em;

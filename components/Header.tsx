@@ -1,4 +1,6 @@
-import { Suspense } from 'react'
+'use client'
+
+import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import DashboardNav from './DashboardNav'
 
@@ -17,6 +19,50 @@ function NavFallback() {
   )
 }
 
+function ThemeToggle() {
+  const [unlocked, setUnlocked] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  useEffect(() => {
+    function sync() {
+      setUnlocked(localStorage.getItem('theme-unlocked') === 'true')
+      setTheme((localStorage.getItem('theme') as 'dark' | 'light') || 'dark')
+    }
+    sync()
+    window.addEventListener('theme-change', sync)
+    window.addEventListener('storage', sync)
+    return () => {
+      window.removeEventListener('theme-change', sync)
+      window.removeEventListener('storage', sync)
+    }
+  }, [])
+
+  if (!unlocked) return null
+
+  function toggle() {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    if (next === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light')
+    } else {
+      document.documentElement.removeAttribute('data-theme')
+    }
+    localStorage.setItem('theme', next)
+    window.dispatchEvent(new Event('theme-change'))
+  }
+
+  return (
+    <button
+      className="theme-toggle"
+      onClick={toggle}
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+    >
+      {theme === 'dark' ? '☀️' : '🌙'}
+    </button>
+  )
+}
+
 export default function Header({ activeTab }: Props) {
   return (
     <header className="site-header">
@@ -30,6 +76,8 @@ export default function Header({ activeTab }: Props) {
         ) : (
           <NavFallback />
         )}
+
+        <ThemeToggle />
       </div>
     </header>
   )
