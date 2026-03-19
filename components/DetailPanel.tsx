@@ -61,15 +61,18 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ))}
             </div>
 
-            <SpecSection title="Performance" rows={[
+            <SpecSection title="Powertrain & Performance" rows={[
+              ['Drivetrain', r.drivetrain],
+              ['Horsepower', (() => { const f = fmtNum(r.hp); return f.text + (typeof r.hp === 'number' ? ' hp' : '') })()],
               ['Torque', typeof r.torque_lb_ft === 'number' ? `${r.torque_lb_ft} lb-ft` : r.torque_lb_ft],
               ['0–60 mph', typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec} sec` : r.zero_to_60_sec],
               ['Curb Weight', typeof r.curb_weight_lbs === 'number' ? `${r.curb_weight_lbs.toLocaleString()} lbs` : r.curb_weight_lbs],
               ['Towing Capacity', typeof r.towing_lbs === 'number' ? `${r.towing_lbs.toLocaleString()} lbs` : r.towing_lbs],
             ]} />
 
-            <SpecSection title="Drivetrain & Charging" rows={[
-              ['Drivetrain', r.drivetrain],
+            <SpecSection title="Range & Charging" rows={[
+              ['EPA Range', (() => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') })()],
+              ['Battery', (() => { const f = fmtNum(r.battery_kwh); return f.text + (typeof r.battery_kwh === 'number' ? ' kWh' : '') })()],
               ['Charging Type', r.charging_type],
               ['DC Fast Charge', typeof r.dc_fast_charge_kw === 'number' ? `${r.dc_fast_charge_kw} kW` : r.dc_fast_charge_kw],
               ['DC 10–80%', typeof r.dc_fast_charge_10_80_min === 'number' ? `${r.dc_fast_charge_10_80_min} min` : r.dc_fast_charge_10_80_min],
@@ -79,6 +82,7 @@ export default function DetailPanel({ idx, onClose }: Props) {
             ]} />
 
             <SpecSection title="Dimensions" rows={[
+              ['Seats', r.seats ?? '—'],
               ['Length', typeof r.length_in === 'number' ? `${r.length_in} in` : r.length_in],
               ['Width', typeof r.width_in === 'number' ? `${r.width_in} in` : r.width_in],
               ['Height', typeof r.height_in === 'number' ? `${r.height_in} in` : r.height_in],
@@ -87,9 +91,13 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ['3rd Row Headroom', typeof r.third_row_headroom_in === 'number' ? `${r.third_row_headroom_in} in` : r.third_row_headroom_in],
             ]} />
 
-            <SpecSection title="Technology & Features" rows={[
+            <SpecSection title="Self-Driving" rows={[
               ['Self Driving Tier', r.self_driving_tier],
+              ['SAE Level', r.sae_level],
               ['Self Driving', r.self_driving],
+            ]} />
+
+            <SpecSection title="Infotainment" rows={[
               ['Car Software', r.car_software],
               ['Center Display', r.center_display],
               ['Gauge Cluster', r.gauge_cluster],
