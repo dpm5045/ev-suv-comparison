@@ -88,6 +88,7 @@ export default function DetailPanel({ idx, onClose }: Props) {
             ]} />
 
             <SpecSection title="Technology & Features" rows={[
+              ['Self Driving Tier', r.self_driving_tier],
               ['Self Driving', r.self_driving],
               ['Car Software', r.car_software],
               ['Main Display', r.main_display],

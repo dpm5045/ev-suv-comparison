@@ -189,6 +189,7 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
                 ]} />
 
                 <SpecSection title="Technology & Features" rows={[
+                  ['Self Driving Tier', selectedTrim.self_driving_tier],
                   ['Self Driving', selectedTrim.self_driving],
                   ['Car Software', selectedTrim.car_software],
                   ['Main Display', selectedTrim.main_display],
