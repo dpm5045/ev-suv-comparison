@@ -46,12 +46,18 @@ Apply all changes and commit? (y/n)
 ```
 
 **Behavior in autonomous mode:**
-- Each phase collects proposed changes into an internal changelog without applying them to the file
-- After all 5 phases complete, run OTD recalculation and count total updates on the proposed state
-- Run validation checks on the proposed state
+
+Since `/refresh` is a Claude Code prompt skill (not a programmatic script), "autonomous mode" means Claude runs all 5 phases sequentially in conversation, applying changes to `lib/ev-data.json` as it goes (same as today), but without pausing for per-phase approval. The key difference is presentation — instead of asking after each phase, Claude accumulates a changelog in conversation context and presents it all at the end.
+
+- Each phase runs its web research, applies changes to `ev-data.json`, and logs what changed
+- After all 5 phases: run OTD recalculation (`scripts/lib/otd-calculator.mjs`) and update count totals
+- Run `/validate` checks against the updated file on disk
 - Present the full consolidated changelog
-- On approval: apply all changes, commit
-- On rejection: discard, no file changes
+- On approval: commit the changes
+- On rejection: `git checkout -- lib/ev-data.json` to revert all changes
+- All 5 phases are always listed in the changelog, even if a phase found 0 changes (e.g., "Phase 4 — New Vehicles: 0 detected")
+
+**Error handling:** If a phase fails mid-way (network error, ambiguous data), skip that phase, note the failure in the changelog, and continue with remaining phases. The changelog will clearly flag which phases completed and which were skipped, so the user can re-run individual phases ad-hoc if needed.
 
 **No changes to:**
 - Phase definitions (the 5 phases remain identical)
@@ -69,12 +75,12 @@ Update `monthly-data-refresh.yml`:
 ## Time to refresh EV data
 
 ### Pre-flight
-Run `/validate` to check current data state.
+Run `/project:validate` to check current data state.
 
 ### Refresh
-Run `/refresh` — this runs all 5 phases autonomously and presents a single changelog for review.
+Run `/project:refresh` — this runs all 5 phases autonomously and presents a single changelog for review.
 
-If you need more control over individual phases, use `/refresh --interactive`.
+If you need more control over individual phases, use `/project:refresh --interactive`.
 
 ### Post-flight
 Review the changelog, approve changes, and the commit is created automatically.
@@ -90,31 +96,21 @@ Review the changelog, approve changes, and the commit is created automatically.
 A one-time procedure using existing skills in sequence. Not a new skill.
 
 ### Step 1: Structural validation
-Run `/validate` to establish baseline. Fix any errors before proceeding.
+Run `/project:validate` to establish baseline. Fix any errors before proceeding.
 
 ### Step 2: Active vehicle spot-checks
-Run `/spot-check` on each active vehicle, one at a time:
-- Kia EV9
-- Hyundai IONIQ 9
-- Rivian R1S
-- Tesla Model X
-- Tesla Model Y (3-Row)
-- Volvo EX90
-- Cadillac Escalade IQ
-- Lucid Gravity
-- Volkswagen ID. Buzz
-- VinFast VF9
+Run `/project:spot-check` on each active vehicle (non-watchlist vehicles with current or past model year trims). As of 2026-03-19 these are: Kia EV9, Hyundai IONIQ 9, Rivian R1S, Tesla Model X, Tesla Model Y (3-Row), Volvo EX90, Cadillac Escalade IQ, Lucid Gravity, Volkswagen ID. Buzz, VinFast VF9.
 
-Full field-by-field comparison against OEM and EPA sources. Focus on high-value fields: MSRP, destination, range, HP, battery, charging, towing, pre-owned pricing.
+Work in batches of 3-4 vehicles per round to keep each research session manageable. Full field-by-field comparison against OEM and EPA sources. Focus on high-value fields: MSRP, destination, range, HP, battery, charging, towing, pre-owned pricing.
 
 ### Step 3: Watchlist pulse check
-Run `/scan-watchlist` to confirm watchlist and 2027 vehicles are still on track. Check for announcements, cancellations, or newly released specs.
+Run `/project:scan-watchlist` to confirm watchlist and 2027 vehicles are still on track. Check for announcements, cancellations, or newly released specs.
 
 ### Step 4: Pre-owned pricing sweep
-Run `/update-pricing` across all vehicles with a used market to catch pricing drift.
+Run `/project:update-pricing` across all vehicles with a used market to catch pricing drift.
 
 ### Step 5: Post-audit validation
-Run `/validate` again to confirm data integrity after all changes.
+Run `/project:validate` again to confirm data integrity after all changes.
 
 ### Step 6: Commit
 Single checkpoint commit summarizing all audit findings and corrections.
@@ -122,7 +118,7 @@ Single checkpoint commit summarizing all audit findings and corrections.
 ### Scoping
 - Active vehicles: full depth (all fields verified against live sources)
 - Watchlist vehicles: light check (still coming? key specs changed?)
-- Work in batches of 3-4 vehicles per spot-check round to keep sessions manageable
+- Work in batches of 3-4 vehicles per spot-check round
 
 ---
 
