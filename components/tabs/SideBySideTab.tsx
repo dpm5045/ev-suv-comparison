@@ -30,6 +30,13 @@ function cargoStr(v: number | string | null | undefined, unit: string): string {
   return String(v)
 }
 
+const TIER_RANK: Record<string, number> = {
+  'Basic L2': 1,
+  'Advanced L2': 2,
+  'L2+ Hands-Free': 3,
+  'L2+ Point-to-Point': 4,
+}
+
 const SECTIONS: SectionDef[] = [
   {
     title: 'Key Stats',
@@ -89,7 +96,13 @@ const SECTIONS: SectionDef[] = [
   {
     title: 'Technology & Features',
     metrics: [
-      { label: 'Self Driving', render: r => r.self_driving || '—' },
+      {
+        label: 'Self Driving Tier',
+        render: r => r.self_driving_tier || '—',
+        rawNum: r => r.self_driving_tier ? (TIER_RANK[r.self_driving_tier] ?? null) : null,
+        higherIsBetter: true,
+      },
+      { label: 'Self Driving System', render: r => r.self_driving || '—' },
       { label: 'Car Software', render: r => r.car_software || '—' },
       { label: 'Main Display', render: r => r.main_display || '—' },
       { label: 'Additional Displays', render: r => r.additional_displays || '—' },
