@@ -30,7 +30,7 @@ export default function AboutPage() {
           <section className="info-section">
             <h2>My Mission</h2>
             <p>
-              The 3-row electric SUV market is growing fast, but comparing vehicles across
+              The 3-row electric vehicle market is growing fast, but comparing vehicles across
               different manufacturers is surprisingly difficult. Specs are scattered across
               press releases, configurators, and review sites — each presenting data differently.
             </p>
@@ -45,8 +45,7 @@ export default function AboutPage() {
             <h2>What&apos;s Covered</h2>
             <p>
               This tool currently tracks <strong>{trimCount} trims</strong> across{' '}
-              <strong>{vehicleCount} vehicles</strong>, covering every 3-row electric SUV
-              and minivan available or announced in the US market. Each vehicle listing includes:
+              <strong>{vehicleCount} vehicles</strong>, covering every 3-row electric vehicle available or announced in the US market. Each vehicle listing includes:
             </p>
             <ul>
               <li>Pricing (MSRP, federal tax credit eligibility, pre-owned values)</li>

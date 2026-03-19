@@ -72,7 +72,7 @@ export default function AccessoriesTab() {
     <>
       <h2 className="section-title">Accessories</h2>
       <p className="section-desc">
-        Curated accessories for 3-row electric SUVs. Shop by vehicle or browse EV must-haves.
+        Curated accessories for 3-row electric vehicles. Shop by vehicle or browse EV must-haves.
       </p>
 
       {/* ── Filter bar ── */}
@@ -131,7 +131,7 @@ export default function AccessoriesTab() {
 
       {/* ── Must-Have section ── */}
       <h3 className="section-title" style={{ fontSize: 18, marginTop: showVehicleSection ? 32 : 0 }}>Must-Have EV Accessories</h3>
-      <p className="section-desc">Top-rated accessories for any 3-row electric SUV.</p>
+      <p className="section-desc">Top-rated accessories for any 3-row electric vehicle.</p>
       <div className="accessories-grid">
         {MUST_HAVES.map(cat => (
           <div key={cat.title} className="accessories-card" data-category={cat.category}>

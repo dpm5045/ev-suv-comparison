@@ -15,7 +15,7 @@ export default function Home() {
         '@type': 'WebSite',
         name: '3-Row EV Comparison Tool',
         url: SITE_URL,
-        description: `Compare ${trimCount} trims across ${vehicleCount} vehicles — pricing, range, charging, cargo & more for every 3-row electric SUV.`,
+        description: `Compare ${trimCount} trims across ${vehicleCount} vehicles — pricing, range, charging, cargo & more for every 3-row electric vehicle.`,
         potentialAction: {
           '@type': 'SearchAction',
           target: `${SITE_URL}/?tab=comparison&q={search_term_string}`,

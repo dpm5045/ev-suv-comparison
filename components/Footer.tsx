@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="footer-col">
             <span className="footer-brand">3-Row EV Comparison</span>
             <p className="footer-tagline">
-              Independent research tool for comparing every 3-row electric SUV and minivan on the market.
+              Independent research tool for comparing every 3-row electric vehicle on the market.
             </p>
           </div>
 

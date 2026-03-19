@@ -55,6 +55,10 @@ function HomeImage() {
         borderRadius: '2px', marginTop: '32px',
       }} />
       <div style={{
+        display: 'flex', fontSize: '22px', color: '#5ba4f5', marginTop: '24px',
+        padding: '10px 28px', border: '2px solid #5ba4f5', borderRadius: '8px',
+      }}>Compare Side by Side →</div>
+      <div style={{
         display: 'flex', fontSize: '18px', color: '#6b7280',
         position: 'absolute', bottom: '30px', right: '40px',
       }}>threerowev.com</div>
