@@ -631,8 +631,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                   data-category={p.id}
                   onClick={() => handlePref(p.id)}
                 >
-                  {isPref1 && <span className="pref-badge">①</span>}
-                  {isPref2 && <span className="pref-badge">②</span>}
+                  {isPref1 && <span className="pref-badge">1</span>}
+                  {isPref2 && <span className="pref-badge">2</span>}
                   {p.label}
                 </button>
               )
