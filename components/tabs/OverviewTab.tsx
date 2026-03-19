@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { DATA } from '@/lib/data'
 import type { InsightFilters } from '../Dashboard'
 import Link from 'next/link'
@@ -309,23 +309,35 @@ function normalizeScores(
   return scores
 }
 
+interface RankResult {
+  ranks: Map<string, number>
+  composites: Map<string, number>
+  normalizedByPref: Map<string, Map<string, number>>
+  effectivePrefs: string[]
+}
+
 function computeRanks(
   summaries: VehicleScorable[],
   pref1: string,
   pref2: string
-): Map<string, number> {
+): RankResult {
   const ranks = new Map<string, number>()
-  if (!pref1 && !pref2) return ranks
+  const compositeMap = new Map<string, number>()
+  const normalizedByPref = new Map<string, Map<string, number>>()
+  const empty: RankResult = { ranks, composites: compositeMap, normalizedByPref, effectivePrefs: [] }
+  if (!pref1 && !pref2) return empty
 
   // Determine effective prefs (excluding sixseat which is a filter)
   const effectivePrefs: string[] = []
   if (pref1 && pref1 !== 'sixseat') effectivePrefs.push(pref1)
   if (pref2 && pref2 !== 'sixseat') effectivePrefs.push(pref2)
 
-  if (!effectivePrefs.length) return ranks
+  if (!effectivePrefs.length) return empty
 
   const scores1 = normalizeScores(summaries, effectivePrefs[0])
+  normalizedByPref.set(effectivePrefs[0], scores1)
   const scores2 = effectivePrefs.length > 1 ? normalizeScores(summaries, effectivePrefs[1]) : null
+  if (scores2) normalizedByPref.set(effectivePrefs[1], scores2)
 
   // Composite score
   const composites: { vehicle: string; score: number }[] = []
@@ -347,9 +359,25 @@ function computeRanks(
   for (let i = 0; i < composites.length; i++) {
     if (i > 0 && composites[i].score < composites[i - 1].score) rank++
     ranks.set(composites[i].vehicle, rank)
+    compositeMap.set(composites[i].vehicle, composites[i].score)
   }
 
-  return ranks
+  return { ranks, composites: compositeMap, normalizedByPref, effectivePrefs }
+}
+
+function formatRawMetric(pref: string, value: number | null): string {
+  if (value === null || value === 0) return '\u2014'
+  switch (pref) {
+    case 'range': return `${Math.round(value)} mi`
+    case 'power': return `${Math.round(value).toLocaleString()} HP`
+    case 'storage': return `${Math.round(value)} cu ft`
+    case 'charging': return `${Math.round(value)} min`
+    case 'selfdriving': {
+      const entry = Object.entries(SELF_DRIVING_TIER_ORDER).find(([, ord]) => ord === value)
+      return entry ? entry[0] : '\u2014'
+    }
+    default: return String(value)
+  }
 }
 
 /* ── component ── */
@@ -466,7 +494,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   }, [filteredDetails, activePref1, activePref2, isPreowned])
 
   /* --- vehicle summaries + budget flags for glance table --- */
-  const { vehicleSummaries, vehiclesInBudget, ranks } = useMemo(() => {
+  const { vehicleSummaries, vehiclesInBudget, ranks, rankResult } = useMemo(() => {
     const d = DATA.details
     const allVehicles = [...new Set(d.map((r) => r.vehicle))].sort()
 
@@ -509,12 +537,14 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
           ? Object.entries(SELF_DRIVING_TIER_ORDER).find(([, ord]) => ord === Math.max(...sdTiers))?.[0] ?? '\u2014'
           : '\u2014',
         hasPreowned: rows.some(hasPreowned),
+        has6Seat: rows.some((r) => r.seats === 6),
       }
     })
 
     // Compute ranks only for vehicles in the filtered set (respects budget + 6-seat filter)
     const scorable = rawSummaries.filter((s) => inBudget.has(s.vehicle))
-    const ranks = computeRanks(scorable, activePref1, activePref2)
+    const rankResult = computeRanks(scorable, activePref1, activePref2)
+    const ranks = rankResult.ranks
 
     // Sort by rank (ranked vehicles first, then alphabetical for unranked)
     const vehicleSummaries = [...rawSummaries].sort((a, b) => {
@@ -526,7 +556,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       return a.vehicle.localeCompare(b.vehicle)
     })
 
-    return { vehicleSummaries, vehiclesInBudget: inBudget, ranks }
+    return { vehicleSummaries, vehiclesInBudget: inBudget, ranks, rankResult }
   }, [filteredDetails, activePref1, activePref2])
 
   /* --- watchlist entries --- */
@@ -666,14 +696,14 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       <div className="card">
         <div className="card-title">Speed Dating Results</div>
         {(activePref1 || activePref2) && (() => {
-          const effectivePrefs: string[] = []
-          if (activePref1 && activePref1 !== 'sixseat') effectivePrefs.push(activePref1)
-          if (activePref2 && activePref2 !== 'sixseat') effectivePrefs.push(activePref2)
-          const prefLabel = (id: string) => PREFERENCE_OPTIONS.find((p) => p.id === id)?.label ?? id
-          if (effectivePrefs.length === 2) {
-            return <p className="count-note" style={{ marginBottom: 8 }}>Ranked by {prefLabel(effectivePrefs[0])} (primary) and {prefLabel(effectivePrefs[1])} (secondary)</p>
-          } else if (effectivePrefs.length === 1) {
-            return <p className="count-note" style={{ marginBottom: 8 }}>Ranked by {prefLabel(effectivePrefs[0])}</p>
+          const allPrefs: string[] = []
+          if (activePref1) allPrefs.push(activePref1)
+          if (activePref2) allPrefs.push(activePref2)
+          const prefLabel = (id: string) => id === 'sixseat' ? '6-Seat availability' : (PREFERENCE_OPTIONS.find((p) => p.id === id)?.label ?? id)
+          if (allPrefs.length === 2) {
+            return <p className="count-note" style={{ marginBottom: 8 }}>Ranked by {prefLabel(allPrefs[0])} (primary) and {prefLabel(allPrefs[1])} (secondary)</p>
+          } else if (allPrefs.length === 1) {
+            return <p className="count-note" style={{ marginBottom: 8 }}>Ranked by {prefLabel(allPrefs[0])}</p>
           }
           return null
         })()}
@@ -694,6 +724,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                   <th className="num">DC 10–80%</th>
                   <th>Self-Driving Tier</th>
                   <th className="num">Behind 3rd Row (cu ft)</th>
+                  <th>6-Seat</th>
                 </tr>
               </thead>
               <tbody>
@@ -726,6 +757,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                       <td className="num">{s.dcChargeMin !== null ? `${s.dcChargeMin} min` : '\u2014'}</td>
                       <td>{s.selfDrivingLabel}</td>
                       <td className="num">{rangeStr(s.cargo3Low, s.cargo3High)}</td>
+                      <td>{s.has6Seat ? 'Yes' : 'No'}</td>
                     </tr>
                   )
                 })}
@@ -803,6 +835,10 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                         <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>{rangeStr(s.cargo3Low, s.cargo3High)} cu ft</span>
                       </div>
                     )}
+                    <div className="cmp-stat">
+                      <span className="cmp-stat-label">6-Seat</span>
+                      <span className="cmp-stat-value">{s.has6Seat ? 'Yes' : 'No'}</span>
+                    </div>
                   </div>
                 </div>
               )
@@ -810,6 +846,103 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
           </div>
         </div>
       </div>
+
+      {/* ── Math Explanation ── */}
+      {rankResult.effectivePrefs.length > 0 && (() => {
+        const prefLabel = (id: string) => PREFERENCE_OPTIONS.find((p) => p.id === id)?.label ?? id
+        const top3 = vehicleSummaries
+          .filter((s) => ranks.get(s.vehicle) !== undefined)
+          .slice(0, 3)
+        if (!top3.length) return null
+        const ep = rankResult.effectivePrefs
+        const hasTwoPrefs = ep.length === 2
+        return (
+          <div className="card math-section">
+            <div className="card-title">How Is The Math Mathing?</div>
+            <p className="count-note" style={{ marginBottom: 12 }}>
+              Each metric is normalized 0&ndash;1 across all vehicles in your budget.
+              {hasTwoPrefs
+                ? ` Your primary pick (${prefLabel(ep[0])}) counts 60%, secondary (${prefLabel(ep[1])}) counts 40%.`
+                : ` Ranked by ${prefLabel(ep[0])} only.`}
+              {(activePref1 === 'sixseat' || activePref2 === 'sixseat') && ' Filtered to 6-seat vehicles only.'}
+            </p>
+
+            {/* Desktop table */}
+            <div className="cmp-table-view">
+              <table className="math-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Vehicle</th>
+                    {ep.map((p) => (
+                      <Fragment key={p}>
+                        <th className="num">{prefLabel(p)}</th>
+                        <th className="num math-sub">Score</th>
+                      </Fragment>
+                    ))}
+                    <th className="num">Composite</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {top3.map((s) => {
+                    const composite = rankResult.composites.get(s.vehicle) ?? 0
+                    return (
+                      <tr key={s.vehicle}>
+                        <td>#{ranks.get(s.vehicle)}</td>
+                        <td><VehicleBadge vehicle={s.vehicle} /></td>
+                        {ep.map((p) => {
+                          const normalized = rankResult.normalizedByPref.get(p)?.get(s.vehicle) ?? 0
+                          const raw = extractMetric(s, p)
+                          return (
+                            <Fragment key={p}>
+                              <td className="num" style={{ color: 'var(--text-muted)' }}>{formatRawMetric(p, raw)}</td>
+                              <td className="num">{normalized.toFixed(2)}</td>
+                            </Fragment>
+                          )
+                        })}
+                        <td className="num math-composite">{composite.toFixed(2)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="cmp-card-view">
+              <div className="math-cards">
+                {top3.map((s) => {
+                  const composite = rankResult.composites.get(s.vehicle) ?? 0
+                  return (
+                    <div key={s.vehicle} className="math-vehicle-card">
+                      <div className="math-vehicle-header">
+                        <span className="rank-badge">#{ranks.get(s.vehicle)}</span>
+                        <VehicleBadge vehicle={s.vehicle} />
+                      </div>
+                      {ep.map((p, i) => {
+                        const normalized = rankResult.normalizedByPref.get(p)?.get(s.vehicle) ?? 0
+                        const raw = extractMetric(s, p)
+                        const weight = hasTwoPrefs ? (i === 0 ? '60%' : '40%') : '100%'
+                        return (
+                          <div key={p} className="math-pref-row">
+                            <span className="math-pref-label">{prefLabel(p)} ({weight})</span>
+                            <span className="math-pref-raw">{formatRawMetric(p, raw)}</span>
+                            <span className="math-pref-score">{normalized.toFixed(2)}</span>
+                          </div>
+                        )
+                      })}
+                      <div className="math-composite-row">
+                        <span>Composite</span>
+                        <span className="math-composite">{composite.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* ── Watchlist ── */}
       <div className="card watchlist-card">
