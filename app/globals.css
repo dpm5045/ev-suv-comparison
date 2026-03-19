@@ -973,6 +973,14 @@ tr[data-clickable='true']:hover td.col-sticky {
   --card-accent: var(--accent);
   --card-tint: rgba(91, 164, 245, 0.06);
 }
+
+/* ── Accessories card tints — light theme ── */
+html[data-theme="light"] .accessories-card[data-category="charging"]     { --card-tint: rgba(180, 83, 9, 0.06); }
+html[data-theme="light"] .accessories-card[data-category="protection"]   { --card-tint: rgba(13, 148, 136, 0.06); }
+html[data-theme="light"] .accessories-card[data-category="organization"] { --card-tint: rgba(22, 163, 74, 0.06); }
+html[data-theme="light"] .accessories-card[data-category="essentials"]   { --card-tint: rgba(234, 88, 12, 0.06); }
+html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --card-tint: rgba(37, 99, 235, 0.06); }
+
 .accessories-cta {
   width: 100%;
   justify-content: center;
@@ -1590,6 +1598,15 @@ tr[data-clickable='true']:hover td.col-sticky {
 .overview-stat[data-category="charging"] { --stat-color: var(--amber);  --stat-glow: rgba(251, 191, 36, 0.08); }
 .overview-stat[data-category="sixseat"]  { --stat-color: var(--purple); --stat-glow: rgba(167, 139, 250, 0.08); }
 .overview-stat[data-category="selfdriving"]  { --stat-color: var(--red);    --stat-glow: rgba(248, 113, 113, 0.08); }
+
+/* ── Overview stat glows — light theme ── */
+html[data-theme="light"] .overview-stat[data-category="count"]       { --stat-glow: rgba(37, 99, 235, 0.08); }
+html[data-theme="light"] .overview-stat[data-category="range"]       { --stat-glow: rgba(13, 148, 136, 0.08); }
+html[data-theme="light"] .overview-stat[data-category="storage"]     { --stat-glow: rgba(22, 163, 74, 0.08); }
+html[data-theme="light"] .overview-stat[data-category="power"]       { --stat-glow: rgba(234, 88, 12, 0.08); }
+html[data-theme="light"] .overview-stat[data-category="charging"]    { --stat-glow: rgba(180, 83, 9, 0.08); }
+html[data-theme="light"] .overview-stat[data-category="sixseat"]     { --stat-glow: rgba(124, 58, 237, 0.08); }
+html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-glow: rgba(220, 38, 38, 0.08); }
 
 .overview-stat-label {
   font-size: 11px;
