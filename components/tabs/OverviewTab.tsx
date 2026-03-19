@@ -54,7 +54,7 @@ const PREOWNED_BUDGET_BUCKETS = [
 const PREFERENCE_OPTIONS = [
   { id: 'range', label: 'Range' },
   { id: 'storage', label: 'Storage' },
-  { id: 'power', label: 'Horsepower' },
+  { id: 'power', label: '0 to 60' },
   { id: 'charging', label: 'Charging Speed' },
   { id: 'selfdriving', label: 'Self-Driving' },
   { id: 'sixseat', label: '6-Seat Options' },
@@ -119,23 +119,24 @@ function tilesForStorage(d: Row[]): Tile[] {
 
 function tilesForPower(d: Row[], isPreowned: boolean): Tile[] {
   const tiles: Tile[] = []
-  const rows = numericRows(d, 'hp')
+  const rows = numericRows(d, 'zero_to_60_sec')
   if (rows.length) {
-    const leader = rows.reduce((a, b) => (a.hp > b.hp ? a : b))
-    tiles.push({ label: 'Most Powerful', value: `${Math.round(leader.hp).toLocaleString()} HP`, detail: `${leader.vehicle} ${leader.trim}` })
+    const fastest = rows.reduce((a, b) => (a.zero_to_60_sec < b.zero_to_60_sec ? a : b))
+    tiles.push({ label: 'Fastest 0-60', value: `${fastest.zero_to_60_sec}s`, detail: `${fastest.vehicle} ${fastest.trim}` })
   }
   if (isPreowned) {
     const withPrice = rows.filter((r) => hasPreowned(r))
     const priced = withPrice.map((r) => ({ ...r, prePrice: parsePrice(r.preowned_range)! })).filter((r) => r.prePrice > 0)
     if (priced.length) {
-      const best = priced.reduce((a, b) => (a.hp / a.prePrice > b.hp / b.prePrice ? a : b))
-      tiles.push({ label: 'Best HP Value', value: `${Math.round(best.hp)} HP`, detail: `${best.vehicle} ${best.trim} \u2014 ~$${Math.round(best.prePrice / 1000)}k pre-owned` })
+      // Best value = lowest (price × 0-60) product — fast AND cheap
+      const best = priced.reduce((a, b) => (a.zero_to_60_sec * a.prePrice < b.zero_to_60_sec * b.prePrice ? a : b))
+      tiles.push({ label: 'Best Speed Value', value: `${best.zero_to_60_sec}s`, detail: `${best.vehicle} ${best.trim} — ~$${Math.round(best.prePrice / 1000)}k pre-owned` })
     }
   } else {
-    const withMsrp = rows.filter((r) => typeof r.msrp === 'number') as (NumRow<'hp'> & { msrp: number })[]
+    const withMsrp = rows.filter((r) => typeof r.msrp === 'number') as (NumRow<'zero_to_60_sec'> & { msrp: number })[]
     if (withMsrp.length) {
-      const best = withMsrp.reduce((a, b) => (a.hp / a.msrp > b.hp / b.msrp ? a : b))
-      tiles.push({ label: 'Best HP Value', value: `${Math.round(best.hp)} HP`, detail: `${best.vehicle} ${best.trim} \u2014 $${Math.round(best.msrp / 1000)}k MSRP` })
+      const best = withMsrp.reduce((a, b) => (a.zero_to_60_sec * a.msrp < b.zero_to_60_sec * b.msrp ? a : b))
+      tiles.push({ label: 'Best Speed Value', value: `${best.zero_to_60_sec}s`, detail: `${best.vehicle} ${best.trim} — $${Math.round(best.msrp / 1000)}k MSRP` })
     }
   }
   return tiles
@@ -257,7 +258,7 @@ const TILE_GENERATORS: Record<string, TileGenerator> = {
 interface VehicleScorable {
   vehicle: string
   rangeHigh: number | null
-  hpHigh: number | null
+  zeroTo60Best: number | null
   cargo3High: number | null
   cargo2High: number | null
   dcChargeMin: number | null
@@ -267,7 +268,7 @@ interface VehicleScorable {
 function extractMetric(s: VehicleScorable, pref: string): number | null {
   switch (pref) {
     case 'range': return s.rangeHigh
-    case 'power': return s.hpHigh
+    case 'power': return s.zeroTo60Best
     case 'storage': return (s.cargo3High !== null && s.cargo3High > 0) ? s.cargo3High : s.cargo2High
     case 'charging': return s.dcChargeMin
     case 'selfdriving': return s.selfDrivingMax
@@ -280,7 +281,7 @@ function normalizeScores(
   pref: string
 ): Map<string, number> {
   const scores = new Map<string, number>()
-  const lowerIsBetter = pref === 'charging'
+  const lowerIsBetter = pref === 'charging' || pref === 'power'
   const values: number[] = []
 
   for (const s of summaries) {
@@ -369,7 +370,7 @@ function formatRawMetric(pref: string, value: number | null): string {
   if (value === null || value === 0) return '\u2014'
   switch (pref) {
     case 'range': return `${Math.round(value)} mi`
-    case 'power': return `${Math.round(value).toLocaleString()} HP`
+    case 'power': return `${value}s`
     case 'storage': return `${Math.round(value)} cu ft`
     case 'charging': return `${Math.round(value)} min`
     case 'selfdriving': {
@@ -505,7 +506,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       const rows = d.filter((r) => r.vehicle === v)
       const msrps = rows.map((r) => r.msrp).filter((x) => typeof x === 'number') as number[]
       const ranges = rows.map((r) => r.range_mi).filter((x) => typeof x === 'number') as number[]
-      const hps = rows.map((r) => r.hp).filter((x) => typeof x === 'number') as number[]
+      const accelTimes = rows.map((r) => r.zero_to_60_sec).filter((x) => typeof x === 'number') as number[]
       const bats = rows.map((r) => r.battery_kwh).filter((x) => typeof x === 'number') as number[]
       const preLows = rows.map((r) => parsePrice(r.preowned_range)).filter((x) => x !== null) as number[]
       const preHighs = rows.map((r) => {
@@ -522,8 +523,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         msrpHigh: msrps.length ? Math.max(...msrps) : null,
         rangeLow: ranges.length ? Math.min(...ranges) : null,
         rangeHigh: ranges.length ? Math.max(...ranges) : null,
-        hpLow: hps.length ? Math.min(...hps) : null,
-        hpHigh: hps.length ? Math.max(...hps) : null,
+        zeroTo60Best: accelTimes.length ? Math.min(...accelTimes) : null,
+        zeroTo60Slowest: accelTimes.length ? Math.max(...accelTimes) : null,
         battery: bats.length ? `${Math.min(...bats)}${Math.min(...bats) !== Math.max(...bats) ? `\u2013${Math.max(...bats)}` : ''}` : '\u2014',
         preLow: preLows.length ? Math.min(...preLows) : null,
         preHigh: preHighs.length ? Math.max(...preHighs) : null,
@@ -717,7 +718,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                   <th className="col-sticky">Vehicle</th>
                   <th className="num">{isPreowned ? 'Pre-Owned Price' : 'MSRP'}</th>
                   <th className="num">Range (mi)</th>
-                  <th className="num">HP</th>
+                  <th className="num">0-60 (s)</th>
                   <th className="num">Battery (kWh)</th>
                   <th className="num">DC 10–80%</th>
                   <th>Self-Driving Tier</th>
@@ -750,7 +751,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                         }
                       </td>
                       <td className="num">{rangeStr(s.rangeLow, s.rangeHigh)}</td>
-                      <td className="num">{rangeStr(s.hpLow, s.hpHigh)}</td>
+                      <td className="num">{s.zeroTo60Best !== null ? `${s.zeroTo60Best}` : '\u2014'}</td>
                       <td className="num">{s.battery}</td>
                       <td className="num">{s.dcChargeMin !== null ? `${s.dcChargeMin} min` : '\u2014'}</td>
                       <td>{s.selfDrivingLabel}</td>
@@ -806,9 +807,9 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                       </span>
                     </div>
                     <div className="cmp-stat">
-                      <span className="cmp-stat-label">HP</span>
+                      <span className="cmp-stat-label">0-60 (s)</span>
                       <span className="cmp-stat-value" style={{ fontFamily: 'var(--mono)' }}>
-                        {rangeStr(s.hpLow, s.hpHigh)}
+                        {s.zeroTo60Best !== null ? `${s.zeroTo60Best}` : '\u2014'}
                       </span>
                     </div>
                     <div className="cmp-stat">
