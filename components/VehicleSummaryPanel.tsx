@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import Link from 'next/link'
-import { toSlug } from '@/lib/slugs'
 import VehicleBadge from './VehicleBadge'
 import SpecSection from './SpecSection'
 
@@ -96,8 +95,8 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
               <div className="detail-vehicle-name">
                 <VehicleBadge vehicle={vehicle} style={{ fontSize: 14, padding: '4px 12px' }} />
               </div>
-              <Link href={`/vehicles/${toSlug(vehicle)}`} className="vsp-fullpage-link">
-                View full page <span aria-hidden="true">↗</span>
+              <Link href={`/?tab=comparison&vehicle=${encodeURIComponent(vehicle)}`} className="vsp-fullpage-link">
+                Compare all trims <span aria-hidden="true">→</span>
               </Link>
             </div>
 
