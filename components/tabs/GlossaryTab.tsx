@@ -49,6 +49,22 @@ const COMMON_NOTATIONS = [
   { notation: 'TBD', meaning: 'Charging connector not yet confirmed by the manufacturer.' },
 ]
 
+const SAE_LEVELS = [
+  { level: 'Level 0', name: 'No Automation', detail: 'Driver does everything. Basic cruise control (no steering assist).' },
+  { level: 'Level 1', name: 'Driver Assistance', detail: 'One function automated — either adaptive cruise control OR lane keeping, but not both simultaneously.' },
+  { level: 'Level 2', name: 'Partial Automation', detail: 'Steering AND speed automated simultaneously, but the driver must monitor and be ready to intervene at all times. All vehicles in our dataset are Level 2.' },
+  { level: 'Level 3', name: 'Conditional Automation', detail: 'The vehicle drives itself in specific conditions. The driver can look away but must take over when the system requests. Only Mercedes DRIVE PILOT (sedan) is certified L3 in the US.' },
+  { level: 'Level 4', name: 'High Automation', detail: 'The vehicle drives itself in defined areas with no human intervention needed. Examples: Waymo robotaxis operating in geofenced cities.' },
+  { level: 'Level 5', name: 'Full Automation', detail: 'The vehicle can drive itself everywhere in all conditions. No steering wheel needed. Does not exist yet.' },
+]
+
+const SELF_DRIVING_TIERS = [
+  { tier: 'Basic L2', detail: 'Adaptive cruise control + lane keeping. Driver must keep hands on wheel and eyes on road at all times. Examples: Kia HDA, Hyundai HDA, Volvo Pilot Assist, Toyota Safety Sense, Mercedes Driver Assistance.' },
+  { tier: 'Advanced L2', detail: 'Adds automated highway lane changes, on/off-ramp handling, or advanced multi-sensor suites beyond basic L2. Still hands-on. Examples: Rivian Driver+, Lucid DreamDrive.' },
+  { tier: 'L2+ Hands-Free', detail: 'Hands-off driving on mapped and geofenced highways. Driver must keep eyes on the road and remain attentive. Example: Cadillac Super Cruise.' },
+  { tier: 'L2+ Point-to-Point', detail: 'City and highway navigation with automated turns, intersections, and lane changes. Driver supervises at all times. Example: Tesla Full Self-Driving.' },
+]
+
 export default function GlossaryTab() {
   const { count_data, count_totals, count_note, glossary } = DATA
 
@@ -58,6 +74,34 @@ export default function GlossaryTab() {
       <p className="section-desc">
         Definitions, charging standards, and notation used throughout the comparison tables.
       </p>
+
+      {/* ── Self-Driving Levels & Tiers ── */}
+      <div className="card">
+        <div className="card-title">Self-Driving Levels &amp; Tiers</div>
+        <p className="section-desc" style={{ marginBottom: '1rem' }}>
+          The SAE J3016 standard defines six levels of driving automation (0–5). Every vehicle in our dataset is Level 2 — but there&apos;s a wide range of capability within that level. We use a four-tier system to distinguish them.
+        </p>
+        <div className="glossary-items">
+          <div style={{ marginBottom: '1rem', fontWeight: 600, color: 'var(--text-muted)', fontSize: 13, letterSpacing: '0.05em' }}>SAE AUTOMATION LEVELS</div>
+          {SAE_LEVELS.map((s) => (
+            <div key={s.level} className="glossary-item">
+              <div className="glossary-field">
+                {s.level} <span className="glossary-full-name">&mdash; {s.name}</span>
+              </div>
+              <div className="glossary-meaning">{s.detail}</div>
+            </div>
+          ))}
+        </div>
+        <div className="glossary-items" style={{ marginTop: '1.5rem' }}>
+          <div style={{ marginBottom: '1rem', fontWeight: 600, color: 'var(--text-muted)', fontSize: 13, letterSpacing: '0.05em' }}>OUR LEVEL 2 TIERS</div>
+          {SELF_DRIVING_TIERS.map((t) => (
+            <div key={t.tier} className="glossary-item">
+              <div className="glossary-field">{t.tier}</div>
+              <div className="glossary-meaning">{t.detail}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* ── Charging Standards Explained ── */}
       <div className="card">
