@@ -682,7 +682,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
 
         {/* Desktop table */}
         <div className="cmp-table-view">
-          <div className="table-wrap">
+          <div className="table-wrap glance-table-wrap">
             <table className="glance-table">
               <thead>
                 <tr>

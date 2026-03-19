@@ -309,6 +309,10 @@ th {
 th.col-sticky {
   text-align: left;
 }
+.glance-table-wrap {
+  height: auto !important;
+  overflow: visible;
+}
 .glance-table th {
   white-space: normal;
   font-size: 14px;
