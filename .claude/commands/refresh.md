@@ -1,6 +1,13 @@
-Run the full 5-phase data refresh for `lib/ev-data.json`. This replaces the API-based pipeline — all research is done in-session using WebSearch/WebFetch.
+Run the full 5-phase data refresh for `lib/ev-data.json`. All research is done in-session using WebSearch/WebFetch.
 
-Process vehicles in batches of 3–4 to keep each phase manageable. Present findings between phases for user review.
+## Mode
+
+- **Default (no arguments):** Autonomous mode — run all 5 phases end-to-end without pausing. Apply changes as each phase completes. Present a single consolidated changelog at the end with one approve/reject decision.
+- **`--interactive`:** Pause after each phase for individual approval (legacy behavior).
+
+Check `$ARGUMENTS` for the `--interactive` flag. If present, follow the "Ask" prompts in each phase. If absent (default), skip all per-phase "Ask" prompts and continue to the next phase.
+
+Process vehicles in batches of 3–4 to keep each phase manageable.
 
 ---
 
@@ -17,7 +24,7 @@ Process vehicles in batches of 3–4 to keep each phase manageable. Present find
 
 Only show rows where the delta is >$2,000.
 
-4. **Ask: "Apply pre-owned pricing updates?"** Only proceed after approval.
+4. **Interactive mode only — Ask: "Apply pre-owned pricing updates?"** In autonomous mode, apply changes and continue.
 
 5. Update BOTH the `details` and `preowned` arrays (they must stay in sync — matching `name` and `preowned_range`).
 
@@ -36,7 +43,7 @@ Only show rows where the delta is >$2,000.
 | Vehicle/Trim | Field | Old Value | New Value | Source |
 |---|---|---|---|---|
 
-5. **Ask: "Apply TBD resolutions?"** Only proceed after approval.
+5. **Interactive mode only — Ask: "Apply TBD resolutions?"** In autonomous mode, apply changes and continue.
 
 6. Only fill fields that are currently TBD — never overwrite existing values. Numeric fields must be numbers, not strings.
 
@@ -62,7 +69,7 @@ Only show rows where the delta is >$2,000.
 
 Only include HIGH-CONFIDENCE corrections. MSRP must be official, not sale price. Range must be EPA-rated.
 
-4. **Ask: "Apply spec corrections?"** Only proceed after approval.
+4. **Interactive mode only — Ask: "Apply spec corrections?"** In autonomous mode, apply changes and continue.
 
 ---
 
@@ -81,7 +88,7 @@ Only include HIGH-CONFIDENCE corrections. MSRP must be official, not sale price.
 
 Only include vehicles with at least "medium" confidence (officially announced with some specs).
 
-5. **Ask: "Add any of these vehicles?"** If user approves, suggest using `/project:add-vehicle <name>` for a thorough addition, OR create skeleton entries with TBD fields for later filling.
+5. **Interactive mode only — Ask: "Add any of these vehicles?"** In autonomous mode, log detected vehicles in the changelog but do NOT auto-add them (adding vehicles requires user judgment on trim selection). Continue to next phase.
 
 ---
 
@@ -107,7 +114,7 @@ Only include vehicles with at least "medium" confidence (officially announced wi
    - `charging_type` format: `"NACS (+CCS adpt)"` or `"CCS1 (+NACS adpt)"`
    - L2 times in hours as decimals
 
-6. **Ask: "Apply gap fills?"** Only proceed after approval.
+6. **Interactive mode only — Ask: "Apply gap fills?"** In autonomous mode, apply changes and continue.
 
 ---
 
@@ -124,15 +131,34 @@ After all 5 phases:
 
 3. **Run validation** via `/project:validate` checks (or `node -e` with the validator).
 
-4. **Present a changelog summary:**
-   - N pre-owned pricing updates
-   - N TBD fields resolved
-   - N spec corrections
-   - N new vehicles detected
-   - N data gaps filled
-   - OTD values recalculated
+4. **Present a consolidated changelog:**
 
-5. **Ask: "Commit these changes?"** If yes, create a checkpoint commit with a descriptive message.
+```
+=== Data Refresh Changelog — YYYY-MM-DD ===
+
+Phase 1 — Pre-owned Pricing: N updates
+Phase 2 — TBD Resolution: N fields resolved
+Phase 3 — Spec Corrections: N corrections
+Phase 4 — New Vehicles: N detected (not auto-added)
+Phase 5 — Gap Filling: N fields filled
+
+Post-processing:
+  - OTD values recalculated
+  - Count totals updated
+  - Validation: X errors, Y warnings
+
+[Full details tables for each phase below]
+```
+
+Include the detailed comparison tables from each phase below the summary.
+
+All 5 phases are always listed, even if a phase found 0 changes.
+
+5. **Ask: "Apply all changes and commit?"**
+   - If approved: create a checkpoint commit with a descriptive message.
+   - If rejected: run `git checkout -- lib/ev-data.json` to revert all changes.
+
+**Error handling:** If a phase fails mid-way (network error, ambiguous data), skip that phase, note the failure in the changelog (e.g., "Phase 3 — Spec Corrections: SKIPPED (network error)"), and continue with remaining phases.
 
 ---
 
