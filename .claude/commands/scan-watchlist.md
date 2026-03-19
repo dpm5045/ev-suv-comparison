@@ -89,12 +89,14 @@ Only include vehicles with at least "Medium" confidence.
 
 3. **Run validation** via `/validate`.
 
-4. **Present a changelog summary:**
+4. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets. If sync fails, warn the user but do not roll back data changes.
+
+5. **Present a changelog summary:**
    - N watchlist specs updated
    - N new vehicles discovered
    - N vehicles graduated to main dataset
 
-5. **Ask: "Commit these changes?"** If yes, create a checkpoint commit.
+6. **Ask: "Commit these changes?"** If yes, create a checkpoint commit.
 
 ---
 

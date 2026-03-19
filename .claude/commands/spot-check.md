@@ -42,3 +42,5 @@ Status values:
    - If `preowned_range` changed, recalculate `otd_preowned` for both low and high: `price * 1.06 + 905`, format as `"$XX,XXX - $XX,XXX"`. Update both the `details` entry and the matching `preowned` entry.
 
 7. Summarize what was changed.
+
+8. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets. If sync fails, warn the user but do not roll back data changes.

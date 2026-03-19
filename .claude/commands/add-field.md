@@ -59,6 +59,13 @@ Add a new spec field to the vehicle dataset across all entries.
 
 14. Report: field added to N entries, M values populated (if research was done), build status.
 
+## Post-Add
+
+After the new field is added and committed:
+
+1. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets.
+2. If sync fails, warn the user but do not roll back data changes.
+
 ## Guardrails
 
 - Never modify existing fields — this command only ADDS a new field.

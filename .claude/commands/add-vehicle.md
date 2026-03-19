@@ -75,6 +75,13 @@ Add a new 3-row electric vehicle to the dataset.
 
 14. Summarize: number of trims added, files modified, any fields left as TBD.
 
+## Post-Add
+
+After the new vehicle is added and committed:
+
+1. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets.
+2. If sync fails, warn the user but do not roll back data changes.
+
 ## Guardrails
 
 - Never hardcode model/vehicle counts — always derive from the data at runtime.

@@ -34,6 +34,13 @@ Only show rows where the delta is significant:
 
 6. Report summary: number of entries updated, average direction of price changes.
 
+## Post-Update
+
+After pricing changes are applied and committed:
+
+1. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets.
+2. If sync fails, warn the user but do not roll back data changes.
+
 ## Important
 
 - The `preowned` array and `details` array must always stay in sync — same `name` field, same `preowned_range` value.
