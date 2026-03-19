@@ -18,3 +18,6 @@ npm-debug.log*
 
 # data refresh dry-run output
 lib/ev-data-preview.json
+
+# Google Sheets credentials
+google-credentials.json
