@@ -39,32 +39,21 @@ const TIER_RANK: Record<string, number> = {
 
 const SECTIONS: SectionDef[] = [
   {
-    title: 'Key Stats',
+    title: 'Pricing',
     metrics: [
       { label: 'MSRP', render: r => fmtMoney(r.msrp).text, rawNum: r => nv(r.msrp), higherIsBetter: false },
       { label: 'Pre-Owned Price', render: r => r.preowned_range || '—' },
-      { label: 'Seats', render: r => r.seats != null ? String(r.seats) : '—' },
+    ],
+  },
+  {
+    title: 'Powertrain & Performance',
+    metrics: [
       { label: 'Drivetrain', render: r => r.drivetrain || '—' },
-      {
-        label: 'EPA Range',
-        render: r => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') },
-        rawNum: r => nv(r.range_mi), higherIsBetter: true,
-      },
       {
         label: 'Horsepower',
         render: r => { const f = fmtNum(r.hp); return f.text + (typeof r.hp === 'number' ? ' hp' : '') },
         rawNum: r => nv(r.hp), higherIsBetter: true,
       },
-      {
-        label: 'Battery',
-        render: r => { const f = fmtNum(r.battery_kwh); return f.text + (typeof r.battery_kwh === 'number' ? ' kWh' : '') },
-        rawNum: r => nv(r.battery_kwh), higherIsBetter: true,
-      },
-    ],
-  },
-  {
-    title: 'Performance',
-    metrics: [
       { label: 'Torque', render: r => typeof r.torque_lb_ft === 'number' ? `${r.torque_lb_ft.toLocaleString()} lb-ft` : (r.torque_lb_ft || '—'), rawNum: r => nv(r.torque_lb_ft), higherIsBetter: true },
       { label: '0–60 mph', render: r => typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec} sec` : (r.zero_to_60_sec || '—'), rawNum: r => nv(r.zero_to_60_sec), higherIsBetter: false },
       { label: 'Curb Weight', render: r => typeof r.curb_weight_lbs === 'number' ? `${r.curb_weight_lbs.toLocaleString()} lbs` : (r.curb_weight_lbs || '—') },
@@ -72,8 +61,18 @@ const SECTIONS: SectionDef[] = [
     ],
   },
   {
-    title: 'Drivetrain & Charging',
+    title: 'Range & Charging',
     metrics: [
+      {
+        label: 'EPA Range',
+        render: r => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') },
+        rawNum: r => nv(r.range_mi), higherIsBetter: true,
+      },
+      {
+        label: 'Battery',
+        render: r => { const f = fmtNum(r.battery_kwh); return f.text + (typeof r.battery_kwh === 'number' ? ' kWh' : '') },
+        rawNum: r => nv(r.battery_kwh), higherIsBetter: true,
+      },
       { label: 'Charging Type', render: r => r.charging_type || '—' },
       { label: 'DC Fast Charge', render: r => typeof r.dc_fast_charge_kw === 'number' ? `${r.dc_fast_charge_kw} kW` : (r.dc_fast_charge_kw || '—'), rawNum: r => nv(r.dc_fast_charge_kw), higherIsBetter: true },
       { label: 'DC 10–80%', render: r => typeof r.dc_fast_charge_10_80_min === 'number' ? `${r.dc_fast_charge_10_80_min} min` : (r.dc_fast_charge_10_80_min || '—'), rawNum: r => nv(r.dc_fast_charge_10_80_min), higherIsBetter: false },
@@ -85,6 +84,7 @@ const SECTIONS: SectionDef[] = [
   {
     title: 'Dimensions',
     metrics: [
+      { label: 'Seats', render: r => r.seats != null ? String(r.seats) : '—' },
       { label: 'Length', render: r => typeof r.length_in === 'number' ? `${r.length_in} in` : (r.length_in || '—') },
       { label: 'Width', render: r => typeof r.width_in === 'number' ? `${r.width_in} in` : (r.width_in || '—') },
       { label: 'Height', render: r => typeof r.height_in === 'number' ? `${r.height_in} in` : (r.height_in || '—') },
@@ -94,7 +94,7 @@ const SECTIONS: SectionDef[] = [
     ],
   },
   {
-    title: 'Technology & Features',
+    title: 'Self-Driving',
     metrics: [
       {
         label: 'Self Driving Tier',
@@ -102,7 +102,13 @@ const SECTIONS: SectionDef[] = [
         rawNum: r => r.self_driving_tier ? (TIER_RANK[r.self_driving_tier] ?? null) : null,
         higherIsBetter: true,
       },
+      { label: 'SAE Level', render: r => r.sae_level != null ? String(r.sae_level) : '—' },
       { label: 'Self Driving System', render: r => r.self_driving || '—' },
+    ],
+  },
+  {
+    title: 'Infotainment',
+    metrics: [
       { label: 'Car Software', render: r => r.car_software || '—' },
       { label: 'Center Display', render: r => r.center_display || '—' },
       { label: 'Gauge Cluster', render: r => r.gauge_cluster || '—' },
