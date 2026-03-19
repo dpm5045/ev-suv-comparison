@@ -27,6 +27,7 @@ export default function DashboardNav({ activeTab }: Props) {
     const params = new URLSearchParams(searchParams.toString())
     params.set('tab', id)
     router.push(`/?${params.toString()}`, { scroll: false })
+    window.scrollTo(0, 0)
     setDrawerOpen(false)
   }
 
