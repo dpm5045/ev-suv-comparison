@@ -34,7 +34,10 @@ Key details:
 - Reads sheet ID from `GOOGLE_SHEET_ID` env var (from `.env.local`)
 - Target sheet/tab name: `"Details"`
 - Values written as-is: numbers stay numbers, nulls become empty cells, strings stay strings
+- Uses a single `values.update` call with the full range (2 API calls total: one clear, one write)
 - Runnable standalone: `npx tsx scripts/sync-sheet.ts`
+- Exits with non-zero code on failure
+- **Graceful no-op**: If `google-credentials.json` or `GOOGLE_SHEET_ID` is missing, the script prints an informational message (e.g., "Google Sheets sync skipped — credentials not configured") and exits with code 0. This ensures data-mutation skills work fine without Google Sheets set up.
 
 ## Skill: `/sync-sheet`
 
@@ -48,13 +51,16 @@ A simple skill that:
 
 ## Integration with Existing Skills
 
-These 5 skills get a new final step — "Run `/sync-sheet` to push updated data to Google Sheets":
+These 6 skills get a new final step — "Run `/sync-sheet` to push updated data to Google Sheets":
 
 - `refresh.md`
 - `add-vehicle.md`
 - `add-field.md`
 - `update-pricing.md`
 - `spot-check.md`
+- `scan-watchlist.md` (can add skeleton detail entries and update counts)
+
+**Excluded**: `validate.md` — read-only, never modifies data.
 
 The sync step runs after all data modifications and validation are complete. If the sync fails, it warns the user but does not roll back data changes — `lib/ev-data.json` remains the source of truth.
 
@@ -63,14 +69,21 @@ The sync step runs after all data modifications and validation are complete. If 
 - **Rows**: One per trim in `DATA.details` (~140 currently)
 - **Columns**: One per `DetailRow` field (~35 currently), using field names as headers
 - **Sync strategy**: Full clear-and-rewrite on each sync (not incremental)
+- **Scope**: Only the `details` array is synced. Other arrays (`preowned`, `glossary`, `assumptions`, `count_data`, `count_totals`) are intentionally excluded — this is a mirror of the Comparison tab only.
 
 ## Git / Security
 
 - `google-credentials.json` → added to `.gitignore` (never committed)
 - `GOOGLE_SHEET_ID` → stored in `.env.local` (already gitignored)
-- `googleapis` → added as a dev dependency only
+- `googleapis` → added as a dev dependency (local-only use — never runs in production/Vercel)
 
 ## Dependencies
 
-- `googleapis` (npm, dev dependency)
+- `googleapis` (npm, dev dependency — local-only use)
 - `tsx` (already available via npx for running .ts scripts)
+
+## Answers to Design Questions
+
+- **Why not a project skill?** A project skill (`.claude/commands/sync-sheet.md`) IS being created as the invocation wrapper. The heavy lifting lives in a proper TypeScript script for testability and standalone use.
+- **Why devDependency?** This script only runs locally by the developer or Claude. It never runs in production (Vercel). If this changes, move to a regular dependency.
+- **Why not sync other arrays?** The user's goal is a spreadsheet backup of the "Full Monty" comparison data. Other arrays serve different purposes and don't need a sheet mirror.
