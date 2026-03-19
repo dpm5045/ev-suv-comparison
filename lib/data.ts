@@ -36,6 +36,8 @@ export interface DetailRow {
   preowned_range: string
   otd_preowned: string
   self_driving: string
+  sae_level: 2 | 3 | 4 | 5 | null
+  self_driving_tier: 'Basic L2' | 'Advanced L2' | 'L2+ Hands-Free' | 'L2+ Point-to-Point' | null
   range_mi: number | string | null
   hp: number | string | null
   battery_kwh: number | string | null
