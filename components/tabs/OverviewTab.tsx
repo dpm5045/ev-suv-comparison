@@ -574,6 +574,27 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
 
   const [expandedVehicle, setExpandedVehicle] = useState<string | null>(null)
 
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme') as 'dark' | 'light' | null
+    if (saved === 'light') setTheme('light')
+  }, [])
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    if (next === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light')
+    } else {
+      document.documentElement.removeAttribute('data-theme')
+    }
+    localStorage.setItem('theme', next)
+    localStorage.setItem('theme-unlocked', 'true')
+    // Dispatch custom event so Header can pick up the unlock
+    window.dispatchEvent(new Event('theme-change'))
+  }
+
   const fmt = (n: number) => Math.round(n).toLocaleString()
   const fmtDollarK = (n: number) => `$${Math.round(n / 1000)}k`
   const rangeStr = (lo: number | null, hi: number | null, unit = '') => {
@@ -611,12 +632,12 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       <div className="overview-hero">
         <h1 className="overview-hero-title">Find Your Perfect 3-Row EV</h1>
         <p className="overview-hero-sub">Compare specs, pricing, and features</p>
-        <div className="overview-hero-image">
+        <div className="overview-hero-image" onClick={toggleTheme} style={{ cursor: 'pointer' }}>
           <picture>
-            <source media="(max-width: 767px)" srcSet="/hero-sketch-mobile.webp" type="image/webp" />
-            <source media="(max-width: 767px)" srcSet="/hero-sketch-mobile.png" type="image/png" />
-            <source srcSet="/hero-sketch-dark.webp" type="image/webp" />
-            <img src="/hero-sketch-dark.png" alt="3-Row EV concept sketch" width={800} height={450} loading="eager" fetchPriority="high" />
+            <source media="(max-width: 767px)" srcSet={theme === 'light' ? '/hero-sketch-light-mobile.webp' : '/hero-sketch-mobile.webp'} type="image/webp" />
+            <source media="(max-width: 767px)" srcSet={theme === 'light' ? '/hero-sketch-light-mobile.png' : '/hero-sketch-mobile.png'} type="image/png" />
+            <source srcSet={theme === 'light' ? '/hero-sketch-light.webp' : '/hero-sketch-dark.webp'} type="image/webp" />
+            <img src={theme === 'light' ? '/hero-sketch-light.png' : '/hero-sketch-dark.png'} alt="3-Row EV concept sketch" width={800} height={450} loading="eager" fetchPriority="high" />
           </picture>
         </div>
       </div>
