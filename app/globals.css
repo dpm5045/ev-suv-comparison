@@ -112,6 +112,7 @@ body {
   right: 32px;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 1;
   background: none;
   border: 1px solid var(--border);
   border-radius: 8px;

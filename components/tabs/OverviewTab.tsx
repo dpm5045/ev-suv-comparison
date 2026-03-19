@@ -577,8 +577,13 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme') as 'dark' | 'light' | null
-    if (saved === 'light') setTheme('light')
+    function sync() {
+      const t = (localStorage.getItem('theme') as 'dark' | 'light') || 'dark'
+      setTheme(t)
+    }
+    sync()
+    window.addEventListener('theme-change', sync)
+    return () => window.removeEventListener('theme-change', sync)
   }, [])
 
   function toggleTheme() {
