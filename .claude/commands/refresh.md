@@ -154,9 +154,9 @@ Include the detailed comparison tables from each phase below the summary.
 
 All 5 phases are always listed, even if a phase found 0 changes.
 
-5. **Ask: "Apply all changes and commit?"**
+5. **Ask: "Commit these changes?"** (In autonomous mode, changes are already applied to disk — this is the single approval gate.)
    - If approved: create a checkpoint commit with a descriptive message.
-   - If rejected: run `git checkout -- lib/ev-data.json` to revert all changes.
+   - If rejected: run `git checkout -- lib/ev-data.json` to revert all phase changes.
 
 **Error handling:** If a phase fails mid-way (network error, ambiguous data), skip that phase, note the failure in the changelog (e.g., "Phase 3 — Spec Corrections: SKIPPED (network error)"), and continue with remaining phases.
 
@@ -165,7 +165,7 @@ All 5 phases are always listed, even if a phase found 0 changes.
 ## Guardrails
 
 - Never hardcode model/vehicle counts — always derive from the data.
-- Protected fields are NEVER modified: `seats`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `cargo_floor_width_in`.
+- Protected fields are NEVER overwritten if they already have a confirmed (non-TBD) value: `seats`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `cargo_floor_width_in`. Phase 5 may fill these if currently null/empty/TBD.
 - The `preowned` and `details` arrays must always stay in sync.
-- Present findings for review BEFORE applying changes in every phase.
+- In interactive mode, present findings for review BEFORE applying changes. In autonomous mode, record findings for the consolidated changelog.
 - For brand-new vehicles with no used market, leave `preowned_range` as `"No meaningful used market yet"`.
