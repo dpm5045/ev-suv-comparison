@@ -467,20 +467,19 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   }, [filteredDetails, activePref1, activePref2, isPreowned])
 
   /* --- vehicle summaries + budget flags for glance table --- */
-  const { vehicleSummaries, vehiclesInBudget } = useMemo(() => {
+  const { vehicleSummaries, vehiclesInBudget, ranks } = useMemo(() => {
     const d = DATA.details
     const allVehicles = [...new Set(d.map((r) => r.vehicle))].sort()
 
     const inBudget = new Set<string>()
     for (const r of filteredDetails) inBudget.add(r.vehicle)
 
-    const vehicleSummaries = allVehicles.map((v) => {
+    const rawSummaries = allVehicles.map((v) => {
       const rows = d.filter((r) => r.vehicle === v)
       const msrps = rows.map((r) => r.msrp).filter((x) => typeof x === 'number') as number[]
       const ranges = rows.map((r) => r.range_mi).filter((x) => typeof x === 'number') as number[]
       const hps = rows.map((r) => r.hp).filter((x) => typeof x === 'number') as number[]
       const bats = rows.map((r) => r.battery_kwh).filter((x) => typeof x === 'number') as number[]
-      const types = [...new Set(rows.map((r) => r.charging_type).filter(Boolean))]
       const preLows = rows.map((r) => parsePrice(r.preowned_range)).filter((x) => x !== null) as number[]
       const preHighs = rows.map((r) => {
         const parts = (r.preowned_range || '').split(/\s*[-\u2013]\s*/)
@@ -488,6 +487,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       }).filter((x) => x !== null) as number[]
       const cargo3s = rows.map((r) => r.cargo_behind_3rd_cu_ft).filter((x) => typeof x === 'number') as number[]
       const cargo2s = rows.map((r) => r.cargo_behind_2nd_cu_ft).filter((x) => typeof x === 'number') as number[]
+      const dcChargeTimes = rows.map((r) => r.dc_fast_charge_10_80_min).filter((x) => typeof x === 'number') as number[]
+      const sdTiers = rows.map((r) => selfDrivingOrdinal(r.self_driving_tier)).filter((x) => x > 0)
       return {
         vehicle: v,
         msrpLow: msrps.length ? Math.min(...msrps) : null,
@@ -497,19 +498,36 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         hpLow: hps.length ? Math.min(...hps) : null,
         hpHigh: hps.length ? Math.max(...hps) : null,
         battery: bats.length ? `${Math.min(...bats)}${Math.min(...bats) !== Math.max(...bats) ? `\u2013${Math.max(...bats)}` : ''}` : '\u2014',
-        charging: types.join(' / ') || '\u2014',
         preLow: preLows.length ? Math.min(...preLows) : null,
         preHigh: preHighs.length ? Math.max(...preHighs) : null,
         cargo3Low: cargo3s.length ? Math.min(...cargo3s) : null,
         cargo3High: cargo3s.length ? Math.max(...cargo3s) : null,
         cargo2Low: cargo2s.length ? Math.min(...cargo2s) : null,
         cargo2High: cargo2s.length ? Math.max(...cargo2s) : null,
+        dcChargeMin: dcChargeTimes.length ? Math.min(...dcChargeTimes) : null,
+        selfDrivingMax: sdTiers.length ? Math.max(...sdTiers) : 0,
+        selfDrivingLabel: sdTiers.length
+          ? Object.entries(SELF_DRIVING_TIER_ORDER).find(([, ord]) => ord === Math.max(...sdTiers))?.[0] ?? '\u2014'
+          : '\u2014',
         hasPreowned: rows.some(hasPreowned),
       }
     })
 
-    return { vehicleSummaries, vehiclesInBudget: inBudget }
-  }, [filteredDetails])
+    // Compute ranks based on active prefs
+    const ranks = computeRanks(rawSummaries as unknown as VehicleSummary[], activePref1, activePref2)
+
+    // Sort by rank (ranked vehicles first, then alphabetical for unranked)
+    const vehicleSummaries = [...rawSummaries].sort((a, b) => {
+      const ra = ranks.get(a.vehicle)
+      const rb = ranks.get(b.vehicle)
+      if (ra !== undefined && rb !== undefined) return ra - rb
+      if (ra !== undefined) return -1
+      if (rb !== undefined) return 1
+      return a.vehicle.localeCompare(b.vehicle)
+    })
+
+    return { vehicleSummaries, vehiclesInBudget: inBudget, ranks }
+  }, [filteredDetails, activePref1, activePref2])
 
   /* --- watchlist entries --- */
   const watchlistEntries = useMemo(() => {
@@ -661,7 +679,6 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                   <th className="num">Range (mi)</th>
                   <th className="num">HP</th>
                   <th className="num">Battery (kWh)</th>
-                  <th>Charge Tech</th>
                   <th className="num">Behind 3rd Row (cu ft)</th>
                   <th className="num">Behind 2nd Row (cu ft)</th>
                 </tr>
@@ -688,7 +705,6 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                       <td className="num">{rangeStr(s.rangeLow, s.rangeHigh)}</td>
                       <td className="num">{rangeStr(s.hpLow, s.hpHigh)}</td>
                       <td className="num">{s.battery}</td>
-                      <td>{s.charging}</td>
                       <td className="num">{rangeStr(s.cargo3Low, s.cargo3High)}</td>
                       <td className="num">{rangeStr(s.cargo2Low, s.cargo2High)}</td>
                     </tr>
@@ -749,10 +765,6 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                         {s.battery} kWh
                       </span>
                     </div>
-                    <div className="cmp-stat" style={{ gridColumn: '1 / -1' }}>
-                      <span className="cmp-stat-label">Charging</span>
-                      <span className="cmp-stat-value">{s.charging}</span>
-                    </div>
                     {s.cargo3Low !== null && (
                       <div className="cmp-stat">
                         <span className="cmp-stat-label">Behind 3rd Row</span>
@@ -777,7 +789,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       <div className="card watchlist-card">
         <div className="card-title">Watchlist</div>
         <p className="count-note" style={{ marginBottom: 16 }}>
-          These 3-row electric SUVs are announced but not yet available in the US market.
+          These 3-row electric vehicles are announced but not yet available in the US market.
         </p>
         <div className="watchlist">
           {watchlistEntries.map((w) => (
