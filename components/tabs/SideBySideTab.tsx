@@ -124,6 +124,7 @@ const SECTIONS: SectionDef[] = [
       { label: 'Frunk', render: r => cargoStr(r.frunk_cu_ft, 'cu ft'), rawNum: r => r.frunk_cu_ft, higherIsBetter: true },
       { label: 'Behind 3rd Row', render: r => cargoStr(r.cargo_behind_3rd_cu_ft, 'cu ft'), rawNum: r => nv(r.cargo_behind_3rd_cu_ft), higherIsBetter: true },
       { label: 'Behind 2nd Row', render: r => cargoStr(r.cargo_behind_2nd_cu_ft, 'cu ft'), rawNum: r => r.cargo_behind_2nd_cu_ft, higherIsBetter: true },
+      { label: 'Behind 1st Row', render: r => cargoStr(r.cargo_behind_1st_cu_ft, 'cu ft'), rawNum: r => nv(r.cargo_behind_1st_cu_ft), higherIsBetter: true },
       { label: 'Fold Flat', render: r => r.fold_flat || '—' },
       { label: 'Floor Width (Wheel Wells)', render: r => cargoStr(r.cargo_floor_width_in, 'in'), rawNum: r => nv(r.cargo_floor_width_in), higherIsBetter: true },
     ],

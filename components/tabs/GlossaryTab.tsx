@@ -77,7 +77,7 @@ const GLOSSARY_SECTIONS: { title: string; fields: string[]; extra?: 'self-drivin
   },
   {
     title: 'Range & Charging',
-    fields: ['EPA/Est Range (mi)', 'Battery (kWh)', 'Charging Type', 'DC Fast Charge (kW)', 'DC Fast Charge 10\u201380%', 'Onboard AC (kW)', 'L2 10\u201380% (hrs.)'],
+    fields: ['EPA/Est Range (mi)', 'Battery (kWh)', 'Charging Type', 'DC Fast Charge (kW)', 'DC Fast Charge 10\u201380%', 'Onboard AC (kW)', 'L2 10\u201380% (hrs.)', 'L2 10\u2013100%'],
     extra: 'charging',
   },
   {

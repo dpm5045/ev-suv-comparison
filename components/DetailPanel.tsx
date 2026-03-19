@@ -111,6 +111,7 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ['Frunk', typeof r.frunk_cu_ft === 'number' ? `${r.frunk_cu_ft} cu ft` : r.frunk_cu_ft],
               ['Behind 3rd Row', typeof r.cargo_behind_3rd_cu_ft === 'number' ? `${r.cargo_behind_3rd_cu_ft} cu ft` : r.cargo_behind_3rd_cu_ft],
               ['Behind 2nd Row', typeof r.cargo_behind_2nd_cu_ft === 'number' ? `${r.cargo_behind_2nd_cu_ft} cu ft` : r.cargo_behind_2nd_cu_ft],
+              ['Behind 1st Row', typeof r.cargo_behind_1st_cu_ft === 'number' ? `${r.cargo_behind_1st_cu_ft} cu ft` : r.cargo_behind_1st_cu_ft],
               ['Fold Flat', r.fold_flat],
               ['Floor Width (Wheel Wells)', typeof r.cargo_floor_width_in === 'number' ? `${r.cargo_floor_width_in} in` : r.cargo_floor_width_in],
             ]} />
