@@ -85,7 +85,7 @@ const GLOSSARY_SECTIONS: { title: string; fields: string[]; extra?: 'self-drivin
     fields: ['Length', 'Width', 'Height', 'Ground Clearance', '3rd Row Legroom', '3rd Row Headroom'],
   },
   {
-    title: 'Technology & Features',
+    title: 'Self-Driving & Tech',
     fields: ['Self Driving', 'SAE Level', 'Self Driving Tier', 'Car Software', 'Center Display', 'Gauge Cluster', 'HUD', 'Other Displays', 'Audio', 'Driver Profiles'],
     extra: 'self-driving',
   },
