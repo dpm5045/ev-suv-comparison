@@ -1,6 +1,6 @@
 {
   "scope": "Scope of Car Models Analyzed: 140 trims were analyzed across seven years & 17 car models.",
-  "count_note": "Notes: Five vehicles are on the Watchlist (not yet available in the US): Toyota Highlander EV, Subaru 3-Row EV, BMW iX7, Genesis GV90, and Tesla Model Y Long (Asia). The Tesla Model Y (3-Row) has a child-sized third row. Rivian R1S Gen1 (2022\u00e2\u20ac\u201c2024) and Gen2 (2025+) models are both included.",
+  "count_note": "Notes: Five vehicles are on the Watchlist (not yet available in the US): Toyota Highlander EV, Subaru 3-Row EV, BMW iX7, Genesis GV90, and Tesla Model Y Long (Asia). The Tesla Model Y (3-Row) has a child-sized third row. Rivian R1S Gen1 (2022â€“2024) and Gen2 (2025+) models are both included.",
   "count_data": [
     {
       "model": "Hyundai IONIQ 9",
@@ -208,9 +208,9 @@
       "trim": "GT-Line",
       "seats": 6,
       "drivetrain": "AWD",
-      "msrp": 73395,
-      "destination": 1495,
-      "otd_new": 80288.4,
+      "msrp": 71900,
+      "destination": 1645,
+      "otd_new": 78862.7,
       "preowned_range": "$52,000 - $56,000",
       "otd_preowned": "$56,025 - $60,265",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
@@ -257,9 +257,9 @@
       "trim": "GT-Line + 2nd Row Relaxation Package",
       "seats": 6,
       "drivetrain": "AWD",
-      "msrp": 73900,
-      "destination": 1495,
-      "otd_new": 80823.7,
+      "msrp": 72405,
+      "destination": 1645,
+      "otd_new": 79398,
       "preowned_range": "$52,000 - $56,000",
       "otd_preowned": "$56,025 - $60,265",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
@@ -307,8 +307,8 @@
       "seats": 6,
       "drivetrain": "AWD",
       "msrp": 68900,
-      "destination": 1495,
-      "otd_new": 75523.7,
+      "destination": 1645,
+      "otd_new": 75682.7,
       "preowned_range": "$47,000 - $53,000",
       "otd_preowned": "$50,725 - $57,085",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
@@ -356,8 +356,8 @@
       "seats": 6,
       "drivetrain": "AWD",
       "msrp": 70400,
-      "destination": 1495,
-      "otd_new": 77113.7,
+      "destination": 1645,
+      "otd_new": 77272.7,
       "preowned_range": "$49,000 - $55,000",
       "otd_preowned": "$52,845 - $59,205",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
@@ -405,8 +405,8 @@
       "seats": 7,
       "drivetrain": "AWD",
       "msrp": 70400,
-      "destination": 1495,
-      "otd_new": 77113.7,
+      "destination": 1645,
+      "otd_new": 77272.7,
       "preowned_range": "$49,000 - $55,000",
       "otd_preowned": "$52,845 - $59,205",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
@@ -454,8 +454,8 @@
       "seats": 7,
       "drivetrain": "AWD",
       "msrp": 63900,
-      "destination": 1495,
-      "otd_new": 70223.7,
+      "destination": 1645,
+      "otd_new": 70382.7,
       "preowned_range": "$44,000 - $51,000",
       "otd_preowned": "$47,545 - $54,965",
       "self_driving": "Kia Highway Driving Assist 2 / Lane Following Assist (ADAS)",
@@ -1103,7 +1103,7 @@
       "seats": 7,
       "drivetrain": "RWD",
       "msrp": 54900,
-      "destination": 1495,
+      "destination": 1645,
       "range_mi": 230,
       "hp": 215,
       "battery_kwh": 76.1,
@@ -1118,7 +1118,7 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
       "cargo_behind_1st_cu_ft": 81.7,
-      "otd_new": 60683.7,
+      "otd_new": 60842.7,
       "towing_lbs": 2000,
       "dc_fast_charge_kw": 235,
       "dc_fast_charge_10_80_min": 20,
@@ -1152,7 +1152,7 @@
       "seats": 6,
       "drivetrain": "RWD",
       "msrp": 57900,
-      "destination": 1495,
+      "destination": 1645,
       "range_mi": 305,
       "hp": 201,
       "battery_kwh": 99.8,
@@ -1167,7 +1167,7 @@
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 41.5,
       "cargo_behind_1st_cu_ft": 81.9,
-      "otd_new": 63863.7,
+      "otd_new": 64022.7,
       "towing_lbs": 2000,
       "dc_fast_charge_kw": 210,
       "dc_fast_charge_10_80_min": 24,
@@ -2239,7 +2239,7 @@
       "other_displays": "",
       "audio": "Rivian Elevation audio",
       "driver_profiles": "User profiles in Rivian account",
-      "notes": "Gen1 platform. Max 149 kWh battery \u00e2\u20ac\u201d 400-mile range.",
+      "notes": "Gen1 platform. Max 149 kWh battery â€” 400-mile range.",
       "frunk_cu_ft": 11.1,
       "cargo_behind_3rd_cu_ft": 17.7,
       "cargo_behind_2nd_cu_ft": 46.7,
@@ -4394,7 +4394,7 @@
       "hud": "No",
       "other_displays": "",
       "audio": "Harman Kardon premium audio, 13 speakers + subwoofer + amp",
-      "driver_profiles": "Yes \u00e2\u20ac\u201d memory seats/mirrors",
+      "driver_profiles": "Yes â€” memory seats/mirrors",
       "notes": "CARFAX groups First Edition used pricing by trim family, so AWD-specific used band is not cleanly separable yet.",
       "frunk_cu_ft": null,
       "cargo_behind_3rd_cu_ft": 18.6,
@@ -4443,7 +4443,7 @@
       "hud": "Yes",
       "other_displays": "",
       "audio": "Harman Kardon premium audio, 13 speakers + subwoofer + amp",
-      "driver_profiles": "Yes \u00e2\u20ac\u201d memory seats/mirrors",
+      "driver_profiles": "Yes â€” memory seats/mirrors",
       "notes": "CARFAX groups Pro S Plus used pricing by trim family, so AWD-specific used band is not cleanly separable yet.",
       "frunk_cu_ft": null,
       "cargo_behind_3rd_cu_ft": 18.6,
@@ -4477,7 +4477,7 @@
       "hud": "No",
       "other_displays": "",
       "audio": "Harman Kardon premium audio, 13 speakers + subwoofer + amp",
-      "driver_profiles": "Yes \u00e2\u20ac\u201d memory seats/mirrors",
+      "driver_profiles": "Yes â€” memory seats/mirrors",
       "frunk_cu_ft": null,
       "fold_flat": "Partial",
       "cargo_floor_width_in": 48.4,
@@ -4526,7 +4526,7 @@
       "hud": "Yes",
       "other_displays": "",
       "audio": "Harman Kardon premium audio, 13 speakers + subwoofer + amp",
-      "driver_profiles": "Yes \u00e2\u20ac\u201d memory seats/mirrors",
+      "driver_profiles": "Yes â€” memory seats/mirrors",
       "frunk_cu_ft": null,
       "fold_flat": "Partial",
       "cargo_floor_width_in": 48.4,
@@ -4575,7 +4575,7 @@
       "hud": "No",
       "other_displays": "",
       "audio": "Harman Kardon premium audio, 13 speakers + subwoofer + amp",
-      "driver_profiles": "Yes \u00e2\u20ac\u201d memory seats/mirrors",
+      "driver_profiles": "Yes â€” memory seats/mirrors",
       "frunk_cu_ft": null,
       "fold_flat": "Partial",
       "cargo_floor_width_in": 48.4,
@@ -7715,7 +7715,7 @@
     {
       "field": "Drivetrain",
       "meaning": "Drive layout and motor configuration",
-      "notes": "RWD (Rear-Wheel Drive) sends power to the rear wheels only \u00e2\u20ac\u201d typically the most efficient layout with the longest range. AWD (All-Wheel Drive) uses two or more motors to power both axles, offering better traction, faster acceleration, and improved regen braking on both axles, at the cost of slightly reduced range. Tri-Motor AWD adds a third motor for even more power and torque distribution."
+      "notes": "RWD (Rear-Wheel Drive) sends power to the rear wheels only â€” typically the most efficient layout with the longest range. AWD (All-Wheel Drive) uses two or more motors to power both axles, offering better traction, faster acceleration, and improved regen braking on both axles, at the cost of slightly reduced range. Tri-Motor AWD adds a third motor for even more power and torque distribution."
     },
     {
       "field": "MSRP ($)",
@@ -7739,7 +7739,7 @@
     },
     {
       "field": "SAE Level",
-      "meaning": "SAE J3016 driving automation level (0\u00e2\u20ac\u201c5)",
+      "meaning": "SAE J3016 driving automation level (0â€“5)",
       "notes": "Level 0 = no automation. Level 1 = one function automated (cruise OR lane keep). Level 2 = steering + speed automated but driver must supervise at all times. Level 3 = car drives in specific conditions, driver can look away. Level 4 = car drives itself in defined areas, no human needed. Level 5 = full automation everywhere. All vehicles in our dataset are currently Level 2."
     },
     {
@@ -7750,7 +7750,7 @@
     {
       "field": "EPA/Est Range (mi)",
       "meaning": "EPA-rated or estimated driving range in miles",
-      "notes": "Uses EPA range where available; otherwise estimated / reported range if EPA data is not yet available. Real-world range is typically 15\u00e2\u20ac\u201c25% lower than the EPA number, especially in cold weather, at highway speeds, or with heavy cargo and climate control use."
+      "notes": "Uses EPA range where available; otherwise estimated / reported range if EPA data is not yet available. Real-world range is typically 15â€“25% lower than the EPA number, especially in cold weather, at highway speeds, or with heavy cargo and climate control use."
     },
     {
       "field": "Horsepower (hp)",
@@ -7768,9 +7768,9 @@
       "notes": "Shows the car's AC charging hardware capability, which affects home / Level 2 charging speed."
     },
     {
-      "field": "L2 10\u00e2\u20ac\u201c80% (hrs.)",
+      "field": "L2 10â€“80% (hrs.)",
       "meaning": "Estimated Level 2 charging time from 10% to 80% in number of hours",
-      "notes": "Derived estimate for the more practical 10%\u00e2\u20ac\u201c80% AC charging window."
+      "notes": "Derived estimate for the more practical 10%â€“80% AC charging window."
     },
     {
       "field": "Charging Type",
@@ -7815,7 +7815,7 @@
     {
       "field": "Frunk Volume (cu ft)",
       "meaning": "The cargo capacity of the front trunk (frunk), measured in cubic feet.",
-      "notes": "A storage compartment under the front hood, made possible by the absence of a combustion engine. Size varies widely \u00e2\u20ac\u201d from minimal (1\u00e2\u20ac\u201c2 cu ft) to large enough for a carry-on suitcase (11+ cu ft)."
+      "notes": "A storage compartment under the front hood, made possible by the absence of a combustion engine. Size varies widely â€” from minimal (1â€“2 cu ft) to large enough for a carry-on suitcase (11+ cu ft)."
     },
     {
       "field": "Behind 3rd Row (cu ft)",
@@ -7863,7 +7863,7 @@
       "notes": "Peak rate achievable at compatible stations (e.g., Supercharger, EA). Actual speed depends on battery state-of-charge and temperature."
     },
     {
-      "field": "DC Fast Charge 10\u00e2\u20ac\u201c80%",
+      "field": "DC Fast Charge 10â€“80%",
       "meaning": "Time to charge from 10% to 80% on a DC fast charger (minutes)",
       "notes": "Measured at or near the vehicle's peak charging rate. Real-world times may vary."
     },
@@ -7908,7 +7908,7 @@
       "notes": "Electric motors deliver peak torque instantly. Relevant for towing and acceleration."
     },
     {
-      "field": "0\u00e2\u20ac\u201c60 mph",
+      "field": "0â€“60 mph",
       "meaning": "Time to accelerate from 0 to 60 miles per hour (seconds)",
       "notes": "Manufacturer-claimed or independently tested. Lower is faster."
     }
