@@ -254,7 +254,7 @@ const TILE_GENERATORS: Record<string, TileGenerator> = {
 
 /* ── scoring engine ── */
 
-type VehicleSummary = {
+interface VehicleScorable {
   vehicle: string
   rangeHigh: number | null
   hpHigh: number | null
@@ -262,14 +262,13 @@ type VehicleSummary = {
   cargo2High: number | null
   dcChargeMin: number | null
   selfDrivingMax: number
-  [key: string]: unknown
 }
 
-function extractMetric(s: VehicleSummary, pref: string): number | null {
+function extractMetric(s: VehicleScorable, pref: string): number | null {
   switch (pref) {
     case 'range': return s.rangeHigh
     case 'power': return s.hpHigh
-    case 'storage': return s.cargo3High ?? s.cargo2High
+    case 'storage': return (s.cargo3High !== null && s.cargo3High > 0) ? s.cargo3High : s.cargo2High
     case 'charging': return s.dcChargeMin
     case 'selfdriving': return s.selfDrivingMax
     default: return null
@@ -277,7 +276,7 @@ function extractMetric(s: VehicleSummary, pref: string): number | null {
 }
 
 function normalizeScores(
-  summaries: VehicleSummary[],
+  summaries: VehicleScorable[],
   pref: string
 ): Map<string, number> {
   const scores = new Map<string, number>()
@@ -311,7 +310,7 @@ function normalizeScores(
 }
 
 function computeRanks(
-  summaries: VehicleSummary[],
+  summaries: VehicleScorable[],
   pref1: string,
   pref2: string
 ): Map<string, number> {
@@ -514,7 +513,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
     })
 
     // Compute ranks based on active prefs
-    const ranks = computeRanks(rawSummaries as unknown as VehicleSummary[], activePref1, activePref2)
+    const ranks = computeRanks(rawSummaries, activePref1, activePref2)
 
     // Sort by rank (ranked vehicles first, then alphabetical for unranked)
     const vehicleSummaries = [...rawSummaries].sort((a, b) => {
