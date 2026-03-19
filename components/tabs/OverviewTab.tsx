@@ -56,6 +56,7 @@ const PREFERENCE_OPTIONS = [
   { id: 'storage', label: 'Storage' },
   { id: 'power', label: 'Horsepower' },
   { id: 'charging', label: 'Charging Speed' },
+  { id: 'selfdriving', label: 'Self-Driving' },
   { id: 'sixseat', label: '6-Seat Options' },
 ] as const
 
@@ -195,6 +196,50 @@ function tilesForSixSeat(d: Row[], isPreowned: boolean): Tile[] {
   return tiles
 }
 
+const SELF_DRIVING_TIER_ORDER: Record<string, number> = {
+  'Basic L2': 1,
+  'Advanced L2': 2,
+  'L2+ Hands-Free': 3,
+  'L2+ Point-to-Point': 4,
+}
+
+function selfDrivingOrdinal(tier: string | null): number {
+  return tier ? (SELF_DRIVING_TIER_ORDER[tier] ?? 0) : 0
+}
+
+function tilesForSelfDriving(d: Row[], isPreowned: boolean): Tile[] {
+  const tiles: Tile[] = []
+  const withTier = d.filter((r) => r.self_driving_tier && selfDrivingOrdinal(r.self_driving_tier) > 0)
+  if (!withTier.length) return tiles
+
+  // Best Self-Driving — highest tier vehicle
+  const best = withTier.reduce((a, b) => selfDrivingOrdinal(a.self_driving_tier) >= selfDrivingOrdinal(b.self_driving_tier) ? a : b)
+  tiles.push({ label: 'Best Self-Driving', value: best.self_driving_tier!, detail: best.vehicle })
+
+  // Best Self-Driving Value — highest tier at lowest price
+  if (isPreowned) {
+    const priced = withTier
+      .filter((r) => hasPreowned(r))
+      .map((r) => ({ ...r, prePrice: parsePrice(r.preowned_range)! }))
+      .filter((r) => r.prePrice > 0)
+    if (priced.length) {
+      const maxTier = Math.max(...priced.map((r) => selfDrivingOrdinal(r.self_driving_tier)))
+      const topTier = priced.filter((r) => selfDrivingOrdinal(r.self_driving_tier) === maxTier)
+      const cheapest = topTier.reduce((a, b) => a.prePrice < b.prePrice ? a : b)
+      tiles.push({ label: 'Best Self-Driving Value', value: cheapest.self_driving_tier!, detail: `${cheapest.vehicle} ${cheapest.trim} \u2014 ~$${Math.round(cheapest.prePrice / 1000)}k pre-owned` })
+    }
+  } else {
+    const withMsrp = withTier.filter((r) => typeof r.msrp === 'number') as (Row & { msrp: number })[]
+    if (withMsrp.length) {
+      const maxTier = Math.max(...withMsrp.map((r) => selfDrivingOrdinal(r.self_driving_tier)))
+      const topTier = withMsrp.filter((r) => selfDrivingOrdinal(r.self_driving_tier) === maxTier)
+      const cheapest = topTier.reduce((a, b) => a.msrp < b.msrp ? a : b)
+      tiles.push({ label: 'Best Self-Driving Value', value: cheapest.self_driving_tier!, detail: `${cheapest.vehicle} ${cheapest.trim} \u2014 $${Math.round(cheapest.msrp / 1000)}k MSRP` })
+    }
+  }
+  return tiles
+}
+
 // Tile generators now receive isPreowned flag
 type TileGenerator = (d: Row[], isPreowned: boolean) => Tile[]
 
@@ -203,6 +248,7 @@ const TILE_GENERATORS: Record<string, TileGenerator> = {
   storage: (d, _ip) => tilesForStorage(d),
   power: tilesForPower,
   charging: tilesForCharging,
+  selfdriving: tilesForSelfDriving,
   sixseat: tilesForSixSeat,
 }
 
@@ -457,16 +503,22 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         <div className="insight-filter-group">
           <span className="insight-filter-label">What Matters Most <span className="insight-filter-hint">(pick 2)</span></span>
           <div className="insight-pills">
-            {PREFERENCE_OPTIONS.map((p) => (
-              <button
-                key={p.id}
-                className={`insight-pill${activePref1 === p.id || activePref2 === p.id ? ' active' : ''}`}
-                data-category={p.id}
-                onClick={() => handlePref(p.id)}
-              >
-                {p.label}
-              </button>
-            ))}
+            {PREFERENCE_OPTIONS.map((p) => {
+              const isPref1 = activePref1 === p.id
+              const isPref2 = activePref2 === p.id
+              return (
+                <button
+                  key={p.id}
+                  className={`insight-pill${isPref1 || isPref2 ? ' active' : ''}`}
+                  data-category={p.id}
+                  onClick={() => handlePref(p.id)}
+                >
+                  {isPref1 && <span className="pref-badge">①</span>}
+                  {isPref2 && <span className="pref-badge">②</span>}
+                  {p.label}
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>
