@@ -65,29 +65,33 @@ const SELF_DRIVING_TIERS = [
   { tier: 'L2+ Point-to-Point', detail: 'City and highway navigation with automated turns, intersections, and lane changes. Driver supervises at all times. Example: Tesla Full Self-Driving.' },
 ]
 
-// Map glossary field names to sections matching the Side-by-Side tab
+// Glossary sections — matches Side-by-Side tab categories
 const GLOSSARY_SECTIONS: { title: string; fields: string[]; extra?: 'self-driving' | 'charging' }[] = [
   {
-    title: 'Key Stats',
-    fields: ['Model Year', 'Trim', 'Seats', 'Drivetrain', 'MSRP ($)', 'Destination ($)', 'Pre-Owned Price Range', 'EPA/Est Range (mi)', 'Horsepower (hp)', 'Battery (kWh)'],
+    title: 'Pricing',
+    fields: ['Model Year', 'Trim', 'MSRP ($)', 'Destination ($)', 'Pre-Owned Price Range'],
   },
   {
-    title: 'Performance',
-    fields: ['Torque', '0\u201360 mph', 'Curb Weight', 'Towing Capacity'],
+    title: 'Powertrain & Performance',
+    fields: ['Drivetrain', 'Horsepower (hp)', 'Torque', '0\u201360 mph', 'Curb Weight', 'Towing Capacity'],
   },
   {
-    title: 'Drivetrain & Charging',
-    fields: ['Charging Type', 'DC Fast Charge (kW)', 'DC Fast Charge 10\u201380%', 'Onboard AC (kW)', 'L2 10\u201380% (hrs.)'],
+    title: 'Range & Charging',
+    fields: ['EPA/Est Range (mi)', 'Battery (kWh)', 'Charging Type', 'DC Fast Charge (kW)', 'DC Fast Charge 10\u201380%', 'Onboard AC (kW)', 'L2 10\u201380% (hrs.)'],
     extra: 'charging',
   },
   {
     title: 'Dimensions',
-    fields: ['Length', 'Width', 'Height', 'Ground Clearance', '3rd Row Legroom', '3rd Row Headroom'],
+    fields: ['Seats', 'Length', 'Width', 'Height', 'Ground Clearance', '3rd Row Legroom', '3rd Row Headroom'],
   },
   {
-    title: 'Self-Driving & Tech',
-    fields: ['Self Driving', 'SAE Level', 'Self Driving Tier', 'Car Software', 'Center Display', 'Gauge Cluster', 'HUD', 'Other Displays', 'Audio', 'Driver Profiles'],
+    title: 'Self-Driving',
+    fields: ['Self Driving', 'SAE Level', 'Self Driving Tier'],
     extra: 'self-driving',
+  },
+  {
+    title: 'Infotainment',
+    fields: ['Car Software', 'Center Display', 'Gauge Cluster', 'HUD', 'Other Displays', 'Audio', 'Driver Profiles'],
   },
   {
     title: 'Cargo & Storage',
