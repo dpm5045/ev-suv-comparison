@@ -35,7 +35,7 @@ Every name in the `preowned` array should have a matching entry in `details`.
 - Every unique `vehicle` value in `details` should have an entry in `VEHICLE_CLASSES`.
 
 ### Data completeness (INFO)
-For each detail entry, count how many of these fields are null/empty/TBD: `onboard_ac_kw`, `l2_10_100`, `l2_10_80`, `charging_type`, `frunk_cu_ft`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `hp`, `battery_kwh`, `range_mi`, `self_driving`, `car_software`, `main_display`. Flag entries with 5+ missing.
+For each detail entry, count how many of these fields are null/empty/TBD: `onboard_ac_kw`, `l2_10_100`, `l2_10_80`, `charging_type`, `frunk_cu_ft`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `hp`, `battery_kwh`, `range_mi`, `self_driving`, `car_software`, `center_display`. Flag entries with 5+ missing.
 
 ### TypeScript build (ERROR if fails)
 Run `npm run build` and report whether it succeeds.

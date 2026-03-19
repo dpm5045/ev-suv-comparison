@@ -118,7 +118,7 @@ export function validateData(data, originalData) {
     'onboard_ac_kw', 'l2_10_100', 'l2_10_80', 'charging_type',
     'frunk_cu_ft', 'cargo_behind_3rd_cu_ft', 'cargo_behind_2nd_cu_ft',
     'cargo_behind_1st_cu_ft', 'fold_flat', 'hp', 'battery_kwh', 'range_mi',
-    'self_driving', 'car_software', 'main_display',
+    'self_driving', 'car_software', 'center_display',
     'sae_level', 'self_driving_tier',
   ]
   for (const row of data.details) {

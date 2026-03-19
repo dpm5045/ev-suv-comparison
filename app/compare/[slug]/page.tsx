@@ -120,7 +120,9 @@ function buildMetrics(a: DetailRow, b: DetailRow): { section: string; metrics: M
       metrics: [
         { label: 'Self Driving', valueA: a.self_driving || '—', valueB: b.self_driving || '—' },
         { label: 'Car Software', valueA: a.car_software || '—', valueB: b.car_software || '—' },
-        { label: 'Main Display', valueA: a.main_display || '—', valueB: b.main_display || '—' },
+        { label: 'Center Display', valueA: a.center_display || '—', valueB: b.center_display || '—' },
+        { label: 'Gauge Cluster', valueA: a.gauge_cluster || '—', valueB: b.gauge_cluster || '—' },
+        { label: 'HUD', valueA: a.hud || '—', valueB: b.hud || '—' },
         { label: 'Audio', valueA: a.audio || '—', valueB: b.audio || '—' },
       ],
     },

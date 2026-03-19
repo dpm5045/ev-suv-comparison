@@ -192,8 +192,10 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
                   ['Self Driving Tier', selectedTrim.self_driving_tier],
                   ['Self Driving', selectedTrim.self_driving],
                   ['Car Software', selectedTrim.car_software],
-                  ['Main Display', selectedTrim.main_display],
-                  ['Additional Displays', selectedTrim.additional_displays],
+                  ['Center Display', selectedTrim.center_display],
+                  ['Gauge Cluster', selectedTrim.gauge_cluster],
+                  ['HUD', selectedTrim.hud],
+                  ['Other Displays', selectedTrim.other_displays],
                   ['Audio', selectedTrim.audio],
                   ['Driver Profiles', selectedTrim.driver_profiles],
                 ]} />

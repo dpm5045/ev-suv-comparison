@@ -46,8 +46,10 @@ export interface DetailRow {
   l2_10_80: number | string | null
   charging_type: string
   car_software: string
-  main_display: string
-  additional_displays: string
+  center_display: string
+  gauge_cluster: string
+  hud: string
+  other_displays: string
   audio: string
   driver_profiles: string
   notes: string

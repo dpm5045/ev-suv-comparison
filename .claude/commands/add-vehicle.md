@@ -21,7 +21,7 @@ Add a new 3-row electric vehicle to the dataset.
    - **Charging**: onboard_ac_kw, l2_10_100, l2_10_80, dc_fast_charge_kw, dc_fast_charge_10_80_min
    - **Dimensions**: length_in, width_in, height_in, ground_clearance_in, third_row_legroom_in, third_row_headroom_in
    - **Cargo**: frunk_cu_ft, cargo_behind_3rd_cu_ft, cargo_behind_2nd_cu_ft, cargo_behind_1st_cu_ft, fold_flat, cargo_floor_width_in
-   - **Tech**: self_driving, car_software, main_display, additional_displays, audio, driver_profiles
+   - **Tech**: self_driving, sae_level, self_driving_tier, car_software, center_display, gauge_cluster, hud, other_displays, audio, driver_profiles
    - **Pricing**: preowned_range (research used market; use "No meaningful used market yet" for unreleased/new vehicles)
    - **Notes**: anything distinctive about the trim
 

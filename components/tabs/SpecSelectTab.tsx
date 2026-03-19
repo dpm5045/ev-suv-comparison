@@ -414,7 +414,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
       },
       {
         key: 'displaySize',
-        label: 'Main Display',
+        label: 'Center Display',
         options: [
           { id: 'under13', label: 'Under 13"' },
           { id: '13to15', label: '13\u201315"' },
@@ -422,7 +422,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
         ],
         test: (r, sel) => {
           if (!sel.length) return true
-          const m = r.main_display.match(/([\d.]+)[""\u201D]/)
+          const m = r.center_display.match(/([\d.]+)[""\u201D]/)
           const size = m ? parseFloat(m[1]) : null
           if (size === null) return false
           return sel.some(id => {
@@ -442,7 +442,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
         ],
         test: (r, sel) => {
           if (!sel.length) return true
-          const ad = (r.additional_displays || '').toLowerCase()
+          const ad = (r.other_displays || '').toLowerCase()
           const hasRear = ad.includes('rear') || ad.includes('entertainment') || ad.includes('tablet') || /\d+[""\u201D]\s*rear/.test(ad)
           return sel.some(id => {
             if (id === 'yes') return hasRear

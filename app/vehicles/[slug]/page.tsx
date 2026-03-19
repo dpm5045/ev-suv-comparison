@@ -145,8 +145,10 @@ export default async function VehiclePage({ params }: Props) {
       rows: [
         { label: 'Self Driving', values: trims.map(r => r.self_driving || '—') },
         { label: 'Car Software', values: trims.map(r => r.car_software || '—') },
-        { label: 'Main Display', values: trims.map(r => r.main_display || '—') },
-        { label: 'Additional Displays', values: trims.map(r => r.additional_displays || '—') },
+        { label: 'Center Display', values: trims.map(r => r.center_display || '—') },
+        { label: 'Gauge Cluster', values: trims.map(r => r.gauge_cluster || '—') },
+        { label: 'HUD', values: trims.map(r => r.hud || '—') },
+        { label: 'Other Displays', values: trims.map(r => r.other_displays || '—') },
         { label: 'Audio', values: trims.map(r => r.audio || '—') },
         { label: 'Driver Profiles', values: trims.map(r => r.driver_profiles || '—') },
       ],

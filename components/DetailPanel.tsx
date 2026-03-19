@@ -91,8 +91,10 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ['Self Driving Tier', r.self_driving_tier],
               ['Self Driving', r.self_driving],
               ['Car Software', r.car_software],
-              ['Main Display', r.main_display],
-              ['Additional Displays', r.additional_displays],
+              ['Center Display', r.center_display],
+              ['Gauge Cluster', r.gauge_cluster],
+              ['HUD', r.hud],
+              ['Other Displays', r.other_displays],
               ['Audio', r.audio],
               ['Driver Profiles', r.driver_profiles],
             ]} />
