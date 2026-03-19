@@ -252,6 +252,107 @@ const TILE_GENERATORS: Record<string, TileGenerator> = {
   sixseat: tilesForSixSeat,
 }
 
+/* ── scoring engine ── */
+
+type VehicleSummary = {
+  vehicle: string
+  rangeHigh: number | null
+  hpHigh: number | null
+  cargo3High: number | null
+  cargo2High: number | null
+  dcChargeMin: number | null
+  selfDrivingMax: number
+  [key: string]: unknown
+}
+
+function extractMetric(s: VehicleSummary, pref: string): number | null {
+  switch (pref) {
+    case 'range': return s.rangeHigh
+    case 'power': return s.hpHigh
+    case 'storage': return s.cargo3High ?? s.cargo2High
+    case 'charging': return s.dcChargeMin
+    case 'selfdriving': return s.selfDrivingMax
+    default: return null
+  }
+}
+
+function normalizeScores(
+  summaries: VehicleSummary[],
+  pref: string
+): Map<string, number> {
+  const scores = new Map<string, number>()
+  const lowerIsBetter = pref === 'charging'
+  const values: number[] = []
+
+  for (const s of summaries) {
+    const v = extractMetric(s, pref)
+    if (v !== null && v !== 0) values.push(v)
+  }
+
+  if (!values.length) return scores
+
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  const spread = max - min
+
+  for (const s of summaries) {
+    const v = extractMetric(s, pref)
+    if (v === null || v === 0) {
+      scores.set(s.vehicle, 0)
+    } else if (spread === 0) {
+      scores.set(s.vehicle, 1)
+    } else {
+      const norm = (v - min) / spread
+      scores.set(s.vehicle, lowerIsBetter ? 1 - norm : norm)
+    }
+  }
+
+  return scores
+}
+
+function computeRanks(
+  summaries: VehicleSummary[],
+  pref1: string,
+  pref2: string
+): Map<string, number> {
+  const ranks = new Map<string, number>()
+  if (!pref1 && !pref2) return ranks
+
+  // Determine effective prefs (excluding sixseat which is a filter)
+  const effectivePrefs: string[] = []
+  if (pref1 && pref1 !== 'sixseat') effectivePrefs.push(pref1)
+  if (pref2 && pref2 !== 'sixseat') effectivePrefs.push(pref2)
+
+  if (!effectivePrefs.length) return ranks
+
+  const scores1 = normalizeScores(summaries, effectivePrefs[0])
+  const scores2 = effectivePrefs.length > 1 ? normalizeScores(summaries, effectivePrefs[1]) : null
+
+  // Composite score
+  const composites: { vehicle: string; score: number }[] = []
+  for (const s of summaries) {
+    const s1 = scores1.get(s.vehicle) ?? 0
+    if (scores2) {
+      const s2 = scores2.get(s.vehicle) ?? 0
+      composites.push({ vehicle: s.vehicle, score: 0.6 * s1 + 0.4 * s2 })
+    } else {
+      composites.push({ vehicle: s.vehicle, score: s1 })
+    }
+  }
+
+  // Sort descending
+  composites.sort((a, b) => b.score - a.score)
+
+  // Dense ranking
+  let rank = 1
+  for (let i = 0; i < composites.length; i++) {
+    if (i > 0 && composites[i].score < composites[i - 1].score) rank++
+    ranks.set(composites[i].vehicle, rank)
+  }
+
+  return ranks
+}
+
 /* ── component ── */
 
 interface OverviewTabProps {
