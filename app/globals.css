@@ -1247,10 +1247,32 @@ tr[data-clickable='true']:hover td.col-sticky {
 .insight-pill.active[data-category="power"]    { background: var(--orange); border-color: var(--orange); }
 .insight-pill.active[data-category="charging"] { background: var(--amber);  border-color: var(--amber); }
 .insight-pill.active[data-category="sixseat"]  { background: var(--purple); border-color: var(--purple); }
+.insight-pill.active[data-category="selfdriving"]  { background: var(--red);    border-color: var(--red); }
+
+.pref-badge {
+  margin-right: 4px;
+  font-size: 14px;
+}
 
 /* Dimmed rows in glance table when outside budget */
 .glance-row-dimmed {
   opacity: 0.35;
+}
+
+.rank-badge {
+  display: inline-block;
+  background: var(--surface3);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  margin-right: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.col-sticky-ranked {
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 600px) {
@@ -1467,6 +1489,7 @@ tr[data-clickable='true']:hover td.col-sticky {
 .overview-stat[data-category="power"]    { --stat-color: var(--orange); --stat-glow: rgba(251, 146, 60, 0.08); }
 .overview-stat[data-category="charging"] { --stat-color: var(--amber);  --stat-glow: rgba(251, 191, 36, 0.08); }
 .overview-stat[data-category="sixseat"]  { --stat-color: var(--purple); --stat-glow: rgba(167, 139, 250, 0.08); }
+.overview-stat[data-category="selfdriving"]  { --stat-color: var(--red);    --stat-glow: rgba(248, 113, 113, 0.08); }
 
 .overview-stat-label {
   font-size: 11px;
