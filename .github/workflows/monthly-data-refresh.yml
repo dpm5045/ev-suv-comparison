@@ -1,4 +1,4 @@
-name: EV Data Refresh Reminder
+name: Bi-Weekly Data Refresh Reminder
 
 on:
   schedule:
@@ -25,16 +25,19 @@ jobs:
               body: [
                 '## Time to refresh EV data',
                 '',
-                'Open Claude Code in the `ev-app` directory and run:',
+                '### Pre-flight',
+                'Run `/project:validate` to check current data state.',
                 '',
-                '```',
-                '/project:refresh',
-                '```',
+                '### Refresh',
+                'Run `/project:refresh` — this runs all 5 phases autonomously and presents a single changelog for review.',
                 '',
-                'This runs the 5-phase data refresh (pre-owned pricing, TBD resolution, spec corrections, new vehicle detection, gap filling) using your Claude Max subscription at no additional API cost.',
+                'If you need more control over individual phases, use `/project:refresh --interactive`.',
+                '',
+                '### Post-flight',
+                'Review the changelog, approve changes, and the commit is created automatically.',
                 '',
                 '---',
-                '*This issue auto-closes in 3 days. Created by [monthly-data-refresh.yml](../../.github/workflows/monthly-data-refresh.yml).*',
+                `*This issue auto-closes in 3 days. Created by [monthly-data-refresh.yml](../../.github/workflows/monthly-data-refresh.yml).*`,
               ].join('\n'),
               labels: ['data-refresh'],
             });
