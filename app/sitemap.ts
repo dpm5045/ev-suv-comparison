@@ -2,7 +2,8 @@ import type { MetadataRoute } from 'next'
 import { SITE_URL, getUniqueVehicles, toSlug, getAllComparisonPairs } from '@/lib/slugs'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date()
+  // Use a fixed date — update when ev-data.json changes meaningfully
+  const now = new Date('2026-03-19')
 
   const pages: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },

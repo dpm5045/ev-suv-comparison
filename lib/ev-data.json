@@ -7458,6 +7458,16 @@
       "notes": "General description of the vehicle's most advanced available hands-free / supervised driving system."
     },
     {
+      "field": "SAE Level",
+      "meaning": "SAE J3016 driving automation level (0–5)",
+      "notes": "Level 0 = no automation. Level 1 = one function automated (cruise OR lane keep). Level 2 = steering + speed automated but driver must supervise at all times. Level 3 = car drives in specific conditions, driver can look away. Level 4 = car drives itself in defined areas, no human needed. Level 5 = full automation everywhere. All vehicles in our dataset are currently Level 2."
+    },
+    {
+      "field": "Self Driving Tier",
+      "meaning": "Capability classification within SAE Level 2",
+      "notes": "Basic L2: adaptive cruise + lane keep, hands-on required. Advanced L2: adds automated lane changes or multi-sensor suites, still hands-on. L2+ Hands-Free: hands-off on mapped highways, eyes-on required. L2+ Point-to-Point: city + highway navigation with automated turns and intersections, driver supervises."
+    },
+    {
       "field": "EPA/Est Range (mi)",
       "meaning": "EPA-rated or estimated driving range in miles",
       "notes": "Uses EPA range where available; otherwise estimated / reported range if EPA data is not yet available. Real-world range is typically 15–25% lower than the EPA number, especially in cold weather, at highway speeds, or with heavy cargo and climate control use."

@@ -417,8 +417,10 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         <p className="overview-hero-sub">Compare specs, pricing, and features</p>
         <div className="overview-hero-image">
           <picture>
-            <source media="(max-width: 767px)" srcSet="/hero-sketch-mobile.png" />
-            <img src="/hero-sketch-dark.png" alt="3-Row EV concept sketch" />
+            <source media="(max-width: 767px)" srcSet="/hero-sketch-mobile.webp" type="image/webp" />
+            <source media="(max-width: 767px)" srcSet="/hero-sketch-mobile.png" type="image/png" />
+            <source srcSet="/hero-sketch-dark.webp" type="image/webp" />
+            <img src="/hero-sketch-dark.png" alt="3-Row EV concept sketch" width={800} height={450} loading="eager" fetchPriority="high" />
           </picture>
         </div>
       </div>

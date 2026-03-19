@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${yearRange} ${vehicle} Specs, Range & Pricing`
   const description = `Compare all ${vehicle} trims${priceRange ? `: pricing from ${priceRange}` : ''}${maxRange ? `, EPA range up to ${maxRange} miles` : ''}. Detailed specs, charging times, and cargo measurements.`
 
+  const ogImage = `/og?type=vehicle&name=${encodeURIComponent(vehicle)}`
   return {
     title,
     description,
@@ -48,7 +49,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: `${SITE_URL}/vehicles/${slug}`,
       type: 'website',
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${vehicle} specs and pricing` }],
     },
+    twitter: { card: 'summary_large_image', images: [ogImage] },
     alternates: { canonical: `${SITE_URL}/vehicles/${slug}` },
   }
 }

@@ -32,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${nameA} vs ${nameB} Comparison`
   const description = `Side-by-side comparison of ${nameA} and ${nameB}: pricing, EPA range, battery, charging, cargo space, and technology features.`
 
+  const ogImage = `/og?type=compare&a=${encodeURIComponent(nameA)}&b=${encodeURIComponent(nameB)}`
   return {
     title,
     description,
@@ -40,7 +41,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: `${SITE_URL}/compare/${slug}`,
       type: 'website',
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${nameA} vs ${nameB}` }],
     },
+    twitter: { card: 'summary_large_image', images: [ogImage] },
     alternates: { canonical: `${SITE_URL}/compare/${slug}` },
   }
 }
@@ -329,6 +332,29 @@ export default async function ComparePage({ params }: Props) {
             Compare specific trims in the Side-by-Side tool &rarr;
           </Link>
         </div>
+        {/* More comparisons for internal linking */}
+        {(() => {
+          const allPairs = getAllComparisonPairs()
+          const related = allPairs.filter(p =>
+            (p.slugA === parsed.slugA || p.slugB === parsed.slugA ||
+             p.slugA === parsed.slugB || p.slugB === parsed.slugB) &&
+            p.slug !== slug
+          ).slice(0, 8)
+          if (!related.length) return null
+          return (
+            <div style={{ marginTop: '2rem' }}>
+              <h2 className="section-title" style={{ fontSize: 18, marginBottom: '0.75rem' }}>More Comparisons</h2>
+              <div className="compare-links" style={{ flexWrap: 'wrap' }}>
+                {related.map(p => (
+                  <Link key={p.slug} href={`/compare/${p.slug}`} className="related-link-card">
+                    <span>{p.nameA} vs {p.nameB}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
+
         <div style={{ marginTop: '1rem' }}>
           <Link href="/" className="back-link">&larr; Back to comparison tool</Link>
         </div>
