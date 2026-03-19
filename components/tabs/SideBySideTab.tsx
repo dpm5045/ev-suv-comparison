@@ -36,7 +36,7 @@ const SECTIONS: SectionDef[] = [
     metrics: [
       { label: 'MSRP', render: r => fmtMoney(r.msrp).text, rawNum: r => nv(r.msrp), higherIsBetter: false },
       { label: 'Pre-Owned Price', render: r => r.preowned_range || '—' },
-      { label: 'Seats', render: r => r.seats != null ? String(r.seats) : '—', rawNum: r => r.seats, higherIsBetter: true },
+      { label: 'Seats', render: r => r.seats != null ? String(r.seats) : '—' },
       { label: 'Drivetrain', render: r => r.drivetrain || '—' },
       {
         label: 'EPA Range',
@@ -60,7 +60,7 @@ const SECTIONS: SectionDef[] = [
     metrics: [
       { label: 'Torque', render: r => typeof r.torque_lb_ft === 'number' ? `${r.torque_lb_ft.toLocaleString()} lb-ft` : (r.torque_lb_ft || '—'), rawNum: r => nv(r.torque_lb_ft), higherIsBetter: true },
       { label: '0–60 mph', render: r => typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec} sec` : (r.zero_to_60_sec || '—'), rawNum: r => nv(r.zero_to_60_sec), higherIsBetter: false },
-      { label: 'Curb Weight', render: r => typeof r.curb_weight_lbs === 'number' ? `${r.curb_weight_lbs.toLocaleString()} lbs` : (r.curb_weight_lbs || '—'), rawNum: r => nv(r.curb_weight_lbs), higherIsBetter: false },
+      { label: 'Curb Weight', render: r => typeof r.curb_weight_lbs === 'number' ? `${r.curb_weight_lbs.toLocaleString()} lbs` : (r.curb_weight_lbs || '—') },
       { label: 'Towing Capacity', render: r => typeof r.towing_lbs === 'number' ? `${r.towing_lbs.toLocaleString()} lbs` : (r.towing_lbs || '—'), rawNum: r => nv(r.towing_lbs), higherIsBetter: true },
     ],
   },
@@ -81,7 +81,7 @@ const SECTIONS: SectionDef[] = [
       { label: 'Length', render: r => typeof r.length_in === 'number' ? `${r.length_in} in` : (r.length_in || '—') },
       { label: 'Width', render: r => typeof r.width_in === 'number' ? `${r.width_in} in` : (r.width_in || '—') },
       { label: 'Height', render: r => typeof r.height_in === 'number' ? `${r.height_in} in` : (r.height_in || '—') },
-      { label: 'Ground Clearance', render: r => typeof r.ground_clearance_in === 'number' ? `${r.ground_clearance_in} in` : (r.ground_clearance_in || '—'), rawNum: r => nv(r.ground_clearance_in), higherIsBetter: true },
+      { label: 'Ground Clearance', render: r => typeof r.ground_clearance_in === 'number' ? `${r.ground_clearance_in} in` : (r.ground_clearance_in || '—') },
       { label: '3rd Row Legroom', render: r => typeof r.third_row_legroom_in === 'number' ? `${r.third_row_legroom_in} in` : (r.third_row_legroom_in || '—'), rawNum: r => nv(r.third_row_legroom_in), higherIsBetter: true },
       { label: '3rd Row Headroom', render: r => typeof r.third_row_headroom_in === 'number' ? `${r.third_row_headroom_in} in` : (r.third_row_headroom_in || '—'), rawNum: r => nv(r.third_row_headroom_in), higherIsBetter: true },
     ],
