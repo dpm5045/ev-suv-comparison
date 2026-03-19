@@ -512,8 +512,9 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       }
     })
 
-    // Compute ranks based on active prefs
-    const ranks = computeRanks(rawSummaries, activePref1, activePref2)
+    // Compute ranks only for vehicles in the filtered set (respects budget + 6-seat filter)
+    const scorable = rawSummaries.filter((s) => inBudget.has(s.vehicle))
+    const ranks = computeRanks(scorable, activePref1, activePref2)
 
     // Sort by rank (ranked vehicles first, then alphabetical for unranked)
     const vehicleSummaries = [...rawSummaries].sort((a, b) => {
