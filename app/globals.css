@@ -412,6 +412,22 @@ tr:hover td {
 .v-bmw { background: #1a1a3a; color: #60a5fa; }
 .v-genesis { background: #2a1a1a; color: #f97316; }
 
+/* ── Vehicle badges — light theme ── */
+html[data-theme="light"] .v-kia { background: #dcfce7; color: #16a34a; }
+html[data-theme="light"] .v-hyundai { background: #dbeafe; color: #2563eb; }
+html[data-theme="light"] .v-lucid { background: #ede9fe; color: #7c3aed; }
+html[data-theme="light"] .v-rivian { background: #ffedd5; color: #ea580c; }
+html[data-theme="light"] .v-tesla { background: #fee2e2; color: #dc2626; }
+html[data-theme="light"] .v-toyota { background: #ccfbf1; color: #0d9488; }
+html[data-theme="light"] .v-vinfast { background: #fef3c7; color: #b45309; }
+html[data-theme="light"] .v-vw { background: #fef9c3; color: #a16207; }
+html[data-theme="light"] .v-volvo { background: #fce7f3; color: #db2777; }
+html[data-theme="light"] .v-cadillac { background: #ede9fe; color: #7c3aed; }
+html[data-theme="light"] .v-mercedes { background: #f4f4f5; color: #52525b; }
+html[data-theme="light"] .v-subaru { background: #d1fae5; color: #059669; }
+html[data-theme="light"] .v-bmw { background: #dbeafe; color: #2563eb; }
+html[data-theme="light"] .v-genesis { background: #ffedd5; color: #ea580c; }
+
 /* ── Watchlist ── */
 .watchlist-card {
   border-left: 3px solid var(--accent);
