@@ -885,7 +885,7 @@ tr[data-clickable='true']:hover td.col-sticky {
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(42, 51, 71, 0.5);
+  border-bottom: 1px solid var(--border);
   font-size: 16px;
 }
 .detail-row-label {
@@ -1910,7 +1910,7 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
 }
 .sbs-table td {
   padding: 10px 16px;
-  border-bottom: 1px solid rgba(42, 51, 71, 0.5);
+  border-bottom: 1px solid var(--border);
   vertical-align: top;
   color: var(--text);
   font-size: 15px;
@@ -2006,7 +2006,7 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   align-items: center;
   gap: 8px;
   padding: 5px 0;
-  border-bottom: 1px solid rgba(42, 51, 71, 0.4);
+  border-bottom: 1px solid var(--border);
 }
 .sbs-mobile-row:last-child { border-bottom: none; }
 .sbs-mobile-val {
@@ -2484,7 +2484,7 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
 .vehicle-cta-section {
   margin-top: 2rem;
   padding: 1.5rem;
-  background: var(--bg-card);
+  background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 12px;
 }
