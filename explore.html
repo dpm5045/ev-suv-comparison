@@ -250,6 +250,7 @@
 
     async function loadData() {
       const res = await fetch("lib/ev-data.json");
+      if (!res.ok) throw new Error(`Failed to load data: ${res.status}`);
       const raw = await res.json();
       const details = raw.details
         .filter(d => !WATCHLIST.includes(d.vehicle))
@@ -382,6 +383,138 @@
       });
     }
 
+    // ── Section 1: Value Analysis Charts ─────────────────────────────
+
+    function chart1_1(data) {
+      const container = chartCard("value", {
+        title: "MSRP vs. Range",
+        insight: "Who gives you the most miles per dollar?",
+      });
+      const filtered = data.filter(d => d.msrp != null && d.range_mi != null);
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 500,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "MSRP ($)", tickFormat: d3.format("$,.0f") },
+        y: { label: "Range (miles)" },
+        color: { domain: [...new Set(filtered.map(d => d.vehicle))].sort(), range: [...new Set(filtered.map(d => d.vehicle))].sort().map(v => VEHICLE_COLORS[v] || "#888") },
+        r: { domain: d3.extent(filtered, d => d.battery_kwh), range: [4, 18] },
+        marks: [
+          Plot.dot(filtered, {
+            x: "msrp", y: "range_mi", fill: "vehicle", r: "battery_kwh",
+            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n$${d3.format(",")(d.msrp)} | ${d.range_mi} mi | ${d.battery_kwh} kWh`,
+          }),
+          Plot.ruleY([0]),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    function chart1_2(data) {
+      const container = chartCard("value", {
+        title: "MSRP vs. Horsepower",
+        insight: "Performance per dollar across the segment.",
+      });
+      const filtered = data.filter(d => d.msrp != null && d.hp != null);
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 500,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "MSRP ($)", tickFormat: d3.format("$,.0f") },
+        y: { label: "Horsepower" },
+        color: { domain: [...new Set(filtered.map(d => d.vehicle))].sort(), range: [...new Set(filtered.map(d => d.vehicle))].sort().map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.dot(filtered, {
+            x: "msrp", y: "hp", fill: "vehicle", r: 6,
+            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n$${d3.format(",")(d.msrp)} | ${d.hp} hp`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    function chart1_3(data) {
+      const container = chartCard("value", {
+        title: "MSRP vs. Cargo (Behind 2nd Row)",
+        insight: "Practicality per dollar.",
+      });
+      const filtered = data.filter(d => d.msrp != null && d.cargo_behind_2nd_cu_ft != null);
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 500,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "MSRP ($)", tickFormat: d3.format("$,.0f") },
+        y: { label: "Cargo behind 2nd row (cu ft)" },
+        color: { domain: [...new Set(filtered.map(d => d.vehicle))].sort(), range: [...new Set(filtered.map(d => d.vehicle))].sort().map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.dot(filtered, {
+            x: "msrp", y: "cargo_behind_2nd_cu_ft", fill: "vehicle", r: 6,
+            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n$${d3.format(",")(d.msrp)} | ${d.cargo_behind_2nd_cu_ft} cu ft`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    function chart1_4(data) {
+      const container = chartCard("value", {
+        title: "MSRP vs. Self-Driving Tier",
+        insight: "Does paying more get you better autonomy, or do some vehicles punch above their price class?",
+      });
+      const filtered = data.filter(d => d.msrp != null && d.self_driving_score != null);
+      const tierLabels = Object.entries(SELF_DRIVING_TIERS);
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 400,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "MSRP ($)", tickFormat: d3.format("$,.0f") },
+        y: {
+          label: "Self-Driving Tier",
+          domain: [2.0, 2.5],
+          ticks: tierLabels.map(([, v]) => v),
+          tickFormat: v => tierLabels.find(([, n]) => n === v)?.[0] ?? "",
+        },
+        color: { domain: [...new Set(filtered.map(d => d.vehicle))].sort(), range: [...new Set(filtered.map(d => d.vehicle))].sort().map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.dot(filtered, {
+            x: "msrp", y: "self_driving_score", fill: "vehicle", r: 7,
+            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n$${d3.format(",")(d.msrp)} | ${d.self_driving_tier}`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    function chart1_5(data) {
+      const container = chartCard("value", {
+        title: "OTD New Price Spread by Vehicle",
+        insight: "Which models span a wide price range vs. are tightly clustered?",
+      });
+      const filtered = data.filter(d => d.otd_new != null);
+      const medians = d3.rollup(filtered, v => d3.median(v, d => d.otd_new), d => d.vehicle);
+      const sortedVehicles = [...medians.entries()].sort((a, b) => a[1] - b[1]).map(d => d[0]);
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 400,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "OTD New Price ($)", tickFormat: d3.format("$,.0f") },
+        y: { label: null, domain: sortedVehicles },
+        color: { domain: sortedVehicles, range: sortedVehicles.map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.dot(filtered, {
+            x: "otd_new", y: "vehicle", fill: "vehicle", r: 5,
+            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\nOTD: $${d3.format(",")(Math.round(d.otd_new))}`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
     // ── Main ───────────────────────────────────────────────────────────
 
     async function main() {
@@ -390,15 +523,23 @@
 
       function renderCharts(filtered) {
         clearCharts();
-        console.log(`Rendering ${filtered.length} trims`);
-        // Chart rendering will be added in subsequent tasks
+        // Section 1: Value Analysis
+        chart1_1(filtered);
+        chart1_2(filtered);
+        chart1_3(filtered);
+        chart1_4(filtered);
+        chart1_5(filtered);
       }
 
       wireFilters(data, renderCharts);
       renderCharts(data); // initial render
     }
 
-    main();
+    main().catch(err => {
+      console.error(err);
+      document.querySelector(".content").innerHTML =
+        `<p style="color:#f87171;padding:2rem;">Error loading data: ${err.message}</p>`;
+    });
   </script>
 </head>
 <body>
