@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EV Data Explorer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: #16162a;
+      padding: 1.5rem 1rem;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      color: #e0e0e0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #a0a0c0;
+      text-decoration: none;
+      padding: 0.5rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+    }
+
+    .sidebar a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .content {
+      padding: 1.5rem 2rem;
+      max-width: 1200px;
+    }
+
+    .filters {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #1a1a2e;
+      padding: 1rem 0;
+      border-bottom: 1px solid #2a2a4e;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    section h2 {
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .chart-card {
+      background: #22223a;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      color: #e0e0e0;
+    }
+
+    .chart-card .insight {
+      color: #8888aa;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: #2a2a4e;
+      border: 1px solid #4a4a6e;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #a0a0c0;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-btn {
+      background: #22223a;
+      color: #e0e0e0;
+      border: 1px solid #4a4a6e;
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .dropdown-btn:hover {
+      border-color: #6a6a8e;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: #22223a;
+      border: 1px solid #4a4a6e;
+      border-radius: 4px;
+      padding: 8px;
+      min-width: 250px;
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    .dropdown.open .dropdown-content {
+      display: block;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 0;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .select-all-btn {
+      background: none;
+      border: none;
+      color: #5ba4f5;
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 4px 0;
+      margin-bottom: 4px;
+    }
+
+    .select-all-btn:hover {
+      text-decoration: underline;
+    }
+
+    #year-select {
+      background: #22223a;
+      color: #e0e0e0;
+      border: 1px solid #4a4a6e;
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    #year-select:hover {
+      border-color: #6a6a8e;
+    }
+  </style>
+  <script type="module">
+    import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    window.Plot = Plot;
+    window.d3 = d3;
+    console.log("Plot and D3 loaded", Plot.version, d3.version);
+
+    // ── Task 2: Constants ──────────────────────────────────────────────
+
+    const VEHICLE_COLORS = {
+      "Kia EV9":               "#4ade80",
+      "Hyundai IONIQ 9":       "#5ba4f5",
+      "Lucid Gravity":         "#a78bfa",
+      "Rivian R1S":            "#fb923c",
+      "Tesla Model X":         "#f87171",
+      "Tesla Model Y (3-Row)": "#f87171",
+      "Volkswagen ID. Buzz":   "#fbbf24",
+      "VinFast VF9":           "#f59e0b",
+      "Volvo EX90":            "#f472b6",
+      "Cadillac Escalade IQ":  "#a78bfa",
+      "Cadillac VISTIQ":       "#c084fc",
+      "Mercedes-Benz EQS SUV": "#d4d4d8",
+    };
+
+    const WATCHLIST = [
+      "Subaru 3-Row EV",
+      "BMW iX7",
+      "Genesis GV90",
+      "Toyota Highlander EV",
+      "Tesla Model Y Long (Asia)",
+    ];
+
+    const SELF_DRIVING_TIERS = {
+      "Basic L2":           2.1,
+      "Advanced L2":        2.2,
+      "L2+ Hands-Free":     2.3,
+      "L2+ Point-to-Point": 2.4,
+    };
+
+    const NUMERIC_FIELDS = [
+      "msrp", "otd_new", "range_mi", "hp", "battery_kwh", "towing_lbs",
+      "dc_fast_charge_kw", "dc_fast_charge_10_80_min", "curb_weight_lbs",
+      "length_in", "width_in", "height_in", "third_row_legroom_in",
+      "third_row_headroom_in", "torque_lb_ft", "zero_to_60_sec",
+      "ground_clearance_in", "cargo_behind_3rd_cu_ft", "cargo_behind_2nd_cu_ft",
+      "cargo_behind_1st_cu_ft", "cargo_floor_width_in", "frunk_cu_ft",
+      "onboard_ac_kw", "l2_10_100", "l2_10_80", "destination",
+    ];
+
+    // ── Task 2: Data Loading ───────────────────────────────────────────
+
+    async function loadData() {
+      const res = await fetch("lib/ev-data.json");
+      const raw = await res.json();
+      const details = raw.details
+        .filter(d => !WATCHLIST.includes(d.vehicle))
+        .map(d => {
+          const row = { ...d };
+          for (const f of NUMERIC_FIELDS) {
+            const v = Number(row[f]);
+            row[f] = Number.isNaN(v) ? null : v;
+          }
+          row.self_driving_score = SELF_DRIVING_TIERS[row.self_driving_tier] ?? null;
+          return row;
+        });
+      return details;
+    }
+
+    // ── Task 3: Global Filters ─────────────────────────────────────────
+
+    function buildFilters(data) {
+      const vehicles = [...new Set(data.map(d => d.vehicle))].sort();
+      const years = [...new Set(data.map(d => d.year))].sort();
+      const filtersEl = document.getElementById("filters");
+
+      // Vehicle multi-select as checkboxes in a dropdown
+      const vehicleDiv = document.createElement("div");
+      vehicleDiv.className = "filter-group";
+      vehicleDiv.innerHTML = `
+        <label>Vehicles</label>
+        <div class="dropdown">
+          <button class="dropdown-btn" id="vehicle-btn">All Vehicles ▼</button>
+          <div class="dropdown-content" id="vehicle-dropdown">
+            <button class="select-all-btn" id="vehicle-select-all">Select All</button>
+            ${vehicles.map(v => `
+              <label class="checkbox-label">
+                <input type="checkbox" value="${v}" checked>
+                <span class="color-dot" style="background:${VEHICLE_COLORS[v] || '#888'}"></span>
+                ${v}
+              </label>
+            `).join("")}
+          </div>
+        </div>
+      `;
+      filtersEl.appendChild(vehicleDiv);
+
+      // Year dropdown
+      const yearDiv = document.createElement("div");
+      yearDiv.className = "filter-group";
+      yearDiv.innerHTML = `
+        <label>Year</label>
+        <select id="year-select">
+          <option value="all">All Years</option>
+          ${years.map(y => `<option value="${y}">${y}</option>`).join("")}
+        </select>
+      `;
+      filtersEl.appendChild(yearDiv);
+    }
+
+    function getFilteredData(data) {
+      const checkboxes = document.querySelectorAll("#vehicle-dropdown input[type=checkbox]");
+      const selectedVehicles = new Set([...checkboxes].filter(c => c.checked).map(c => c.value));
+      const yearVal = document.getElementById("year-select").value;
+
+      return data.filter(d => {
+        if (!selectedVehicles.has(d.vehicle)) return false;
+        if (yearVal !== "all" && d.year !== Number(yearVal)) return false;
+        return true;
+      });
+    }
+
+    function wireFilters(data, renderCharts) {
+      const btn = document.getElementById("vehicle-btn");
+      const dropdown = btn.closest(".dropdown");
+      btn.addEventListener("click", () => dropdown.classList.toggle("open"));
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) dropdown.classList.remove("open");
+      });
+
+      document.getElementById("vehicle-select-all").addEventListener("click", () => {
+        const boxes = document.querySelectorAll("#vehicle-dropdown input[type=checkbox]");
+        const allChecked = [...boxes].every(c => c.checked);
+        boxes.forEach(c => c.checked = !allChecked);
+        updateVehicleButtonLabel();
+        renderCharts(getFilteredData(data));
+      });
+
+      document.querySelectorAll("#vehicle-dropdown input[type=checkbox]").forEach(cb => {
+        cb.addEventListener("change", () => {
+          updateVehicleButtonLabel();
+          renderCharts(getFilteredData(data));
+        });
+      });
+
+      document.getElementById("year-select").addEventListener("change", () => {
+        renderCharts(getFilteredData(data));
+      });
+    }
+
+    function updateVehicleButtonLabel() {
+      const boxes = document.querySelectorAll("#vehicle-dropdown input[type=checkbox]");
+      const checked = [...boxes].filter(c => c.checked);
+      const btn = document.getElementById("vehicle-btn");
+      if (checked.length === boxes.length) btn.textContent = "All Vehicles ▼";
+      else if (checked.length === 0) btn.textContent = "None Selected ▼";
+      else if (checked.length <= 2) btn.textContent = checked.map(c => c.value.split(" ")[0]).join(", ") + " ▼";
+      else btn.textContent = `${checked.length} Vehicles ▼`;
+    }
+
+    // ── Task 4: Chart Helpers ──────────────────────────────────────────
+
+    function chartCard(sectionId, { title, insight }) {
+      const section = document.getElementById(sectionId);
+      const card = document.createElement("div");
+      card.className = "chart-card";
+      card.innerHTML = `<h3>${title}</h3><div class="chart-container"></div><p class="insight">${insight}</p>`;
+      section.appendChild(card);
+      return card.querySelector(".chart-container");
+    }
+
+    function clearCharts() {
+      document.querySelectorAll(".chart-card").forEach(c => c.remove());
+    }
+
+    function vehicleColorScale(data) {
+      const vehicles = [...new Set(data.map(d => d.vehicle))].sort();
+      return Plot.scale({
+        color: {
+          type: "categorical",
+          domain: vehicles,
+          range: vehicles.map(v => VEHICLE_COLORS[v] || "#888"),
+        }
+      });
+    }
+
+    // ── Main ───────────────────────────────────────────────────────────
+
+    async function main() {
+      const data = await loadData();
+      buildFilters(data);
+
+      function renderCharts(filtered) {
+        clearCharts();
+        console.log(`Rendering ${filtered.length} trims`);
+        // Chart rendering will be added in subsequent tasks
+      }
+
+      wireFilters(data, renderCharts);
+      renderCharts(data); // initial render
+    }
+
+    main();
+  </script>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      <h2>EV Explorer</h2>
+      <a href="#value">Value Analysis</a>
+      <a href="#market">Market Evolution</a>
+      <a href="#size">Size & Practicality</a>
+      <a href="#charging">Charging & Efficiency</a>
+    </nav>
+    <main class="content">
+      <div class="filters" id="filters">
+        <!-- filters added by JS -->
+      </div>
+      <section id="value"><h2>Section 1: Value Analysis</h2></section>
+      <section id="market"><h2>Section 2: Market Evolution</h2></section>
+      <section id="size"><h2>Section 3: Size & Practicality</h2></section>
+      <section id="charging"><h2>Section 4: Charging & Efficiency</h2></section>
+    </main>
+  </div>
+</body>
+</html>
