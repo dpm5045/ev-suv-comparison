@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EV Data Explorer</title>
   <style>
+    html { scroll-behavior: smooth; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -68,6 +69,7 @@
 
     section {
       margin-bottom: 3rem;
+      scroll-margin-top: 80px;
     }
 
     section h2 {
@@ -196,6 +198,11 @@
     #year-select:hover {
       border-color: #6a6a8e;
     }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 0.75rem 0; }
+    .legend-item { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; color: #a0a0c0; }
+
+    .sidebar a.active { color: #fff; border-left: 2px solid #5ba4f5; padding-left: calc(1rem - 2px); }
   </style>
   <script type="module">
     import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
@@ -737,14 +744,52 @@
       container.appendChild(plot);
     }
 
+    // ── Polish: Legend ─────────────────────────────────────────────────
+
+    function renderLegend(data) {
+      let legend = document.getElementById("legend");
+      if (!legend) {
+        legend = document.createElement("div");
+        legend.id = "legend";
+        legend.className = "legend";
+        document.querySelector(".filters").after(legend);
+      }
+      const vehicles = [...new Set(data.map(d => d.vehicle))].sort();
+      legend.innerHTML = vehicles.map(v =>
+        `<span class="legend-item"><span class="color-dot" style="background:${VEHICLE_COLORS[v] || '#888'}"></span>${v}</span>`
+      ).join("");
+    }
+
+    // ── Polish: Scroll Spy ──────────────────────────────────────────────
+
+    function setupScrollSpy() {
+      const sections = document.querySelectorAll("main section");
+      const navLinks = document.querySelectorAll(".sidebar a");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(a => a.classList.remove("active"));
+            const active = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`);
+            if (active) active.classList.add("active");
+          }
+        });
+      }, { rootMargin: "-20% 0px -80% 0px" });
+      sections.forEach(s => observer.observe(s));
+    }
+
     // ── Main ───────────────────────────────────────────────────────────
 
     async function main() {
+      document.querySelector(".content").insertAdjacentHTML("afterbegin",
+        '<div id="loading" style="text-align:center;padding:4rem;color:#8888aa;">Loading data...</div>');
+
       const data = await loadData();
+      document.getElementById("loading")?.remove();
       buildFilters(data);
 
       function renderCharts(filtered) {
         clearCharts();
+        renderLegend(filtered);
         // Section 1: Value Analysis
         chart1_1(filtered);
         chart1_2(filtered);
@@ -765,6 +810,7 @@
 
       wireFilters(data, renderCharts);
       renderCharts(data); // initial render
+      setupScrollSpy();
     }
 
     main().catch(err => {
