@@ -2034,7 +2034,7 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
     align-items: center;
     gap: 12px;
     order: 3;
-    margin-left: 0;
+    margin-left: auto;
   }
   .theme-toggle {
     position: static;
