@@ -707,10 +707,10 @@ tr[data-clickable='true'] {
   cursor: pointer;
 }
 tr[data-clickable='true']:hover td {
-  background: var(--accent-glow);
+  background: var(--surface2);
 }
 tr[data-clickable='true']:hover td.col-sticky {
-  background: var(--accent-glow);
+  background: var(--surface2);
 }
 
 /* ── Detail panel ── */
