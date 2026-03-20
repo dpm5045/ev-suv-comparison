@@ -515,6 +515,228 @@
       container.appendChild(plot);
     }
 
+    // ── Section 2: Market Evolution Charts ─────────────────────────────
+
+    function chart2_1(data) {
+      const container = chartCard("market", {
+        title: "Average MSRP by Vehicle Over Model Years",
+        insight: "Who's getting cheaper? Who's climbing?",
+      });
+      const filtered = data.filter(d => d.msrp != null && d.year != null);
+      const grouped = d3.flatRollup(
+        filtered,
+        v => d3.mean(v, d => d.msrp),
+        d => d.vehicle,
+        d => d.year,
+      ).map(([vehicle, year, avg]) => ({ vehicle, year, avg }));
+
+      const vehicles = [...new Set(grouped.map(d => d.vehicle))].sort();
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 500,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "Model Year", tickFormat: d3.format("d") },
+        y: { label: "Average MSRP ($)", tickFormat: d3.format("$,.0f") },
+        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.line(grouped, { x: "year", y: "avg", stroke: "vehicle", strokeWidth: 2, tip: true }),
+          Plot.dot(grouped, {
+            x: "year", y: "avg", fill: "vehicle", r: 4,
+            tip: true, title: d => `${d.vehicle} ${d.year}\nAvg MSRP: $${d3.format(",")(Math.round(d.avg))}`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    function chart2_2(data) {
+      const container = chartCard("market", {
+        title: "Range Improvement (Earliest vs. Latest Year)",
+        insight: "Which models have gained the most range over time?",
+      });
+      const filtered = data.filter(d => d.range_mi != null && d.year != null);
+      const byVehicle = d3.group(filtered, d => d.vehicle);
+      const slopeData = [];
+      for (const [vehicle, rows] of byVehicle) {
+        const years = [...new Set(rows.map(d => d.year))].sort();
+        if (years.length < 2) continue;
+        const earliest = years[0];
+        const latest = years[years.length - 1];
+        const earlyAvg = d3.mean(rows.filter(d => d.year === earliest), d => d.range_mi);
+        const lateAvg = d3.mean(rows.filter(d => d.year === latest), d => d.range_mi);
+        slopeData.push({ vehicle, year: earliest, range: earlyAvg, endpoint: "earliest" });
+        slopeData.push({ vehicle, year: latest, range: lateAvg, endpoint: "latest" });
+      }
+
+      if (slopeData.length === 0) {
+        container.textContent = "Not enough multi-year data for slope chart.";
+        return;
+      }
+
+      const vehicles = [...new Set(slopeData.map(d => d.vehicle))].sort();
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 400,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "Model Year", tickFormat: d3.format("d"), domain: d3.extent(slopeData, d => d.year) },
+        y: { label: "Average Range (miles)" },
+        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.line(slopeData, { x: "year", y: "range", stroke: "vehicle", strokeWidth: 2, z: "vehicle" }),
+          Plot.dot(slopeData, {
+            x: "year", y: "range", fill: "vehicle", r: 5,
+            tip: true, title: d => `${d.vehicle} ${d.year}\nAvg Range: ${Math.round(d.range)} mi`,
+          }),
+          Plot.text(slopeData.filter(d => d.endpoint === "latest"), {
+            x: "year", y: "range", text: "vehicle", fill: "vehicle",
+            dx: 10, textAnchor: "start", fontSize: 11,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    // ── Section 3: Size & Practicality Charts ───────────────────────────
+
+    function chart3_1(data) {
+      const container = chartCard("size", {
+        title: "Curb Weight vs. Range",
+        insight: "Does heavier = worse range, or do bigger batteries compensate?",
+      });
+      const filtered = data.filter(d => d.curb_weight_lbs != null && d.range_mi != null);
+      const vehicles = [...new Set(filtered.map(d => d.vehicle))].sort();
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 500,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "Curb Weight (lbs)", tickFormat: d3.format(",") },
+        y: { label: "Range (miles)" },
+        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.dot(filtered, {
+            x: "curb_weight_lbs", y: "range_mi", fill: "vehicle", r: 6,
+            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n${d3.format(",")(d.curb_weight_lbs)} lbs | ${d.range_mi} mi`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    function chart3_2(data) {
+      const container = chartCard("size", {
+        title: "Cargo Behind 3rd Row by Vehicle",
+        insight: "How usable is that third row in practice?",
+      });
+      const filtered = data.filter(d => d.cargo_behind_3rd_cu_ft != null);
+      const medians = d3.flatRollup(filtered, v => d3.median(v, d => d.cargo_behind_3rd_cu_ft), d => d.vehicle)
+        .map(([vehicle, median]) => ({ vehicle, median }))
+        .sort((a, b) => b.median - a.median);
+      const sortedVehicles = medians.map(d => d.vehicle);
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 400,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: null, domain: sortedVehicles, padding: 0.3 },
+        y: { label: "Cargo behind 3rd row (cu ft)" },
+        color: { domain: sortedVehicles, range: sortedVehicles.map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.barY(medians, {
+            x: "vehicle", y: "median", fill: "vehicle", fillOpacity: 0.4,
+          }),
+          Plot.dot(filtered, {
+            x: "vehicle", y: "cargo_behind_3rd_cu_ft", fill: "vehicle", r: 5,
+            fillOpacity: 0.9, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n${d.cargo_behind_3rd_cu_ft} cu ft`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    function chart3_3(data) {
+      const container = chartCard("size", {
+        title: "Length vs. Third-Row Legroom",
+        insight: "Are bigger vehicles actually giving you more third-row space?",
+      });
+      const filtered = data.filter(d => d.length_in != null && d.third_row_legroom_in != null);
+      const vehicles = [...new Set(filtered.map(d => d.vehicle))].sort();
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 500,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "Overall Length (inches)" },
+        y: { label: "Third-Row Legroom (inches)" },
+        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.dot(filtered, {
+            x: "length_in", y: "third_row_legroom_in", fill: "vehicle", r: 6,
+            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n${d.length_in}" long | ${d.third_row_legroom_in}" legroom`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    // ── Section 4: Charging & Efficiency Charts ─────────────────────────
+
+    function chart4_1(data) {
+      const container = chartCard("charging", {
+        title: "Battery kWh vs. DC Fast Charge Speed",
+        insight: "Who charges fastest relative to battery size?",
+      });
+      const filtered = data.filter(d => d.battery_kwh != null && d.dc_fast_charge_kw != null);
+      const vehicles = [...new Set(filtered.map(d => d.vehicle))].sort();
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 500,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: "Battery Capacity (kWh)" },
+        y: { label: "DC Fast Charge Peak (kW)" },
+        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.dot(filtered, {
+            x: "battery_kwh", y: "dc_fast_charge_kw", fill: "vehicle", r: 6,
+            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n${d.battery_kwh} kWh | ${d.dc_fast_charge_kw} kW`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
+    function chart4_2(data) {
+      const container = chartCard("charging", {
+        title: "DC Fast Charge 10–80% Time by Vehicle",
+        insight: "The real-world question — how long am I waiting?",
+      });
+      const filtered = data.filter(d => d.dc_fast_charge_10_80_min != null);
+      const medians = d3.flatRollup(filtered, v => d3.median(v, d => d.dc_fast_charge_10_80_min), d => d.vehicle)
+        .map(([vehicle, median]) => ({ vehicle, median }))
+        .sort((a, b) => a.median - b.median);
+      const sortedVehicles = medians.map(d => d.vehicle);
+      const plot = Plot.plot({
+        width: container.clientWidth || 900,
+        height: 400,
+        style: { background: "transparent", color: "#e0e0e0" },
+        x: { label: null, domain: sortedVehicles, padding: 0.3 },
+        y: { label: "10–80% Charge Time (minutes)" },
+        color: { domain: sortedVehicles, range: sortedVehicles.map(v => VEHICLE_COLORS[v] || "#888") },
+        marks: [
+          Plot.barY(medians, {
+            x: "vehicle", y: "median", fill: "vehicle", fillOpacity: 0.4,
+          }),
+          Plot.dot(filtered, {
+            x: "vehicle", y: "dc_fast_charge_10_80_min", fill: "vehicle", r: 5,
+            fillOpacity: 0.9, stroke: "#1a1a2e", strokeWidth: 1,
+            tip: true, title: d => `${d.name}\n${d.dc_fast_charge_10_80_min} min`,
+          }),
+        ],
+      });
+      container.appendChild(plot);
+    }
+
     // ── Main ───────────────────────────────────────────────────────────
 
     async function main() {
@@ -529,6 +751,16 @@
         chart1_3(filtered);
         chart1_4(filtered);
         chart1_5(filtered);
+        // Section 2: Market Evolution
+        chart2_1(filtered);
+        chart2_2(filtered);
+        // Section 3: Size & Practicality
+        chart3_1(filtered);
+        chart3_2(filtered);
+        chart3_3(filtered);
+        // Section 4: Charging & Efficiency
+        chart4_1(filtered);
+        chart4_2(filtered);
       }
 
       wireFilters(data, renderCharts);
