@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import type { TabId } from './Header'
@@ -20,6 +20,29 @@ export default function DashboardNav({ activeTab }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [themeUnlocked, setThemeUnlocked] = useState(false)
+
+  useEffect(() => {
+    function sync() {
+      setThemeUnlocked(localStorage.getItem('theme-unlocked') === 'true')
+    }
+    sync()
+    window.addEventListener('theme-change', sync)
+    return () => window.removeEventListener('theme-change', sync)
+  }, [])
+
+  function handleSwitchMode() {
+    const current = localStorage.getItem('theme') || 'dark'
+    const next = current === 'dark' ? 'light' : 'dark'
+    if (next === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light')
+    } else {
+      document.documentElement.removeAttribute('data-theme')
+    }
+    localStorage.setItem('theme', next)
+    window.dispatchEvent(new Event('theme-change'))
+    setDrawerOpen(false)
+  }
 
   const activeTabLabel = TABS.find(t => t.id === activeTab)?.label ?? 'Home'
 
@@ -70,6 +93,9 @@ export default function DashboardNav({ activeTab }: Props) {
           </button>
         ))}
         <Link href="/about" className={`nav-drawer-item${activeTab === 'about' ? ' active' : ''}`} onClick={() => setDrawerOpen(false)}>About</Link>
+        {themeUnlocked && (
+          <button className="nav-drawer-item" onClick={handleSwitchMode}>Switch Mode</button>
+        )}
       </div>
     </>
   )
