@@ -3,143 +3,23 @@
 import { Fragment } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { DATA, type DetailRow } from '@/lib/data'
-import { fmtMoney, fmtNum } from '@/lib/utils'
+import { SPEC_SECTIONS, type SpecSection as SpecSectionDef, type FieldDef } from '@/lib/spec-fields'
 import VehicleBadge from '../VehicleBadge'
 
-// ── Metric definitions ───────────────────────────────────────────────────────
+// ── Notes section (not in the shared registry) ───────────────────────────────
 
-interface MetricDef {
-  label: string
-  render: (r: DetailRow) => string
-  rawNum?: (r: DetailRow) => number | null
-  higherIsBetter?: boolean
+const NOTES_SECTION: SpecSectionDef = {
+  title: 'Notes',
+  fields: [
+    { label: 'Notes', render: r => r.notes || '—' },
+  ],
 }
 
-interface SectionDef {
-  title: string
-  metrics: MetricDef[]
-}
-
-function nv(v: number | string | null | undefined): number | null {
-  return typeof v === 'number' ? v : null
-}
-
-function cargoStr(v: number | string | null | undefined, unit: string): string {
-  if (v === null || v === undefined) return '—'
-  if (typeof v === 'number') return `${v} ${unit}`
-  return String(v)
-}
-
-const TIER_RANK: Record<string, number> = {
-  'Basic L2': 1,
-  'Advanced L2': 2,
-  'L2+ Hands-Free': 3,
-  'L2+ Point-to-Point': 4,
-}
-
-const SECTIONS: SectionDef[] = [
-  {
-    title: 'Pricing',
-    metrics: [
-      { label: 'MSRP', render: r => fmtMoney(r.msrp).text, rawNum: r => nv(r.msrp), higherIsBetter: false },
-      { label: 'Pre-Owned Price', render: r => r.preowned_range || '—' },
-    ],
-  },
-  {
-    title: 'Powertrain & Performance',
-    metrics: [
-      { label: 'Drivetrain', render: r => r.drivetrain || '—' },
-      {
-        label: 'Horsepower',
-        render: r => { const f = fmtNum(r.hp); return f.text + (typeof r.hp === 'number' ? ' hp' : '') },
-        rawNum: r => nv(r.hp), higherIsBetter: true,
-      },
-      { label: 'Torque', render: r => typeof r.torque_lb_ft === 'number' ? `${r.torque_lb_ft.toLocaleString()} lb-ft` : (r.torque_lb_ft || '—'), rawNum: r => nv(r.torque_lb_ft), higherIsBetter: true },
-      { label: '0–60 mph', render: r => typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec} sec` : (r.zero_to_60_sec || '—'), rawNum: r => nv(r.zero_to_60_sec), higherIsBetter: false },
-      { label: 'Curb Weight', render: r => typeof r.curb_weight_lbs === 'number' ? `${r.curb_weight_lbs.toLocaleString()} lbs` : (r.curb_weight_lbs || '—') },
-      { label: 'Towing Capacity', render: r => typeof r.towing_lbs === 'number' ? `${r.towing_lbs.toLocaleString()} lbs` : (r.towing_lbs || '—'), rawNum: r => nv(r.towing_lbs), higherIsBetter: true },
-    ],
-  },
-  {
-    title: 'Range & Charging',
-    metrics: [
-      {
-        label: 'EPA Range',
-        render: r => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') },
-        rawNum: r => nv(r.range_mi), higherIsBetter: true,
-      },
-      {
-        label: 'Battery',
-        render: r => { const f = fmtNum(r.battery_kwh); return f.text + (typeof r.battery_kwh === 'number' ? ' kWh' : '') },
-        rawNum: r => nv(r.battery_kwh), higherIsBetter: true,
-      },
-      { label: 'Charging Type', render: r => r.charging_type || '—' },
-      { label: 'DC Fast Charge', render: r => typeof r.dc_fast_charge_kw === 'number' ? `${r.dc_fast_charge_kw} kW` : (r.dc_fast_charge_kw || '—'), rawNum: r => nv(r.dc_fast_charge_kw), higherIsBetter: true },
-      { label: 'DC 10–80%', render: r => typeof r.dc_fast_charge_10_80_min === 'number' ? `${r.dc_fast_charge_10_80_min} min` : (r.dc_fast_charge_10_80_min || '—'), rawNum: r => nv(r.dc_fast_charge_10_80_min), higherIsBetter: false },
-      { label: 'Onboard AC', render: r => r.onboard_ac_kw ? `${r.onboard_ac_kw} kW` : '—', rawNum: r => nv(r.onboard_ac_kw), higherIsBetter: true },
-      { label: 'L2 10–80%', render: r => r.l2_10_80 ? `${r.l2_10_80} hrs` : '—', rawNum: r => nv(r.l2_10_80), higherIsBetter: false },
-      { label: 'L2 10–100%', render: r => r.l2_10_100 ? `${r.l2_10_100} hrs` : '—', rawNum: r => nv(r.l2_10_100), higherIsBetter: false },
-    ],
-  },
-  {
-    title: 'Dimensions',
-    metrics: [
-      { label: 'Seats', render: r => r.seats != null ? String(r.seats) : '—' },
-      { label: 'Length', render: r => typeof r.length_in === 'number' ? `${r.length_in} in` : (r.length_in || '—') },
-      { label: 'Width', render: r => typeof r.width_in === 'number' ? `${r.width_in} in` : (r.width_in || '—') },
-      { label: 'Height', render: r => typeof r.height_in === 'number' ? `${r.height_in} in` : (r.height_in || '—') },
-      { label: 'Ground Clearance', render: r => typeof r.ground_clearance_in === 'number' ? `${r.ground_clearance_in} in` : (r.ground_clearance_in || '—') },
-      { label: '3rd Row Legroom', render: r => typeof r.third_row_legroom_in === 'number' ? `${r.third_row_legroom_in} in` : (r.third_row_legroom_in || '—'), rawNum: r => nv(r.third_row_legroom_in), higherIsBetter: true },
-      { label: '3rd Row Headroom', render: r => typeof r.third_row_headroom_in === 'number' ? `${r.third_row_headroom_in} in` : (r.third_row_headroom_in || '—'), rawNum: r => nv(r.third_row_headroom_in), higherIsBetter: true },
-    ],
-  },
-  {
-    title: 'Self-Driving',
-    metrics: [
-      {
-        label: 'Self Driving Tier',
-        render: r => r.self_driving_tier || '—',
-        rawNum: r => r.self_driving_tier ? (TIER_RANK[r.self_driving_tier] ?? null) : null,
-        higherIsBetter: true,
-      },
-      { label: 'SAE Level', render: r => r.sae_level != null ? String(r.sae_level) : '—' },
-      { label: 'Self Driving System', render: r => r.self_driving || '—' },
-    ],
-  },
-  {
-    title: 'Infotainment',
-    metrics: [
-      { label: 'Car Software', render: r => r.car_software || '—' },
-      { label: 'Center Display', render: r => r.center_display || '—' },
-      { label: 'Gauge Cluster', render: r => r.gauge_cluster || '—' },
-      { label: 'HUD', render: r => r.hud || '—' },
-      { label: 'Other Displays', render: r => r.other_displays || '—' },
-      { label: 'Audio', render: r => r.audio || '—' },
-      { label: 'Driver Profiles', render: r => r.driver_profiles || '—' },
-    ],
-  },
-  {
-    title: 'Cargo & Storage',
-    metrics: [
-      { label: 'Frunk', render: r => cargoStr(r.frunk_cu_ft, 'cu ft'), rawNum: r => r.frunk_cu_ft, higherIsBetter: true },
-      { label: 'Behind 3rd Row', render: r => cargoStr(r.cargo_behind_3rd_cu_ft, 'cu ft'), rawNum: r => nv(r.cargo_behind_3rd_cu_ft), higherIsBetter: true },
-      { label: 'Behind 2nd Row', render: r => cargoStr(r.cargo_behind_2nd_cu_ft, 'cu ft'), rawNum: r => r.cargo_behind_2nd_cu_ft, higherIsBetter: true },
-      { label: 'Behind 1st Row', render: r => cargoStr(r.cargo_behind_1st_cu_ft, 'cu ft'), rawNum: r => nv(r.cargo_behind_1st_cu_ft), higherIsBetter: true },
-      { label: 'Fold Flat', render: r => r.fold_flat || '—' },
-      { label: 'Floor Width (Wheel Wells)', render: r => cargoStr(r.cargo_floor_width_in, 'in'), rawNum: r => nv(r.cargo_floor_width_in), higherIsBetter: true },
-    ],
-  },
-  {
-    title: 'Notes',
-    metrics: [
-      { label: 'Notes', render: r => r.notes || '—' },
-    ],
-  },
-]
+const ALL_SECTIONS: SpecSectionDef[] = [...SPEC_SECTIONS, NOTES_SECTION]
 
 // ── Highlight helper ─────────────────────────────────────────────────────────
 
-function getCellClasses(metric: MetricDef, rows: (DetailRow | null)[]): string[] {
+function getCellClasses(metric: FieldDef, rows: (DetailRow | null)[]): string[] {
   if (!metric.rawNum || metric.higherIsBetter === undefined) return rows.map(() => 'sbs-cell')
   const populated = rows.filter((r): r is DetailRow => r !== null)
   if (populated.length < 2) return rows.map(() => 'sbs-cell')
@@ -313,13 +193,13 @@ export default function SideBySideTab() {
                 </tr>
               </thead>
               <tbody>
-                {SECTIONS.map(section => (
+                {ALL_SECTIONS.map(section => (
                   <Fragment key={section.title}>
                     <tr className="sbs-section-header">
                       <td className="sbs-metric-label">{section.title}</td>
                       <td colSpan={3} />
                     </tr>
-                    {section.metrics.map(metric => {
+                    {section.fields.map(metric => {
                       const cellClasses = getCellClasses(metric, rows)
                       return (
                         <tr key={`${section.title}-${metric.label}`}>
@@ -340,10 +220,10 @@ export default function SideBySideTab() {
 
           {/* ── Mobile: metric card feed ── */}
           <div className="sbs-mobile-view">
-            {SECTIONS.map(section => (
+            {ALL_SECTIONS.map(section => (
               <div key={section.title} className="sbs-mobile-section">
                 <div className="sbs-mobile-section-title">{section.title}</div>
-                {section.metrics.map(metric => {
+                {section.fields.map(metric => {
                   const cellClasses = getCellClasses(metric, rows)
                   const populatedEntries = rows.map((row, i) => ({ row, i })).filter(e => e.row !== null)
                   if (populatedEntries.length === 0) return null

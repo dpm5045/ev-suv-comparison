@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { toSlug } from '@/lib/slugs'
 import VehicleBadge from './VehicleBadge'
 import SpecSection from './SpecSection'
+import { filterSections } from '@/lib/spec-fields'
 
 interface Props {
   idx: number | null
@@ -61,60 +62,11 @@ export default function DetailPanel({ idx, onClose }: Props) {
               ))}
             </div>
 
-            <SpecSection title="Powertrain & Performance" rows={[
-              ['Drivetrain', r.drivetrain],
-              ['Horsepower', (() => { const f = fmtNum(r.hp); return f.text + (typeof r.hp === 'number' ? ' hp' : '') })()],
-              ['Torque', typeof r.torque_lb_ft === 'number' ? `${r.torque_lb_ft} lb-ft` : r.torque_lb_ft],
-              ['0–60 mph', typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec} sec` : r.zero_to_60_sec],
-              ['Curb Weight', typeof r.curb_weight_lbs === 'number' ? `${r.curb_weight_lbs.toLocaleString()} lbs` : r.curb_weight_lbs],
-              ['Towing Capacity', typeof r.towing_lbs === 'number' ? `${r.towing_lbs.toLocaleString()} lbs` : r.towing_lbs],
-            ]} />
-
-            <SpecSection title="Range & Charging" rows={[
-              ['EPA Range', (() => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') })()],
-              ['Battery', (() => { const f = fmtNum(r.battery_kwh); return f.text + (typeof r.battery_kwh === 'number' ? ' kWh' : '') })()],
-              ['Charging Type', r.charging_type],
-              ['DC Fast Charge', typeof r.dc_fast_charge_kw === 'number' ? `${r.dc_fast_charge_kw} kW` : r.dc_fast_charge_kw],
-              ['DC 10–80%', typeof r.dc_fast_charge_10_80_min === 'number' ? `${r.dc_fast_charge_10_80_min} min` : r.dc_fast_charge_10_80_min],
-              ['Onboard AC', r.onboard_ac_kw ? `${r.onboard_ac_kw} kW` : '—'],
-              ['L2 10–80%', r.l2_10_80 ? `${r.l2_10_80} hrs` : '—'],
-              ['L2 10–100%', r.l2_10_100 ? `${r.l2_10_100} hrs` : '—'],
-            ]} />
-
-            <SpecSection title="Dimensions" rows={[
-              ['Seats', r.seats ?? '—'],
-              ['Length', typeof r.length_in === 'number' ? `${r.length_in} in` : r.length_in],
-              ['Width', typeof r.width_in === 'number' ? `${r.width_in} in` : r.width_in],
-              ['Height', typeof r.height_in === 'number' ? `${r.height_in} in` : r.height_in],
-              ['Ground Clearance', typeof r.ground_clearance_in === 'number' ? `${r.ground_clearance_in} in` : r.ground_clearance_in],
-              ['3rd Row Legroom', typeof r.third_row_legroom_in === 'number' ? `${r.third_row_legroom_in} in` : r.third_row_legroom_in],
-              ['3rd Row Headroom', typeof r.third_row_headroom_in === 'number' ? `${r.third_row_headroom_in} in` : r.third_row_headroom_in],
-            ]} />
-
-            <SpecSection title="Self-Driving" rows={[
-              ['Self Driving Tier', r.self_driving_tier],
-              ['SAE Level', r.sae_level],
-              ['Self Driving', r.self_driving],
-            ]} />
-
-            <SpecSection title="Infotainment" rows={[
-              ['Car Software', r.car_software],
-              ['Center Display', r.center_display],
-              ['Gauge Cluster', r.gauge_cluster],
-              ['HUD', r.hud],
-              ['Other Displays', r.other_displays],
-              ['Audio', r.audio],
-              ['Driver Profiles', r.driver_profiles],
-            ]} />
-
-            <SpecSection title="Cargo & Storage" rows={[
-              ['Frunk', typeof r.frunk_cu_ft === 'number' ? `${r.frunk_cu_ft} cu ft` : r.frunk_cu_ft],
-              ['Behind 3rd Row', typeof r.cargo_behind_3rd_cu_ft === 'number' ? `${r.cargo_behind_3rd_cu_ft} cu ft` : r.cargo_behind_3rd_cu_ft],
-              ['Behind 2nd Row', typeof r.cargo_behind_2nd_cu_ft === 'number' ? `${r.cargo_behind_2nd_cu_ft} cu ft` : r.cargo_behind_2nd_cu_ft],
-              ['Behind 1st Row', typeof r.cargo_behind_1st_cu_ft === 'number' ? `${r.cargo_behind_1st_cu_ft} cu ft` : r.cargo_behind_1st_cu_ft],
-              ['Fold Flat', r.fold_flat],
-              ['Floor Width (Wheel Wells)', typeof r.cargo_floor_width_in === 'number' ? `${r.cargo_floor_width_in} in` : r.cargo_floor_width_in],
-            ]} />
+            {filterSections(undefined, ['Pricing']).map(sec => (
+              <SpecSection key={sec.title} title={sec.title} rows={
+                sec.fields.map(f => [f.label, f.render(r)] as [string, string])
+              } />
+            ))}
 
 
             {r.notes && (

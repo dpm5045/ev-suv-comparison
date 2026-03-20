@@ -8,6 +8,7 @@ import {
 } from '@/lib/slugs'
 import { VEHICLE_CLASSES, type DetailRow } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
+import { SPEC_SECTIONS } from '@/lib/spec-fields'
 import Header from '@/components/Header'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -70,72 +71,17 @@ interface Metric {
 }
 
 function buildMetrics(a: DetailRow, b: DetailRow): { section: string; metrics: Metric[] }[] {
-  const nv = (v: number | string | null | undefined) => typeof v === 'number' ? v : null
-
-  return [
-    {
-      section: 'Key Stats',
-      metrics: [
-        { label: 'MSRP', valueA: fmtMoney(a.msrp).text, valueB: fmtMoney(b.msrp).text, numA: nv(a.msrp), numB: nv(b.msrp), higherIsBetter: false },
-        { label: 'Seats', valueA: a.seats != null ? String(a.seats) : '—', valueB: b.seats != null ? String(b.seats) : '—', numA: null, numB: null, higherIsBetter: true },
-        { label: 'EPA Range', valueA: fmtNum(a.range_mi).text + (typeof a.range_mi === 'number' ? ' mi' : ''), valueB: fmtNum(b.range_mi).text + (typeof b.range_mi === 'number' ? ' mi' : ''), numA: nv(a.range_mi), numB: nv(b.range_mi), higherIsBetter: true },
-        { label: 'Horsepower', valueA: fmtNum(a.hp).text + (typeof a.hp === 'number' ? ' hp' : ''), valueB: fmtNum(b.hp).text + (typeof b.hp === 'number' ? ' hp' : ''), numA: nv(a.hp), numB: nv(b.hp), higherIsBetter: true },
-        { label: 'Battery', valueA: fmtNum(a.battery_kwh).text + (typeof a.battery_kwh === 'number' ? ' kWh' : ''), valueB: fmtNum(b.battery_kwh).text + (typeof b.battery_kwh === 'number' ? ' kWh' : ''), numA: nv(a.battery_kwh), numB: nv(b.battery_kwh), higherIsBetter: true },
-      ],
-    },
-    {
-      section: 'Performance',
-      metrics: [
-        { label: 'Torque', valueA: typeof a.torque_lb_ft === 'number' ? `${a.torque_lb_ft.toLocaleString()} lb-ft` : '—', valueB: typeof b.torque_lb_ft === 'number' ? `${b.torque_lb_ft.toLocaleString()} lb-ft` : '—', numA: nv(a.torque_lb_ft), numB: nv(b.torque_lb_ft), higherIsBetter: true },
-        { label: '0–60 mph', valueA: typeof a.zero_to_60_sec === 'number' ? `${a.zero_to_60_sec} sec` : '—', valueB: typeof b.zero_to_60_sec === 'number' ? `${b.zero_to_60_sec} sec` : '—', numA: nv(a.zero_to_60_sec), numB: nv(b.zero_to_60_sec), higherIsBetter: false },
-        { label: 'Curb Weight', valueA: typeof a.curb_weight_lbs === 'number' ? `${a.curb_weight_lbs.toLocaleString()} lbs` : '—', valueB: typeof b.curb_weight_lbs === 'number' ? `${b.curb_weight_lbs.toLocaleString()} lbs` : '—', numA: nv(a.curb_weight_lbs), numB: nv(b.curb_weight_lbs), higherIsBetter: false },
-        { label: 'Towing', valueA: typeof a.towing_lbs === 'number' ? `${a.towing_lbs.toLocaleString()} lbs` : '—', valueB: typeof b.towing_lbs === 'number' ? `${b.towing_lbs.toLocaleString()} lbs` : '—', numA: nv(a.towing_lbs), numB: nv(b.towing_lbs), higherIsBetter: true },
-      ],
-    },
-    {
-      section: 'Drivetrain & Charging',
-      metrics: [
-        { label: 'Drivetrain', valueA: a.drivetrain || '—', valueB: b.drivetrain || '—' },
-        { label: 'Charging Type', valueA: a.charging_type || '—', valueB: b.charging_type || '—' },
-        { label: 'DC Fast Charge', valueA: typeof a.dc_fast_charge_kw === 'number' ? `${a.dc_fast_charge_kw} kW` : '—', valueB: typeof b.dc_fast_charge_kw === 'number' ? `${b.dc_fast_charge_kw} kW` : '—', numA: nv(a.dc_fast_charge_kw), numB: nv(b.dc_fast_charge_kw), higherIsBetter: true },
-        { label: 'DC 10–80%', valueA: typeof a.dc_fast_charge_10_80_min === 'number' ? `${a.dc_fast_charge_10_80_min} min` : '—', valueB: typeof b.dc_fast_charge_10_80_min === 'number' ? `${b.dc_fast_charge_10_80_min} min` : '—', numA: nv(a.dc_fast_charge_10_80_min), numB: nv(b.dc_fast_charge_10_80_min), higherIsBetter: false },
-        { label: 'Onboard AC', valueA: a.onboard_ac_kw ? `${a.onboard_ac_kw} kW` : '—', valueB: b.onboard_ac_kw ? `${b.onboard_ac_kw} kW` : '—', numA: nv(a.onboard_ac_kw), numB: nv(b.onboard_ac_kw), higherIsBetter: true },
-        { label: 'L2 10–80%', valueA: a.l2_10_80 ? `${a.l2_10_80} hrs` : '—', valueB: b.l2_10_80 ? `${b.l2_10_80} hrs` : '—', numA: nv(a.l2_10_80), numB: nv(b.l2_10_80), higherIsBetter: false },
-        { label: 'L2 10–100%', valueA: a.l2_10_100 ? `${a.l2_10_100} hrs` : '—', valueB: b.l2_10_100 ? `${b.l2_10_100} hrs` : '—', numA: nv(a.l2_10_100), numB: nv(b.l2_10_100), higherIsBetter: false },
-      ],
-    },
-    {
-      section: 'Dimensions',
-      metrics: [
-        { label: 'Length', valueA: typeof a.length_in === 'number' ? `${a.length_in} in` : '—', valueB: typeof b.length_in === 'number' ? `${b.length_in} in` : '—' },
-        { label: 'Width', valueA: typeof a.width_in === 'number' ? `${a.width_in} in` : '—', valueB: typeof b.width_in === 'number' ? `${b.width_in} in` : '—' },
-        { label: 'Height', valueA: typeof a.height_in === 'number' ? `${a.height_in} in` : '—', valueB: typeof b.height_in === 'number' ? `${b.height_in} in` : '—' },
-        { label: 'Ground Clearance', valueA: typeof a.ground_clearance_in === 'number' ? `${a.ground_clearance_in} in` : '—', valueB: typeof b.ground_clearance_in === 'number' ? `${b.ground_clearance_in} in` : '—' },
-        { label: '3rd Row Legroom', valueA: typeof a.third_row_legroom_in === 'number' ? `${a.third_row_legroom_in} in` : '—', valueB: typeof b.third_row_legroom_in === 'number' ? `${b.third_row_legroom_in} in` : '—', numA: nv(a.third_row_legroom_in), numB: nv(b.third_row_legroom_in), higherIsBetter: true },
-        { label: '3rd Row Headroom', valueA: typeof a.third_row_headroom_in === 'number' ? `${a.third_row_headroom_in} in` : '—', valueB: typeof b.third_row_headroom_in === 'number' ? `${b.third_row_headroom_in} in` : '—', numA: nv(a.third_row_headroom_in), numB: nv(b.third_row_headroom_in), higherIsBetter: true },
-      ],
-    },
-    {
-      section: 'Technology & Features',
-      metrics: [
-        { label: 'Self Driving', valueA: a.self_driving || '—', valueB: b.self_driving || '—' },
-        { label: 'Car Software', valueA: a.car_software || '—', valueB: b.car_software || '—' },
-        { label: 'Center Display', valueA: a.center_display || '—', valueB: b.center_display || '—' },
-        { label: 'Gauge Cluster', valueA: a.gauge_cluster || '—', valueB: b.gauge_cluster || '—' },
-        { label: 'HUD', valueA: a.hud || '—', valueB: b.hud || '—' },
-        { label: 'Audio', valueA: a.audio || '—', valueB: b.audio || '—' },
-      ],
-    },
-    {
-      section: 'Cargo & Storage',
-      metrics: [
-        { label: 'Frunk', valueA: typeof a.frunk_cu_ft === 'number' ? `${a.frunk_cu_ft} cu ft` : (a.frunk_cu_ft || '—'), valueB: typeof b.frunk_cu_ft === 'number' ? `${b.frunk_cu_ft} cu ft` : (b.frunk_cu_ft || '—'), numA: a.frunk_cu_ft, numB: b.frunk_cu_ft, higherIsBetter: true },
-        { label: 'Behind 3rd Row', valueA: typeof a.cargo_behind_3rd_cu_ft === 'number' ? `${a.cargo_behind_3rd_cu_ft} cu ft` : (a.cargo_behind_3rd_cu_ft as string || '—'), valueB: typeof b.cargo_behind_3rd_cu_ft === 'number' ? `${b.cargo_behind_3rd_cu_ft} cu ft` : (b.cargo_behind_3rd_cu_ft as string || '—'), numA: nv(a.cargo_behind_3rd_cu_ft), numB: nv(b.cargo_behind_3rd_cu_ft), higherIsBetter: true },
-        { label: 'Behind 2nd Row', valueA: a.cargo_behind_2nd_cu_ft ? `${a.cargo_behind_2nd_cu_ft} cu ft` : '—', valueB: b.cargo_behind_2nd_cu_ft ? `${b.cargo_behind_2nd_cu_ft} cu ft` : '—', numA: a.cargo_behind_2nd_cu_ft, numB: b.cargo_behind_2nd_cu_ft, higherIsBetter: true },
-        { label: 'Fold Flat', valueA: a.fold_flat || '—', valueB: b.fold_flat || '—' },
-      ],
-    },
-  ]
+  return SPEC_SECTIONS.map(sec => ({
+    section: sec.title,
+    metrics: sec.fields.map(f => ({
+      label: f.label,
+      valueA: f.render(a),
+      valueB: f.render(b),
+      numA: f.rawNum?.(a) ?? null,
+      numB: f.rawNum?.(b) ?? null,
+      higherIsBetter: f.higherIsBetter,
+    })),
+  }))
 }
 
 function cellClass(metric: Metric, side: 'A' | 'B'): string {

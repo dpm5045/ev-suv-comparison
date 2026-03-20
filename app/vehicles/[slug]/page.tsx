@@ -8,6 +8,7 @@ import {
 } from '@/lib/slugs'
 import { VEHICLE_CLASSES } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
+import { SPEC_SECTIONS } from '@/lib/spec-fields'
 import Header from '@/components/Header'
 import Breadcrumb from '@/components/Breadcrumb'
 import VehicleTrimSection from '@/components/VehicleTrimSection'
@@ -83,101 +84,27 @@ export default async function VehiclePage({ params }: Props) {
   const cargo3s = trims.map(t => t.cargo_behind_3rd_cu_ft).filter((c): c is number => typeof c === 'number')
   const towing = trims.map(t => t.towing_lbs).filter((t): t is number => typeof t === 'number')
 
-  // Formatting helpers for comparison table
-  function fv(val: number | string | null | undefined, unit?: string): string {
-    if (val === null || val === undefined) return '—'
-    if (typeof val === 'number') return unit ? `${val.toLocaleString()} ${unit}` : val.toLocaleString()
-    return val || '—'
-  }
-  function fm(val: number | string | null | undefined): string {
-    if (val === null || val === undefined) return '—'
-    if (typeof val === 'number') return `$${val.toLocaleString()}`
-    return val || '—'
-  }
-
-  // Spec sections for comparison table
-  const specSections: { title: string; rows: { label: string; values: string[] }[] }[] = [
-    {
-      title: 'Key Stats',
-      rows: [
-        { label: 'MSRP', values: trims.map(r => fm(r.msrp)) },
-        { label: 'Pre-Owned Price', values: trims.map(r => r.preowned_range || '—') },
-        { label: 'EPA Range', values: trims.map(r => fv(r.range_mi, 'mi')) },
-        { label: 'Horsepower', values: trims.map(r => fv(r.hp, 'hp')) },
-        { label: 'Battery', values: trims.map(r => fv(r.battery_kwh, 'kWh')) },
-        { label: 'Seats', values: trims.map(r => r.seats != null ? String(r.seats) : '—') },
-      ],
-    },
-    {
-      title: 'Performance',
-      rows: [
-        { label: 'Torque', values: trims.map(r => fv(r.torque_lb_ft, 'lb-ft')) },
-        { label: '0–60 mph', values: trims.map(r => fv(r.zero_to_60_sec, 'sec')) },
-        { label: 'Curb Weight', values: trims.map(r => fv(r.curb_weight_lbs, 'lbs')) },
-        { label: 'Towing Capacity', values: trims.map(r => fv(r.towing_lbs, 'lbs')) },
-      ],
-    },
-    {
-      title: 'Drivetrain & Charging',
-      rows: [
-        { label: 'Drivetrain', values: trims.map(r => r.drivetrain || '—') },
-        { label: 'Charging Type', values: trims.map(r => r.charging_type || '—') },
-        { label: 'DC Fast Charge', values: trims.map(r => fv(r.dc_fast_charge_kw, 'kW')) },
-        { label: 'DC 10–80%', values: trims.map(r => fv(r.dc_fast_charge_10_80_min, 'min')) },
-        { label: 'Onboard AC', values: trims.map(r => r.onboard_ac_kw ? `${r.onboard_ac_kw} kW` : '—') },
-        { label: 'L2 10–80%', values: trims.map(r => r.l2_10_80 ? `${r.l2_10_80} hrs` : '—') },
-        { label: 'L2 10–100%', values: trims.map(r => r.l2_10_100 ? `${r.l2_10_100} hrs` : '—') },
-      ],
-    },
-    {
-      title: 'Dimensions',
-      rows: [
-        { label: 'Length', values: trims.map(r => fv(r.length_in, 'in')) },
-        { label: 'Width', values: trims.map(r => fv(r.width_in, 'in')) },
-        { label: 'Height', values: trims.map(r => fv(r.height_in, 'in')) },
-        { label: 'Ground Clearance', values: trims.map(r => fv(r.ground_clearance_in, 'in')) },
-        { label: '3rd Row Legroom', values: trims.map(r => fv(r.third_row_legroom_in, 'in')) },
-        { label: '3rd Row Headroom', values: trims.map(r => fv(r.third_row_headroom_in, 'in')) },
-      ],
-    },
-    {
-      title: 'Technology & Features',
-      rows: [
-        { label: 'Self Driving', values: trims.map(r => r.self_driving || '—') },
-        { label: 'Car Software', values: trims.map(r => r.car_software || '—') },
-        { label: 'Center Display', values: trims.map(r => r.center_display || '—') },
-        { label: 'Gauge Cluster', values: trims.map(r => r.gauge_cluster || '—') },
-        { label: 'HUD', values: trims.map(r => r.hud || '—') },
-        { label: 'Other Displays', values: trims.map(r => r.other_displays || '—') },
-        { label: 'Audio', values: trims.map(r => r.audio || '—') },
-        { label: 'Driver Profiles', values: trims.map(r => r.driver_profiles || '—') },
-      ],
-    },
-    {
-      title: 'Cargo & Storage',
-      rows: [
-        { label: 'Frunk', values: trims.map(r => fv(r.frunk_cu_ft, 'cu ft')) },
-        { label: 'Behind 3rd Row', values: trims.map(r => fv(r.cargo_behind_3rd_cu_ft, 'cu ft')) },
-        { label: 'Behind 2nd Row', values: trims.map(r => fv(r.cargo_behind_2nd_cu_ft, 'cu ft')) },
-        { label: 'Behind 1st Row', values: trims.map(r => fv(r.cargo_behind_1st_cu_ft, 'cu ft')) },
-        { label: 'Fold Flat', values: trims.map(r => r.fold_flat || '—') },
-        { label: 'Floor Width', values: trims.map(r => fv(r.cargo_floor_width_in, 'in')) },
-      ],
-    },
-  ]
+  // Build spec sections from centralized registry
+  const specSections = SPEC_SECTIONS.map(sec => ({
+    title: sec.title,
+    rows: sec.fields.map(f => ({
+      label: f.label,
+      values: trims.map(r => f.render(r)),
+    })),
+  }))
 
   // Pre-format trim data for the mobile client component
-  // Filter out 'Key Stats' since those values are already in the card header
+  // Filter out 'Pricing' since those values are already in the card header
   const trimDataForMobile = trims.map((r, i) => ({
     id: `trim-${i}`,
     year: r.year,
     trim: r.trim,
-    msrp: fm(r.msrp),
-    range: fv(r.range_mi, 'mi'),
-    hp: fv(r.hp, 'hp'),
+    msrp: fmtMoney(r.msrp).text,
+    range: fmtNum(r.range_mi).text + (typeof r.range_mi === 'number' ? ' mi' : ''),
+    hp: fmtNum(r.hp).text + (typeof r.hp === 'number' ? ' hp' : ''),
     seats: r.seats != null ? `${r.seats}-seat` : '—',
     notes: r.notes || '',
-    sections: specSections.filter(sec => sec.title !== 'Key Stats').map(sec => ({
+    sections: specSections.filter(sec => sec.title !== 'Pricing').map(sec => ({
       title: sec.title,
       rows: sec.rows.map(row => ({
         label: row.label,

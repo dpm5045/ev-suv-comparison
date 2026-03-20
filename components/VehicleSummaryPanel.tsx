@@ -6,6 +6,7 @@ import { fmtMoney, fmtNum } from '@/lib/utils'
 import Link from 'next/link'
 import VehicleBadge from './VehicleBadge'
 import SpecSection from './SpecSection'
+import { SPEC_SECTIONS } from '@/lib/spec-fields'
 
 interface Props {
   vehicle: string | null
@@ -162,59 +163,11 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
                   ))}
                 </div>
 
-                <SpecSection title="Performance" rows={[
-                  ['Torque', typeof selectedTrim.torque_lb_ft === 'number' ? `${selectedTrim.torque_lb_ft} lb-ft` : selectedTrim.torque_lb_ft],
-                  ['0–60 mph', typeof selectedTrim.zero_to_60_sec === 'number' ? `${selectedTrim.zero_to_60_sec} sec` : selectedTrim.zero_to_60_sec],
-                  ['Curb Weight', typeof selectedTrim.curb_weight_lbs === 'number' ? `${selectedTrim.curb_weight_lbs.toLocaleString()} lbs` : selectedTrim.curb_weight_lbs],
-                  ['Towing Capacity', typeof selectedTrim.towing_lbs === 'number' ? `${selectedTrim.towing_lbs.toLocaleString()} lbs` : selectedTrim.towing_lbs],
-                ]} />
-
-                <SpecSection title="Drivetrain & Charging" rows={[
-                  ['Drivetrain', selectedTrim.drivetrain],
-                  ['Charging Type', selectedTrim.charging_type],
-                  ['DC Fast Charge', typeof selectedTrim.dc_fast_charge_kw === 'number' ? `${selectedTrim.dc_fast_charge_kw} kW` : selectedTrim.dc_fast_charge_kw],
-                  ['DC 10–80%', typeof selectedTrim.dc_fast_charge_10_80_min === 'number' ? `${selectedTrim.dc_fast_charge_10_80_min} min` : selectedTrim.dc_fast_charge_10_80_min],
-                  ['Onboard AC', selectedTrim.onboard_ac_kw ? `${selectedTrim.onboard_ac_kw} kW` : '—'],
-                  ['L2 10–80%', selectedTrim.l2_10_80 ? `${selectedTrim.l2_10_80} hrs` : '—'],
-                  ['L2 10–100%', selectedTrim.l2_10_100 ? `${selectedTrim.l2_10_100} hrs` : '—'],
-                ]} />
-
-                <SpecSection title="Dimensions" rows={[
-                  ['Length', typeof selectedTrim.length_in === 'number' ? `${selectedTrim.length_in} in` : selectedTrim.length_in],
-                  ['Width', typeof selectedTrim.width_in === 'number' ? `${selectedTrim.width_in} in` : selectedTrim.width_in],
-                  ['Height', typeof selectedTrim.height_in === 'number' ? `${selectedTrim.height_in} in` : selectedTrim.height_in],
-                  ['Ground Clearance', typeof selectedTrim.ground_clearance_in === 'number' ? `${selectedTrim.ground_clearance_in} in` : selectedTrim.ground_clearance_in],
-                  ['3rd Row Legroom', typeof selectedTrim.third_row_legroom_in === 'number' ? `${selectedTrim.third_row_legroom_in} in` : selectedTrim.third_row_legroom_in],
-                  ['3rd Row Headroom', typeof selectedTrim.third_row_headroom_in === 'number' ? `${selectedTrim.third_row_headroom_in} in` : selectedTrim.third_row_headroom_in],
-                ]} />
-
-                <SpecSection title="Technology & Features" rows={[
-                  ['Self Driving Tier', selectedTrim.self_driving_tier],
-                  ['Self Driving', selectedTrim.self_driving],
-                  ['Car Software', selectedTrim.car_software],
-                  ['Center Display', selectedTrim.center_display],
-                  ['Gauge Cluster', selectedTrim.gauge_cluster],
-                  ['HUD', selectedTrim.hud],
-                  ['Other Displays', selectedTrim.other_displays],
-                  ['Audio', selectedTrim.audio],
-                  ['Driver Profiles', selectedTrim.driver_profiles],
-                ]} />
-
-                <SpecSection title="Cargo & Storage" rows={[
-                  ['Frunk', typeof selectedTrim.frunk_cu_ft === 'number' ? `${selectedTrim.frunk_cu_ft} cu ft` : selectedTrim.frunk_cu_ft],
-                  ['Behind 3rd Row', typeof selectedTrim.cargo_behind_3rd_cu_ft === 'number' ? `${selectedTrim.cargo_behind_3rd_cu_ft} cu ft` : selectedTrim.cargo_behind_3rd_cu_ft],
-                  ['Behind 2nd Row', typeof selectedTrim.cargo_behind_2nd_cu_ft === 'number' ? `${selectedTrim.cargo_behind_2nd_cu_ft} cu ft` : selectedTrim.cargo_behind_2nd_cu_ft],
-                  ['Fold Flat', selectedTrim.fold_flat],
-                  ['Floor Width (Wheel Wells)', typeof selectedTrim.cargo_floor_width_in === 'number' ? `${selectedTrim.cargo_floor_width_in} in` : selectedTrim.cargo_floor_width_in],
-                ]} />
-
-                <SpecSection title="Pricing & OTD" rows={[
-                  ['MSRP', (() => { const f = fmtMoney(selectedTrim.msrp); return f.text })()],
-                  ['Destination', typeof selectedTrim.destination === 'number' ? `$${selectedTrim.destination.toLocaleString()}` : selectedTrim.destination],
-                  ['OTD (New)', (() => { const f = fmtMoney(selectedTrim.otd_new); return f.text })()],
-                  ['Pre-Owned Range', selectedTrim.preowned_range || '—'],
-                  ['OTD (Pre-Owned)', (() => { const f = fmtMoney(selectedTrim.otd_preowned); return f.text })()],
-                ]} />
+                {SPEC_SECTIONS.map(sec => (
+                  <SpecSection key={sec.title} title={sec.title} rows={
+                    sec.fields.map(f => [f.label, f.render(selectedTrim)] as [string, string])
+                  } />
+                ))}
 
                 {selectedTrim.notes && (
                   <div className="detail-section">
