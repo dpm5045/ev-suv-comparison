@@ -2033,11 +2033,15 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
     display: flex;
     align-items: center;
     gap: 12px;
+    order: 3;
+    margin-left: 0;
   }
   .theme-toggle {
     position: static;
     transform: none;
-    margin: 0 auto;
+    flex: 1;
+    justify-content: center;
+    order: 2;
   }
   .nav-drawer-overlay {
     display: block;
