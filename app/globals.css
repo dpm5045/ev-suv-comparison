@@ -207,6 +207,7 @@ body {
   font-size: 16px;
   font-weight: 500;
   color: var(--text-muted);
+  text-decoration: none;
   background: none;
   border: none;
   border-bottom: 1px solid var(--border);
