@@ -9,6 +9,16 @@ A single `explore.html` file at the repo root. Opens in any browser with no buil
 
 Desktop-first. Not intended for public deployment (yet) — this is a personal exploration tool.
 
+## How to Run
+
+Browsers block `fetch()` and ES module imports from `file://` origins. The file must be served via a local HTTP server:
+
+```bash
+npx serve .        # then open http://localhost:3000/explore.html
+# or
+python -m http.server   # then open http://localhost:8000/explore.html
+```
+
 ## File Structure
 
 ```
@@ -23,8 +33,8 @@ No new dependencies, no build changes, no impact on the Next.js app.
 
 On page load, `explore.html` fetches `lib/ev-data.json` and preprocesses the `details` array:
 
-1. **Coerce numeric fields** — fields like `msrp`, `range_mi`, `hp`, `battery_kwh`, etc. that may contain strings (e.g., "TBD", "N/A") are coerced to numbers; non-numeric values become `null`.
-2. **Filter out watchlist-only vehicles** — vehicles where most specs are TBD/null (e.g., Subaru 3-Row EV, BMW iX7, Genesis GV90) are excluded from charts to avoid noise. A `WATCHLIST` array defines which vehicles to skip.
+1. **Coerce numeric fields** — all numeric-intended fields (`msrp`, `otd_new`, `range_mi`, `hp`, `battery_kwh`, `towing_lbs`, `dc_fast_charge_kw`, `dc_fast_charge_10_80_min`, `curb_weight_lbs`, `length_in`, `width_in`, `height_in`, `third_row_legroom_in`, `third_row_headroom_in`, `torque_lb_ft`, `zero_to_60_sec`, `ground_clearance_in`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `cargo_floor_width_in`, `frunk_cu_ft`, `onboard_ac_kw`, `l2_10_100`, `l2_10_80`, `destination`) are coerced via `Number()`; values that produce `NaN` become `null`.
+2. **Filter out watchlist-only vehicles** — vehicles where most specs are TBD/null are excluded from charts. The `WATCHLIST` array includes: Subaru 3-Row EV, BMW iX7, Genesis GV90, Toyota Highlander EV, and Tesla Model Y Long (Asia).
 3. **Encode self-driving tiers** — the `self_driving_tier` string field is mapped to a numeric `self_driving_score`:
 
 | Tier                  | Numeric | Rationale                                      |
@@ -56,14 +66,14 @@ On page load, `explore.html` fetches `lib/ev-data.json` and preprocesses the `de
 ## Visual Design
 
 - **Dark theme:** dark background (~`#1a1a2e`), light text and gridlines.
-- **Vehicle colors:** a consistent color per vehicle across all charts, derived from the existing CSS vehicle classes (`.v-kia`, `.v-tesla`, etc.) in `globals.css`.
+- **Vehicle colors:** a consistent color per vehicle across all charts, defined as a JS object mapping vehicle name to hex color (values copied from the existing `.v-kia`, `.v-tesla`, etc. classes in `globals.css`). Since `explore.html` is standalone and does not load `globals.css`, the colors are hardcoded in the script.
 - **Typography:** system font stack. Chart titles are brief and descriptive. Each chart gets a one-line insight caption below.
 - **Layout:** each chart section has a heading, the chart, and a caption. Charts auto-resize to viewport width.
 
 ## Interactivity
 
 ### Global Controls
-- **Vehicle filter** — multi-select dropdown. Defaults to all vehicles. Selecting specific vehicles highlights them across all charts simultaneously.
+- **Vehicle filter** — multi-select dropdown. Defaults to all vehicles. Selecting specific vehicles filters the data: non-selected vehicles are hidden from all charts. (Not dimmed — hidden, to reduce visual noise during exploration.)
 - **Year filter** — dropdown: All Years, or a specific year. Filters data across all charts.
 
 ### Per-Chart Behavior
@@ -124,6 +134,7 @@ On page load, `explore.html` fetches `lib/ev-data.json` and preprocesses the `de
 - Left anchor: Vehicle's earliest model year average range
 - Right anchor: Vehicle's latest model year average range
 - Lines: Colored by vehicle
+- Note: Vehicles with only one model year are excluded from this chart (they have no trend to show).
 - Insight: Which models have gained the most range over time?
 
 ### Section 3: Size & Practicality
@@ -139,7 +150,7 @@ On page load, `explore.html` fetches `lib/ev-data.json` and preprocesses the `de
 - Type: Bar chart
 - X-axis: Vehicle (categorical, sorted by cargo)
 - Y-axis: Cargo behind 3rd row (cu ft)
-- Bars grouped by trim if multiple values per vehicle
+- One bar per vehicle showing the median value across trims; individual trim dots overlaid for spread
 - Insight: How usable is that third row in practice?
 
 **Chart 3.3 — Length vs. Third-Row Legroom**
@@ -162,14 +173,14 @@ On page load, `explore.html` fetches `lib/ev-data.json` and preprocesses the `de
 - Type: Bar chart
 - X-axis: Vehicle (categorical, sorted by charge time)
 - Y-axis: 10–80% charge time (minutes)
-- Bars grouped by trim
+- One bar per vehicle showing the median value across trims; individual trim dots overlaid for spread
 - Insight: The real-world question — how long am I waiting?
 
 ## Technology
 
-- **Observable Plot** (via CDN) — high-level, declarative chart library. Handles bindable axes, color scales, tooltips.
-- **D3** (via CDN) — used only for data manipulation (scales, parsing) where Observable Plot doesn't cover it.
-- **No build step** — pure HTML + ES modules from CDN.
+- **Observable Plot v0.6** (pinned, via CDN: `https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6`) — high-level, declarative chart library.
+- **D3 v7** (pinned, via CDN: `https://cdn.jsdelivr.net/npm/d3@7`) — used only for data manipulation where Observable Plot doesn't cover it.
+- **No build step** — pure HTML + ES modules from CDN. Requires a local HTTP server (see "How to Run").
 - **No framework** — vanilla JS in `<script type="module">` blocks.
 
 ## Out of Scope
