@@ -372,6 +372,7 @@ td {
   border-bottom: 1px solid var(--border);
   vertical-align: top;
   color: var(--text);
+  background: var(--surface);
   text-align: center;
 }
 td.col-sticky {
