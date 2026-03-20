@@ -806,14 +806,13 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                       <span className="rank-badge">#{ranks.get(s.vehicle)}</span>
                     )}
                     <VehicleBadge vehicle={s.vehicle} />
-                    <Link
-                      href={`/vehicles/${toSlug(s.vehicle)}`}
+                    <button
                       className="card-page-link"
-                      aria-label={`View ${s.vehicle} full page`}
-                      onClick={(e) => e.stopPropagation()}
+                      aria-label={`View ${s.vehicle} details`}
+                      onClick={(e) => { e.stopPropagation(); onVehicleClick?.(s.vehicle) }}
                     >
                       <span aria-hidden="true">↗</span>
-                    </Link>
+                    </button>
                     <span className="accordion-chevron" />
                   </div>
                   <div className="cmp-card-stats">

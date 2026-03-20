@@ -96,9 +96,6 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
               <div className="detail-vehicle-name">
                 <VehicleBadge vehicle={vehicle} style={{ fontSize: 14, padding: '4px 12px' }} />
               </div>
-              <Link href={`/?tab=comparison&vehicle=${encodeURIComponent(vehicle)}`} className="vsp-fullpage-link">
-                Compare all trims <span aria-hidden="true">→</span>
-              </Link>
             </div>
 
             {/* Vehicle Summary */}
@@ -177,6 +174,12 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
                 )}
               </div>
             )}
+
+            <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+              <Link href={`/?tab=comparison&vehicle=${encodeURIComponent(vehicle)}`} className="vsp-fullpage-link">
+                Compare all trims <span aria-hidden="true">→</span>
+              </Link>
+            </div>
           </>
         )}
       </aside>
