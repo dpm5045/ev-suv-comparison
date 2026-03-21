@@ -560,7 +560,78 @@
         },
       });
     }
-    function renderTradeoffs() {}
+    function renderTradeoffs(details) {
+      // Helper: build per-vehicle scatter datasets
+      function buildScatterDatasets(data, xField, yField) {
+        const vehicles = [...new Set(data.map(d => d.vehicle))].sort();
+        return vehicles.map(v => {
+          const points = data
+            .filter(d => d.vehicle === v && d[xField] != null && d[yField] != null)
+            .map(d => ({ x: d[xField], y: d[yField], name: d.name }));
+          return {
+            label: v,
+            data: points,
+            backgroundColor: VEHICLE_COLORS[v] || '#888',
+            pointRadius: 6,
+            pointHoverRadius: 9,
+          };
+        }).filter(ds => ds.data.length > 0);
+      }
+
+      // --- Chart A: Range vs MSRP ---
+      new Chart(document.getElementById('chart-range-vs-price'), {
+        type: 'scatter',
+        data: { datasets: buildScatterDatasets(details, 'msrp', 'range_mi') },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const pt = ctx.raw;
+                  return `${pt.name}: $${(pt.x/1000).toFixed(0)}k, ${pt.y} mi`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'MSRP ($)' },
+              ticks: { callback: v => `$${(v/1000).toFixed(0)}k` },
+            },
+            y: { title: { display: true, text: 'EPA Range (mi)' } },
+          },
+        },
+      });
+
+      // --- Chart B: Cargo vs 0-60 ---
+      new Chart(document.getElementById('chart-cargo-vs-speed'), {
+        type: 'scatter',
+        data: { datasets: buildScatterDatasets(details, 'zero_to_60_sec', 'cargo_behind_3rd_cu_ft') },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const pt = ctx.raw;
+                  return `${pt.name}: ${pt.x}s, ${pt.y} cu ft`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: '0–60 Time (sec)' },
+              reverse: true, // faster (lower) on right feels more intuitive
+            },
+            y: { title: { display: true, text: 'Cargo Behind 3rd Row (cu ft)' } },
+          },
+        },
+      });
+    }
     function renderTech() {}
 
     main();
