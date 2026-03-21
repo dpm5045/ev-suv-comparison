@@ -295,7 +295,7 @@ function PriceRangeChart() {
             const [lo, hi] = ctx.parsed._custom
               ? [ctx.parsed._custom.min, ctx.parsed._custom.max]
               : [ctx.parsed.x, ctx.parsed.x]
-            return ` $${fmtK(lo)} – $${fmtK(hi)}`
+            return ` $${fmtK(lo ?? 0)} – $${fmtK(hi ?? 0)}`
           },
         },
       },
