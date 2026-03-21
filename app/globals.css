@@ -2950,3 +2950,119 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   flex-shrink: 1;
   min-height: 0;
 }
+
+/* ── Market Insights ── */
+.market-insights-section {
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+.market-insights-section .section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.market-insights-section .section-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.mi-chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.mi-chart-title {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+.mi-chart-wrap { position: relative; }
+.mi-chart-wrap--standard canvas { height: 400px !important; }
+.mi-chart-wrap--range canvas   { height: 540px !important; }
+.mi-chart-wrap--tall canvas    { height: 450px !important; }
+
+.mi-stat-callouts {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.mi-stat-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  flex: 1;
+  min-width: 140px;
+}
+.mi-stat-value {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.mi-stat-label {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+.mi-insights {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 12px;
+}
+.mi-insights h4 {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.mi-insights ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.mi-insights li {
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  padding-left: 1.1rem;
+  position: relative;
+}
+.mi-insights li::before {
+  content: '›';
+  position: absolute;
+  left: 0.15rem;
+  color: var(--text-dim);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.mi-insights li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .mi-stat-callouts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .mi-chart-wrap--standard canvas { height: 300px !important; }
+  .mi-chart-wrap--range canvas   { height: 420px !important; }
+  .mi-chart-wrap--tall canvas    { height: 320px !important; }
+}
