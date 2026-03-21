@@ -300,7 +300,76 @@
       }
     }
 
-    function renderGrowth() {}
+    function renderGrowth(details, countData) {
+      // --- Stat callouts ---
+      const statsEl = document.getElementById('growth-stats');
+
+      // Models per year (from details)
+      const modelsByYear = {};
+      YEARS.forEach(y => {
+        modelsByYear[y] = new Set(details.filter(d => d.year === y).map(d => d.vehicle)).size;
+      });
+      const firstYearWithData = YEARS.find(y => modelsByYear[y] > 0);
+      const latestYear = YEARS[YEARS.length - 1];
+
+      // Trims per year (from countData)
+      const trimsByYear = {};
+      YEARS.forEach(y => {
+        trimsByYear[y] = countData.reduce((sum, row) => sum + (row[`y${y}`] || 0), 0);
+      });
+
+      // Price range per year (from details)
+      const priceFirstYear = details.filter(d => d.year === firstYearWithData).map(d => d.msrp).filter(Boolean);
+      const priceLatestYear = details.filter(d => d.year === latestYear).map(d => d.msrp).filter(Boolean);
+
+      statsEl.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value">${modelsByYear[firstYearWithData]} → ${modelsByYear[latestYear]}</div>
+          <div class="stat-label">Models Available</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${trimsByYear[firstYearWithData]} → ${trimsByYear[latestYear]}</div>
+          <div class="stat-label">Trims Analyzed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">$${Math.round(Math.min(...priceFirstYear)/1000)}k–$${Math.round(Math.max(...priceFirstYear)/1000)}k → $${Math.round(Math.min(...priceLatestYear)/1000)}k–$${Math.round(Math.max(...priceLatestYear)/1000)}k</div>
+          <div class="stat-label">MSRP Range</div>
+        </div>
+      `;
+
+      // --- Stacked bar chart ---
+      const vehicles = [...new Set(countData.map(d => d.model))].sort();
+
+      const datasets = vehicles
+        .filter(v => YEAR_KEYS.some(k => countData.find(d => d.model === v)?.[k] > 0))
+        .map(vehicle => ({
+          label: vehicle,
+          data: YEAR_KEYS.map(k => {
+            const row = countData.find(d => d.model === vehicle);
+            return row ? (row[k] || 0) : 0;
+          }),
+          backgroundColor: VEHICLE_COLORS[vehicle] || '#888',
+        }));
+
+      new Chart(document.getElementById('chart-growth'), {
+        type: 'bar',
+        data: {
+          labels: YEARS.map(String),
+          datasets,
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            tooltip: { mode: 'index' },
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: { stacked: true, title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+          },
+        },
+      });
+    }
     function renderPrice() {}
     function renderCapability() {}
     function renderTradeoffs() {}
