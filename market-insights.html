@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3-Row EV Market Insights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;800&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    :root {
+      --bg-primary: #0f0f1a;
+      --bg-elevated: #171726;
+      --bg-surface: #1e1e32;
+      --border-subtle: rgba(255,255,255,0.06);
+      --border-medium: rgba(255,255,255,0.12);
+      --text-primary: #e8e8f0;
+      --text-secondary: #9898b0;
+      --text-muted: #686880;
+      --accent: #6b8afd;
+      --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      color: var(--text-primary);
+    }
+
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2.5rem 4rem;
+    }
+
+    .header {
+      margin-bottom: 1.5rem;
+    }
+
+    .header h1 {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .byline {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .section-nav {
+      position: sticky;
+      top: 0;
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg-primary);
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 100;
+      overflow-x: auto;
+    }
+
+    .section-nav a {
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      background: transparent;
+      transition: background 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .section-nav a:hover {
+      background: var(--bg-surface);
+    }
+
+    .section-nav a.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .chart-section {
+      margin-bottom: 3rem;
+      padding-top: 1rem;
+      scroll-margin-top: 60px;
+    }
+
+    h2 {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    .chart-wrap {
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-callouts {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .stat-value {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        padding: 1.5rem 1rem 2rem;
+      }
+
+      .stat-callouts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .section-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <header class="header">
+      <h1>3-Row EV Market Insights</h1>
+      <p class="byline">A data-driven look at the 3-row electric SUV segment</p>
+    </header>
+
+    <nav class="section-nav" id="section-nav">
+      <a href="#growth">Market Growth</a>
+      <a href="#price">Price Landscape</a>
+      <a href="#capability">Capability Evolution</a>
+      <a href="#tradeoffs">Market Trade-offs</a>
+      <a href="#tech">Tech Adoption</a>
+    </nav>
+
+    <section id="growth" class="chart-section">
+      <h2>Market Growth</h2>
+      <p class="section-subtitle">How the 3-row EV segment exploded from one vehicle to a full market</p>
+      <div class="stat-callouts" id="growth-stats"></div>
+      <div class="chart-wrap"><canvas id="chart-growth"></canvas></div>
+    </section>
+
+    <section id="price" class="chart-section">
+      <h2>Price Landscape</h2>
+      <p class="section-subtitle">What the market looks like when you shop by budget</p>
+      <div class="chart-wrap"><canvas id="chart-price-range"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-price-segment"></canvas></div>
+    </section>
+
+    <section id="capability" class="chart-section">
+      <h2>Capability Evolution</h2>
+      <p class="section-subtitle">How range, charging, and performance have improved over time</p>
+      <div class="stat-callouts" id="capability-stats"></div>
+      <div class="chart-wrap"><canvas id="chart-capability"></canvas></div>
+    </section>
+
+    <section id="tradeoffs" class="chart-section">
+      <h2>Market Trade-offs</h2>
+      <p class="section-subtitle">What the market forces you to give up</p>
+      <div class="chart-wrap"><canvas id="chart-range-vs-price"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-cargo-vs-speed"></canvas></div>
+    </section>
+
+    <section id="tech" class="chart-section">
+      <h2>Tech Adoption</h2>
+      <p class="section-subtitle">How key technologies have spread across the segment</p>
+      <div class="chart-wrap"><canvas id="chart-charging"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-self-driving"></canvas></div>
+      <div class="chart-wrap"><canvas id="chart-seats"></canvas></div>
+    </section>
+  </div>
+
+  <script>
+    const VEHICLE_COLORS = {
+      "Kia EV9":               "#4ade80",
+      "Hyundai IONIQ 9":       "#5ba4f5",
+      "Lucid Gravity":         "#a78bfa",
+      "Rivian R1S":            "#fb923c",
+      "Tesla Model X":         "#f87171",
+      "Tesla Model Y (3-Row)": "#f87171",
+      "Volkswagen ID. Buzz":   "#fbbf24",
+      "VinFast VF9":           "#f59e0b",
+      "Volvo EX90":            "#f472b6",
+      "Cadillac Escalade IQ":  "#a78bfa",
+      "Cadillac VISTIQ":       "#c084fc",
+      "Mercedes-Benz EQS SUV": "#d4d4d8",
+    };
+
+    const WATCHLIST = [
+      "Subaru 3-Row EV", "BMW iX7", "Genesis GV90",
+      "Toyota Highlander EV", "Tesla Model Y Long (Asia)",
+    ];
+
+    const YEARS = [2021, 2022, 2023, 2024, 2025, 2026];
+    const YEAR_KEYS = YEARS.map(y => `y${y}`);
+
+    const CHARGING_CATEGORIES = {
+      "NACS":              "Native NACS",
+      "NACS (+CCS adpt)":  "Native NACS",
+      "NACS (+CCS incl)":  "Native NACS",
+      "NACS / GB-T":       "Native NACS",
+      "Tesla (pre-NACS)":  "Native NACS",
+      "CCS (+NACS adpt)":  "CCS (NACS adapter)",
+      "CCS1 (+NACS adpt)": "CCS (NACS adapter)",
+      "CCS":               "CCS Only",
+      "CCS1":              "CCS Only",
+      "TBD":               "TBD",
+      "TBD (NACS likely)": "TBD",
+    };
+
+    Chart.defaults.color = '#9898b0';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+    Chart.defaults.font.family = "'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+
+    async function loadData() {
+      const res = await fetch("lib/ev-data.json");
+      const raw = await res.json();
+      const details = raw.details.filter(d =>
+        !WATCHLIST.includes(d.vehicle) && d.year < 2027
+      );
+      const countData = raw.count_data.filter(d =>
+        !WATCHLIST.includes(d.model)
+      );
+      return { details, countData };
+    }
+
+    function initScrollSpy() {
+      const sections = document.querySelectorAll('.chart-section');
+      const navLinks = document.querySelectorAll('.section-nav a');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(link => link.classList.remove('active'));
+            const active = document.querySelector(`.section-nav a[href="#${entry.target.id}"]`);
+            if (active) active.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-20% 0px -70% 0px' });
+      sections.forEach(s => observer.observe(s));
+    }
+
+    async function main() {
+      try {
+        const { details, countData } = await loadData();
+        initScrollSpy();
+        renderGrowth(details, countData);
+        renderPrice(details);
+        renderCapability(details);
+        renderTradeoffs(details);
+        renderTech(details);
+      } catch (err) {
+        document.querySelector('.content').innerHTML =
+          `<p style="color:#f87171;text-align:center;padding:4rem;">Failed to load data: ${err.message}</p>`;
+      }
+    }
+
+    function renderGrowth() {}
+    function renderPrice() {}
+    function renderCapability() {}
+    function renderTradeoffs() {}
+    function renderTech() {}
+
+    main();
+  </script>
+</body>
+</html>
