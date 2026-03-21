@@ -563,7 +563,7 @@ export default function DataExplorer() {
 
   return (
     <div className="explorer">
-      <h1 className="section-title">3-Row Electric Vehicle Explorer</h1>
+      <h1 className="section-title">Data Explorer</h1>
       <p className="count-note">
         Interactive scatter plot of {allData.length} trims across {vehicles.length} vehicles.
         Use the filters and axis selectors below to explore the data.

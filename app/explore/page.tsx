@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { SITE_URL } from '@/lib/slugs'
 import Header from '@/components/Header'
-import Breadcrumb from '@/components/Breadcrumb'
 import DataExplorer from '@/components/DataExplorer'
 
 export const metadata: Metadata = {
@@ -13,12 +12,8 @@ export const metadata: Metadata = {
 export default function ExplorePage() {
   return (
     <>
-      <Header />
-      <main className="info-page">
-        <Breadcrumb items={[
-          { label: 'Home', href: '/' },
-          { label: 'Data Explorer' },
-        ]} />
+      <Header activeTab="overview" />
+      <main className="main">
         <DataExplorer />
       </main>
     </>
