@@ -20,9 +20,9 @@ Insert the Market Insights section in `OverviewTab.tsx` **after the `</div>` clo
 
 ## Dependencies
 
-- `chart.js` (npm package)
-- `react-chartjs-2` (React wrapper for Chart.js)
-- No other new dependencies
+Install: `npm install chart.js react-chartjs-2`
+
+The app already has Observable Plot + D3 for the DataExplorer component. We're adding Chart.js here because the three charts are already built and tested in Chart.js in the standalone `market-insights.html` — porting configs directly is faster and less error-prone than rewriting in Observable Plot. The two libraries coexist without conflict.
 
 ## Component Architecture
 
@@ -31,7 +31,7 @@ Insert the Market Insights section in `OverviewTab.tsx` **after the `</div>` clo
 A `'use client'` component that:
 - Imports `DATA` from `lib/data.ts` for all data
 - Imports Chart.js components from `react-chartjs-2` (`Bar`, `Scatter`, `Line`)
-- Registers required Chart.js modules via `Chart.register(...)`
+- Registers all required Chart.js modules: `import { Chart, registerables } from 'chart.js'; Chart.register(...registerables);`
 - Computes all chart data at render time from `DATA.details` and `DATA.count_data`
 - Renders three chart cards with takeaway boxes
 
@@ -51,7 +51,7 @@ Import `MarketInsights` and render it:
 
 All data comes from `DATA` (imported from `lib/data.ts`), which reads `lib/ev-data.json`:
 
-- **Market Growth**: `DATA.counts` (count_data array with `model` + `y2021`–`y2026` keys) + `DATA.count_totals` + `us_ev_sales` from the JSON root
+- **Market Growth**: `DATA.count_data` (array of objects with `model` + year keys) — use only `y2021` through `y2026`, omit `y2027`. Also uses `DATA.count_totals` and `us_ev_sales` from the JSON root
 - **MSRP Range**: `DATA.details` filtered to latest year per vehicle, min/max `msrp` (numeric only — filter out `"N/A - Not New"` strings)
 - **Range vs Price**: `DATA.details` filtered to non-null `msrp` (numeric) and `range_mi`
 
@@ -95,7 +95,8 @@ Port directly from `market-insights.html` `renderGrowth()`:
 - **Y-axis (left)**: Number of trims (stacked bars, one dataset per vehicle)
 - **Y-axis (right)**: US EV sales in thousands (dashed line from `us_ev_sales`)
 - **Bar styling**: `backgroundColor: color + '50'`, `borderColor: color + '99'`, `borderWidth: 1`, `borderRadius: 3`
-- **Line styling**: `borderColor: 'rgba(255,107,53,0.6)'`, `borderDash: [6, 4]`, hollow points with dark fill
+- **Line styling**: `borderColor: 'rgba(255,107,53,0.6)'`, `borderDash: [6, 4]`, hollow points with dark fill, `spanGaps: true`
+- **Null handling for US EV sales**: `us_ev_sales.y2026` may be `null` — omit null data points so the line ends at the last known year (use `spanGaps: true` and pass `null` in the data array)
 - **Stat callouts above chart**: Models available (first→latest), Trims analyzed, MSRP range, US EV Sales
 
 ### Chart 2: MSRP Range by Vehicle (Horizontal Floating Bar)
