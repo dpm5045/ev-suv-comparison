@@ -370,7 +370,102 @@
         },
       });
     }
-    function renderPrice() {}
+    function renderPrice(details) {
+      const vehicles = [...new Set(details.map(d => d.vehicle))].sort();
+
+      const priceData = vehicles.map(v => {
+        const vTrims = details.filter(d => d.vehicle === v && d.msrp != null);
+        const latestYear = Math.max(...vTrims.map(d => d.year));
+        const latestTrims = vTrims.filter(d => d.year === latestYear);
+        const prices = latestTrims.map(d => d.msrp);
+        return {
+          vehicle: v,
+          min: Math.min(...prices),
+          max: Math.max(...prices),
+          year: latestYear,
+        };
+      }).sort((a, b) => a.min - b.min);
+
+      new Chart(document.getElementById('chart-price-range'), {
+        type: 'bar',
+        data: {
+          labels: priceData.map(d => d.vehicle),
+          datasets: [{
+            data: priceData.map(d => [d.min, d.max]),
+            backgroundColor: priceData.map(d => VEHICLE_COLORS[d.vehicle] || '#888'),
+            borderRadius: 4,
+          }],
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const [min, max] = ctx.raw;
+                  return `$${(min/1000).toFixed(0)}k – $${(max/1000).toFixed(0)}k`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'MSRP ($)' },
+              ticks: { callback: v => `$${(v/1000).toFixed(0)}k` },
+            },
+            y: { grid: { display: false } },
+          },
+        },
+      });
+
+      const segments = [
+        { label: 'Under $60k', min: 0, max: 60000 },
+        { label: '$60k–$90k', min: 60000, max: 90000 },
+        { label: '$90k+', min: 90000, max: Infinity },
+      ];
+
+      // Reuse priceData from Chart A to get latest-year trims
+      const latestYearTrims = [];
+      priceData.forEach(pd => {
+        latestYearTrims.push(
+          ...details.filter(d => d.vehicle === pd.vehicle && d.year === pd.year && d.msrp != null)
+        );
+      });
+
+      const segVehicles = vehicles.filter(v =>
+        latestYearTrims.some(d => d.vehicle === v)
+      );
+
+      const segmentDatasets = segVehicles.map(v => ({
+        label: v,
+        data: segments.map(seg =>
+          latestYearTrims.filter(d =>
+            d.vehicle === v && d.msrp >= seg.min && d.msrp < seg.max
+          ).length
+        ),
+        backgroundColor: VEHICLE_COLORS[v] || '#888',
+      }));
+
+      new Chart(document.getElementById('chart-price-segment'), {
+        type: 'bar',
+        data: {
+          labels: segments.map(s => s.label),
+          datasets: segmentDatasets,
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+          },
+        },
+      });
+    }
     function renderCapability() {}
     function renderTradeoffs() {}
     function renderTech() {}
