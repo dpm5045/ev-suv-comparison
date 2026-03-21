@@ -632,7 +632,121 @@
         },
       });
     }
-    function renderTech() {}
+    function renderTech(details) {
+      // --- Chart A: Charging standards by year ---
+      const chargingOrder = ['Native NACS', 'CCS (NACS adapter)', 'CCS Only', 'TBD'];
+      const chargingColors = {
+        'Native NACS':       '#4ade80',
+        'CCS (NACS adapter)': '#fbbf24',
+        'CCS Only':          '#f87171',
+        'TBD':               '#6b7280',
+      };
+
+      const chargingDatasets = chargingOrder.map(cat => ({
+        label: cat,
+        data: YEARS.map(y => {
+          return details.filter(d =>
+            d.year === y && CHARGING_CATEGORIES[d.charging_type] === cat
+          ).length;
+        }),
+        backgroundColor: chargingColors[cat],
+      }));
+
+      // Remove TBD dataset if all zeros
+      const filteredChargingDatasets = chargingDatasets.filter(ds => ds.data.some(v => v > 0));
+
+      new Chart(document.getElementById('chart-charging'), {
+        type: 'bar',
+        data: { labels: YEARS.map(String), datasets: filteredChargingDatasets },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            tooltip: { mode: 'index' },
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: { stacked: true, title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+          },
+        },
+      });
+
+      // --- Chart B: Self-driving tiers by year ---
+      const tierOrder = ['Basic L2', 'Advanced L2', 'L2+ Hands-Free', 'L2+ Point-to-Point'];
+      const tierColors = {
+        'Basic L2':            '#6b7280',
+        'Advanced L2':         '#fbbf24',
+        'L2+ Hands-Free':     '#5ba4f5',
+        'L2+ Point-to-Point': '#4ade80',
+      };
+
+      const tierDatasets = tierOrder.map(tier => ({
+        label: tier,
+        data: YEARS.map(y =>
+          details.filter(d => d.year === y && d.self_driving_tier === tier).length
+        ),
+        backgroundColor: tierColors[tier],
+      }));
+
+      new Chart(document.getElementById('chart-self-driving'), {
+        type: 'bar',
+        data: { labels: YEARS.map(String), datasets: tierDatasets },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            tooltip: { mode: 'index' },
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: { stacked: true, title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+          },
+        },
+      });
+
+      // --- Chart C: Seat configs by vehicle (latest year per vehicle) ---
+      const vehicles = [...new Set(details.map(d => d.vehicle))].sort();
+
+      const seatData = vehicles.map(v => {
+        const vTrims = details.filter(d => d.vehicle === v);
+        const latestYear = Math.max(...vTrims.map(d => d.year));
+        const latest = vTrims.filter(d => d.year === latestYear);
+        return {
+          vehicle: v,
+          sixSeat: latest.filter(d => d.seats === 6).length,
+          sevenSeat: latest.filter(d => d.seats === 7).length,
+        };
+      }).filter(d => d.sixSeat + d.sevenSeat > 0);
+
+      new Chart(document.getElementById('chart-seats'), {
+        type: 'bar',
+        data: {
+          labels: seatData.map(d => d.vehicle),
+          datasets: [
+            {
+              label: '6-Seat',
+              data: seatData.map(d => d.sixSeat),
+              backgroundColor: '#5ba4f5',
+            },
+            {
+              label: '7-Seat',
+              data: seatData.map(d => d.sevenSeat),
+              backgroundColor: '#4ade80',
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+          },
+        },
+      });
+    }
 
     main();
   </script>
