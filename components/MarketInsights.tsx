@@ -83,6 +83,12 @@ function fmtK(v: number): string {
   return String(v)
 }
 
+/** Format us_ev_sales values (stored in thousands) as 630k or 1.3M */
+function fmtEvSales(v: number): string {
+  if (v >= 1000) return `${(v / 1000).toFixed(1)}M`
+  return `${v}k`
+}
+
 // ── Filtered data hook ────────────────────────────────────────────────────────
 function useFilteredData() {
   return useMemo(() => {
@@ -180,7 +186,7 @@ function GrowthChart() {
         callbacks: {
           label: (ctx: TooltipItem<'bar'>) => {
             if (ctx.dataset.label === 'US EV Sales') {
-              return ` US EV Sales: ${fmtK(ctx.parsed.y as number)}`
+              return ` US EV Sales: ${fmtEvSales(ctx.parsed.y as number)}`
             }
             return ` ${ctx.dataset.label}: ${ctx.parsed.y} trim${(ctx.parsed.y as number) !== 1 ? 's' : ''}`
           },
@@ -206,34 +212,36 @@ function GrowthChart() {
   }
 
   return (
+    <>
+    <div className="mi-milestone-grid">
+      <div className="mi-milestone-card">
+        <div className="mi-milestone-value">{modelsByYear[firstYearWithData]} → {modelsByYear[latestYear]}</div>
+        <div className="mi-milestone-label">Models Available</div>
+      </div>
+      <div className="mi-milestone-card">
+        <div className="mi-milestone-value">{trimsByYear[firstYearWithData]} → {trimsByYear[latestYear]}</div>
+        <div className="mi-milestone-label">Trims Analyzed</div>
+      </div>
+      {priceFirstYear.length > 0 && priceLatestYear.length > 0 && (
+        <div className="mi-milestone-card">
+          <div className="mi-milestone-value">
+            ${Math.round(Math.min(...priceFirstYear) / 1000)}k–${Math.round(Math.max(...priceFirstYear) / 1000)}k
+            <span className="mi-milestone-arrow">→</span>
+            ${Math.round(Math.min(...priceLatestYear) / 1000)}k–${Math.round(Math.max(...priceLatestYear) / 1000)}k
+          </div>
+          <div className="mi-milestone-label">MSRP Range</div>
+        </div>
+      )}
+      {salesFirst && salesLatest && (
+        <div className="mi-milestone-card">
+          <div className="mi-milestone-value">{fmtEvSales(salesFirst)} → {fmtEvSales(salesLatest)}</div>
+          <div className="mi-milestone-label">US EV Sales ({firstYearWithData} → {salesLatestLabel})</div>
+        </div>
+      )}
+    </div>
+
     <div className="mi-chart-card">
       <h3 className="mi-chart-title">Segment Growth by Year</h3>
-
-      <div className="mi-stat-callouts">
-        <div className="mi-stat-card">
-          <span className="mi-stat-value">{modelsByYear[firstYearWithData]} → {modelsByYear[latestYear]}</span>
-          <span className="mi-stat-label">Models Available</span>
-        </div>
-        <div className="mi-stat-card">
-          <span className="mi-stat-value">{trimsByYear[firstYearWithData]} → {trimsByYear[latestYear]}</span>
-          <span className="mi-stat-label">Trims Analyzed</span>
-        </div>
-        {priceFirstYear.length > 0 && priceLatestYear.length > 0 && (
-          <div className="mi-stat-card">
-            <span className="mi-stat-value">
-              ${Math.round(Math.min(...priceFirstYear) / 1000)}k–${Math.round(Math.max(...priceFirstYear) / 1000)}k → ${Math.round(Math.min(...priceLatestYear) / 1000)}k–${Math.round(Math.max(...priceLatestYear) / 1000)}k
-            </span>
-            <span className="mi-stat-label">MSRP Range</span>
-          </div>
-        )}
-        {salesFirst && salesLatest && (
-          <div className="mi-stat-card">
-            <span className="mi-stat-value">{fmtK(salesFirst)} → {fmtK(salesLatest)}</span>
-            <span className="mi-stat-label">US EV Sales ({firstYearWithData} → {salesLatestLabel})</span>
-          </div>
-        )}
-      </div>
-
       <div className="mi-chart-wrap" style={{ height: 420 }}>
         {/* @ts-expect-error mixed chart type */}
         <Bar data={chartData} options={options} />
@@ -248,6 +256,7 @@ function GrowthChart() {
         ]}
       />
     </div>
+    </>
   )
 }
 

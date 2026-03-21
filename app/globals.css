@@ -2956,6 +2956,53 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   margin-top: 8px;
   margin-bottom: 20px;
 }
+
+/* Milestone cards — zerodayclock-inspired */
+.mi-milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.mi-milestone-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 16px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.mi-milestone-card:hover {
+  border-color: var(--border-light, rgba(255,255,255,0.12));
+}
+.mi-milestone-value {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.mi-milestone-arrow {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.mi-milestone-label {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+@media (max-width: 768px) {
+  .mi-milestone-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .mi-milestone-value {
+    font-size: 1.05rem;
+  }
+}
 .market-insights-section .section-title {
   font-size: 17px;
   font-weight: 700;
