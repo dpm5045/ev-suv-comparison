@@ -117,7 +117,21 @@
       border-radius: 12px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
+      position: relative;
     }
+
+    .chart-wrap h3 {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      font-family: var(--font-sans);
+    }
+
+    .chart-wrap--tall canvas   { height: 450px !important; }
+    .chart-wrap--standard canvas { height: 400px !important; }
+    .chart-wrap--short canvas  { height: 350px !important; }
+    .chart-wrap--range canvas  { height: 540px !important; }
 
     .stat-callouts {
       display: flex;
@@ -161,6 +175,15 @@
         flex-wrap: nowrap;
         overflow-x: auto;
       }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .chart-wrap--tall canvas   { height: 340px !important; }
+      .chart-wrap--standard canvas { height: 300px !important; }
+      .chart-wrap--short canvas  { height: 260px !important; }
+      .chart-wrap--range canvas  { height: 420px !important; }
     }
   </style>
 </head>
@@ -183,36 +206,57 @@
       <h2>Market Growth</h2>
       <p class="section-subtitle">How the 3-row EV segment exploded from one vehicle to a full market</p>
       <div class="stat-callouts" id="growth-stats"></div>
-      <div class="chart-wrap"><canvas id="chart-growth"></canvas></div>
+      <div class="chart-wrap chart-wrap--standard"><canvas id="chart-growth"></canvas></div>
     </section>
 
     <section id="price" class="chart-section">
       <h2>Price Landscape</h2>
       <p class="section-subtitle">What the market looks like when you shop by budget</p>
-      <div class="chart-wrap"><canvas id="chart-price-range"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-price-segment"></canvas></div>
+      <div class="chart-wrap chart-wrap--range">
+        <h3>MSRP Range by Vehicle</h3>
+        <canvas id="chart-price-range"></canvas>
+      </div>
+      <div class="chart-wrap chart-wrap--standard">
+        <h3>Trims by Price Segment</h3>
+        <canvas id="chart-price-segment"></canvas>
+      </div>
     </section>
 
     <section id="capability" class="chart-section">
       <h2>Capability Evolution</h2>
       <p class="section-subtitle">How range, charging, and performance have improved over time</p>
       <div class="stat-callouts" id="capability-stats"></div>
-      <div class="chart-wrap"><canvas id="chart-capability"></canvas></div>
+      <div class="chart-wrap chart-wrap--standard"><canvas id="chart-capability"></canvas></div>
     </section>
 
     <section id="tradeoffs" class="chart-section">
       <h2>Market Trade-offs</h2>
       <p class="section-subtitle">What the market forces you to give up</p>
-      <div class="chart-wrap"><canvas id="chart-range-vs-price"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-cargo-vs-speed"></canvas></div>
+      <div class="chart-wrap chart-wrap--tall">
+        <h3>Does Paying More Get You More Range?</h3>
+        <canvas id="chart-range-vs-price"></canvas>
+      </div>
+      <div class="chart-wrap chart-wrap--tall">
+        <h3>Practicality vs. Performance</h3>
+        <canvas id="chart-cargo-vs-speed"></canvas>
+      </div>
     </section>
 
     <section id="tech" class="chart-section">
       <h2>Tech Adoption</h2>
       <p class="section-subtitle">How key technologies have spread across the segment</p>
-      <div class="chart-wrap"><canvas id="chart-charging"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-self-driving"></canvas></div>
-      <div class="chart-wrap"><canvas id="chart-seats"></canvas></div>
+      <div class="chart-wrap chart-wrap--standard">
+        <h3>Charging Standard Adoption</h3>
+        <canvas id="chart-charging"></canvas>
+      </div>
+      <div class="chart-wrap chart-wrap--standard">
+        <h3>Self-Driving Capability Tiers</h3>
+        <canvas id="chart-self-driving"></canvas>
+      </div>
+      <div class="chart-wrap chart-wrap--short">
+        <h3>Seat Configuration Options</h3>
+        <canvas id="chart-seats"></canvas>
+      </div>
     </section>
   </div>
 
@@ -359,6 +403,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
             tooltip: { mode: 'index' },
@@ -399,6 +444,7 @@
         options: {
           indexAxis: 'y',
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { display: false },
             tooltip: {
@@ -456,6 +502,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
           },
@@ -542,6 +589,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
             tooltip: {
@@ -584,6 +632,7 @@
         data: { datasets: buildScatterDatasets(details, 'msrp', 'range_mi') },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
             tooltip: {
@@ -611,6 +660,7 @@
         data: { datasets: buildScatterDatasets(details, 'zero_to_60_sec', 'cargo_behind_3rd_cu_ft') },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
             tooltip: {
@@ -660,6 +710,7 @@
         data: { labels: YEARS.map(String), datasets: filteredChargingDatasets },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
             tooltip: { mode: 'index' },
@@ -693,6 +744,7 @@
         data: { labels: YEARS.map(String), datasets: tierDatasets },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
             tooltip: { mode: 'index' },
@@ -737,6 +789,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
           },
