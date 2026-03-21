@@ -765,16 +765,22 @@
         const latest = vTrims.filter(d => d.year === latestYear);
         return {
           vehicle: v,
+          fiveSeat: latest.filter(d => d.seats === 5).length,
           sixSeat: latest.filter(d => d.seats === 6).length,
           sevenSeat: latest.filter(d => d.seats === 7).length,
         };
-      }).filter(d => d.sixSeat + d.sevenSeat > 0);
+      }).filter(d => d.fiveSeat + d.sixSeat + d.sevenSeat > 0);
 
       new Chart(document.getElementById('chart-seats'), {
         type: 'bar',
         data: {
           labels: seatData.map(d => d.vehicle),
           datasets: [
+            {
+              label: '5-Seat',
+              data: seatData.map(d => d.fiveSeat),
+              backgroundColor: '#f87171',
+            },
             {
               label: '6-Seat',
               data: seatData.map(d => d.sixSeat),
