@@ -6,6 +6,7 @@ import type { InsightFilters } from '../Dashboard'
 import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
 import ExploreTeaser from '@/components/ExploreTeaser'
+import MarketInsights from '@/components/MarketInsights'
 import { toSlug } from '@/lib/slugs'
 
 const WATCHLIST_VEHICLES = [
@@ -971,6 +972,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       })()}
       <ExploreTeaser />
       </div>
+
+      <MarketInsights />
 
       {/* ── Watchlist ── */}
       <div className="card watchlist-card">
