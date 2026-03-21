@@ -112,23 +112,24 @@ function Takeaway({ items }: { items: string[] }) {
 function GrowthChart() {
   const { details, count_data, us_ev_sales } = useFilteredData()
 
-  // Stat callouts
-  const models = new Set(details.map((r) => r.vehicle)).size
-  const trims = details.length
-  const msrpNums = details
-    .map((r) => r.msrp)
-    .filter((v): v is number => typeof v === 'number')
-  const msrpMin = Math.min(...msrpNums)
-  const msrpMax = Math.max(...msrpNums)
+  // Stat callouts — per-year comparisons matching market-insights.html
+  const modelsByYear: Record<number, number> = {}
+  const trimsByYear: Record<number, number> = {}
+  YEARS.forEach(y => {
+    modelsByYear[y] = new Set(details.filter(d => d.year === y).map(d => d.vehicle)).size
+    trimsByYear[y] = count_data.reduce((sum, row) => sum + ((row[`y${y}` as keyof typeof row] as number) || 0), 0)
+  })
+  const firstYearWithData = YEARS.find(y => modelsByYear[y] > 0) ?? 2021
+  const latestYear = YEARS[YEARS.length - 1]
 
-  const evSalesTotal = [
-    us_ev_sales.y2021,
-    us_ev_sales.y2022,
-    us_ev_sales.y2023,
-    us_ev_sales.y2024,
-    us_ev_sales.y2025,
-    us_ev_sales.y2026,
-  ]
+  const priceFirstYear = details.filter(d => d.year === firstYearWithData && typeof d.msrp === 'number').map(d => d.msrp as number)
+  const priceLatestYear = details.filter(d => d.year === latestYear && typeof d.msrp === 'number').map(d => d.msrp as number)
+
+  const salesFirst = us_ev_sales[`y${firstYearWithData}` as keyof typeof us_ev_sales] as number | null
+  const salesLatest = (us_ev_sales[`y${latestYear}` as keyof typeof us_ev_sales] ?? us_ev_sales[`y${latestYear - 1}` as keyof typeof us_ev_sales]) as number | null
+  const salesLatestLabel = us_ev_sales[`y${latestYear}` as keyof typeof us_ev_sales] ? latestYear : latestYear - 1
+
+  const evSalesTotal = YEARS.map(y => us_ev_sales[`y${y}` as keyof typeof us_ev_sales] as number | null)
 
   // Bar datasets — one per vehicle
   const vehicles = count_data.map((r) => r.model)
@@ -208,30 +209,32 @@ function GrowthChart() {
     <div className="mi-chart-card">
       <h3 className="mi-chart-title">Segment Growth by Year</h3>
 
-      <div className="mi-stat-row">
-        <div className="mi-stat">
-          <span className="mi-stat-val">{models}</span>
+      <div className="mi-stat-callouts">
+        <div className="mi-stat-card">
+          <span className="mi-stat-value">{modelsByYear[firstYearWithData]} → {modelsByYear[latestYear]}</span>
           <span className="mi-stat-label">Models Available</span>
         </div>
-        <div className="mi-stat">
-          <span className="mi-stat-val">{trims}</span>
+        <div className="mi-stat-card">
+          <span className="mi-stat-value">{trimsByYear[firstYearWithData]} → {trimsByYear[latestYear]}</span>
           <span className="mi-stat-label">Trims Analyzed</span>
         </div>
-        <div className="mi-stat">
-          <span className="mi-stat-val">
-            ${fmtK(msrpMin)}–${fmtK(msrpMax)}
-          </span>
-          <span className="mi-stat-label">MSRP Range</span>
-        </div>
-        <div className="mi-stat">
-          <span className="mi-stat-val">
-            {fmtK(us_ev_sales.y2024 ?? 0)}
-          </span>
-          <span className="mi-stat-label">US EV Sales (2024)</span>
-        </div>
+        {priceFirstYear.length > 0 && priceLatestYear.length > 0 && (
+          <div className="mi-stat-card">
+            <span className="mi-stat-value">
+              ${Math.round(Math.min(...priceFirstYear) / 1000)}k–${Math.round(Math.max(...priceFirstYear) / 1000)}k → ${Math.round(Math.min(...priceLatestYear) / 1000)}k–${Math.round(Math.max(...priceLatestYear) / 1000)}k
+            </span>
+            <span className="mi-stat-label">MSRP Range</span>
+          </div>
+        )}
+        {salesFirst && salesLatest && (
+          <div className="mi-stat-card">
+            <span className="mi-stat-value">{fmtK(salesFirst)} → {fmtK(salesLatest)}</span>
+            <span className="mi-stat-label">US EV Sales ({firstYearWithData} → {salesLatestLabel})</span>
+          </div>
+        )}
       </div>
 
-      <div className="mi-chart-wrap">
+      <div className="mi-chart-wrap" style={{ height: 420 }}>
         {/* @ts-expect-error mixed chart type */}
         <Bar data={chartData} options={options} />
       </div>
@@ -391,7 +394,7 @@ function RangeVsPriceChart() {
   return (
     <div className="mi-chart-card">
       <h3 className="mi-chart-title">Range vs. Price (All Trims)</h3>
-      <div className="mi-chart-wrap">
+      <div className="mi-chart-wrap" style={{ height: 480 }}>
         <Scatter data={chartData} options={options} />
       </div>
       <Takeaway
