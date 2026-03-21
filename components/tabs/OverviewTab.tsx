@@ -5,6 +5,7 @@ import { DATA } from '@/lib/data'
 import type { InsightFilters } from '../Dashboard'
 import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
+import ExploreTeaser from '@/components/ExploreTeaser'
 import { toSlug } from '@/lib/slugs'
 
 const WATCHLIST_VEHICLES = [
@@ -871,6 +872,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         </div>
       </div>
 
+      <div className="math-explore-row">
       {/* ── Math Explanation ── */}
       {rankResult.effectivePrefs.length > 0 && (() => {
         const prefLabel = (id: string) => PREFERENCE_OPTIONS.find((p) => p.id === id)?.label ?? id
@@ -967,6 +969,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
           </div>
         )
       })()}
+      <ExploreTeaser />
+      </div>
 
       {/* ── Watchlist ── */}
       <div className="card watchlist-card">

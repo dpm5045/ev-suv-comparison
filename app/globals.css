@@ -2912,3 +2912,36 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
 .explorer-chart-container figure text {
   font-family: var(--font) !important;
 }
+
+/* ── Explore Teaser Card ── */
+.math-explore-row {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 16px;
+  align-items: stretch;
+  margin-top: 16px;
+}
+@media (max-width: 768px) {
+  .math-explore-row { grid-template-columns: 1fr; }
+}
+.explore-teaser {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 20px 16px;
+  transition: border-color 0.15s;
+  cursor: pointer;
+}
+.explore-teaser:hover {
+  border-color: var(--accent);
+}
+.explore-teaser .card-title { margin-top: 12px; }
+.explore-teaser-svg {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+}
