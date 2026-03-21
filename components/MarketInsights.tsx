@@ -33,10 +33,12 @@ ChartJS.register(
 // ── Global dark theme defaults ──────────────────────────────────────────────
 ChartJS.defaults.color = '#777790'
 ChartJS.defaults.borderColor = 'rgba(255,255,255,0.05)'
-ChartJS.defaults.font.family = 'JetBrains Mono, monospace'
-ChartJS.defaults.plugins.tooltip.backgroundColor = 'rgba(18,18,30,0.92)'
+ChartJS.defaults.font.family = "'JetBrains Mono', 'SF Mono', monospace"
+ChartJS.defaults.font.size = 11
+ChartJS.defaults.plugins.tooltip.backgroundColor = 'rgba(19,19,25,0.95)'
 ChartJS.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.10)'
 ChartJS.defaults.plugins.tooltip.borderWidth = 1
+ChartJS.defaults.plugins.tooltip.cornerRadius = 10
 ChartJS.defaults.plugins.tooltip.padding = 10
 ChartJS.defaults.plugins.tooltip.titleColor = '#c8c8e0'
 ChartJS.defaults.plugins.tooltip.bodyColor = '#9898b0'
@@ -51,12 +53,12 @@ const VEHICLE_COLORS: Record<string, string> = {
   'Rivian R1S':             '#d48a56',
   'Tesla Model X':          '#cf6b6b',
   'Tesla Model Y (3-Row)':  '#cf6b6b',
-  'VW ID. Buzz':            '#c8a84e',
+  'Volkswagen ID. Buzz':    '#c8a84e',
   'VinFast VF9':            '#c49340',
   'Volvo EX90':             '#c47a9e',
   'Cadillac Escalade IQ':   '#8a7fba',
   'Cadillac VISTIQ':        '#a98fd4',
-  'Mercedes EQS SUV':       '#9a9aaa',
+  'Mercedes-Benz EQS SUV':  '#9a9aaa',
 }
 
 const WATCHLIST = [
@@ -160,7 +162,7 @@ function GrowthChart() {
     tension: 0.3,
     yAxisID: 'y2',
     fill: false,
-    spanGaps: false,
+    spanGaps: true,
   }
 
   const chartData = {
