@@ -2725,3 +2725,190 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   font-weight: 600;
 }
 .math-composite { color: var(--accent); font-family: var(--mono); }
+
+/* ══════════════════════════════════════════════════════════════════
+   Data Explorer (components/DataExplorer.tsx)
+   ══════════════════════════════════════════════════════════════════ */
+
+.explorer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 0 2rem;
+}
+
+.explorer-loading,
+.explorer-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 3rem 1rem;
+  font-size: 1rem;
+}
+
+/* ── Controls rows ── */
+.explorer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+
+.explorer-controls + .explorer-controls {
+  border-top: 1px solid var(--border);
+}
+
+.explorer-controls-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-right: 0.25rem;
+  white-space: nowrap;
+}
+
+.explorer-control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.explorer-control-group label {
+  font-weight: 500;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ── Styled select ── */
+.explorer-select {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: var(--font);
+  transition: border-color 0.15s;
+}
+.explorer-select:hover { border-color: var(--accent); }
+.explorer-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+/* ── Multi-select dropdown ── */
+.explorer-dropdown { position: relative; }
+
+.explorer-dropdown-btn {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: var(--font);
+  transition: border-color 0.15s;
+}
+.explorer-dropdown-btn:hover { border-color: var(--accent); }
+
+.explorer-dropdown-content {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  min-width: 260px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  margin-top: 4px;
+}
+
+.explorer-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 4px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  border-radius: 4px;
+  color: var(--text);
+  transition: background 0.1s;
+}
+.explorer-checkbox-label:hover { background: var(--surface2); }
+
+.explorer-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.explorer-select-all-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-family: var(--font);
+  padding: 4px 0;
+  margin-bottom: 6px;
+}
+.explorer-select-all-btn:hover { text-decoration: underline; }
+
+/* ── Chart area ── */
+.explorer-chart-area {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 2rem 2rem 1.5rem;
+  margin-top: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+/* ── Legend ── */
+.explorer-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.25rem;
+  padding: 1rem 0 0;
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.explorer-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Chart note ── */
+.explorer-chart-note {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-style: italic;
+}
+
+/* ── Observable Plot tooltip overrides ── */
+.explorer-chart-container [aria-label="tip"] {
+  color: #1a1a2e !important;
+  font-size: 0.82rem;
+  font-family: var(--font) !important;
+}
+.explorer-chart-container figure [aria-label="tip"] text {
+  fill: #1a1a2e !important;
+}
+.explorer-chart-container figure text {
+  font-family: var(--font) !important;
+}
