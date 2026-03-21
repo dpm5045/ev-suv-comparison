@@ -466,7 +466,100 @@
         },
       });
     }
-    function renderCapability() {}
+    function renderCapability(details) {
+      const metrics = [
+        { field: 'range_mi', label: 'EPA Range', color: '#4ade80', invert: false },
+        { field: 'dc_fast_charge_10_80_min', label: 'DC Fast Charge (10-80%)', color: '#5ba4f5', invert: true },
+        { field: 'hp', label: 'Horsepower', color: '#fb923c', invert: false },
+        { field: 'battery_kwh', label: 'Battery Capacity', color: '#a78bfa', invert: false },
+      ];
+
+      // Compute average per year for each metric (skip nulls)
+      function avgByYear(field) {
+        return YEARS.map(y => {
+          const vals = details.filter(d => d.year === y && d[field] != null).map(d => d[field]);
+          return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+        });
+      }
+
+      const rawAverages = {};
+      metrics.forEach(m => { rawAverages[m.field] = avgByYear(m.field); });
+
+      // Normalize to % change from 2021 baseline
+      const datasets = metrics.map(m => {
+        const avgs = rawAverages[m.field];
+        const baseline = avgs[0]; // 2021
+        if (baseline == null || baseline === 0) return null;
+
+        const normalized = avgs.map(v => {
+          if (v == null) return null;
+          const pctChange = ((v - baseline) / baseline) * 100;
+          return m.invert ? -pctChange : pctChange; // invert: decrease = improvement
+        });
+
+        return {
+          label: m.label,
+          data: normalized,
+          borderColor: m.color,
+          backgroundColor: m.color + '22',
+          tension: 0.3,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          spanGaps: true,
+        };
+      }).filter(Boolean);
+
+      // --- Stat callouts ---
+      const statsEl = document.getElementById('capability-stats');
+      const statItems = metrics.map(m => {
+        const avgs = rawAverages[m.field];
+        const first = avgs[0];
+        const last = avgs[avgs.length - 1];
+        if (first == null || last == null) return '';
+        const pctChange = ((last - first) / first) * 100;
+        // For inverted metrics (charge time), show improvement as positive "up" value
+        // matching the chart where the inverted line goes UP for improvements
+        const displayPct = m.invert ? -pctChange : pctChange;
+        const isImprovement = displayPct > 0;
+        const arrow = isImprovement ? '↑' : '↓';
+        return `
+          <div class="stat-card">
+            <div class="stat-value" style="color: ${isImprovement ? '#4ade80' : '#f87171'}">${arrow} ${Math.abs(displayPct).toFixed(0)}%</div>
+            <div class="stat-label">${m.label}</div>
+          </div>
+        `;
+      }).join('');
+      statsEl.innerHTML = statItems;
+
+      // --- Line chart ---
+      const sampleSizes = YEARS.map(y => details.filter(d => d.year === y).length);
+
+      new Chart(document.getElementById('chart-capability'), {
+        type: 'line',
+        data: {
+          labels: YEARS.map((y, i) => `${y} (n=${sampleSizes[i]})`),
+          datasets,
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(1)}%`,
+              },
+            },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              title: { display: true, text: '% Change from 2021 Baseline' },
+              ticks: { callback: v => `${v >= 0 ? '+' : ''}${v}%` },
+            },
+          },
+        },
+      });
+    }
     function renderTradeoffs() {}
     function renderTech() {}
 
