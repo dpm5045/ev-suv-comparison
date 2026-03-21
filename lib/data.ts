@@ -95,11 +95,27 @@ export interface AssumptionRow {
   notes: string
 }
 
+export interface USEVSales {
+  note: string
+  y2021: number
+  y2022: number
+  y2023: number
+  y2024: number
+  y2025: number
+  y2026: number | null
+}
+
+export interface USEVSalesNotes {
+  y2026?: string
+}
+
 export interface EVData {
   scope: string
   count_note: string
   count_data: CountRow[]
   count_totals: CountTotals
+  us_ev_sales: USEVSales
+  us_ev_sales_notes: USEVSalesNotes
   details: DetailRow[]
   preowned: PreownedRow[]
   glossary: GlossaryRow[]

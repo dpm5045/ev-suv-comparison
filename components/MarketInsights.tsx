@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -89,6 +89,46 @@ function fmtEvSales(v: number): string {
   return `${v}k`
 }
 
+// ── Theme-aware colors ──────────────────────────────────────────────────────
+function useIsLightTheme() {
+  const [light, setLight] = useState(false)
+  useEffect(() => {
+    function check() {
+      setLight(document.documentElement.getAttribute('data-theme') === 'light')
+    }
+    check()
+    const obs = new MutationObserver(check)
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    return () => obs.disconnect()
+  }, [])
+  return light
+}
+
+function themeGrid(light: boolean) {
+  return light ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)'
+}
+
+function themeBorder(light: boolean) {
+  return light ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.05)'
+}
+
+// ── Shared canvas background plugin ─────────────────────────────────────────
+function isLightMode() {
+  return typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'light'
+}
+
+const canvasBgPlugin = {
+  id: 'canvasBg',
+  beforeDraw(chart: any) {
+    const { ctx, chartArea } = chart
+    if (!chartArea) return
+    ctx.save()
+    ctx.fillStyle = isLightMode() ? 'rgba(0,0,0,0.015)' : 'rgba(255,255,255,0.02)'
+    ctx.fillRect(chartArea.left, chartArea.top, chartArea.width, chartArea.height)
+    ctx.restore()
+  },
+}
+
 // ── Filtered data hook ────────────────────────────────────────────────────────
 function useFilteredData() {
   return useMemo(() => {
@@ -116,50 +156,38 @@ function Takeaway({ items }: { items: string[] }) {
 
 // ── 1. GrowthChart ────────────────────────────────────────────────────────────
 function GrowthChart() {
-  const { details, count_data, us_ev_sales } = useFilteredData()
-
-  // Stat callouts — per-year comparisons matching market-insights.html
-  const modelsByYear: Record<number, number> = {}
-  const trimsByYear: Record<number, number> = {}
-  YEARS.forEach(y => {
-    modelsByYear[y] = new Set(details.filter(d => d.year === y).map(d => d.vehicle)).size
-    trimsByYear[y] = count_data.reduce((sum, row) => sum + ((row[`y${y}` as keyof typeof row] as number) || 0), 0)
-  })
-  const firstYearWithData = YEARS.find(y => modelsByYear[y] > 0) ?? 2021
-  const latestYear = YEARS[YEARS.length - 1]
-
-  const priceFirstYear = details.filter(d => d.year === firstYearWithData && typeof d.msrp === 'number').map(d => d.msrp as number)
-  const priceLatestYear = details.filter(d => d.year === latestYear && typeof d.msrp === 'number').map(d => d.msrp as number)
-
-  const salesFirst = us_ev_sales[`y${firstYearWithData}` as keyof typeof us_ev_sales] as number | null
-  const salesLatest = (us_ev_sales[`y${latestYear}` as keyof typeof us_ev_sales] ?? us_ev_sales[`y${latestYear - 1}` as keyof typeof us_ev_sales]) as number | null
-  const salesLatestLabel = us_ev_sales[`y${latestYear}` as keyof typeof us_ev_sales] ? latestYear : latestYear - 1
+  const isLight = useIsLightTheme()
+  const gridColor = themeGrid(isLight)
+  const { count_data, us_ev_sales } = useFilteredData()
 
   const evSalesTotal = YEARS.map(y => us_ev_sales[`y${y}` as keyof typeof us_ev_sales] as number | null)
 
-  // Bar datasets — one per vehicle
-  const vehicles = count_data.map((r) => r.model)
-  const barDatasets = vehicles.map((vehicle) => {
-    const row = count_data.find((r) => r.model === vehicle)!
-    const color = VEHICLE_COLORS[vehicle] ?? '#888888'
+  // Per-year trim totals (for bar labels)
+  const trimTotals = YEARS.map((_, yi) =>
+    count_data.reduce((sum, row) => sum + ((row[YEAR_KEYS[yi]] as number) || 0), 0)
+  )
+
+  // Per-vehicle stacked bar datasets
+  const barDatasets = count_data.map((row) => {
+    const color = VEHICLE_COLORS[row.model] ?? '#888888'
     return {
       type: 'bar' as const,
-      label: vehicle,
-      data: YEAR_KEYS.map((k) => (row[k] as number) ?? 0),
-      backgroundColor: colorAlpha(color, '50'),
-      borderColor: colorAlpha(color, '99'),
+      label: row.model,
+      data: YEAR_KEYS.map((k) => (row[k] as number) || 0),
+      backgroundColor: colorAlpha(color, '70'),
+      borderColor: colorAlpha(color, 'cc'),
       borderWidth: 1,
-      borderRadius: 3,
-      stack: 'trims',
+      borderRadius: 0,
       yAxisID: 'y',
+      stack: 'trims',
     }
   })
 
-  // Line overlay — US EV sales (right y-axis)
-  const lineDataset = {
+  // Line overlay — US EV sales (right y-axis), actual data only (2026 nulled out)
+  const actualLineDataset = {
     type: 'line' as const,
     label: 'US EV Sales',
-    data: evSalesTotal.map((v) => (v === null ? null : v)),
+    data: evSalesTotal.map((v, i) => (i === YEARS.length - 1 ? null : v)),
     borderColor: 'rgba(255,160,60,0.85)',
     backgroundColor: 'rgba(255,160,60,0.10)',
     borderDash: [5, 4],
@@ -172,79 +200,118 @@ function GrowthChart() {
     spanGaps: true,
   }
 
+  // Projected line segment (2025 → 2026)
+  const lastActual = evSalesTotal[YEARS.length - 2]
+  const projected2026 = evSalesTotal[YEARS.length - 1]
+  const projectedLineDataset = {
+    type: 'line' as const,
+    label: '__projected__',
+    data: YEARS.map((_, i) => {
+      if (i === YEARS.length - 2) return lastActual
+      if (i === YEARS.length - 1) return projected2026
+      return null
+    }),
+    borderColor: 'rgba(255,160,60,0.85)',
+    borderDash: [3, 3],
+    borderWidth: 2,
+    pointRadius: YEARS.map((_, i) => (i === YEARS.length - 1 ? 5 : 0)),
+    pointBackgroundColor: 'transparent',
+    pointBorderColor: 'rgba(255,160,60,0.9)',
+    pointBorderWidth: 2,
+    tension: 0,
+    yAxisID: 'y2',
+    fill: false,
+    spanGaps: true,
+  }
+
   const chartData = {
     labels: YEARS.map(String),
-    datasets: [...barDatasets, lineDataset],
+    datasets: [...barDatasets, actualLineDataset, projectedLineDataset],
+  }
+
+  // Custom plugin to draw trim totals on top of stacked bars
+  const barLabelPlugin = {
+    id: 'barLabels',
+    afterDatasetsDraw(chart: any) {
+      const { ctx } = chart
+      ctx.save()
+      ctx.font = "600 13px 'JetBrains Mono', monospace"
+      ctx.fillStyle = isLight ? '#1c1917' : '#e4e4ec'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'bottom'
+      // Find the topmost bar y-position for each index
+      YEARS.forEach((_, i) => {
+        if (trimTotals[i] <= 0) return
+        let minY = Infinity
+        let xPos = 0
+        for (let d = 0; d < chart.data.datasets.length; d++) {
+          const meta = chart.getDatasetMeta(d)
+          if (meta.type !== 'bar') continue
+          const bar = meta.data[i]
+          if (bar && bar.y < minY) {
+            minY = bar.y
+            xPos = bar.x
+          }
+        }
+        if (minY < Infinity) {
+          ctx.fillText(String(trimTotals[i]), xPos, minY - 6)
+        }
+      })
+      ctx.restore()
+    },
   }
 
   const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 14 } },
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          boxWidth: 12, padding: 14,
+          filter: (item) => item.text !== '__projected__',
+        },
+      },
       tooltip: {
         callbacks: {
           label: (ctx: TooltipItem<'bar'>) => {
+            if (ctx.dataset.label === '__projected__') {
+              return ` 2026 est.: ~1.26M (Cox Automotive)`
+            }
             if (ctx.dataset.label === 'US EV Sales') {
               return ` US EV Sales: ${fmtEvSales(ctx.parsed.y as number)}`
             }
-            return ` ${ctx.dataset.label}: ${ctx.parsed.y} trim${(ctx.parsed.y as number) !== 1 ? 's' : ''}`
+            if (ctx.parsed.y === 0) return ''
+            return ` ${ctx.dataset.label}: ${ctx.parsed.y} trims`
           },
         },
       },
     },
     scales: {
-      x: { stacked: true, grid: { color: 'rgba(255,255,255,0.04)' } },
+      x: { stacked: true, grid: { color: gridColor } },
       y: {
         stacked: true,
         position: 'left',
         title: { display: true, text: 'Trims Available' },
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: { stepSize: 1 },
+        grid: { color: gridColor },
       },
       y2: {
         position: 'right',
         title: { display: true, text: 'US EV Sales' },
         grid: { drawOnChartArea: false },
-        ticks: { callback: (v: number | string) => fmtK(Number(v)) },
+        ticks: { callback: (v: number | string) => fmtEvSales(Number(v)) },
       },
     },
   }
 
   return (
-    <>
-    <div className="mi-milestone-grid">
-      <div className="mi-milestone-card">
-        <div className="mi-milestone-value">{modelsByYear[firstYearWithData]} → {modelsByYear[latestYear]}</div>
-        <div className="mi-milestone-label">Models Available</div>
-      </div>
-      <div className="mi-milestone-card">
-        <div className="mi-milestone-value">{trimsByYear[firstYearWithData]} → {trimsByYear[latestYear]}</div>
-        <div className="mi-milestone-label">Trims Analyzed</div>
-      </div>
-      {priceFirstYear.length > 0 && priceLatestYear.length > 0 && (
-        <div className="mi-milestone-card">
-          <div className="mi-milestone-value">
-            ${Math.round(Math.min(...priceFirstYear) / 1000)}k–${Math.round(Math.max(...priceFirstYear) / 1000)}k
-            <span className="mi-milestone-arrow">→</span>
-            ${Math.round(Math.min(...priceLatestYear) / 1000)}k–${Math.round(Math.max(...priceLatestYear) / 1000)}k
-          </div>
-          <div className="mi-milestone-label">MSRP Range</div>
-        </div>
-      )}
-      {salesFirst && salesLatest && (
-        <div className="mi-milestone-card">
-          <div className="mi-milestone-value">{fmtEvSales(salesFirst)} → {fmtEvSales(salesLatest)}</div>
-          <div className="mi-milestone-label">US EV Sales ({firstYearWithData} → {salesLatestLabel})</div>
-        </div>
-      )}
-    </div>
-
     <div className="mi-chart-card">
-      <h3 className="mi-chart-title">Segment Growth by Year</h3>
+      <h3 className="mi-chart-title">3-Row EVs: A Market That (almost) Didn&apos;t Exist 5 Years Ago</h3>
+      <p className="mi-chart-subtitle">From a handful of trims in 2021 to nearly 50 by 2026 — the segment exploded as the broader US EV market crossed 1M annual sales.</p>
       <div className="mi-chart-wrap" style={{ height: 420 }}>
         {/* @ts-expect-error mixed chart type */}
-        <Bar data={chartData} options={options} />
+        <Bar data={chartData} options={options} plugins={[barLabelPlugin, canvasBgPlugin]} />
       </div>
 
       <Takeaway
@@ -253,18 +320,19 @@ function GrowthChart() {
           'The biggest year-over-year wave hit 2025–26 as Hyundai IONIQ 9, Cadillac VISTIQ, and Lucid Gravity all entered in the same window.',
           'Newest entrants (IONIQ 9, Lucid Gravity, VISTIQ) are still building out their trim ladders — expect more options in 2026–27.',
           'US EV sales crossed 1M units in 2023 and continued climbing, validating the broader market shift that is drawing all these 3-row launches.',
+          '2026 US EV sales projection (~1.26M) from Cox Automotive 2026 Outlook.',
         ]}
       />
     </div>
-    </>
   )
 }
 
 // ── 2. PriceRangeChart ────────────────────────────────────────────────────────
 function PriceRangeChart() {
+  const isLight = useIsLightTheme()
+  const gridColor = themeGrid(isLight)
   const { details } = useFilteredData()
 
-  // For each vehicle, get [min, max] MSRP across their latest available year
   type VehicleRange = { vehicle: string; min: number; max: number }
   const byVehicle: Record<string, number[]> = {}
 
@@ -275,11 +343,11 @@ function PriceRangeChart() {
   })
 
   const ranges: VehicleRange[] = Object.entries(byVehicle)
-    .map(([vehicle, prices]) => ({
-      vehicle,
-      min: Math.min(...prices),
-      max: Math.max(...prices),
-    }))
+    .map(([vehicle, prices]) => {
+      const lo = Math.min(...prices)
+      const hi = Math.max(...prices)
+      return { vehicle, min: lo, max: hi }
+    })
     .sort((a, b) => a.min - b.min)
 
   const chartData = {
@@ -287,14 +355,106 @@ function PriceRangeChart() {
     datasets: [
       {
         label: 'MSRP Range',
-        data: ranges.map((r) => [r.min, r.max]),
-        backgroundColor: ranges.map((r) => colorAlpha(VEHICLE_COLORS[r.vehicle] ?? '#888888', '70')),
-        borderColor: ranges.map((r) => colorAlpha(VEHICLE_COLORS[r.vehicle] ?? '#888888', 'cc')),
+        data: ranges.map((r) => r.min === r.max ? [r.min - 500, r.max + 500] : [r.min, r.max]),
+        backgroundColor: ranges.map((r) => colorAlpha(VEHICLE_COLORS[r.vehicle] ?? '#888888', '99')),
+        borderColor: ranges.map((r) => colorAlpha(VEHICLE_COLORS[r.vehicle] ?? '#888888', 'ee')),
         borderWidth: 1.5,
         borderRadius: 3,
         borderSkipped: false,
       },
     ],
+  }
+
+  // Plugin: draw min/max price labels at bar ends + diamond for single-price
+  const priceEndLabelPlugin = {
+    id: 'priceEndLabels',
+    afterDatasetsDraw(chart: any) {
+      const { ctx } = chart
+      const meta = chart.getDatasetMeta(0)
+      if (!meta) return
+      ctx.save()
+      ctx.font = "500 10px 'JetBrains Mono', monospace"
+      ctx.textBaseline = 'middle'
+
+      meta.data.forEach((bar: any, i: number) => {
+        const { min: lo, max: hi } = ranges[i]
+        const borderColor = chartData.datasets[0].borderColor[i]
+        ctx.fillStyle = borderColor
+
+        if (lo === hi) {
+          // Single-price: draw diamond marker + single label
+          const xPos = chart.scales.x.getPixelForValue(lo)
+          const yPos = bar.y
+          const s = 5
+          ctx.beginPath()
+          ctx.moveTo(xPos, yPos - s)
+          ctx.lineTo(xPos + s, yPos)
+          ctx.lineTo(xPos, yPos + s)
+          ctx.lineTo(xPos - s, yPos)
+          ctx.closePath()
+          ctx.fill()
+          ctx.textAlign = 'left'
+          ctx.fillText(`$${Math.round(lo / 1000)}k`, xPos + 8, yPos)
+        } else {
+          // Min label (left of bar)
+          ctx.textAlign = 'right'
+          ctx.fillText(`$${Math.round(lo / 1000)}k`, bar.base - 4, bar.y)
+          // Max label (right of bar)
+          ctx.textAlign = 'left'
+          ctx.fillText(`$${Math.round(hi / 1000)}k`, bar.x + 4, bar.y)
+        }
+      })
+      ctx.restore()
+    },
+  }
+
+  // Plugin: alternating row shading
+  const rowShadingPlugin = {
+    id: 'rowShading',
+    beforeDatasetsDraw(chart: any) {
+      const { ctx, chartArea, scales: { y } } = chart
+      if (!chartArea || !y) return
+      ctx.save()
+      const tickCount = y.ticks.length
+      for (let i = 0; i < tickCount; i++) {
+        if (i % 2 !== 0) continue
+        const rowHeight = tickCount > 1
+          ? Math.abs(y.getPixelForTick(1) - y.getPixelForTick(0))
+          : chartArea.height
+        const yStart = y.getPixelForTick(i) - rowHeight / 2
+        ctx.fillStyle = isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.02)'
+        ctx.fillRect(chartArea.left, yStart, chartArea.width, rowHeight)
+      }
+      ctx.restore()
+    },
+  }
+
+  // Plugin: reference lines at $60k and $100k
+  const refLinePlugin = {
+    id: 'refLines',
+    afterDatasetsDraw(chart: any) {
+      const { ctx, chartArea, scales: { x } } = chart
+      if (!chartArea || !x) return
+      ctx.save()
+      ;[60000, 100000].forEach((val) => {
+        const xPos = x.getPixelForValue(val)
+        ctx.setLineDash([4, 4])
+        ctx.strokeStyle = isLight ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.12)'
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(xPos, chartArea.top)
+        ctx.lineTo(xPos, chartArea.bottom)
+        ctx.stroke()
+      })
+      ctx.setLineDash([])
+      ctx.font = "9px 'JetBrains Mono', monospace"
+      ctx.fillStyle = isLight ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.25)'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'top'
+      ctx.fillText('Mass Market', (x.getPixelForValue(40000) + x.getPixelForValue(60000)) / 2, chartArea.bottom + 4)
+      ctx.fillText('Luxury', (x.getPixelForValue(100000) + x.getPixelForValue(185000)) / 2, chartArea.bottom + 4)
+      ctx.restore()
+    },
   }
 
   const options: ChartOptions<'bar'> = {
@@ -306,10 +466,9 @@ function PriceRangeChart() {
       tooltip: {
         callbacks: {
           label: (ctx: TooltipItem<'bar'>) => {
-            const [lo, hi] = ctx.parsed._custom
-              ? [ctx.parsed._custom.min, ctx.parsed._custom.max]
-              : [ctx.parsed.x, ctx.parsed.x]
-            return ` $${fmtK(lo ?? 0)} – $${fmtK(hi ?? 0)}`
+            const { min: lo, max: hi } = ranges[ctx.dataIndex]
+            if (lo === hi) return ` $${fmtK(lo)}`
+            return ` $${fmtK(lo)} – $${fmtK(hi)}`
           },
         },
       },
@@ -317,20 +476,26 @@ function PriceRangeChart() {
     scales: {
       x: {
         title: { display: true, text: 'MSRP (USD)' },
-        grid: { color: 'rgba(255,255,255,0.04)' },
+        grid: { color: gridColor },
+        min: 40000,
+        max: 185000,
+        afterBuildTicks: (axis: any) => {
+          axis.ticks = [50000, 75000, 100000, 125000, 150000, 175000].map(v => ({ value: v }))
+        },
         ticks: {
           callback: (v: number | string) => `$${fmtK(Number(v))}`,
         },
       },
-      y: { grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { grid: { color: gridColor } },
     },
   }
 
   return (
     <div className="mi-chart-card">
-      <h3 className="mi-chart-title">MSRP Range by Vehicle (All Trims)</h3>
+      <h3 className="mi-chart-title">MSRP Range by Vehicle</h3>
+      <p className="mi-chart-subtitle">Most of the segment lives above $70k — only Kia and VinFast offer true mass-market entry points below $60k.</p>
       <div className="mi-chart-wrap" style={{ height: `${Math.max(260, ranges.length * 36 + 60)}px` }}>
-        <Bar data={chartData} options={options} />
+        <Bar data={chartData} options={options} plugins={[rowShadingPlugin, refLinePlugin, priceEndLabelPlugin, canvasBgPlugin]} />
       </div>
       <Takeaway
         items={[
@@ -346,41 +511,118 @@ function PriceRangeChart() {
 
 // ── 3. RangeVsPriceChart ──────────────────────────────────────────────────────
 function RangeVsPriceChart() {
+  const isLight = useIsLightTheme()
+  const gridColor = themeGrid(isLight)
   const { details } = useFilteredData()
 
-  // Group by vehicle, each point is {x: msrp, y: range_mi, name: trim_name}
-  const byVehicle: Record<string, Array<{ x: number; y: number; name: string }>> = {}
-
+  // Deduplicate: keep only trims from each vehicle's latest year
+  const latestYearByVehicle: Record<string, number> = {}
   details.forEach((r) => {
-    if (typeof r.msrp !== 'number') return
-    if (typeof r.range_mi !== 'number') return
+    if (typeof r.msrp !== 'number' || typeof r.range_mi !== 'number') return
+    latestYearByVehicle[r.vehicle] = Math.max(latestYearByVehicle[r.vehicle] ?? 0, r.year)
+  })
+
+  const byVehicle: Record<string, Array<{ x: number; y: number; name: string }>> = {}
+  details.forEach((r) => {
+    if (typeof r.msrp !== 'number' || typeof r.range_mi !== 'number') return
+    if (r.year !== latestYearByVehicle[r.vehicle]) return
     if (!byVehicle[r.vehicle]) byVehicle[r.vehicle] = []
     byVehicle[r.vehicle].push({ x: r.msrp, y: r.range_mi, name: r.trim })
   })
 
-  const datasets = Object.entries(byVehicle).map(([vehicle, points]) => {
+  const scatterDatasets = Object.entries(byVehicle).map(([vehicle, points]) => {
     const color = VEHICLE_COLORS[vehicle] ?? '#888888'
     return {
       label: vehicle,
       data: points,
-      backgroundColor: colorAlpha(color, '25'),
+      backgroundColor: colorAlpha(color, '60'),
       borderColor: color,
       borderWidth: 1.5,
-      pointRadius: 4.5,
-      pointHoverRadius: 6,
+      pointRadius: 5.5,
+      pointHoverRadius: 7,
     }
   })
 
-  const chartData = { datasets }
+  // Linear regression trend line
+  const allPoints = scatterDatasets.flatMap(ds => ds.data)
+  const n = allPoints.length
+  const sumX = allPoints.reduce((s, p) => s + p.x, 0)
+  const sumY = allPoints.reduce((s, p) => s + p.y, 0)
+  const sumXY = allPoints.reduce((s, p) => s + p.x * p.y, 0)
+  const sumX2 = allPoints.reduce((s, p) => s + p.x * p.x, 0)
+  const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX)
+  const intercept = (sumY - slope * sumX) / n
+  const xMin = Math.min(...allPoints.map(p => p.x))
+  const xMax = Math.max(...allPoints.map(p => p.x))
+
+  const trendDataset = {
+    label: '__trend__',
+    type: 'line' as const,
+    data: [{ x: xMin, y: slope * xMin + intercept }, { x: xMax, y: slope * xMax + intercept }],
+    pointRadius: 0,
+    borderDash: [6, 4],
+    borderColor: isLight ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.15)',
+    borderWidth: 1.5,
+    fill: false,
+  }
+
+  // Median values for quadrant lines
+  const sortedPrices = allPoints.map(p => p.x).sort((a, b) => a - b)
+  const sortedRanges = allPoints.map(p => p.y).sort((a, b) => a - b)
+  const medianPrice = sortedPrices[Math.floor(sortedPrices.length / 2)]
+  const medianRange = sortedRanges[Math.floor(sortedRanges.length / 2)]
+
+  // Plugin: quadrant annotations
+  const quadrantPlugin = {
+    id: 'quadrants',
+    beforeDatasetsDraw(chart: any) {
+      const { ctx, chartArea, scales: { x, y } } = chart
+      if (!chartArea) return
+      const mx = x.getPixelForValue(medianPrice)
+      const my = y.getPixelForValue(medianRange)
+      ctx.save()
+      ctx.setLineDash([4, 4])
+      ctx.strokeStyle = isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.10)'
+      ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(mx, chartArea.top); ctx.lineTo(mx, chartArea.bottom); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(chartArea.left, my); ctx.lineTo(chartArea.right, my); ctx.stroke()
+      ctx.restore()
+    },
+    afterDatasetsDraw(chart: any) {
+      const { ctx, chartArea, scales: { x, y } } = chart
+      if (!chartArea) return
+      const mx = x.getPixelForValue(medianPrice)
+      const my = y.getPixelForValue(medianRange)
+      ctx.save()
+      ctx.font = "italic 9px 'JetBrains Mono', monospace"
+      ctx.fillStyle = isLight ? 'rgba(0,0,0,0.35)' : 'rgba(255,255,255,0.25)'
+      ctx.textAlign = 'center'
+      const pad = 14
+      ctx.fillText('High Range, Lower Price', (chartArea.left + mx) / 2, chartArea.top + pad)
+      ctx.fillText('High Range, Premium', (mx + chartArea.right) / 2, chartArea.top + pad)
+      ctx.fillText('Lower Range, Lower Price', (chartArea.left + mx) / 2, chartArea.bottom - pad)
+      ctx.fillText('Lower Range, Premium', (mx + chartArea.right) / 2, chartArea.bottom - pad)
+      ctx.restore()
+    },
+  }
+
+  const chartData = { datasets: [...scatterDatasets, trendDataset] }
 
   const options: ChartOptions<'scatter'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 14 } },
+      legend: {
+        position: 'right',
+        labels: {
+          boxWidth: 12, padding: 14,
+          filter: (item) => item.text !== '__trend__',
+        },
+      },
       tooltip: {
         callbacks: {
           label: (ctx: TooltipItem<'scatter'>) => {
+            if (ctx.dataset.label === '__trend__') return ''
             const raw = ctx.raw as { x: number; y: number; name: string }
             return ` ${raw.name}: $${fmtK(raw.x)}, ${raw.y} mi`
           },
@@ -390,27 +632,29 @@ function RangeVsPriceChart() {
     scales: {
       x: {
         title: { display: true, text: 'MSRP (USD)' },
-        grid: { color: 'rgba(255,255,255,0.04)' },
+        grid: { color: gridColor },
         ticks: { callback: (v: number | string) => `$${fmtK(Number(v))}` },
       },
       y: {
         title: { display: true, text: 'EPA Range (mi)' },
-        grid: { color: 'rgba(255,255,255,0.04)' },
+        grid: { color: gridColor },
       },
     },
   }
 
   return (
     <div className="mi-chart-card">
-      <h3 className="mi-chart-title">Range vs. Price (All Trims)</h3>
+      <h3 className="mi-chart-title">Does Paying More Get You More Range?</h3>
+      <p className="mi-chart-subtitle">Not really — the correlation is weak. Performance trims often sacrifice range for power, while value trims punch above their price.</p>
       <div className="mi-chart-wrap" style={{ height: 480 }}>
-        <Scatter data={chartData} options={options} />
+        {/* @ts-expect-error mixed chart type */}
+        <Scatter data={chartData} options={options} plugins={[quadrantPlugin, canvasBgPlugin]} />
       </div>
       <Takeaway
         items={[
           'Weak price-range correlation: spending more does not guarantee more range — performance trims often trade range for power.',
           'Best range-per-dollar belongs to the Kia EV9 Standard Range and Hyundai IONIQ 9 entry trims, which offer competitive range at lower price points.',
-          'No cargo-vs-speed tradeoff is visible in the data — vehicles with the largest cargo volumes are spread evenly across the range-price scatter.',
+          'The trend line confirms a weak price-range correlation — the segment\'s priciest trims don\'t consistently deliver more range.',
         ]}
       />
     </div>
@@ -423,10 +667,7 @@ export default function MarketInsights() {
     <section className="mi-section">
       <div className="mi-header">
         <h2 className="mi-title">Market Insights</h2>
-        <p className="mi-subtitle">
-          Segment trends, pricing landscape, and range-value analysis across all
-          tracked 3-row AWD electric SUVs.
-        </p>
+        <p className="mi-intro">Now that you&apos;ve found your match, here&apos;s how the 3-row EV landscape stacks up — growth trends, pricing tiers, and what you really get for your money.</p>
       </div>
 
       <GrowthChart />

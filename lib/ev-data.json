@@ -200,6 +200,18 @@
     "y2027": 6,
     "total": 140
   },
+  "us_ev_sales": {
+    "note": "Total US plug-in electric vehicle (BEV + PHEV) sales by year, in thousands. Sources: Cox Automotive, Argonne National Laboratory, CleanTechnica, EIA.",
+    "y2021": 630,
+    "y2022": 810,
+    "y2023": 1190,
+    "y2024": 1300,
+    "y2025": 1275,
+    "y2026": 1260
+  },
+  "us_ev_sales_notes": {
+    "y2026": "Projected — Cox Automotive 2026 Outlook"
+  },
   "details": [
     {
       "name": "Kia EV9, 2026, GT-Line",

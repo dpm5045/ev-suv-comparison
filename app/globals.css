@@ -287,6 +287,10 @@ body {
   letter-spacing: -0.03em;
   margin-bottom: 6px;
 }
+.section-title--hero {
+  font-size: 28px;
+  font-weight: 800;
+}
 .section-desc {
   font-size: 17px;
   color: var(--text-muted);
@@ -3014,20 +3018,48 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   color: var(--text-muted);
   margin-bottom: 16px;
 }
-.mi-chart-card {
+.mi-section {
+  margin-top: 56px;
+  margin-bottom: 48px;
   background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 28px 28px;
+}
+.mi-header {
+  margin-bottom: 24px;
+}
+.mi-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.mi-intro {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.55;
+}
+.mi-chart-card {
+  background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px 24px;
   margin-bottom: 16px;
 }
 .mi-chart-title {
-  font-family: 'JetBrains Mono', 'SF Mono', monospace;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+.mi-chart-subtitle {
+  font-size: 0.8rem;
   color: var(--text-muted);
-  margin-bottom: 12px;
-  letter-spacing: 0.01em;
+  margin-bottom: 14px;
+  line-height: 1.5;
 }
 .mi-chart-wrap { position: relative; }
 .mi-chart-wrap--standard canvas { height: 400px !important; }
@@ -3061,7 +3093,7 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   margin-top: 3px;
 }
 .mi-insights {
-  background: var(--surface2);
+  background: var(--surface3);
   border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
   border-radius: 10px;

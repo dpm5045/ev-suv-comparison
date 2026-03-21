@@ -649,7 +649,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         </div>
       </div>
 
-      <h2 className="section-title">Let&apos;s Go Speed Dating</h2>
+      <h2 className="section-title section-title--hero">Let&apos;s Go Speed Dating</h2>
       <p className="section-desc">
         Results from {filteredDetails.length} configurations
         {activeBudget !== 'all' && ` in your budget`}. Pick what matters most to you.
@@ -976,8 +976,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       <MarketInsights />
 
       {/* ── Watchlist ── */}
-      <div className="card watchlist-card">
-        <div className="card-title">Watchlist</div>
+      <div className="card watchlist-card" style={{ marginTop: 48 }}>
+        <h2 className="section-title section-title--hero">Watchlist</h2>
         <p className="count-note" style={{ marginBottom: 16 }}>
           These 3-row electric vehicles are announced but not yet available in the US market.
         </p>
