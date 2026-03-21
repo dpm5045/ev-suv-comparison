@@ -422,7 +422,6 @@ export default function DataExplorer() {
     const xConfig = buildAxisConfig(xAxis, xFormat)
     const yConfig = buildAxisConfig(yAxis, yFormat)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const marks: any[] = []
 
     // Quadrant crosshair lines and labels
@@ -463,7 +462,6 @@ export default function DataExplorer() {
     }
 
     // Dot mark
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dotOpts: Record<string, any> = {
       x: xAxis,
       y: yAxis,
@@ -489,8 +487,7 @@ export default function DataExplorer() {
         return t
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const plotConfig: Record<string, any> = {
+        const plotConfig: Record<string, any> = {
         width: container.clientWidth || 900,
         height: 560,
         marginTop: 20,
@@ -514,8 +511,7 @@ export default function DataExplorer() {
       dotOpts.r = 6
       dotOpts.title = buildTitle
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const plotConfig: Record<string, any> = {
+        const plotConfig: Record<string, any> = {
         width: container.clientWidth || 900,
         height: 560,
         marginTop: 20,
