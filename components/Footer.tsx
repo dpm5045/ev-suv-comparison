@@ -17,6 +17,7 @@ export default function Footer() {
             <nav className="footer-links">
               <Link href="/">Home</Link>
               <Link href="/about">About</Link>
+              <Link href="/explore">Data Explorer</Link>
               <Link href="/privacy">Privacy Policy</Link>
             </nav>
           </div>
