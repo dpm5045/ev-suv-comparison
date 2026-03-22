@@ -85,7 +85,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 .header-inner {
-  max-width: 1400px;
+  max-width: var(--max-content, 1400px);
   margin: 0 auto;
   padding: 0 32px;
   display: flex;
@@ -227,7 +227,7 @@ body {
 
 /* ── Main ── */
 .main {
-  max-width: 1400px;
+  max-width: var(--max-content, 1400px);
   margin: 0 auto;
   padding: 24px 32px 64px;
 }
@@ -2315,7 +2315,7 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   background: var(--surface);
 }
 .footer-inner {
-  max-width: 1400px;
+  max-width: var(--max-content, 1400px);
   margin: 0 auto;
   padding: 2.5rem 32px 2rem;
 }
@@ -3117,7 +3117,7 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   gap: 7px;
 }
 .mi-insights li {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   line-height: 1.55;
   color: var(--text-muted);
   padding-left: 1.1rem;
@@ -3144,4 +3144,57 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   .mi-chart-wrap--standard canvas { height: 300px !important; }
   .mi-chart-wrap--range canvas   { height: 420px !important; }
   .mi-chart-wrap--tall canvas    { height: 320px !important; }
+  .mi-insights li { font-size: 0.82rem; }
+  .mi-insights li::before { font-size: 0.85rem; }
+}
+
+/* ── Takeaway accordion ── */
+.mi-insights-accordion {
+  margin-top: 12px;
+  cursor: pointer;
+}
+.mi-insights-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  transition: border-color 0.2s;
+}
+.mi-insights-accordion.open .mi-insights-toggle {
+  border-radius: 10px 10px 0 0;
+  border-bottom: none;
+}
+.mi-insights-accordion.open .mi-insights {
+  margin-top: 0;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+}
+.mi-insights-chevron {
+  transition: transform 0.2s;
+  font-size: 1rem;
+}
+.mi-insights-chevron.open {
+  transform: rotate(90deg);
+}
+
+/* ── Large-screen breakpoints ── */
+@media (min-width: 1600px) {
+  :root { --max-content: 1600px; }
+  .mi-chart-wrap--standard canvas { height: 480px !important; }
+  .mi-chart-wrap--range canvas   { height: 620px !important; }
+  .mi-chart-wrap--tall canvas    { height: 520px !important; }
+  .explorer { max-width: 1400px; }
+}
+@media (min-width: 1920px) {
+  :root { --max-content: 1800px; }
+  .explorer { max-width: 1600px; }
 }

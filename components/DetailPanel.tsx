@@ -48,11 +48,11 @@ export default function DetailPanel({ idx, onClose }: Props) {
 
             <div className="detail-grid">
               {([
-                ['MSRP', (() => { const f = fmtMoney(r.msrp); return <span className={f.className}>{f.text}</span> })()],
-                ['Pre-Owned Price', r.preowned_range || '—'],
                 ['EPA Range', (() => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') })()],
-                ['Horsepower', (() => { const f = fmtNum(r.hp); return f.text + (typeof r.hp === 'number' ? ' hp' : '') })()],
-                ['Battery', (() => { const f = fmtNum(r.battery_kwh); return f.text + (typeof r.battery_kwh === 'number' ? ' kWh' : '') })()],
+                ['Cargo (3rd Row)', (() => { const f = fmtNum(r.cargo_behind_3rd_cu_ft); return f.text + (typeof r.cargo_behind_3rd_cu_ft === 'number' ? ' cu ft' : '') })()],
+                ['0–60 mph', (() => { const f = fmtNum(r.zero_to_60_sec); return f.text + (typeof r.zero_to_60_sec === 'number' ? ' sec' : '') })()],
+                ['DC 10–80%', (() => { const f = fmtNum(r.dc_fast_charge_10_80_min); return f.text + (typeof r.dc_fast_charge_10_80_min === 'number' ? ' min' : '') })()],
+                ['Self-Driving', r.self_driving_tier ?? '—'],
                 ['Seats', r.seats ?? '—'],
               ] as [string, React.ReactNode][]).map(([label, val]) => (
                 <div key={label} className="detail-stat">

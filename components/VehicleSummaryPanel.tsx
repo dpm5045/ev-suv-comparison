@@ -26,7 +26,11 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
 
   // All trims for this vehicle
   const trims = useMemo(
-    () => (vehicle ? DATA.details.filter(d => d.vehicle === vehicle) : []),
+    () => (vehicle
+      ? DATA.details
+          .filter(d => d.vehicle === vehicle)
+          .sort((a, b) => b.year - a.year || a.trim.localeCompare(b.trim))
+      : []),
     [vehicle]
   )
 
@@ -48,13 +52,12 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
   const summary = useMemo(() => {
     if (!trims.length) return null
 
-    const msrps = trims.map(t => t.msrp).filter((v): v is number => typeof v === 'number')
     const ranges = trims.map(t => t.range_mi).filter((v): v is number => typeof v === 'number')
-    const hps = trims.map(t => t.hp).filter((v): v is number => typeof v === 'number')
-    const batteries = trims.map(t => t.battery_kwh).filter((v): v is number => typeof v === 'number')
+    const cargos = trims.map(t => t.cargo_behind_3rd_cu_ft).filter((v): v is number => typeof v === 'number')
+    const accel = trims.map(t => t.zero_to_60_sec).filter((v): v is number => typeof v === 'number')
+    const dcCharge = trims.map(t => t.dc_fast_charge_10_80_min).filter((v): v is number => typeof v === 'number')
+    const selfDriving = [...new Set(trims.map(t => t.self_driving_tier).filter(Boolean))]
     const seats = [...new Set(trims.map(t => t.seats).filter(Boolean))]
-    const drivetrains = [...new Set(trims.map(t => t.drivetrain).filter(Boolean))]
-    const chargingTypes = [...new Set(trims.map(t => t.charging_type).filter(Boolean))]
 
     function rangeText(nums: number[], suffix: string) {
       if (!nums.length) return '—'
@@ -65,23 +68,13 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
         : `${lo.toLocaleString()} – ${hi.toLocaleString()}${suffix}`
     }
 
-    function moneyRange(nums: number[]) {
-      if (!nums.length) return '—'
-      const lo = Math.min(...nums)
-      const hi = Math.max(...nums)
-      const fLo = fmtMoney(lo)
-      const fHi = fmtMoney(hi)
-      return lo === hi ? fLo.text : `${fLo.text} – ${fHi.text}`
-    }
-
     return {
-      msrp: moneyRange(msrps),
       range: rangeText(ranges, ' mi'),
-      hp: rangeText(hps, ' hp'),
-      battery: rangeText(batteries, ' kWh'),
+      cargo: rangeText(cargos, ' cu ft'),
+      accel: rangeText(accel, ' sec'),
+      dcCharge: rangeText(dcCharge, ' min'),
+      selfDriving: selfDriving.join(', ') || '—',
       seats: seats.join(', ') || '—',
-      drivetrain: drivetrains.join(', ') || '—',
-      charging: chargingTypes.join(', ') || '—',
     }
   }, [trims])
 
@@ -101,12 +94,12 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
             {/* Vehicle Summary */}
             <div className="vsp-summary-grid">
               {([
-                ['MSRP Range', summary.msrp],
                 ['EPA Range', summary.range],
-                ['Horsepower', summary.hp],
-                ['Battery', summary.battery],
-                ['Seating', summary.seats],
-                ['Drivetrain / Charging', `${summary.drivetrain} / ${summary.charging}`],
+                ['Cargo (3rd Row)', summary.cargo],
+                ['0–60 mph', summary.accel],
+                ['DC 10–80%', summary.dcCharge],
+                ['Self-Driving', summary.selfDriving],
+                ['Seats', summary.seats],
               ] as [string, string][]).map(([label, val]) => (
                 <div key={label} className="vsp-stat">
                   <div className="vsp-stat-label">{label}</div>
@@ -146,11 +139,11 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
 
                 <div className="detail-grid">
                   {([
-                    ['MSRP', (() => { const f = fmtMoney(selectedTrim.msrp); return <span className={f.className}>{f.text}</span> })()],
-                    ['Pre-Owned', selectedTrim.preowned_range || '—'],
                     ['EPA Range', (() => { const f = fmtNum(selectedTrim.range_mi); return f.text + (typeof selectedTrim.range_mi === 'number' ? ' mi' : '') })()],
-                    ['HP', (() => { const f = fmtNum(selectedTrim.hp); return f.text + (typeof selectedTrim.hp === 'number' ? ' hp' : '') })()],
-                    ['Battery', (() => { const f = fmtNum(selectedTrim.battery_kwh); return f.text + (typeof selectedTrim.battery_kwh === 'number' ? ' kWh' : '') })()],
+                    ['Cargo (3rd Row)', (() => { const f = fmtNum(selectedTrim.cargo_behind_3rd_cu_ft); return f.text + (typeof selectedTrim.cargo_behind_3rd_cu_ft === 'number' ? ' cu ft' : '') })()],
+                    ['0–60 mph', (() => { const f = fmtNum(selectedTrim.zero_to_60_sec); return f.text + (typeof selectedTrim.zero_to_60_sec === 'number' ? ' sec' : '') })()],
+                    ['DC 10–80%', (() => { const f = fmtNum(selectedTrim.dc_fast_charge_10_80_min); return f.text + (typeof selectedTrim.dc_fast_charge_10_80_min === 'number' ? ' min' : '') })()],
+                    ['Self-Driving', selectedTrim.self_driving_tier ?? '—'],
                     ['Seats', selectedTrim.seats ?? '—'],
                   ] as [string, React.ReactNode][]).map(([label, val]) => (
                     <div key={label} className="detail-stat">

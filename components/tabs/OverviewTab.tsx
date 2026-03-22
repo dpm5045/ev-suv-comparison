@@ -973,7 +973,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       <ExploreTeaser />
       </div>
 
-      <MarketInsights />
+      <MarketInsights onVehicleClick={onVehicleClick} />
 
       {/* ── Watchlist ── */}
       <div className="card watchlist-card" style={{ marginTop: 48 }}>

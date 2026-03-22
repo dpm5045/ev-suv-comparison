@@ -489,7 +489,7 @@ export default function DataExplorer() {
 
         const plotConfig: Record<string, any> = {
         width: container.clientWidth || 900,
-        height: 560,
+        height: (container.clientWidth || 900) >= 1200 ? 700 : 560,
         marginTop: 20,
         marginRight: 20,
         marginBottom: 45,
@@ -513,7 +513,7 @@ export default function DataExplorer() {
 
         const plotConfig: Record<string, any> = {
         width: container.clientWidth || 900,
-        height: 560,
+        height: (container.clientWidth || 900) >= 1200 ? 700 : 560,
         marginTop: 20,
         marginRight: 20,
         marginBottom: 45,

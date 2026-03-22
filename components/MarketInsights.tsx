@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,10 +33,10 @@ ChartJS.register(
 )
 
 // ── Global dark theme defaults ──────────────────────────────────────────────
-ChartJS.defaults.color = '#777790'
+ChartJS.defaults.color = '#9898b0'
 ChartJS.defaults.borderColor = 'rgba(255,255,255,0.05)'
 ChartJS.defaults.font.family = "'JetBrains Mono', 'SF Mono', monospace"
-ChartJS.defaults.font.size = 11
+ChartJS.defaults.font.size = 12
 ChartJS.defaults.plugins.tooltip.backgroundColor = 'rgba(19,19,25,0.95)'
 ChartJS.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.10)'
 ChartJS.defaults.plugins.tooltip.borderWidth = 1
@@ -145,19 +145,49 @@ function useFilteredData() {
   }, [])
 }
 
-// ── Takeaway box helper ───────────────────────────────────────────────────────
-function Takeaway({ items }: { items: string[] }) {
+// ── Takeaway accordion helper ─────────────────────────────────────────────────
+function Takeaway({ items, label }: { items: string[]; label?: string }) {
+  const [open, setOpen] = useState(false)
+  const toggle = useCallback(() => setOpen((o) => !o), [])
   return (
-    <ul className="mi-insights">
-      {items.map((item, i) => (
-        <li key={i}>{item}</li>
-      ))}
-    </ul>
+    <div className={`mi-insights-accordion${open ? ' open' : ''}`} onClick={toggle}>
+      <div className="mi-insights-toggle">
+        <span>{label ?? 'Key Takeaways'}</span>
+        <span className={`mi-insights-chevron${open ? ' open' : ''}`}>›</span>
+      </div>
+      {open && (
+        <ul className="mi-insights">
+          {items.map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }
 
+// ── Chart click helper ────────────────────────────────────────────────────────
+function useChartClick(onVehicleClick?: (vehicle: string) => void) {
+  const chartRef = useRef<any>(null)
+  const onClick = useCallback((_event: any, elements: any[]) => {
+    if (!onVehicleClick || !elements.length || !chartRef.current) return
+    const el = elements[0]
+    const ds = chartRef.current.data.datasets[el.datasetIndex]
+    const label = ds?.label
+    if (label && !label.startsWith('__') && label !== 'US EV Sales') {
+      onVehicleClick(label)
+    }
+  }, [onVehicleClick])
+  const onHover = useCallback((event: any, elements: any[]) => {
+    const canvas = event?.native?.target as HTMLCanvasElement | undefined
+    if (canvas) canvas.style.cursor = elements.length ? 'pointer' : ''
+  }, [])
+  return { chartRef, onClick, onHover }
+}
+
 // ── 1. GrowthChart ────────────────────────────────────────────────────────────
-function GrowthChart() {
+function GrowthChart({ onVehicleClick }: { onVehicleClick?: (vehicle: string) => void }) {
+  const { chartRef, onClick, onHover } = useChartClick(onVehicleClick)
   const isLight = useIsLightTheme()
   const gridColor = themeGrid(isLight)
   const { count_data, us_ev_sales } = useFilteredData()
@@ -237,8 +267,8 @@ function GrowthChart() {
     afterDatasetsDraw(chart: any) {
       const { ctx } = chart
       ctx.save()
-      ctx.font = "600 13px 'JetBrains Mono', monospace"
-      ctx.fillStyle = isLight ? '#1c1917' : '#e4e4ec'
+      ctx.font = "700 14px 'JetBrains Mono', monospace"
+      ctx.fillStyle = isLightMode() ? '#000' : '#e4e4ec'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'bottom'
       // Find the topmost bar y-position for each index
@@ -266,6 +296,8 @@ function GrowthChart() {
   const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick,
+    onHover,
     plugins: {
       legend: {
         display: true,
@@ -291,18 +323,19 @@ function GrowthChart() {
       },
     },
     scales: {
-      x: { stacked: true, grid: { color: gridColor } },
+      x: { stacked: true, grid: { color: gridColor }, ticks: { font: { size: 12 } } },
       y: {
         stacked: true,
         position: 'left',
-        title: { display: true, text: 'Trims Available' },
+        title: { display: true, text: 'Trims Available', font: { size: 13 } },
         grid: { color: gridColor },
+        ticks: { font: { size: 12 } },
       },
       y2: {
         position: 'right',
-        title: { display: true, text: 'US EV Sales' },
+        title: { display: true, text: 'US EV Sales', font: { size: 13 } },
         grid: { drawOnChartArea: false },
-        ticks: { callback: (v: number | string) => fmtEvSales(Number(v)) },
+        ticks: { callback: (v: number | string) => fmtEvSales(Number(v)), font: { size: 12 } },
       },
     },
   }
@@ -311,9 +344,9 @@ function GrowthChart() {
     <div className="mi-chart-card">
       <h3 className="mi-chart-title">3-Row EVs: A Market That (almost) Didn&apos;t Exist 5 Years Ago</h3>
       <p className="mi-chart-subtitle">From a handful of trims in 2021 to nearly 50 by 2026 — the segment exploded as the broader US EV market crossed 1M annual sales.</p>
-      <div className="mi-chart-wrap" style={{ height: 420 }}>
+      <div className="mi-chart-wrap" style={{ height: 440 }}>
         {/* @ts-expect-error mixed chart type */}
-        <Bar data={chartData} options={options} plugins={[barLabelPlugin, canvasBgPlugin]} />
+        <Bar ref={chartRef} data={chartData} options={options} plugins={[barLabelPlugin, canvasBgPlugin]} />
       </div>
 
       <Takeaway
@@ -330,7 +363,8 @@ function GrowthChart() {
 }
 
 // ── 2. PriceRangeChart ────────────────────────────────────────────────────────
-function PriceRangeChart() {
+function PriceRangeChart({ onVehicleClick }: { onVehicleClick?: (vehicle: string) => void }) {
+  const priceChartRef = useRef<any>(null)
   const isLight = useIsLightTheme()
   const gridColor = themeGrid(isLight)
   const { details } = useFilteredData()
@@ -459,10 +493,21 @@ function PriceRangeChart() {
     },
   }
 
+  const priceBarClick = useCallback((_event: any, elements: any[]) => {
+    if (!onVehicleClick || !elements.length) return
+    const vehicle = ranges[elements[0].index]?.vehicle
+    if (vehicle) onVehicleClick(vehicle)
+  }, [onVehicleClick, ranges])
+
   const options: ChartOptions<'bar'> = {
     indexAxis: 'y',
     responsive: true,
     maintainAspectRatio: false,
+    onClick: priceBarClick,
+    onHover: (event: any, elements: any[]) => {
+      const canvas = event?.native?.target as HTMLCanvasElement | undefined
+      if (canvas) canvas.style.cursor = elements.length ? 'pointer' : ''
+    },
     plugins: {
       legend: { display: false },
       tooltip: {
@@ -477,7 +522,7 @@ function PriceRangeChart() {
     },
     scales: {
       x: {
-        title: { display: true, text: 'MSRP (USD)' },
+        title: { display: true, text: 'MSRP (USD)', font: { size: 13 } },
         grid: { color: gridColor },
         min: 40000,
         max: 185000,
@@ -486,9 +531,10 @@ function PriceRangeChart() {
         },
         ticks: {
           callback: (v: number | string) => `$${fmtK(Number(v))}`,
+          font: { size: 12 },
         },
       },
-      y: { grid: { color: gridColor } },
+      y: { grid: { color: gridColor }, ticks: { font: { size: 12 } } },
     },
   }
 
@@ -497,7 +543,7 @@ function PriceRangeChart() {
       <h3 className="mi-chart-title">MSRP Range by Vehicle</h3>
       <p className="mi-chart-subtitle">Most of the segment lives above $70k — only Kia and VinFast offer true mass-market entry points below $60k.</p>
       <div className="mi-chart-wrap" style={{ height: `${Math.max(260, ranges.length * 36 + 60)}px` }}>
-        <Bar data={chartData} options={options} plugins={[rowShadingPlugin, refLinePlugin, priceEndLabelPlugin, canvasBgPlugin]} />
+        <Bar ref={priceChartRef} data={chartData} options={options} plugins={[rowShadingPlugin, refLinePlugin, priceEndLabelPlugin, canvasBgPlugin]} />
       </div>
       <Takeaway
         items={[
@@ -512,7 +558,8 @@ function PriceRangeChart() {
 }
 
 // ── 3. RangeVsPriceChart ──────────────────────────────────────────────────────
-function RangeVsPriceChart() {
+function RangeVsPriceChart({ onVehicleClick }: { onVehicleClick?: (vehicle: string) => void }) {
+  const { chartRef: scatterRef, onClick: scatterClick, onHover: scatterHover } = useChartClick(onVehicleClick)
   const isLight = useIsLightTheme()
   const gridColor = themeGrid(isLight)
   const { details } = useFilteredData()
@@ -613,6 +660,8 @@ function RangeVsPriceChart() {
   const options: ChartOptions<'scatter'> = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick: scatterClick,
+    onHover: scatterHover,
     plugins: {
       legend: {
         position: 'right',
@@ -633,13 +682,14 @@ function RangeVsPriceChart() {
     },
     scales: {
       x: {
-        title: { display: true, text: 'MSRP (USD)' },
+        title: { display: true, text: 'MSRP (USD)', font: { size: 13 } },
         grid: { color: gridColor },
-        ticks: { callback: (v: number | string) => `$${fmtK(Number(v))}` },
+        ticks: { callback: (v: number | string) => `$${fmtK(Number(v))}`, font: { size: 12 } },
       },
       y: {
-        title: { display: true, text: 'EPA Range (mi)' },
+        title: { display: true, text: 'EPA Range (mi)', font: { size: 13 } },
         grid: { color: gridColor },
+        ticks: { font: { size: 12 } },
       },
     },
   }
@@ -648,9 +698,9 @@ function RangeVsPriceChart() {
     <div className="mi-chart-card">
       <h3 className="mi-chart-title">Does Paying More Get You More Range?</h3>
       <p className="mi-chart-subtitle">Not really — the correlation is weak. Performance trims often sacrifice range for power, while value trims punch above their price.</p>
-      <div className="mi-chart-wrap" style={{ height: 480 }}>
+      <div className="mi-chart-wrap" style={{ height: 500 }}>
         {/* @ts-expect-error mixed chart type */}
-        <Scatter data={chartData} options={options} plugins={[quadrantPlugin, canvasBgPlugin]} />
+        <Scatter ref={scatterRef} data={chartData} options={options} plugins={[quadrantPlugin, canvasBgPlugin]} />
       </div>
       <Takeaway
         items={[
@@ -664,7 +714,7 @@ function RangeVsPriceChart() {
 }
 
 // ── Default export ────────────────────────────────────────────────────────────
-export default function MarketInsights() {
+export default function MarketInsights({ onVehicleClick }: { onVehicleClick?: (vehicle: string) => void } = {}) {
   return (
     <section className="mi-section">
       <div className="mi-header">
@@ -672,9 +722,9 @@ export default function MarketInsights() {
         <p className="mi-intro">Now that you&apos;ve found your match, here&apos;s how the 3-row EV landscape stacks up — growth trends, pricing tiers, and what you really get for your money.</p>
       </div>
 
-      <GrowthChart />
-      <PriceRangeChart />
-      <RangeVsPriceChart />
+      <GrowthChart onVehicleClick={onVehicleClick} />
+      <PriceRangeChart onVehicleClick={onVehicleClick} />
+      <RangeVsPriceChart onVehicleClick={onVehicleClick} />
     </section>
   )
 }
