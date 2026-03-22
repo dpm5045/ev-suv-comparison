@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { DATA } from '@/lib/data'
+import { DATA, WATCHLIST_VEHICLES } from '@/lib/data'
 import type { DetailRow } from '@/lib/data'
 
 // ── Constants ──────────────────────────────────────────────────────
@@ -21,13 +21,7 @@ const VEHICLE_COLORS: Record<string, string> = {
   'Mercedes-Benz EQS SUV': '#d4d4d8',
 }
 
-const WATCHLIST = [
-  'Subaru 3-Row EV',
-  'BMW iX7',
-  'Genesis GV90',
-  'Toyota Highlander EV',
-  'Tesla Model Y Long (Asia)',
-]
+const WATCHLIST: readonly string[] = WATCHLIST_VEHICLES
 
 const SELF_DRIVING_TIERS: Record<string, number> = {
   'Basic L2':           2.1,

@@ -1,12 +1,15 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { DATA } from '@/lib/data'
+import { DATA, WATCHLIST_VEHICLES, isWatchlistVehicle } from '@/lib/data'
 import { getUniqueVehicles, SITE_URL } from '@/lib/slugs'
 import Header from '@/components/Header'
 import Breadcrumb from '@/components/Breadcrumb'
 
 const vehicleCount = getUniqueVehicles().length
+const watchlistCount = WATCHLIST_VEHICLES.length
+const activeCount = vehicleCount - watchlistCount
 const trimCount = DATA.details.length
+const activeTrimCount = DATA.details.filter(d => !isWatchlistVehicle(d.vehicle)).length
 
 export const metadata: Metadata = {
   title: 'About',
@@ -44,8 +47,10 @@ export default function AboutPage() {
           <section className="info-section">
             <h2>What&apos;s Covered</h2>
             <p>
-              This tool currently tracks <strong>{trimCount} trims</strong> across{' '}
-              <strong>{vehicleCount} vehicles</strong>, covering every 3-row electric vehicle available or announced in the US market. Each vehicle listing includes:
+              This tool currently tracks <strong>{activeTrimCount} trims</strong> across{' '}
+              <strong>{activeCount} vehicles</strong> available in the US market, plus{' '}
+              <strong>{watchlistCount} upcoming vehicles</strong> on our watchlist — <strong>{trimCount} trims</strong> across{' '}
+              <strong>{vehicleCount} vehicles</strong> in total. Each vehicle listing includes:
             </p>
             <ul>
               <li>Pricing (MSRP, federal tax credit eligibility, pre-owned values)</li>

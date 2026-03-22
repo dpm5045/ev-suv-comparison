@@ -17,7 +17,7 @@ import {
   type TooltipItem,
 } from 'chart.js'
 import { Bar, Scatter } from 'react-chartjs-2'
-import { DATA, type DetailRow, type CountRow, type USEVSales } from '@/lib/data'
+import { DATA, WATCHLIST_VEHICLES, type DetailRow, type CountRow, type USEVSales } from '@/lib/data'
 
 ChartJS.register(
   CategoryScale,
@@ -63,13 +63,7 @@ const VEHICLE_COLORS: Record<string, string> = {
   'Mercedes-Benz EQS SUV':  '#9a9aaa',
 }
 
-const WATCHLIST = [
-  'Subaru 3-Row EV',
-  'BMW iX7',
-  'Genesis GV90',
-  'Toyota Highlander EV',
-  'Tesla Model Y Long (Asia)',
-]
+const WATCHLIST: readonly string[] = WATCHLIST_VEHICLES
 
 const YEARS: number[] = [2021, 2022, 2023, 2024, 2025, 2026]
 const YEAR_KEYS: (keyof CountRow)[] = ['y2021', 'y2022', 'y2023', 'y2024', 'y2025', 'y2026']

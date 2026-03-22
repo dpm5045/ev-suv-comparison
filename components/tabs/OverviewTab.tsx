@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useMemo, useState } from 'react'
-import { DATA } from '@/lib/data'
+import { DATA, WATCHLIST_VEHICLES, isWatchlistVehicle } from '@/lib/data'
 import type { InsightFilters } from '../Dashboard'
 import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
@@ -9,13 +9,6 @@ import ExploreTeaser from '@/components/ExploreTeaser'
 import MarketInsights from '@/components/MarketInsights'
 import { toSlug } from '@/lib/slugs'
 
-const WATCHLIST_VEHICLES = [
-  'Toyota Highlander EV',
-  'Subaru 3-Row EV',
-  'BMW iX7',
-  'Genesis GV90',
-  'Tesla Model Y Long (Asia)',
-]
 
 /* ── helpers ── */
 
@@ -499,7 +492,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   /* --- vehicle summaries + budget flags for glance table --- */
   const { vehicleSummaries, vehiclesInBudget, ranks, rankResult } = useMemo(() => {
     const d = DATA.details
-    const allVehicles = [...new Set(d.map((r) => r.vehicle))].sort()
+    const allVehicles = [...new Set(d.map((r) => r.vehicle))].filter((v) => !isWatchlistVehicle(v)).sort()
 
     const inBudget = new Set<string>()
     for (const r of filteredDetails) inBudget.add(r.vehicle)
@@ -755,7 +748,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                 </tr>
               </thead>
               <tbody>
-                {vehicleSummaries.filter((s) => !WATCHLIST_VEHICLES.includes(s.vehicle)).map((s) => {
+                {vehicleSummaries.filter((s) => !isWatchlistVehicle(s.vehicle)).map((s) => {
                   const dimmed = isPreowned
                     ? !s.hasPreowned || !vehiclesInBudget.has(s.vehicle)
                     : !vehiclesInBudget.has(s.vehicle)
@@ -796,7 +789,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         {/* Mobile card layout */}
         <div className="cmp-card-view">
           <div className="cmp-cards">
-            {vehicleSummaries.filter((s) => !WATCHLIST_VEHICLES.includes(s.vehicle)).map((s) => {
+            {vehicleSummaries.filter((s) => !isWatchlistVehicle(s.vehicle)).map((s) => {
               const dimmed = isPreowned
                 ? !s.hasPreowned || !vehiclesInBudget.has(s.vehicle)
                 : !vehiclesInBudget.has(s.vehicle)

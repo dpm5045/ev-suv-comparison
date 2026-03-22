@@ -124,6 +124,20 @@ export interface EVData {
 
 export const DATA = rawData as EVData
 
+/** Vehicles announced but not yet available in the US market */
+export const WATCHLIST_VEHICLES = [
+  'Toyota Highlander EV',
+  'Subaru 3-Row EV',
+  'BMW iX7',
+  'Genesis GV90',
+  'Tesla Model Y Long (Asia)',
+] as const satisfies readonly string[]
+
+/** Type-safe check for watchlist membership */
+export function isWatchlistVehicle(vehicle: string): boolean {
+  return (WATCHLIST_VEHICLES as readonly string[]).includes(vehicle)
+}
+
 export const VEHICLE_CLASSES: Record<string, string> = {
   'Kia EV9': 'v-kia',
   'Hyundai IONIQ 9': 'v-hyundai',
