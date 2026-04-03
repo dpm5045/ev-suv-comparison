@@ -127,10 +127,11 @@ export const DATA = rawData as EVData
 /** Vehicles announced but not yet available in the US market */
 export const WATCHLIST_VEHICLES = [
   'Toyota Highlander EV',
-  'Subaru 3-Row EV',
+  'Subaru Getaway',
   'BMW iX7',
   'Genesis GV90',
   'Tesla Model Y Long (Asia)',
+  'Faraday Future FX Super One',
 ] as const satisfies readonly string[]
 
 /** Type-safe check for watchlist membership */
@@ -153,8 +154,9 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'Cadillac Escalade IQ': 'v-cadillac',
   'Cadillac VISTIQ': 'v-cadillac',
   'Mercedes-Benz EQS SUV': 'v-mercedes',
-  'Subaru 3-Row EV': 'v-subaru',
+  'Subaru Getaway': 'v-subaru',
   'BMW iX7': 'v-bmw',
   'Genesis GV90': 'v-genesis',
+  'Faraday Future FX Super One': 'v-faraday',
 }
 

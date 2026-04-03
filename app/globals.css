@@ -440,6 +440,7 @@ tr:hover td {
 .v-subaru { background: #1a2a2a; color: #34d399; }
 .v-bmw { background: #1a1a3a; color: #60a5fa; }
 .v-genesis { background: #2a1a1a; color: #f97316; }
+.v-faraday { background: #1a2a3a; color: #38bdf8; }
 
 /* ── Vehicle badges — light theme ── */
 html[data-theme="light"] .v-kia { background: #dcfce7; color: #16a34a; }
@@ -456,6 +457,7 @@ html[data-theme="light"] .v-mercedes { background: #f4f4f5; color: #52525b; }
 html[data-theme="light"] .v-subaru { background: #d1fae5; color: #059669; }
 html[data-theme="light"] .v-bmw { background: #dbeafe; color: #2563eb; }
 html[data-theme="light"] .v-genesis { background: #ffedd5; color: #ea580c; }
+html[data-theme="light"] .v-faraday { background: #e0f2fe; color: #0284c7; }
 
 /* ── Watchlist ── */
 .watchlist-card {
