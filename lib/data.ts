@@ -139,6 +139,14 @@ export function isWatchlistVehicle(vehicle: string): boolean {
   return (WATCHLIST_VEHICLES as readonly string[]).includes(vehicle)
 }
 
+/** Vehicles that have been discontinued or are exiting the US market */
+export const GOODBYELIST_VEHICLES: { vehicle: string; summary: string }[] = [
+  {
+    vehicle: 'Tesla Model X',
+    summary: 'Discontinued Q2 2026. Tesla announced the end of Model X production, closing the book on the original 3-row electric SUV.',
+  },
+]
+
 export const VEHICLE_CLASSES: Record<string, string> = {
   'Kia EV9': 'v-kia',
   'Hyundai IONIQ 9': 'v-hyundai',
