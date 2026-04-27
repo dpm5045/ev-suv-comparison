@@ -4,120 +4,131 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EV Data Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;800&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    html { scroll-behavior: smooth; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg-primary: #0f0f1a;
+      --bg-elevated: #171726;
+      --bg-surface: #1e1e32;
+      --border-subtle: rgba(255,255,255,0.06);
+      --border-medium: rgba(255,255,255,0.12);
+      --text-primary: #e8e8f0;
+      --text-secondary: #9898b0;
+      --text-muted: #6868808;
+      --accent: #6b8afd;
+      --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+      --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
     body {
-      background: #1a1a2e;
-      color: #e0e0e0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      background: #16162a;
-      padding: 1.5rem 1rem;
-    }
-
-    .sidebar h2 {
-      margin-bottom: 1.5rem;
-      font-size: 1.2rem;
-      color: #e0e0e0;
-    }
-
-    .sidebar a {
-      display: block;
-      color: #a0a0c0;
-      text-decoration: none;
-      padding: 0.5rem 0.5rem;
-      border-radius: 4px;
-      margin-bottom: 0.25rem;
-      font-size: 0.95rem;
-    }
-
-    .sidebar a:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
     }
 
     .content {
-      padding: 1.5rem 2rem;
-      max-width: 1200px;
+      padding: 3rem 2.5rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
     }
 
-    .filters {
+    /* ── Header ─────────────────────────────────────────── */
+
+    .header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header h1 {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .header .byline {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Controls ────────────────────────────────────────── */
+
+    .controls-wrapper {
       position: sticky;
       top: 0;
       z-index: 10;
-      background: #1a1a2e;
+      background: var(--bg-primary);
       padding: 1rem 0;
-      border-bottom: 1px solid #2a2a4e;
+    }
+
+    .controls-row {
       display: flex;
-      gap: 1rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
       align-items: center;
     }
 
-    section {
-      margin-bottom: 3rem;
-      scroll-margin-top: 80px;
+    .controls-row + .controls-row {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
     }
 
-    section h2 {
-      margin-bottom: 1rem;
-      font-size: 1.3rem;
-    }
-
-    .chart-card {
-      background: #22223a;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .chart-card h3 {
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-      color: #e0e0e0;
-    }
-
-    .chart-card .insight {
-      color: #8888aa;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-      font-style: italic;
-    }
-
-    .tooltip {
-      position: absolute;
-      background: #2a2a4e;
-      border: 1px solid #4a4a6e;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .filter-group label {
+    .controls-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
       font-weight: 600;
-      font-size: 0.85rem;
-      color: #a0a0c0;
+      margin-right: 0.25rem;
+      white-space: nowrap;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .control-group label {
+      font-weight: 500;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .control-group select {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-medium);
+      border-radius: 6px;
+      padding: 7px 12px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: var(--font-sans);
+      transition: border-color 0.15s;
+    }
+
+    .control-group select:hover {
+      border-color: var(--accent);
+    }
+
+    .control-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(107,138,253,0.15);
     }
 
     .dropdown {
@@ -125,30 +136,34 @@
     }
 
     .dropdown-btn {
-      background: #22223a;
-      color: #e0e0e0;
-      border: 1px solid #4a4a6e;
-      border-radius: 4px;
-      padding: 6px 12px;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-medium);
+      border-radius: 6px;
+      padding: 7px 12px;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      font-family: var(--font-sans);
+      transition: border-color 0.15s;
     }
 
     .dropdown-btn:hover {
-      border-color: #6a6a8e;
+      border-color: var(--accent);
     }
 
     .dropdown-content {
       display: none;
       position: absolute;
-      background: #22223a;
-      border: 1px solid #4a4a6e;
-      border-radius: 4px;
-      padding: 8px;
-      min-width: 250px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-medium);
+      border-radius: 8px;
+      padding: 10px;
+      min-width: 260px;
       max-height: 400px;
       overflow-y: auto;
       z-index: 20;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      margin-top: 4px;
     }
 
     .dropdown.open .dropdown-content {
@@ -158,10 +173,16 @@
     .checkbox-label {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 0;
+      gap: 8px;
+      padding: 5px 4px;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
+      border-radius: 4px;
+      transition: background 0.1s;
+    }
+
+    .checkbox-label:hover {
+      background: rgba(255,255,255,0.04);
     }
 
     .color-dot {
@@ -169,49 +190,83 @@
       height: 10px;
       border-radius: 50%;
       display: inline-block;
+      flex-shrink: 0;
     }
 
     .select-all-btn {
       background: none;
       border: none;
-      color: #5ba4f5;
+      color: var(--accent);
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+      font-family: var(--font-sans);
       padding: 4px 0;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .select-all-btn:hover {
       text-decoration: underline;
     }
 
-    #year-select {
-      background: #22223a;
-      color: #e0e0e0;
-      border: 1px solid #4a4a6e;
-      border-radius: 4px;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-size: 0.85rem;
+    /* ── Chart Area ──────────────────────────────────────── */
+
+    .chart-area {
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      padding: 2rem 2rem 1.5rem;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-subtle);
     }
 
-    #year-select:hover {
-      border-color: #6a6a8e;
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.25rem;
+      padding: 1rem 0 0;
+      margin-top: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
     }
 
-    .legend { display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 0.75rem 0; }
-    .legend-item { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; color: #a0a0c0; }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
 
-    .sidebar a.active { color: #fff; border-left: 2px solid #5ba4f5; padding-left: calc(1rem - 2px); }
+    .chart-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+      font-style: italic;
+    }
+
+    /* ── Observable Plot overrides ────────────────────────── */
+
+    [aria-label="tip"] {
+      color: #1a1a2e !important;
+      font-size: 0.82rem;
+      font-family: var(--font-sans) !important;
+    }
+
+    figure [aria-label="tip"] text {
+      fill: #1a1a2e !important;
+    }
+
+    /* Make Plot SVG text use our fonts */
+    figure text {
+      font-family: var(--font-sans) !important;
+    }
   </style>
   <script type="module">
     import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
     import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-    window.Plot = Plot;
-    window.d3 = d3;
-    console.log("Plot and D3 loaded", Plot.version, d3.version);
 
-    // ── Task 2: Constants ──────────────────────────────────────────────
+    // ── Constants ────────────────────────────────────────────────────────
 
     const VEHICLE_COLORS = {
       "Kia EV9":               "#4ade80",
@@ -253,7 +308,148 @@
       "onboard_ac_kw", "l2_10_100", "l2_10_80", "destination",
     ];
 
-    // ── Task 2: Data Loading ───────────────────────────────────────────
+    // Human-readable labels for each plottable field
+    const FIELD_LABELS = {
+      msrp:                      "MSRP ($)",
+      otd_new:                   "OTD New Price ($)",
+      range_mi:                  "Range (miles)",
+      hp:                        "Horsepower",
+      battery_kwh:               "Battery (kWh)",
+      towing_lbs:                "Towing Capacity (lbs)",
+      dc_fast_charge_kw:         "DC Fast Charge (kW)",
+      dc_fast_charge_10_80_min:  "DC Charge 10–80% (min)",
+      curb_weight_lbs:           "Curb Weight (lbs)",
+      length_in:                 "Length (in)",
+      width_in:                  "Width (in)",
+      height_in:                 "Height (in)",
+      third_row_legroom_in:      "3rd Row Legroom (in)",
+      third_row_headroom_in:     "3rd Row Headroom (in)",
+      torque_lb_ft:              "Torque (lb-ft)",
+      zero_to_60_sec:            "0–60 mph (sec)",
+      ground_clearance_in:       "Ground Clearance (in)",
+      cargo_behind_3rd_cu_ft:    "Cargo Behind 3rd Row (cu ft)",
+      cargo_behind_2nd_cu_ft:    "Cargo Behind 2nd Row (cu ft)",
+      cargo_behind_1st_cu_ft:    "Cargo Behind 1st Row (cu ft)",
+      cargo_floor_width_in:      "Cargo Floor Width (in)",
+      frunk_cu_ft:               "Frunk (cu ft)",
+      onboard_ac_kw:             "Onboard AC Charger (kW)",
+      l2_10_100:                 "L2 Charge 10–100% (hrs)",
+      l2_10_80:                  "L2 Charge 10–80% (hrs)",
+      destination:               "Destination Charge ($)",
+      self_driving_score:        "Self-Driving Tier",
+    };
+
+    // Whether higher values are "better" (1), "worse" (-1), or neutral (0)
+    const FIELD_DIRECTION = {
+      msrp:                      -1, // lower price = better
+      otd_new:                   -1,
+      range_mi:                   1, // more range = better
+      hp:                         1,
+      battery_kwh:                1,
+      towing_lbs:                 1,
+      dc_fast_charge_kw:          1, // faster charging = better
+      dc_fast_charge_10_80_min:  -1, // less time = better
+      curb_weight_lbs:           -1, // lighter = better (efficiency)
+      length_in:                  0, // neutral — preference-dependent
+      width_in:                   0,
+      height_in:                  0,
+      third_row_legroom_in:       1,
+      third_row_headroom_in:      1,
+      torque_lb_ft:               1,
+      zero_to_60_sec:            -1, // faster = better
+      ground_clearance_in:        1,
+      cargo_behind_3rd_cu_ft:     1,
+      cargo_behind_2nd_cu_ft:     1,
+      cargo_behind_1st_cu_ft:     1,
+      cargo_floor_width_in:       1,
+      frunk_cu_ft:                1,
+      onboard_ac_kw:              1,
+      l2_10_100:                 -1, // less time = better
+      l2_10_80:                  -1,
+      destination:               -1,
+      self_driving_score:         1,
+    };
+
+    // Quadrant label logic: given direction of X and Y, label each quadrant
+    // Returns { topLeft, topRight, bottomLeft, bottomRight } or null if both neutral
+    function getQuadrantLabels(xField, yField) {
+      const xDir = FIELD_DIRECTION[xField] ?? 0;
+      const yDir = FIELD_DIRECTION[yField] ?? 0;
+      if (xDir === 0 && yDir === 0) return null;
+
+      // Determine what "high" means for each axis
+      const xHighGood = xDir === 1;
+      const xHighBad  = xDir === -1;
+      const yHighGood = yDir === 1;
+      const yHighBad  = yDir === -1;
+
+      // Score each quadrant: +1 for each "good" dimension, -1 for each "bad"
+      function score(xHigh, yHigh) {
+        let s = 0;
+        if (xDir !== 0) s += (xHigh ? xHighGood : xHighBad) ? 1 : -1;
+        if (yDir !== 0) s += (yHigh ? yHighGood : yHighBad) ? 1 : -1;
+        return s;
+      }
+
+      function label(s, xHigh, yHigh) {
+        if (s === 2)  return "Best Value";
+        if (s === -2) return "Worst Value";
+        // Mixed: one good, one bad — describe the tradeoff
+        if (s === 0 && xDir !== 0 && yDir !== 0) {
+          // Figure out which dimension is good
+          const xGood = (xHigh && xHighGood) || (!xHigh && xHighBad);
+          if (xGood) return "Good " + shortName(xField) + ",\nWeak " + shortName(yField);
+          else return "Good " + shortName(yField) + ",\nWeak " + shortName(xField);
+        }
+        // One axis is neutral
+        if (xDir === 0) return yHigh ? (yHighGood ? "Strong" : "Weak") : (yHighBad ? "Weak" : "Strong");
+        if (yDir === 0) return xHigh ? (xHighGood ? "Strong" : "Weak") : (xHighBad ? "Weak" : "Strong");
+        return "";
+      }
+
+      const tl = score(false, true);
+      const tr = score(true, true);
+      const bl = score(false, false);
+      const br = score(true, false);
+
+      return {
+        topLeft:     label(tl, false, true),
+        topRight:    label(tr, true, true),
+        bottomLeft:  label(bl, false, false),
+        bottomRight: label(br, true, false),
+      };
+    }
+
+    // Short field name for tradeoff labels
+    function shortName(field) {
+      const shorts = {
+        msrp: "Price", otd_new: "Price", range_mi: "Range", hp: "Power",
+        battery_kwh: "Battery", towing_lbs: "Towing", dc_fast_charge_kw: "Charge Speed",
+        dc_fast_charge_10_80_min: "Charge Time", curb_weight_lbs: "Weight",
+        third_row_legroom_in: "Legroom", third_row_headroom_in: "Headroom",
+        torque_lb_ft: "Torque", zero_to_60_sec: "Acceleration",
+        ground_clearance_in: "Clearance", cargo_behind_3rd_cu_ft: "Cargo",
+        cargo_behind_2nd_cu_ft: "Cargo", cargo_behind_1st_cu_ft: "Cargo",
+        cargo_floor_width_in: "Cargo Width", frunk_cu_ft: "Frunk",
+        onboard_ac_kw: "AC Charger", l2_10_100: "L2 Time", l2_10_80: "L2 Time",
+        destination: "Dest. Fee", self_driving_score: "Self-Driving",
+        length_in: "Length", width_in: "Width", height_in: "Height",
+      };
+      return shorts[field] || FIELD_LABELS[field];
+    }
+
+    // Fields worth plotting (exclude destination, include self_driving_score)
+    const PLOTTABLE_FIELDS = [
+      "msrp", "otd_new", "range_mi", "hp", "torque_lb_ft", "zero_to_60_sec",
+      "self_driving_score",
+      "battery_kwh", "towing_lbs",
+      "dc_fast_charge_kw", "dc_fast_charge_10_80_min",
+      "third_row_legroom_in", "third_row_headroom_in",
+      "cargo_behind_3rd_cu_ft", "cargo_behind_2nd_cu_ft", "cargo_behind_1st_cu_ft",
+      "cargo_floor_width_in", "frunk_cu_ft",
+    ];
+
+    // ── Data Loading ─────────────────────────────────────────────────────
 
     async function loadData() {
       const res = await fetch("lib/ev-data.json");
@@ -273,16 +469,16 @@
       return details;
     }
 
-    // ── Task 3: Global Filters ─────────────────────────────────────────
+    // ── Filters ──────────────────────────────────────────────────────────
 
     function buildFilters(data) {
       const vehicles = [...new Set(data.map(d => d.vehicle))].sort();
       const years = [...new Set(data.map(d => d.year))].sort();
       const filtersEl = document.getElementById("filters");
 
-      // Vehicle multi-select as checkboxes in a dropdown
+      // Vehicle multi-select
       const vehicleDiv = document.createElement("div");
-      vehicleDiv.className = "filter-group";
+      vehicleDiv.className = "control-group";
       vehicleDiv.innerHTML = `
         <label>Vehicles</label>
         <div class="dropdown">
@@ -301,56 +497,122 @@
       `;
       filtersEl.appendChild(vehicleDiv);
 
-      // Year dropdown
+      // Year multi-select
       const yearDiv = document.createElement("div");
-      yearDiv.className = "filter-group";
+      yearDiv.className = "control-group";
       yearDiv.innerHTML = `
-        <label>Year</label>
-        <select id="year-select">
-          <option value="all">All Years</option>
-          ${years.map(y => `<option value="${y}">${y}</option>`).join("")}
-        </select>
+        <label>Years</label>
+        <div class="dropdown">
+          <button class="dropdown-btn" id="year-btn">All Years ▼</button>
+          <div class="dropdown-content" id="year-dropdown">
+            <button class="select-all-btn" id="year-select-all">Select All</button>
+            ${years.map(y => `
+              <label class="checkbox-label">
+                <input type="checkbox" value="${y}" checked>
+                ${y}
+              </label>
+            `).join("")}
+          </div>
+        </div>
       `;
       filtersEl.appendChild(yearDiv);
+
+      // Seats filter
+      const seatsDiv = document.createElement("div");
+      seatsDiv.className = "control-group";
+      seatsDiv.innerHTML = `
+        <label>Seats</label>
+        <select id="seats-select">
+          <option value="all">All</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      `;
+      filtersEl.appendChild(seatsDiv);
+
+      // Drivetrain filter
+      const dtDiv = document.createElement("div");
+      dtDiv.className = "control-group";
+      dtDiv.innerHTML = `
+        <label>Drivetrain</label>
+        <select id="drivetrain-select">
+          <option value="all">All</option>
+          <option value="AWD">AWD</option>
+          <option value="RWD">RWD</option>
+        </select>
+      `;
+      filtersEl.appendChild(dtDiv);
+
+      // Range multi-select filter
+      const rangeBuckets = ["200–250 mi", "250–300 mi", "300–325 mi", "325–350 mi", "350–400 mi", "400+ mi"];
+      const rangeDiv = document.createElement("div");
+      rangeDiv.className = "control-group";
+      rangeDiv.innerHTML = `
+        <label>Range</label>
+        <div class="dropdown">
+          <button class="dropdown-btn" id="range-btn">All Ranges ▼</button>
+          <div class="dropdown-content" id="range-dropdown">
+            <button class="select-all-btn" id="range-select-all">Select All</button>
+            ${rangeBuckets.map(r => `
+              <label class="checkbox-label">
+                <input type="checkbox" value="${r}" checked>
+                ${r}
+              </label>
+            `).join("")}
+          </div>
+        </div>
+      `;
+      filtersEl.appendChild(rangeDiv);
     }
 
     function getFilteredData(data) {
-      const checkboxes = document.querySelectorAll("#vehicle-dropdown input[type=checkbox]");
-      const selectedVehicles = new Set([...checkboxes].filter(c => c.checked).map(c => c.value));
-      const yearVal = document.getElementById("year-select").value;
+      const vehicleBoxes = document.querySelectorAll("#vehicle-dropdown input[type=checkbox]");
+      const selectedVehicles = new Set([...vehicleBoxes].filter(c => c.checked).map(c => c.value));
+      const yearBoxes = document.querySelectorAll("#year-dropdown input[type=checkbox]");
+      const selectedYears = new Set([...yearBoxes].filter(c => c.checked).map(c => Number(c.value)));
+      const seatsVal = document.getElementById("seats-select").value;
+      const dtVal = document.getElementById("drivetrain-select").value;
+      const rangeBoxes = document.querySelectorAll("#range-dropdown input[type=checkbox]");
+      const selectedRanges = new Set([...rangeBoxes].filter(c => c.checked).map(c => c.value));
 
       return data.filter(d => {
         if (!selectedVehicles.has(d.vehicle)) return false;
-        if (yearVal !== "all" && d.year !== Number(yearVal)) return false;
+        if (!selectedYears.has(d.year)) return false;
+        if (seatsVal !== "all" && d.seats !== Number(seatsVal)) return false;
+        if (dtVal !== "all" && d.drivetrain !== dtVal) return false;
+        // Range bucket filter
+        const r = d.range_mi;
+        if (r == null) return selectedRanges.size === rangeBoxes.length; // show null range only if "all" selected
+        let inBucket = false;
+        if (r >= 200 && r < 250 && selectedRanges.has("200–250 mi")) inBucket = true;
+        if (r >= 250 && r < 300 && selectedRanges.has("250–300 mi")) inBucket = true;
+        if (r >= 300 && r < 325 && selectedRanges.has("300–325 mi")) inBucket = true;
+        if (r >= 325 && r < 350 && selectedRanges.has("325–350 mi")) inBucket = true;
+        if (r >= 350 && r < 400 && selectedRanges.has("350–400 mi")) inBucket = true;
+        if (r >= 400 && selectedRanges.has("400+ mi")) inBucket = true;
+        if (!inBucket) return false;
         return true;
       });
     }
 
-    function wireFilters(data, renderCharts) {
-      const btn = document.getElementById("vehicle-btn");
+    function wireDropdown(btnId, dropdownId, selectAllId, updateLabel, data, render) {
+      const btn = document.getElementById(btnId);
       const dropdown = btn.closest(".dropdown");
       btn.addEventListener("click", () => dropdown.classList.toggle("open"));
       document.addEventListener("click", (e) => {
         if (!dropdown.contains(e.target)) dropdown.classList.remove("open");
       });
 
-      document.getElementById("vehicle-select-all").addEventListener("click", () => {
-        const boxes = document.querySelectorAll("#vehicle-dropdown input[type=checkbox]");
+      document.getElementById(selectAllId).addEventListener("click", () => {
+        const boxes = document.querySelectorAll(`#${dropdownId} input[type=checkbox]`);
         const allChecked = [...boxes].every(c => c.checked);
         boxes.forEach(c => c.checked = !allChecked);
-        updateVehicleButtonLabel();
-        renderCharts(getFilteredData(data));
+        updateLabel();
+        render();
       });
 
-      document.querySelectorAll("#vehicle-dropdown input[type=checkbox]").forEach(cb => {
-        cb.addEventListener("change", () => {
-          updateVehicleButtonLabel();
-          renderCharts(getFilteredData(data));
-        });
-      });
-
-      document.getElementById("year-select").addEventListener("change", () => {
-        renderCharts(getFilteredData(data));
+      document.querySelectorAll(`#${dropdownId} input[type=checkbox]`).forEach(cb => {
+        cb.addEventListener("change", () => { updateLabel(); render(); });
       });
     }
 
@@ -364,387 +626,186 @@
       else btn.textContent = `${checked.length} Vehicles ▼`;
     }
 
-    // ── Task 4: Chart Helpers ──────────────────────────────────────────
-
-    function chartCard(sectionId, { title, insight }) {
-      const section = document.getElementById(sectionId);
-      const card = document.createElement("div");
-      card.className = "chart-card";
-      card.innerHTML = `<h3>${title}</h3><div class="chart-container"></div><p class="insight">${insight}</p>`;
-      section.appendChild(card);
-      return card.querySelector(".chart-container");
+    function updateYearButtonLabel() {
+      const boxes = document.querySelectorAll("#year-dropdown input[type=checkbox]");
+      const checked = [...boxes].filter(c => c.checked);
+      const btn = document.getElementById("year-btn");
+      if (checked.length === boxes.length) btn.textContent = "All Years ▼";
+      else if (checked.length === 0) btn.textContent = "No Years ▼";
+      else btn.textContent = checked.map(c => c.value).join(", ") + " ▼";
     }
 
-    function clearCharts() {
-      document.querySelectorAll(".chart-card").forEach(c => c.remove());
+    function updateRangeButtonLabel() {
+      const boxes = document.querySelectorAll("#range-dropdown input[type=checkbox]");
+      const checked = [...boxes].filter(c => c.checked);
+      const btn = document.getElementById("range-btn");
+      if (checked.length === boxes.length) btn.textContent = "All Ranges ▼";
+      else if (checked.length === 0) btn.textContent = "No Range ▼";
+      else if (checked.length === 1) btn.textContent = checked[0].value + " ▼";
+      else btn.textContent = `${checked.length} Ranges ▼`;
     }
 
-    function vehicleColorScale(data) {
-      const vehicles = [...new Set(data.map(d => d.vehicle))].sort();
-      return Plot.scale({
-        color: {
-          type: "categorical",
-          domain: vehicles,
-          range: vehicles.map(v => VEHICLE_COLORS[v] || "#888"),
+    // ── Axis Selectors ───────────────────────────────────────────────────
+
+    function buildAxisSelectors() {
+      const axisEl = document.getElementById("axis-selectors");
+
+      function makeSelect(id, label, defaultVal, includeNone) {
+        const group = document.createElement("div");
+        group.className = "control-group";
+        let options = PLOTTABLE_FIELDS.map(f =>
+          `<option value="${f}" ${f === defaultVal ? "selected" : ""}>${FIELD_LABELS[f]}</option>`
+        ).join("");
+        if (includeNone) {
+          options = `<option value="none" ${defaultVal === "none" ? "selected" : ""}>None (fixed size)</option>` + options;
         }
-      });
-    }
-
-    // ── Section 1: Value Analysis Charts ─────────────────────────────
-
-    function chart1_1(data) {
-      const container = chartCard("value", {
-        title: "MSRP vs. Range",
-        insight: "Who gives you the most miles per dollar?",
-      });
-      const filtered = data.filter(d => d.msrp != null && d.range_mi != null);
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 500,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "MSRP ($)", tickFormat: d3.format("$,.0f") },
-        y: { label: "Range (miles)" },
-        color: { domain: [...new Set(filtered.map(d => d.vehicle))].sort(), range: [...new Set(filtered.map(d => d.vehicle))].sort().map(v => VEHICLE_COLORS[v] || "#888") },
-        r: { domain: d3.extent(filtered, d => d.battery_kwh), range: [4, 18] },
-        marks: [
-          Plot.dot(filtered, {
-            x: "msrp", y: "range_mi", fill: "vehicle", r: "battery_kwh",
-            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n$${d3.format(",")(d.msrp)} | ${d.range_mi} mi | ${d.battery_kwh} kWh`,
-          }),
-          Plot.ruleY([0]),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    function chart1_2(data) {
-      const container = chartCard("value", {
-        title: "MSRP vs. Horsepower",
-        insight: "Performance per dollar across the segment.",
-      });
-      const filtered = data.filter(d => d.msrp != null && d.hp != null);
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 500,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "MSRP ($)", tickFormat: d3.format("$,.0f") },
-        y: { label: "Horsepower" },
-        color: { domain: [...new Set(filtered.map(d => d.vehicle))].sort(), range: [...new Set(filtered.map(d => d.vehicle))].sort().map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.dot(filtered, {
-            x: "msrp", y: "hp", fill: "vehicle", r: 6,
-            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n$${d3.format(",")(d.msrp)} | ${d.hp} hp`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    function chart1_3(data) {
-      const container = chartCard("value", {
-        title: "MSRP vs. Cargo (Behind 2nd Row)",
-        insight: "Practicality per dollar.",
-      });
-      const filtered = data.filter(d => d.msrp != null && d.cargo_behind_2nd_cu_ft != null);
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 500,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "MSRP ($)", tickFormat: d3.format("$,.0f") },
-        y: { label: "Cargo behind 2nd row (cu ft)" },
-        color: { domain: [...new Set(filtered.map(d => d.vehicle))].sort(), range: [...new Set(filtered.map(d => d.vehicle))].sort().map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.dot(filtered, {
-            x: "msrp", y: "cargo_behind_2nd_cu_ft", fill: "vehicle", r: 6,
-            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n$${d3.format(",")(d.msrp)} | ${d.cargo_behind_2nd_cu_ft} cu ft`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    function chart1_4(data) {
-      const container = chartCard("value", {
-        title: "MSRP vs. Self-Driving Tier",
-        insight: "Does paying more get you better autonomy, or do some vehicles punch above their price class?",
-      });
-      const filtered = data.filter(d => d.msrp != null && d.self_driving_score != null);
-      const tierLabels = Object.entries(SELF_DRIVING_TIERS);
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 400,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "MSRP ($)", tickFormat: d3.format("$,.0f") },
-        y: {
-          label: "Self-Driving Tier",
-          domain: [2.0, 2.5],
-          ticks: tierLabels.map(([, v]) => v),
-          tickFormat: v => tierLabels.find(([, n]) => n === v)?.[0] ?? "",
-        },
-        color: { domain: [...new Set(filtered.map(d => d.vehicle))].sort(), range: [...new Set(filtered.map(d => d.vehicle))].sort().map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.dot(filtered, {
-            x: "msrp", y: "self_driving_score", fill: "vehicle", r: 7,
-            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n$${d3.format(",")(d.msrp)} | ${d.self_driving_tier}`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    function chart1_5(data) {
-      const container = chartCard("value", {
-        title: "OTD New Price Spread by Vehicle",
-        insight: "Which models span a wide price range vs. are tightly clustered?",
-      });
-      const filtered = data.filter(d => d.otd_new != null);
-      const medians = d3.rollup(filtered, v => d3.median(v, d => d.otd_new), d => d.vehicle);
-      const sortedVehicles = [...medians.entries()].sort((a, b) => a[1] - b[1]).map(d => d[0]);
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 400,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "OTD New Price ($)", tickFormat: d3.format("$,.0f") },
-        y: { label: null, domain: sortedVehicles },
-        color: { domain: sortedVehicles, range: sortedVehicles.map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.dot(filtered, {
-            x: "otd_new", y: "vehicle", fill: "vehicle", r: 5,
-            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\nOTD: $${d3.format(",")(Math.round(d.otd_new))}`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    // ── Section 2: Market Evolution Charts ─────────────────────────────
-
-    function chart2_1(data) {
-      const container = chartCard("market", {
-        title: "Average MSRP by Vehicle Over Model Years",
-        insight: "Who's getting cheaper? Who's climbing?",
-      });
-      const filtered = data.filter(d => d.msrp != null && d.year != null);
-      const grouped = d3.flatRollup(
-        filtered,
-        v => d3.mean(v, d => d.msrp),
-        d => d.vehicle,
-        d => d.year,
-      ).map(([vehicle, year, avg]) => ({ vehicle, year, avg }));
-
-      const vehicles = [...new Set(grouped.map(d => d.vehicle))].sort();
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 500,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "Model Year", tickFormat: d3.format("d") },
-        y: { label: "Average MSRP ($)", tickFormat: d3.format("$,.0f") },
-        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.line(grouped, { x: "year", y: "avg", stroke: "vehicle", strokeWidth: 2, tip: true }),
-          Plot.dot(grouped, {
-            x: "year", y: "avg", fill: "vehicle", r: 4,
-            tip: true, title: d => `${d.vehicle} ${d.year}\nAvg MSRP: $${d3.format(",")(Math.round(d.avg))}`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    function chart2_2(data) {
-      const container = chartCard("market", {
-        title: "Range Improvement (Earliest vs. Latest Year)",
-        insight: "Which models have gained the most range over time?",
-      });
-      const filtered = data.filter(d => d.range_mi != null && d.year != null);
-      const byVehicle = d3.group(filtered, d => d.vehicle);
-      const slopeData = [];
-      for (const [vehicle, rows] of byVehicle) {
-        const years = [...new Set(rows.map(d => d.year))].sort();
-        if (years.length < 2) continue;
-        const earliest = years[0];
-        const latest = years[years.length - 1];
-        const earlyAvg = d3.mean(rows.filter(d => d.year === earliest), d => d.range_mi);
-        const lateAvg = d3.mean(rows.filter(d => d.year === latest), d => d.range_mi);
-        slopeData.push({ vehicle, year: earliest, range: earlyAvg, endpoint: "earliest" });
-        slopeData.push({ vehicle, year: latest, range: lateAvg, endpoint: "latest" });
+        group.innerHTML = `<label>${label}</label><select id="${id}">${options}</select>`;
+        axisEl.appendChild(group);
       }
 
-      if (slopeData.length === 0) {
-        container.textContent = "Not enough multi-year data for slope chart.";
+      makeSelect("x-axis", "X-Axis", "msrp", false);
+      makeSelect("y-axis", "Y-Axis", "range_mi", false);
+      makeSelect("bubble-size", "Bubble Size", "none", true);
+    }
+
+    // ── Chart Rendering ──────────────────────────────────────────────────
+
+    function renderChart(data) {
+      const container = document.getElementById("chart-container");
+      container.innerHTML = "";
+
+      const xField = document.getElementById("x-axis").value;
+      const yField = document.getElementById("y-axis").value;
+      const sizeField = document.getElementById("bubble-size").value;
+
+      const filtered = data.filter(d => d[xField] != null && d[yField] != null);
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="color:#8888aa;text-align:center;padding:3rem;">No data for this combination.</p>';
         return;
       }
 
-      const vehicles = [...new Set(slopeData.map(d => d.vehicle))].sort();
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 400,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "Model Year", tickFormat: d3.format("d"), domain: d3.extent(slopeData, d => d.year) },
-        y: { label: "Average Range (miles)" },
-        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.line(slopeData, { x: "year", y: "range", stroke: "vehicle", strokeWidth: 2, z: "vehicle" }),
-          Plot.dot(slopeData, {
-            x: "year", y: "range", fill: "vehicle", r: 5,
-            tip: true, title: d => `${d.vehicle} ${d.year}\nAvg Range: ${Math.round(d.range)} mi`,
-          }),
-          Plot.text(slopeData.filter(d => d.endpoint === "latest"), {
-            x: "year", y: "range", text: "vehicle", fill: "vehicle",
-            dx: 10, textAnchor: "start", fontSize: 11,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    // ── Section 3: Size & Practicality Charts ───────────────────────────
-
-    function chart3_1(data) {
-      const container = chartCard("size", {
-        title: "Curb Weight vs. Range",
-        insight: "Does heavier = worse range, or do bigger batteries compensate?",
-      });
-      const filtered = data.filter(d => d.curb_weight_lbs != null && d.range_mi != null);
       const vehicles = [...new Set(filtered.map(d => d.vehicle))].sort();
-      const plot = Plot.plot({
+
+      const isCurrency = (f) => ["msrp", "otd_new", "destination"].includes(f);
+      const xFormat = isCurrency(xField) ? d3.format("$,.0f") : undefined;
+      const yFormat = isCurrency(yField) ? d3.format("$,.0f") : undefined;
+
+      // Special axis handling for self-driving tier
+      const tierLabels = Object.entries(SELF_DRIVING_TIERS);
+      const TIER_SHORT = { "Basic L2": "Basic L2", "Advanced L2": "Adv. L2", "L2+ Hands-Free": "L2+ HF", "L2+ Point-to-Point": "L2+ P2P" };
+      const yConfig = yField === "self_driving_score"
+        ? {
+            label: FIELD_LABELS[yField],
+            domain: [2.0, 2.5],
+            ticks: tierLabels.map(([, v]) => v),
+            tickFormat: v => { const t = tierLabels.find(([, n]) => n === v); return t ? TIER_SHORT[t[0]] : ""; },
+          }
+        : { label: FIELD_LABELS[yField], tickFormat: yFormat };
+
+      const xConfig = xField === "self_driving_score"
+        ? {
+            label: FIELD_LABELS[xField],
+            domain: [2.0, 2.5],
+            ticks: tierLabels.map(([, v]) => v),
+            tickFormat: v => { const t = tierLabels.find(([, n]) => n === v); return t ? TIER_SHORT[t[0]] : ""; },
+          }
+        : { label: FIELD_LABELS[xField], tickFormat: xFormat };
+
+      const plotConfig = {
         width: container.clientWidth || 900,
-        height: 500,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "Curb Weight (lbs)", tickFormat: d3.format(",") },
-        y: { label: "Range (miles)" },
-        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.dot(filtered, {
-            x: "curb_weight_lbs", y: "range_mi", fill: "vehicle", r: 6,
-            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n${d3.format(",")(d.curb_weight_lbs)} lbs | ${d.range_mi} mi`,
-          }),
-        ],
-      });
+        height: 560,
+        marginTop: 20,
+        marginRight: 20,
+        marginBottom: 45,
+        marginLeft: 60,
+        style: { background: "transparent", color: "#9898b0", fontSize: "12px" },
+        grid: true,
+        x: xConfig,
+        y: yConfig,
+        color: {
+          domain: vehicles,
+          range: vehicles.map(v => VEHICLE_COLORS[v] || "#888"),
+        },
+        marks: [],
+      };
+
+      // Build dot mark options
+      const dotOpts = {
+        x: xField,
+        y: yField,
+        fill: "vehicle",
+        fillOpacity: 0.8,
+        stroke: "#171726",
+        strokeWidth: 1,
+        tip: true,
+      };
+
+      // Bubble size
+      if (sizeField !== "none") {
+        const sizeData = filtered.filter(d => d[sizeField] != null);
+        dotOpts.r = sizeField;
+        plotConfig.r = { domain: d3.extent(sizeData, d => d[sizeField]), range: [4, 20] };
+        dotOpts.title = d => {
+          let t = `${d.name}\n${FIELD_LABELS[xField]}: ${isCurrency(xField) ? "$" + d3.format(",")(d[xField]) : d[xField]}`;
+          t += `\n${FIELD_LABELS[yField]}: ${isCurrency(yField) ? "$" + d3.format(",")(d[yField]) : d[yField]}`;
+          if (d[sizeField] != null) t += `\n${FIELD_LABELS[sizeField]}: ${d[sizeField]}`;
+          return t;
+        };
+      } else {
+        dotOpts.r = 6;
+        dotOpts.title = d => {
+          let t = `${d.name}\n${FIELD_LABELS[xField]}: ${isCurrency(xField) ? "$" + d3.format(",")(d[xField]) : d[xField]}`;
+          t += `\n${FIELD_LABELS[yField]}: ${isCurrency(yField) ? "$" + d3.format(",")(d[yField]) : d[yField]}`;
+          return t;
+        };
+      }
+
+      // Quadrant lines and labels
+      const xMedian = d3.median(filtered, d => d[xField]);
+      const yMedian = d3.median(filtered, d => d[yField]);
+
+      if (xMedian != null && yMedian != null) {
+        // Median crosshair lines
+        plotConfig.marks.push(
+          Plot.ruleX([xMedian], { stroke: "rgba(255,255,255,0.12)", strokeWidth: 1, strokeDasharray: "6,4" }),
+          Plot.ruleY([yMedian], { stroke: "rgba(255,255,255,0.12)", strokeWidth: 1, strokeDasharray: "6,4" }),
+        );
+
+        // Quadrant labels
+        const labels = getQuadrantLabels(xField, yField);
+        if (labels) {
+          // Position labels near the median crosshair, inside each quadrant
+          const xMin = d3.min(filtered, d => d[xField]);
+          const xMax = d3.max(filtered, d => d[xField]);
+          const yMin = d3.min(filtered, d => d[yField]);
+          const yMax = d3.max(filtered, d => d[yField]);
+          const xLow  = xMedian - (xMedian - xMin) * 0.5;
+          const xHigh = xMedian + (xMax - xMedian) * 0.5;
+          const yLow  = yMedian - (yMedian - yMin) * 0.5;
+          const yHigh = yMedian + (yMax - yMedian) * 0.5;
+
+          const quadrants = [
+            { x: xLow,  y: yHigh, text: labels.topLeft,     textAnchor: "middle" },
+            { x: xHigh, y: yHigh, text: labels.topRight,    textAnchor: "middle" },
+            { x: xLow,  y: yLow,  text: labels.bottomLeft,  textAnchor: "middle" },
+            { x: xHigh, y: yLow,  text: labels.bottomRight, textAnchor: "middle" },
+          ].filter(q => q.text);
+
+          plotConfig.marks.push(
+            Plot.text(quadrants, {
+              x: "x", y: "y", text: "text", textAnchor: "middle",
+              fill: "rgba(255,255,255,0.18)", fontStyle: "italic", fontSize: 13, lineAnchor: "middle",
+            })
+          );
+        }
+      }
+
+      plotConfig.marks.push(Plot.dot(filtered, dotOpts));
+
+      const plot = Plot.plot(plotConfig);
       container.appendChild(plot);
     }
-
-    function chart3_2(data) {
-      const container = chartCard("size", {
-        title: "Cargo Behind 3rd Row by Vehicle",
-        insight: "How usable is that third row in practice?",
-      });
-      const filtered = data.filter(d => d.cargo_behind_3rd_cu_ft != null);
-      const medians = d3.flatRollup(filtered, v => d3.median(v, d => d.cargo_behind_3rd_cu_ft), d => d.vehicle)
-        .map(([vehicle, median]) => ({ vehicle, median }))
-        .sort((a, b) => b.median - a.median);
-      const sortedVehicles = medians.map(d => d.vehicle);
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 400,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: null, domain: sortedVehicles, padding: 0.3 },
-        y: { label: "Cargo behind 3rd row (cu ft)" },
-        color: { domain: sortedVehicles, range: sortedVehicles.map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.barY(medians, {
-            x: "vehicle", y: "median", fill: "vehicle", fillOpacity: 0.4,
-          }),
-          Plot.dot(filtered, {
-            x: "vehicle", y: "cargo_behind_3rd_cu_ft", fill: "vehicle", r: 5,
-            fillOpacity: 0.9, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n${d.cargo_behind_3rd_cu_ft} cu ft`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    function chart3_3(data) {
-      const container = chartCard("size", {
-        title: "Length vs. Third-Row Legroom",
-        insight: "Are bigger vehicles actually giving you more third-row space?",
-      });
-      const filtered = data.filter(d => d.length_in != null && d.third_row_legroom_in != null);
-      const vehicles = [...new Set(filtered.map(d => d.vehicle))].sort();
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 500,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "Overall Length (inches)" },
-        y: { label: "Third-Row Legroom (inches)" },
-        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.dot(filtered, {
-            x: "length_in", y: "third_row_legroom_in", fill: "vehicle", r: 6,
-            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n${d.length_in}" long | ${d.third_row_legroom_in}" legroom`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    // ── Section 4: Charging & Efficiency Charts ─────────────────────────
-
-    function chart4_1(data) {
-      const container = chartCard("charging", {
-        title: "Battery kWh vs. DC Fast Charge Speed",
-        insight: "Who charges fastest relative to battery size?",
-      });
-      const filtered = data.filter(d => d.battery_kwh != null && d.dc_fast_charge_kw != null);
-      const vehicles = [...new Set(filtered.map(d => d.vehicle))].sort();
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 500,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: "Battery Capacity (kWh)" },
-        y: { label: "DC Fast Charge Peak (kW)" },
-        color: { domain: vehicles, range: vehicles.map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.dot(filtered, {
-            x: "battery_kwh", y: "dc_fast_charge_kw", fill: "vehicle", r: 6,
-            fillOpacity: 0.8, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n${d.battery_kwh} kWh | ${d.dc_fast_charge_kw} kW`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    function chart4_2(data) {
-      const container = chartCard("charging", {
-        title: "DC Fast Charge 10–80% Time by Vehicle",
-        insight: "The real-world question — how long am I waiting?",
-      });
-      const filtered = data.filter(d => d.dc_fast_charge_10_80_min != null);
-      const medians = d3.flatRollup(filtered, v => d3.median(v, d => d.dc_fast_charge_10_80_min), d => d.vehicle)
-        .map(([vehicle, median]) => ({ vehicle, median }))
-        .sort((a, b) => a.median - b.median);
-      const sortedVehicles = medians.map(d => d.vehicle);
-      const plot = Plot.plot({
-        width: container.clientWidth || 900,
-        height: 400,
-        style: { background: "transparent", color: "#e0e0e0" },
-        x: { label: null, domain: sortedVehicles, padding: 0.3 },
-        y: { label: "10–80% Charge Time (minutes)" },
-        color: { domain: sortedVehicles, range: sortedVehicles.map(v => VEHICLE_COLORS[v] || "#888") },
-        marks: [
-          Plot.barY(medians, {
-            x: "vehicle", y: "median", fill: "vehicle", fillOpacity: 0.4,
-          }),
-          Plot.dot(filtered, {
-            x: "vehicle", y: "dc_fast_charge_10_80_min", fill: "vehicle", r: 5,
-            fillOpacity: 0.9, stroke: "#1a1a2e", strokeWidth: 1,
-            tip: true, title: d => `${d.name}\n${d.dc_fast_charge_10_80_min} min`,
-          }),
-        ],
-      });
-      container.appendChild(plot);
-    }
-
-    // ── Polish: Legend ─────────────────────────────────────────────────
 
     function renderLegend(data) {
       let legend = document.getElementById("legend");
@@ -752,7 +813,9 @@
         legend = document.createElement("div");
         legend.id = "legend";
         legend.className = "legend";
-        document.querySelector(".filters").after(legend);
+        // Insert after chart-container, before the note
+        const note = document.querySelector(".chart-note");
+        document.getElementById("chart-area").insertBefore(legend, note);
       }
       const vehicles = [...new Set(data.map(d => d.vehicle))].sort();
       legend.innerHTML = vehicles.map(v =>
@@ -760,57 +823,37 @@
       ).join("");
     }
 
-    // ── Polish: Scroll Spy ──────────────────────────────────────────────
-
-    function setupScrollSpy() {
-      const sections = document.querySelectorAll("main section");
-      const navLinks = document.querySelectorAll(".sidebar a");
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            navLinks.forEach(a => a.classList.remove("active"));
-            const active = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`);
-            if (active) active.classList.add("active");
-          }
-        });
-      }, { rootMargin: "-20% 0px -80% 0px" });
-      sections.forEach(s => observer.observe(s));
-    }
-
-    // ── Main ───────────────────────────────────────────────────────────
+    // ── Main ─────────────────────────────────────────────────────────────
 
     async function main() {
-      document.querySelector(".content").insertAdjacentHTML("afterbegin",
-        '<div id="loading" style="text-align:center;padding:4rem;color:#8888aa;">Loading data...</div>');
+      document.getElementById("chart-container").innerHTML =
+        '<p style="color:var(--text-muted);text-align:center;padding:4rem;font-family:var(--font-serif);font-size:1.1rem;">Loading data...</p>';
 
       const data = await loadData();
-      document.getElementById("loading")?.remove();
       buildFilters(data);
+      buildAxisSelectors();
 
-      function renderCharts(filtered) {
-        clearCharts();
+      function render() {
+        const filtered = getFilteredData(data);
         renderLegend(filtered);
-        // Section 1: Value Analysis
-        chart1_1(filtered);
-        chart1_2(filtered);
-        chart1_3(filtered);
-        chart1_4(filtered);
-        chart1_5(filtered);
-        // Section 2: Market Evolution
-        chart2_1(filtered);
-        chart2_2(filtered);
-        // Section 3: Size & Practicality
-        chart3_1(filtered);
-        chart3_2(filtered);
-        chart3_3(filtered);
-        // Section 4: Charging & Efficiency
-        chart4_1(filtered);
-        chart4_2(filtered);
+        renderChart(filtered);
       }
 
-      wireFilters(data, renderCharts);
-      renderCharts(data); // initial render
-      setupScrollSpy();
+      // Wire filter dropdowns
+      wireDropdown("vehicle-btn", "vehicle-dropdown", "vehicle-select-all", updateVehicleButtonLabel, data, render);
+      wireDropdown("year-btn", "year-dropdown", "year-select-all", updateYearButtonLabel, data, render);
+      wireDropdown("range-btn", "range-dropdown", "range-select-all", updateRangeButtonLabel, data, render);
+
+      // Wire seats and drivetrain filters
+      document.getElementById("seats-select").addEventListener("change", render);
+      document.getElementById("drivetrain-select").addEventListener("change", render);
+
+      // Wire axis selectors
+      document.getElementById("x-axis").addEventListener("change", render);
+      document.getElementById("y-axis").addEventListener("change", render);
+      document.getElementById("bubble-size").addEventListener("change", render);
+
+      render();
     }
 
     main().catch(err => {
@@ -821,23 +864,25 @@
   </script>
 </head>
 <body>
-  <div class="layout">
-    <nav class="sidebar">
-      <h2>EV Explorer</h2>
-      <a href="#value">Value Analysis</a>
-      <a href="#market">Market Evolution</a>
-      <a href="#size">Size & Practicality</a>
-      <a href="#charging">Charging & Efficiency</a>
-    </nav>
-    <main class="content">
-      <div class="filters" id="filters">
-        <!-- filters added by JS -->
+  <main class="content">
+    <div class="header">
+      <h1>3-Row Electric Vehicle Explorer</h1>
+      <p class="byline">Data updated March 2026</p>
+    </div>
+    <div class="controls-wrapper">
+      <div class="controls-row" id="filters">
+        <span class="controls-label">Filter</span>
+        <!-- vehicle/year filters injected by JS -->
       </div>
-      <section id="value"><h2>Section 1: Value Analysis</h2></section>
-      <section id="market"><h2>Section 2: Market Evolution</h2></section>
-      <section id="size"><h2>Section 3: Size & Practicality</h2></section>
-      <section id="charging"><h2>Section 4: Charging & Efficiency</h2></section>
-    </main>
-  </div>
+      <div class="controls-row" id="axis-selectors">
+        <span class="controls-label">Plot</span>
+        <!-- X, Y, Bubble size selectors injected by JS -->
+      </div>
+    </div>
+    <div class="chart-area" id="chart-area">
+      <div id="chart-container"></div>
+      <p class="chart-note">Dashed lines show the median. Quadrant labels indicate relative value based on whether higher or lower is better for each metric.</p>
+    </div>
+  </main>
 </body>
 </html>

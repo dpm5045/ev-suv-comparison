@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThreeRowEV.com April Updates — April 3, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 640px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent { color: #58a6ff; }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body {
+    padding: 28px 32px 32px;
+  }
+  .update-section {
+    margin-bottom: 24px;
+  }
+  .update-section:last-child { margin-bottom: 0; }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-insight {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+  }
+  .tag-data {
+    background: rgba(56, 139, 253, 0.15);
+    color: #58a6ff;
+  }
+  .tag-new {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+  .tag-trend {
+    background: rgba(244, 63, 94, 0.15);
+    color: #fb7185;
+  }
+  .update-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span {
+    color: #e6edf3;
+    font-weight: 500;
+  }
+  .divider {
+    height: 1px;
+    background: #30363d;
+    margin: 24px 0;
+  }
+  .letter-footer {
+    padding: 20px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #484f58;
+  }
+  .letter-footer a {
+    color: #58a6ff;
+    text-decoration: none;
+  }
+  .highlight-box {
+    background: rgba(168, 85, 247, 0.06);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .highlight-box h2 {
+    color: #c084fc;
+  }
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .stat-box {
+    flex: 1;
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #58a6ff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  .delta-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(30, 30, 40, 0.6);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .delta-card + .delta-card {
+    margin-top: 8px;
+  }
+  .delta-badge {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    line-height: 1;
+  }
+  .delta-badge.down {
+    background: rgba(244, 63, 94, 0.12);
+    color: #fb7185;
+    border: 1px solid rgba(244, 63, 94, 0.25);
+  }
+  .delta-badge.up {
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.25);
+  }
+  .delta-badge.neutral {
+    background: rgba(56, 139, 253, 0.12);
+    color: #58a6ff;
+    border: 1px solid rgba(56, 139, 253, 0.25);
+  }
+  .delta-info h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 3px;
+  }
+  .delta-info p {
+    font-size: 12px;
+    color: #8b949e;
+    line-height: 1.4;
+  }
+  .callout {
+    background: rgba(251, 191, 36, 0.06);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #8b949e;
+    line-height: 1.6;
+  }
+  .callout strong { color: #fbbf24; }
+  @media (max-width: 480px) {
+    .letter-body { padding: 20px 18px 24px; }
+    .letter-header { padding: 28px 18px 22px; }
+    .stat-row { flex-direction: column; }
+    .delta-card { flex-direction: column; text-align: center; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+  <div class="letter">
+    <div class="letter-header">
+      <h1>ThreeRowEV.com <span class="accent">April Updates</span></h1>
+      <div class="subtitle">April 3, 2026</div>
+    </div>
+    <div class="letter-body">
+
+      <!-- Refresh Overview -->
+      <div class="highlight-box">
+        <div class="update-tag tag-data">Full Refresh</div>
+        <h2>141 Trims &middot; 18 Models &middot; 5 Phases</h2>
+        <p style="color: #8b949e; font-size: 14px; line-height: 1.6;">
+          We ran a comprehensive data refresh across pre-owned pricing, TBD resolution, spec corrections, new vehicle detection, and gap filling. Here are the most interesting findings.
+        </p>
+        <div class="stat-row" style="margin-top: 16px;">
+          <div class="stat-box">
+            <div class="stat-num">107</div>
+            <div class="stat-label">Fields Updated</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">46</div>
+            <div class="stat-label">Price Changes</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">14</div>
+            <div class="stat-label">Spec Corrections</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exec Summary -->
+      <div class="update-section">
+        <div class="update-tag tag-data">TL;DR</div>
+        <h2>What You Need to Know</h2>
+        <ul class="metric-list">
+          <li><span>Full 5-phase data refresh</span> &mdash; 107 fields updated across 141 trims and 18 models</li>
+          <li><span>Used 3-row EV market is softening fast</span> &mdash; Volvo EX90 down 38%, Kia EV9 2026 trading 35&ndash;45% below MSRP</li>
+          <li><span>Subaru officially unveiled the Getaway</span> &mdash; 420 hp, 300+ mi, 7 seats, NACS, on sale late 2026</li>
+          <li><span>Lucid Gravity GT is the new range king</span> &mdash; 437 mi EPA, nearly 100 mi ahead of the field</li>
+          <li><span>Tesla Model X 2026 price cut</span> &mdash; Base dropped $1,640 to $99,990, Plaid to $114,990</li>
+          <li><span>Faraday Future FX Super One</span> added to the watchlist &mdash; electric 7-seat MPV, 2027</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Broader Market Signal -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Market Signal</div>
+        <h2>The Used 3-Row EV Market Is Softening</h2>
+        <p>Across the board, pre-owned prices dropped &mdash; some dramatically. This isn&rsquo;t a single-brand story; it&rsquo;s structural. More supply from 2025&ndash;2026 model years, aggressive OEM incentives on new inventory, and the arrival of the IONIQ 9 and Getaway are all putting downward pressure on the used market.</p>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num" style="color: #fb7185;">&darr;$14K</div>
+            <div class="stat-label">Largest Drop<br>(Volvo EX90)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" style="color: #fb7185;">&darr;$12K</div>
+            <div class="stat-label">2nd Largest<br>(Kia EV9)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" style="color: #fb7185;">&darr;$8K</div>
+            <div class="stat-label">Tesla Model X<br>(2023 Base)</div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top: 14px;">
+          <strong>Bottom line:</strong> If you&rsquo;re in the market for a used 3-row EV, right now may be the best buyer&rsquo;s market we&rsquo;ve seen. Prices are falling faster than depreciation curves predicted, and there&rsquo;s real inventory to choose from.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Insight #1: Volvo EX90 -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Fastest Depreciation</div>
+        <h2>Volvo EX90: Down 38% in One Year</h2>
+        <p>The Volvo EX90 is depreciating faster than any other luxury EV in the dataset. A 2025 Twin Motor Plus that stickered around $80K is now going for $47&ndash;55K used &mdash; a $25K+ haircut in roughly twelve months.</p>
+        <div class="delta-card">
+          <div class="delta-badge down">&darr;38%</div>
+          <div class="delta-info">
+            <h3>2025 Twin Motor Plus</h3>
+            <p>Was $60&ndash;68K &rarr; Now $47&ndash;55K &nbsp;&middot;&nbsp; MSRP ~$80K new</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge down">&darr;$14K</div>
+          <div class="delta-info">
+            <h3>2025 Twin Motor Ultra</h3>
+            <p>Was $66&ndash;76K &rarr; Now $54&ndash;62K</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>What it means:</strong> If you've been eyeing the EX90, the used market just became extremely compelling. A year-old Ultra with every option is now cheaper than a new base model.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Insight #2: Kia EV9 -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Price Collapse</div>
+        <h2>Kia EV9 2026: Used Below MSRP &mdash; Already</h2>
+        <p>The 2026 Kia EV9 is trading at 35&ndash;45% off MSRP on the used market, just months after going on sale. A GT-Line that listed at $71,900 new is now going for $40&ndash;49K used. Aggressive dealer discounting and Kia&rsquo;s own price adjustments are flooding the market with cheaper new inventory, cratering residuals.</p>
+        <div class="delta-card">
+          <div class="delta-badge down">&darr;$12K</div>
+          <div class="delta-info">
+            <h3>2026 GT-Line</h3>
+            <p>Was $52&ndash;56K &rarr; Now $40&ndash;49K &nbsp;&middot;&nbsp; MSRP $71,900</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge down">&darr;$9K</div>
+          <div class="delta-info">
+            <h3>2026 Land</h3>
+            <p>Was $47&ndash;53K &rarr; Now $38&ndash;46K &nbsp;&middot;&nbsp; MSRP $62,600</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge down">&darr;$8K</div>
+          <div class="delta-info">
+            <h3>2026 Wind</h3>
+            <p>Was $44&ndash;51K &rarr; Now $36&ndash;44K &nbsp;&middot;&nbsp; MSRP $57,900</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>What it means:</strong> The EV9 may be the best-value 3-row EV right now. A lightly used 2026 Land with 283 miles of range for under $40K undercuts most competitors&rsquo; new base models.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Insight #3: Lucid Gravity Range -->
+      <div class="update-section">
+        <div class="update-tag tag-insight">Range King</div>
+        <h2>Lucid Gravity GT: 437 Miles EPA</h2>
+        <p>The Lucid Gravity Grand Touring quietly became the longest-range 3-row EV by a wide margin. Its EPA-rated 437 miles is nearly 100 miles more than the next closest competitor &mdash; and Lucid <em>raised</em> the MSRP by $4K to $98,900, signaling confidence in the product.</p>
+        <div class="delta-card">
+          <div class="delta-badge up">437</div>
+          <div class="delta-info">
+            <h3>Grand Touring EPA Range</h3>
+            <p>Was listed at 371 mi &rarr; Corrected to 437 mi EPA &nbsp;&middot;&nbsp; MSRP $94,900 &rarr; $98,900</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge neutral">420</div>
+          <div class="delta-info">
+            <h3>Dream Edition EPA Range</h3>
+            <p>Was listed at 440 mi &rarr; Corrected to 420 mi EPA &nbsp;&middot;&nbsp; Still the top-end trim at $139,900</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>What it means:</strong> For range-anxious buyers, the Gravity GT is in a class of its own. 437 miles means road trips with almost no charging planning, and at $99K it undercuts the Tesla Model X Plaid ($115K, 335 mi) while offering 100+ more miles of range.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- New: Subaru Getaway -->
+      <div class="update-section">
+        <div class="update-tag tag-new">Officially Named</div>
+        <h2>Subaru Getaway: No Longer &ldquo;3-Row EV&rdquo;</h2>
+        <p>Subaru unveiled the Getaway at the New York Auto Show &mdash; the official name for what we&rsquo;ve been tracking as &ldquo;Subaru 3-Row EV.&rdquo; It shares Toyota&rsquo;s e-TNGA platform with the Highlander EV and brings legit specs to the table.</p>
+        <ul class="metric-list">
+          <li><span>420 hp</span> dual-motor AWD, sub-5-second 0&ndash;60</li>
+          <li><span>95.8 kWh</span> battery, 300+ miles range (mfr estimate)</li>
+          <li><span>3,500 lb</span> towing, 150 kW DC fast charge (10&ndash;80% in 30 min)</li>
+          <li><span>7 seats</span> with 15.9 cu ft behind 3rd row, 45.6 behind 2nd</li>
+          <li><span>NACS</span> charging port, EyeSight driver assist</li>
+          <li><span>On sale</span> late 2026 &middot; Pricing TBD (mid-$40K expected)</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Watchlist Addition -->
+      <div class="update-section">
+        <div class="update-tag tag-new">Watchlist</div>
+        <h2>Faraday Future FX Super One Added</h2>
+        <p>An electric MPV/minivan from Faraday Future with up to 7 seats, dual or tri-motor AWD (350 hp/motor), and Tesla Supercharger access. Consumer deliveries expected Q4 2026&ndash;Q1 2027. Specs are still mostly TBD, but it&rsquo;s now on the radar.</p>
+      </div>
+
+    </div>
+    <div class="letter-footer">
+      <a href="https://threerowev.com">threerowev.com</a> &mdash; 3-Row AWD Electric SUV Comparison
+    </div>
+  </div>
+</body>
+</html>

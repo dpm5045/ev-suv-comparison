@@ -1,0 +1,400 @@
+/* ── Subtitle ── */
+.subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Section numbers ── */
+.sectionNum {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+/* ── TOC ── */
+.toc {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 2.5rem;
+}
+
+.tocTitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.tocList {
+  list-style: none;
+  counter-reset: toc;
+  columns: 2;
+  column-gap: 2rem;
+  padding: 0;
+}
+
+.tocList li {
+  counter-increment: toc;
+  break-inside: avoid;
+  margin-bottom: 6px;
+}
+
+.tocList li a {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  transition: color 0.2s;
+}
+
+.tocList li a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.tocList li a:hover {
+  color: var(--accent);
+}
+
+/* ── Inline code ── */
+.code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--bg-2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: var(--accent);
+}
+
+/* ── Tech card grid ── */
+.techGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  margin: 16px 0 8px;
+}
+
+.techCard {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  transition: border-color 0.25s, transform 0.25s;
+}
+
+.techCard:hover {
+  border-color: var(--border-bright, var(--border));
+  transform: translateY(-1px);
+}
+
+.techCardLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.techCardValue {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.techCardDetail {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* ── Schema block ── */
+.schemaBlock {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 12px 0 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.schemaBrace {
+  color: var(--text-dim);
+}
+
+.schemaLine {
+  padding-left: 20px;
+}
+
+.schemaKey {
+  color: var(--accent);
+}
+
+.schemaType {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.schemaComment {
+  color: var(--text-dim);
+  opacity: 0.7;
+}
+
+/* ── Formula block ── */
+.formula {
+  background: var(--bg-2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 12px 0 20px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.9;
+}
+
+.formulaLabel {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+/* ── Pre/code blocks ── */
+.pre {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  margin: 12px 0 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+/* ── Source tags ── */
+.sourceTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 20px;
+}
+
+.sourceTag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.tagOem { border-left: 3px solid var(--accent); }
+.tagRef { border-left: 3px solid #4ade80; }
+.tagSpecs { border-left: 3px solid #fbbf24; }
+
+/* ── Badges ── */
+.badge {
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.badgeBlue { background: rgba(91,164,245,0.12); color: var(--accent); }
+.badgeGreen { background: rgba(74,222,128,0.12); color: #4ade80; }
+.badgeAmber { background: rgba(251,191,36,0.10); color: #fbbf24; }
+
+/* ── Pipeline ── */
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.pipelineStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.pipelineTrack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 28px;
+}
+
+.pipelineDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bg-0);
+  border: 2px solid var(--accent);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.pipelineLine {
+  width: 2px;
+  flex-grow: 1;
+  min-height: 24px;
+  background: var(--border);
+}
+
+.pipelineContent {
+  padding-bottom: 20px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pipelineLabel {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.pipelineDesc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ── Table ── */
+.tableWrap {
+  overflow-x: auto;
+  margin: 16px 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table thead {
+  background: var(--bg-2);
+}
+
+.table th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: var(--bg-1);
+}
+
+.cellCmd {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* ── Guardrails ── */
+.guardrails {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+}
+
+.guardrails li {
+  position: relative;
+  padding: 10px 0 10px 22px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  border-bottom: 1px solid var(--border);
+}
+
+.guardrails li:last-child {
+  border-bottom: none;
+}
+
+.guardrails li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.guardrails li strong {
+  color: var(--text);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .tocList {
+    columns: 1;
+  }
+  .techGrid {
+    grid-template-columns: 1fr;
+  }
+  .schemaBlock {
+    font-size: 11px;
+    padding: 14px;
+  }
+  .formula {
+    font-size: 12px;
+  }
+}

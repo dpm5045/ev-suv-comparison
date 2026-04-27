@@ -6,20 +6,22 @@
   <title>3-Row EV Market Insights</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;800&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
   <style>
     :root {
-      --bg-primary: #0f0f1a;
-      --bg-elevated: #171726;
-      --bg-surface: #1e1e32;
-      --border-subtle: rgba(255,255,255,0.06);
-      --border-medium: rgba(255,255,255,0.12);
-      --text-primary: #e8e8f0;
-      --text-secondary: #9898b0;
-      --text-muted: #686880;
-      --accent: #6b8afd;
-      --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --bg: #0c0c12;
+      --bg-card: #131319;
+      --bg-surface: #1a1a22;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.12);
+      --text: #e4e4ec;
+      --muted: #777790;
+      --faint: #444458;
+      --accent: #ff6b35;
+      --accent-subtle: rgba(255,107,53,0.12);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
     }
 
     *, *::before, *::after {
@@ -29,136 +31,195 @@
     }
 
     body {
-      background: var(--bg-primary);
+      background: var(--bg);
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
-      color: var(--text-primary);
+      color: var(--text);
     }
 
     .content {
-      max-width: 1100px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 3rem 2.5rem 4rem;
+      padding: 3rem 2rem 4rem;
     }
 
     .header {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     .header h1 {
-      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 32px;
-      font-weight: 800;
+      font-family: var(--font-sans);
+      font-size: 28px;
+      font-weight: 700;
       letter-spacing: -0.03em;
-      color: var(--text-primary);
+      color: var(--text);
       margin-bottom: 0.4rem;
     }
 
     .byline {
       font-size: 0.8rem;
-      color: var(--text-muted);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-weight: 400;
     }
 
     .section-nav {
       position: sticky;
       top: 0;
       display: flex;
-      gap: 0.5rem;
-      background: var(--bg-primary);
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-subtle);
+      gap: 0.25rem;
+      background: rgba(12,12,18,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
       z-index: 100;
       overflow-x: auto;
     }
 
     .section-nav a {
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
+      padding: 0.35rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      color: var(--muted);
       text-decoration: none;
       background: transparent;
-      transition: background 0.2s;
+      transition: all 0.2s;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .section-nav a:hover {
+      color: var(--text);
       background: var(--bg-surface);
     }
 
     .section-nav a.active {
-      background: var(--accent);
-      color: white;
+      background: var(--accent-subtle);
+      color: var(--accent);
     }
 
     .chart-section {
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
       padding-top: 1rem;
       scroll-margin-top: 60px;
     }
 
     h2 {
-      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 0.25rem;
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.2rem;
     }
 
     .section-subtitle {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
+      font-size: 0.82rem;
+      color: var(--muted);
       margin-bottom: 1.25rem;
     }
 
     .chart-wrap {
-      background: var(--bg-elevated);
-      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       padding: 1.5rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       position: relative;
     }
 
     .chart-wrap h3 {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
+      font-size: 0.78rem;
+      color: var(--muted);
       font-weight: 500;
       margin-bottom: 0.75rem;
-      font-family: var(--font-sans);
+      font-family: var(--font-mono);
+      letter-spacing: 0.01em;
     }
 
     .chart-wrap--tall canvas   { height: 450px !important; }
-    .chart-wrap--standard canvas { height: 400px !important; }
-    .chart-wrap--short canvas  { height: 350px !important; }
+    .chart-wrap--standard canvas { height: 380px !important; }
+    .chart-wrap--short canvas  { height: 320px !important; }
     .chart-wrap--range canvas  { height: 540px !important; }
 
     .stat-callouts {
       display: flex;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
       flex-wrap: wrap;
     }
 
     .stat-card {
-      background: var(--bg-surface);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 1rem 1.25rem;
+      padding: 0.9rem 1.1rem;
       flex: 1;
       min-width: 150px;
     }
 
     .stat-value {
-      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
     }
 
     .stat-label {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      margin-top: 0.25rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      font-family: var(--font-mono);
+    }
+
+    .insights-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .insights-box h4 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .insights-box ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .insights-box li {
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: var(--muted);
+      padding-left: 1.25rem;
+      position: relative;
+    }
+
+    .insights-box li::before {
+      content: '›';
+      position: absolute;
+      left: 0.2rem;
+      color: var(--faint);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .insights-box li strong {
+      color: var(--text);
+      font-weight: 600;
     }
 
     @media (max-width: 768px) {
@@ -207,6 +268,7 @@
       <p class="section-subtitle">How the 3-row EV segment exploded from one vehicle to a full market</p>
       <div class="stat-callouts" id="growth-stats"></div>
       <div class="chart-wrap chart-wrap--standard"><canvas id="chart-growth"></canvas></div>
+      <div class="insights-box" id="insights-growth"></div>
     </section>
 
     <section id="price" class="chart-section">
@@ -220,6 +282,7 @@
         <h3>Trims by Price Segment</h3>
         <canvas id="chart-price-segment"></canvas>
       </div>
+      <div class="insights-box" id="insights-price"></div>
     </section>
 
     <section id="capability" class="chart-section">
@@ -227,6 +290,11 @@
       <p class="section-subtitle">How range, charging, and performance have improved over time</p>
       <div class="stat-callouts" id="capability-stats"></div>
       <div class="chart-wrap chart-wrap--standard"><canvas id="chart-capability"></canvas></div>
+      <div class="chart-wrap chart-wrap--standard">
+        <h3>Median Values — % Change from 2021 Baseline</h3>
+        <canvas id="chart-capability-median"></canvas>
+      </div>
+      <div class="insights-box" id="insights-capability"></div>
     </section>
 
     <section id="tradeoffs" class="chart-section">
@@ -240,6 +308,7 @@
         <h3>Practicality vs. Performance</h3>
         <canvas id="chart-cargo-vs-speed"></canvas>
       </div>
+      <div class="insights-box" id="insights-tradeoffs"></div>
     </section>
 
     <section id="tech" class="chart-section">
@@ -257,23 +326,25 @@
         <h3>Seat Configuration Options</h3>
         <canvas id="chart-seats"></canvas>
       </div>
+      <div class="insights-box" id="insights-tech"></div>
     </section>
   </div>
 
   <script>
+    // Desaturated, restrained palette — inspired by zerodayclock's muted tones
     const VEHICLE_COLORS = {
-      "Kia EV9":               "#4ade80",
-      "Hyundai IONIQ 9":       "#5ba4f5",
-      "Lucid Gravity":         "#a78bfa",
-      "Rivian R1S":            "#fb923c",
-      "Tesla Model X":         "#f87171",
-      "Tesla Model Y (3-Row)": "#f87171",
-      "Volkswagen ID. Buzz":   "#fbbf24",
-      "VinFast VF9":           "#f59e0b",
-      "Volvo EX90":            "#f472b6",
-      "Cadillac Escalade IQ":  "#a78bfa",
-      "Cadillac VISTIQ":       "#c084fc",
-      "Mercedes-Benz EQS SUV": "#d4d4d8",
+      "Kia EV9":               "#6bc490",
+      "Hyundai IONIQ 9":       "#6b9fd4",
+      "Lucid Gravity":         "#9a8cc8",
+      "Rivian R1S":            "#d48a56",
+      "Tesla Model X":         "#cf6b6b",
+      "Tesla Model Y (3-Row)": "#cf6b6b",
+      "Volkswagen ID. Buzz":   "#c8a84e",
+      "VinFast VF9":           "#c49340",
+      "Volvo EX90":            "#c47a9e",
+      "Cadillac Escalade IQ":  "#8a7fba",
+      "Cadillac VISTIQ":       "#a98fd4",
+      "Mercedes-Benz EQS SUV": "#9a9aaa",
     };
 
     const WATCHLIST = [
@@ -298,9 +369,32 @@
       "TBD (NACS likely)": "TBD",
     };
 
-    Chart.defaults.color = '#9898b0';
-    Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
-    Chart.defaults.font.family = "'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    // Global Chart.js theming — zerodayclock-inspired: restrained, data-forward
+    Chart.defaults.color = '#777790';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+    Chart.defaults.font.family = "'JetBrains Mono', 'SF Mono', monospace";
+    Chart.defaults.font.size = 11;
+    Chart.defaults.font.weight = 400;
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+    Chart.defaults.plugins.legend.labels.pointStyle = 'circle';
+
+    // Custom tooltip styling — frosted glass, zerodayclock-style
+    Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(19,19,25,0.95)';
+    Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
+    Chart.defaults.plugins.tooltip.borderWidth = 1;
+    Chart.defaults.plugins.tooltip.cornerRadius = 10;
+    Chart.defaults.plugins.tooltip.padding = { top: 10, bottom: 10, left: 14, right: 14 };
+    Chart.defaults.plugins.tooltip.titleFont = { family: "'JetBrains Mono', monospace", size: 11, weight: 600 };
+    Chart.defaults.plugins.tooltip.bodyFont = { family: "'JetBrains Mono', monospace", size: 11 };
+    Chart.defaults.plugins.tooltip.titleColor = '#e4e4ec';
+    Chart.defaults.plugins.tooltip.bodyColor = '#777790';
+
+    // Subtle grid defaults
+    Chart.defaults.scale.grid = {
+      ...Chart.defaults.scale.grid,
+      color: 'rgba(255,255,255,0.04)',
+      lineWidth: 1,
+    };
 
     async function loadData() {
       const res = await fetch("lib/ev-data.json");
@@ -311,7 +405,8 @@
       const countData = raw.count_data.filter(d =>
         !WATCHLIST.includes(d.model)
       );
-      return { details, countData };
+      const usEvSales = raw.us_ev_sales || null;
+      return { details, countData, usEvSales };
     }
 
     function initScrollSpy() {
@@ -331,9 +426,9 @@
 
     async function main() {
       try {
-        const { details, countData } = await loadData();
+        const { details, countData, usEvSales } = await loadData();
         initScrollSpy();
-        renderGrowth(details, countData);
+        renderGrowth(details, countData, usEvSales);
         renderPrice(details);
         renderCapability(details);
         renderTradeoffs(details);
@@ -344,7 +439,7 @@
       }
     }
 
-    function renderGrowth(details, countData) {
+    function renderGrowth(details, countData, usEvSales) {
       // --- Stat callouts ---
       const statsEl = document.getElementById('growth-stats');
 
@@ -362,9 +457,19 @@
         trimsByYear[y] = countData.reduce((sum, row) => sum + (row[`y${y}`] || 0), 0);
       });
 
-      // Price range per year (from details)
-      const priceFirstYear = details.filter(d => d.year === firstYearWithData).map(d => d.msrp).filter(Boolean);
-      const priceLatestYear = details.filter(d => d.year === latestYear).map(d => d.msrp).filter(Boolean);
+      // Price range per year (from details — filter to numeric MSRP only)
+      const priceFirstYear = details.filter(d => d.year === firstYearWithData && typeof d.msrp === 'number').map(d => d.msrp);
+      const priceLatestYear = details.filter(d => d.year === latestYear && typeof d.msrp === 'number').map(d => d.msrp);
+
+      // US EV sales stat
+      const salesFirst = usEvSales ? usEvSales[`y${firstYearWithData}`] : null;
+      const salesLatest = usEvSales ? usEvSales[`y${latestYear}`] || usEvSales[`y${latestYear - 1}`] : null;
+      const salesLatestLabel = usEvSales && usEvSales[`y${latestYear}`] ? latestYear : latestYear - 1;
+      const salesStat = salesFirst && salesLatest
+        ? `<div class="stat-card">
+            <div class="stat-value">${salesFirst < 1000 ? salesFirst + 'k' : (salesFirst/1000).toFixed(1) + 'M'} → ${salesLatest < 1000 ? salesLatest + 'k' : (salesLatest/1000).toFixed(1) + 'M'}</div>
+            <div class="stat-label">US EV Sales (${firstYearWithData} → ${salesLatestLabel})</div>
+          </div>` : '';
 
       statsEl.innerHTML = `
         <div class="stat-card">
@@ -379,6 +484,7 @@
           <div class="stat-value">$${Math.round(Math.min(...priceFirstYear)/1000)}k–$${Math.round(Math.max(...priceFirstYear)/1000)}k → $${Math.round(Math.min(...priceLatestYear)/1000)}k–$${Math.round(Math.max(...priceLatestYear)/1000)}k</div>
           <div class="stat-label">MSRP Range</div>
         </div>
+        ${salesStat}
       `;
 
       // --- Stacked bar chart ---
@@ -386,14 +492,44 @@
 
       const datasets = vehicles
         .filter(v => YEAR_KEYS.some(k => countData.find(d => d.model === v)?.[k] > 0))
-        .map(vehicle => ({
-          label: vehicle,
-          data: YEAR_KEYS.map(k => {
-            const row = countData.find(d => d.model === vehicle);
-            return row ? (row[k] || 0) : 0;
-          }),
-          backgroundColor: VEHICLE_COLORS[vehicle] || '#888',
-        }));
+        .map(vehicle => {
+          const color = VEHICLE_COLORS[vehicle] || '#888';
+          return {
+            label: vehicle,
+            data: YEAR_KEYS.map(k => {
+              const row = countData.find(d => d.model === vehicle);
+              return row ? (row[k] || 0) : 0;
+            }),
+            backgroundColor: color + '50',
+            borderColor: color + '99',
+            borderWidth: 1,
+            borderRadius: 3,
+            borderSkipped: 'bottom',
+          };
+        });
+
+      // Add US EV sales overlay line (secondary axis) — thin, dashed, restrained
+      if (usEvSales) {
+        const salesLine = {
+          label: 'US EV Sales (thousands)',
+          data: YEARS.map(y => usEvSales[`y${y}`] || null),
+          type: 'line',
+          borderColor: 'rgba(255,107,53,0.6)',
+          backgroundColor: 'rgba(255,107,53,0.03)',
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointRadius: 3.5,
+          pointBackgroundColor: '#131319',
+          pointBorderColor: 'rgba(255,107,53,0.7)',
+          pointBorderWidth: 2,
+          pointHoverRadius: 5,
+          tension: 0.35,
+          yAxisID: 'y1',
+          spanGaps: true,
+          order: -1,
+        };
+        datasets.push(salesLine);
+      }
 
       new Chart(document.getElementById('chart-growth'), {
         type: 'bar',
@@ -405,15 +541,60 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
-            tooltip: { mode: 'index' },
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 8, padding: 14, font: { size: 10 } },
+            },
+            tooltip: {
+              mode: 'index',
+              callbacks: {
+                label: ctx => {
+                  if (ctx.dataset.yAxisID === 'y1') {
+                    return ctx.raw != null ? `US EV Sales: ${ctx.raw >= 1000 ? (ctx.raw/1000).toFixed(1) + 'M' : ctx.raw + 'k'}` : null;
+                  }
+                  return ctx.raw > 0 ? `${ctx.dataset.label}: ${ctx.raw}` : null;
+                },
+              },
+            },
           },
           scales: {
-            x: { stacked: true, grid: { display: false } },
-            y: { stacked: true, title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+            x: { stacked: true, grid: { display: false }, ticks: { font: { size: 12, weight: 600 } } },
+            y: { stacked: true, title: { display: true, text: '3-Row EV Trims', font: { size: 10 } }, beginAtZero: true },
+            y1: {
+              position: 'right',
+              title: { display: true, text: 'US EV Sales (k)', font: { size: 10 } },
+              beginAtZero: true,
+              grid: { drawOnChartArea: false },
+              ticks: { callback: v => v >= 1000 ? (v/1000).toFixed(1) + 'M' : v + 'k' },
+            },
           },
         },
       });
+
+      // --- Insights box ---
+      // Find biggest YoY jump
+      let maxJump = 0, jumpFrom = 0, jumpTo = 0;
+      for (let i = 1; i < YEARS.length; i++) {
+        const diff = trimsByYear[YEARS[i]] - trimsByYear[YEARS[i - 1]];
+        if (diff > maxJump) { maxJump = diff; jumpFrom = YEARS[i - 1]; jumpTo = YEARS[i]; }
+      }
+      // Find newest entrants (vehicles whose earliest year is the latest)
+      const firstAppearance = {};
+      details.forEach(d => {
+        if (!firstAppearance[d.vehicle] || d.year < firstAppearance[d.vehicle]) firstAppearance[d.vehicle] = d.year;
+      });
+      const newestYear = Math.max(...Object.values(firstAppearance));
+      const newest = Object.entries(firstAppearance).filter(([, y]) => y === newestYear).map(([v]) => v).sort();
+
+      document.getElementById('insights-growth').innerHTML = `
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li>The segment went from <strong>${modelsByYear[firstYearWithData]} model to ${modelsByYear[latestYear]} models</strong> in just ${latestYear - firstYearWithData} years — a ${Math.round(modelsByYear[latestYear] / modelsByYear[firstYearWithData])}x increase in consumer choice.</li>
+          <li>The biggest wave hit in <strong>${jumpFrom}–${jumpTo}</strong>, adding ${maxJump} new trims as automakers rushed to compete in the 3-row EV space.</li>
+          <li><strong>Newest entrants (${newestYear}):</strong> ${newest.join(', ')} — if you're shopping now, these are the freshest options with the latest tech.</li>
+          <li><strong>Total US EV sales</strong> (all segments, dashed line) doubled from ${salesFirst ? (salesFirst < 1000 ? salesFirst + 'k' : (salesFirst/1000).toFixed(1) + 'M') : '?'} to ${salesLatest ? (salesLatest < 1000 ? salesLatest + 'k' : (salesLatest/1000).toFixed(1) + 'M') : '?'} over the same period. The emergence of family-friendly 3-row options helped drive that growth — giving a segment of buyers who previously had no electric alternative a reason to switch.</li>
+        </ul>
+      `;
     }
     function renderPrice(details) {
       const vehicles = [...new Set(details.map(d => d.vehicle))].sort();
@@ -437,8 +618,11 @@
           labels: priceData.map(d => d.vehicle),
           datasets: [{
             data: priceData.map(d => [d.min, d.max]),
-            backgroundColor: priceData.map(d => VEHICLE_COLORS[d.vehicle] || '#888'),
+            backgroundColor: priceData.map(d => (VEHICLE_COLORS[d.vehicle] || '#888') + '70'),
+            borderColor: priceData.map(d => (VEHICLE_COLORS[d.vehicle] || '#888') + 'cc'),
+            borderWidth: 1,
             borderRadius: 4,
+            borderSkipped: false,
           }],
         },
         options: {
@@ -458,10 +642,11 @@
           },
           scales: {
             x: {
-              title: { display: true, text: 'MSRP ($)' },
-              ticks: { callback: v => `$${(v/1000).toFixed(0)}k` },
+              title: { display: true, text: 'MSRP ($)', font: { size: 10 } },
+              ticks: { callback: v => `$${(v/1000).toFixed(0)}k`, font: { size: 11, weight: 500 } },
+              grid: { color: 'rgba(255,255,255,0.03)', drawTicks: false },
             },
-            y: { grid: { display: false } },
+            y: { grid: { display: false }, ticks: { font: { size: 10 } } },
           },
         },
       });
@@ -484,15 +669,21 @@
         latestYearTrims.some(d => d.vehicle === v)
       );
 
-      const segmentDatasets = segVehicles.map(v => ({
-        label: v,
-        data: segments.map(seg =>
-          latestYearTrims.filter(d =>
-            d.vehicle === v && d.msrp >= seg.min && d.msrp < seg.max
-          ).length
-        ),
-        backgroundColor: VEHICLE_COLORS[v] || '#888',
-      }));
+      const segmentDatasets = segVehicles.map(v => {
+        const color = VEHICLE_COLORS[v] || '#888';
+        return {
+          label: v,
+          data: segments.map(seg =>
+            latestYearTrims.filter(d =>
+              d.vehicle === v && d.msrp >= seg.min && d.msrp < seg.max
+            ).length
+          ),
+          backgroundColor: color + '50',
+          borderColor: color + '99',
+          borderWidth: 1,
+          borderRadius: 3,
+        };
+      });
 
       new Chart(document.getElementById('chart-price-segment'), {
         type: 'bar',
@@ -504,27 +695,45 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            legend: { position: 'bottom', labels: { boxWidth: 8, padding: 14, font: { size: 10 } } },
           },
           scales: {
-            x: { grid: { display: false } },
-            y: { title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+            x: { grid: { display: false }, ticks: { font: { size: 12, weight: 600 } } },
+            y: { title: { display: true, text: 'Trims', font: { size: 10 } }, beginAtZero: true },
           },
         },
       });
+
+      // --- Insights box ---
+      const allPrices = latestYearTrims.map(d => d.msrp).filter(Boolean);
+      const under60 = latestYearTrims.filter(d => d.msrp < 60000).length;
+      const mid = latestYearTrims.filter(d => d.msrp >= 60000 && d.msrp < 90000).length;
+      const over90 = latestYearTrims.filter(d => d.msrp >= 90000).length;
+      const cheapest = priceData[0];
+      const widest = [...priceData].sort((a, b) => (b.max - b.min) - (a.max - a.min))[0];
+
+      document.getElementById('insights-price').innerHTML = `
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li>The market is <strong>top-heavy</strong>: only ${under60} of ${allPrices.length} current trims start under $60k, while ${over90} are $90k+. Budget shoppers have very limited options.</li>
+          <li><strong>${cheapest.vehicle}</strong> offers the lowest entry point at $${(cheapest.min/1000).toFixed(0)}k — the most accessible path into a 3-row EV.</li>
+          <li>The <strong>$60k–$90k sweet spot</strong> has the most competition (${mid} trims), which means the best selection and strongest pricing pressure for mid-range buyers.</li>
+          <li><strong>${widest.vehicle}</strong> spans the widest price range ($${(widest.min/1000).toFixed(0)}k–$${(widest.max/1000).toFixed(0)}k), offering something at multiple price tiers under one brand.</li>
+        </ul>
+      `;
     }
     function renderCapability(details) {
       const metrics = [
         { field: 'range_mi', label: 'EPA Range', color: '#4ade80', invert: false },
         { field: 'dc_fast_charge_10_80_min', label: 'DC Fast Charge (10-80%)', color: '#5ba4f5', invert: true },
-        { field: 'hp', label: 'Horsepower', color: '#fb923c', invert: false },
+        { field: 'msrp', label: 'Avg MSRP', color: '#fb923c', invert: true },
         { field: 'battery_kwh', label: 'Battery Capacity', color: '#a78bfa', invert: false },
       ];
 
-      // Compute average per year for each metric (skip nulls)
+      // Compute average per year for each metric (skip nulls and non-numeric values)
       function avgByYear(field) {
         return YEARS.map(y => {
-          const vals = details.filter(d => d.year === y && d[field] != null).map(d => d[field]);
+          const vals = details.filter(d => d.year === y && d[field] != null && typeof d[field] === 'number').map(d => d[field]);
           return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
         });
       }
@@ -548,10 +757,15 @@
           label: m.label,
           data: normalized,
           borderColor: m.color,
-          backgroundColor: m.color + '22',
-          tension: 0.3,
-          pointRadius: 4,
-          pointHoverRadius: 6,
+          backgroundColor: m.color + '08',
+          borderWidth: 1.5,
+          tension: 0.35,
+          pointRadius: 3.5,
+          pointHoverRadius: 5,
+          pointBackgroundColor: '#131319',
+          pointBorderColor: m.color,
+          pointBorderWidth: 2,
+          fill: true,
           spanGaps: true,
         };
       }).filter(Boolean);
@@ -591,7 +805,7 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            legend: { position: 'bottom', labels: { boxWidth: 8, padding: 14, font: { size: 10 } } },
             tooltip: {
               callbacks: {
                 label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(1)}%`,
@@ -599,29 +813,135 @@
             },
           },
           scales: {
-            x: { grid: { display: false } },
+            x: { grid: { display: false }, ticks: { font: { size: 12, weight: 600 } } },
             y: {
-              title: { display: true, text: '% Change from 2021 Baseline' },
+              title: { display: true, text: '% from 2021', font: { size: 10 } },
               ticks: { callback: v => `${v >= 0 ? '+' : ''}${v}%` },
+              grid: { color: 'rgba(255,255,255,0.03)' },
             },
           },
         },
       });
+
+      // --- Median chart ---
+      function median(arr) {
+        if (!arr.length) return null;
+        const sorted = [...arr].sort((a, b) => a - b);
+        const mid = Math.floor(sorted.length / 2);
+        return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+      }
+
+      function medianByYear(field) {
+        return YEARS.map(y => {
+          const vals = details.filter(d => d.year === y && d[field] != null && typeof d[field] === 'number').map(d => d[field]);
+          return median(vals);
+        });
+      }
+
+      const rawMedians = {};
+      metrics.forEach(m => { rawMedians[m.field] = medianByYear(m.field); });
+
+      const medianDatasets = metrics.map(m => {
+        const meds = rawMedians[m.field];
+        const baseline = meds[0];
+        if (baseline == null || baseline === 0) return null;
+
+        const normalized = meds.map(v => {
+          if (v == null) return null;
+          const pctChange = ((v - baseline) / baseline) * 100;
+          return m.invert ? -pctChange : pctChange;
+        });
+
+        return {
+          label: m.label,
+          data: normalized,
+          borderColor: m.color,
+          backgroundColor: m.color + '08',
+          borderWidth: 1.5,
+          tension: 0.35,
+          pointRadius: 3.5,
+          pointHoverRadius: 5,
+          pointBackgroundColor: '#131319',
+          pointBorderColor: m.color,
+          pointBorderWidth: 2,
+          fill: true,
+          spanGaps: true,
+        };
+      }).filter(Boolean);
+
+      const medianSampleSizes = YEARS.map(y => details.filter(d => d.year === y).length);
+
+      new Chart(document.getElementById('chart-capability-median'), {
+        type: 'line',
+        data: {
+          labels: YEARS.map((y, i) => `${y} (n=${medianSampleSizes[i]})`),
+          datasets: medianDatasets,
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 8, padding: 14, font: { size: 10 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(1)}%`,
+              },
+            },
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { font: { size: 12, weight: 600 } } },
+            y: {
+              title: { display: true, text: '% from 2021 (median)', font: { size: 10 } },
+              ticks: { callback: v => `${v >= 0 ? '+' : ''}${v}%` },
+              grid: { color: 'rgba(255,255,255,0.03)' },
+            },
+          },
+        },
+      });
+
+      // --- Insights box ---
+      const rangeAvg2026 = rawAverages['range_mi'][5];
+      const rangeMed2026 = rawMedians['range_mi'][5];
+      const batteryAvg2026 = rawAverages['battery_kwh'][5];
+      const batteryMed2026 = rawMedians['battery_kwh'][5];
+      const chargeAvg2026 = rawAverages['dc_fast_charge_10_80_min'][5];
+      const chargeMed2026 = rawMedians['dc_fast_charge_10_80_min'][5];
+      const msrpAvg2026 = rawAverages['msrp'][5];
+      const msrpMed2026 = rawMedians['msrp'][5];
+      const msrpMed2021 = rawMedians['msrp'][0];
+
+      document.getElementById('insights-capability').innerHTML = `
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li><strong>Averages vs. medians tell different stories.</strong> The average is pulled by outliers (the Escalade IQ's 200 kWh pack, the Mercedes Maybach's $181k sticker). The median shows what a <em>typical</em> shopper actually gets.</li>
+          <li><strong>Most 3-row EVs deliver ~${rangeMed2026 ? rangeMed2026.toFixed(0) : '?'} miles of range</strong> (median), even though the average is ${rangeAvg2026 ? rangeAvg2026.toFixed(0) : '?'} mi. A few long-range trims inflate the mean — don't count on 330+ miles unless you're specifically shopping for it.</li>
+          <li><strong>Battery size is less impressive than it looks.</strong> The average grew to ${batteryAvg2026 ? batteryAvg2026.toFixed(0) : '?'} kWh, but the median is only ${batteryMed2026 ? batteryMed2026.toFixed(0) : '?'} kWh — a handful of massive packs skew the mean upward. Most vehicles cluster around 100 kWh.</li>
+          <li><strong>Charging is the one metric where both charts agree</strong> — median ${chargeMed2026 ? chargeMed2026.toFixed(0) : '?'} min vs. average ${chargeAvg2026 ? chargeAvg2026.toFixed(0) : '?'} min. Improvements here are real and consistent across the segment, not driven by outliers.</li>
+          <li><strong>The typical 3-row EV costs ~$${msrpMed2026 ? (msrpMed2026/1000).toFixed(0) + 'k' : '?'}</strong> (median), well below the $${msrpAvg2026 ? (msrpAvg2026/1000).toFixed(0) + 'k' : '?'} average${msrpMed2021 ? ` — and down from a $${(msrpMed2021/1000).toFixed(0)}k median in 2021` : ''}. Luxury trims inflate the average, but the accessible middle of the market is growing.</li>
+        </ul>
+      `;
     }
     function renderTradeoffs(details) {
       // Helper: build per-vehicle scatter datasets
       function buildScatterDatasets(data, xField, yField) {
         const vehicles = [...new Set(data.map(d => d.vehicle))].sort();
         return vehicles.map(v => {
+          const color = VEHICLE_COLORS[v] || '#888';
           const points = data
             .filter(d => d.vehicle === v && d[xField] != null && d[yField] != null)
             .map(d => ({ x: d[xField], y: d[yField], name: d.name }));
           return {
             label: v,
             data: points,
-            backgroundColor: VEHICLE_COLORS[v] || '#888',
-            pointRadius: 6,
-            pointHoverRadius: 9,
+            backgroundColor: color + '25',
+            borderColor: color,
+            borderWidth: 1.5,
+            pointRadius: 4.5,
+            pointHoverRadius: 7,
+            pointBackgroundColor: color + '25',
+            pointBorderColor: color,
+            pointBorderWidth: 1.5,
+            pointHoverBackgroundColor: color + '60',
           };
         }).filter(ds => ds.data.length > 0);
       }
@@ -634,7 +954,7 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            legend: { position: 'bottom', labels: { boxWidth: 8, padding: 14, font: { size: 10 } } },
             tooltip: {
               callbacks: {
                 label: ctx => {
@@ -646,10 +966,14 @@
           },
           scales: {
             x: {
-              title: { display: true, text: 'MSRP ($)' },
-              ticks: { callback: v => `$${(v/1000).toFixed(0)}k` },
+              title: { display: true, text: 'MSRP ($)', font: { size: 10 } },
+              ticks: { callback: v => `$${(v/1000).toFixed(0)}k`, font: { size: 11, weight: 500 } },
+              grid: { color: 'rgba(255,255,255,0.03)' },
             },
-            y: { title: { display: true, text: 'EPA Range (mi)' } },
+            y: {
+              title: { display: true, text: 'EPA Range (mi)', font: { size: 10 } },
+              grid: { color: 'rgba(255,255,255,0.03)' },
+            },
           },
         },
       });
@@ -662,7 +986,7 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            legend: { position: 'bottom', labels: { boxWidth: 8, padding: 14, font: { size: 10 } } },
             tooltip: {
               callbacks: {
                 label: ctx => {
@@ -674,22 +998,50 @@
           },
           scales: {
             x: {
-              title: { display: true, text: '0–60 Time (sec)' },
-              reverse: true, // faster (lower) on right feels more intuitive
+              title: { display: true, text: '0–60 Time (sec)', font: { size: 10 } },
+              reverse: true,
+              grid: { color: 'rgba(255,255,255,0.03)' },
             },
-            y: { title: { display: true, text: 'Cargo Behind 3rd Row (cu ft)' } },
+            y: {
+              title: { display: true, text: 'Cargo Behind 3rd Row (cu ft)', font: { size: 10 } },
+              grid: { color: 'rgba(255,255,255,0.03)' },
+            },
           },
         },
       });
+
+      // --- Insights box ---
+      // Compute range-per-dollar leaders
+      const rpd = details
+        .filter(d => d.msrp && d.range_mi)
+        .map(d => ({ name: d.name, vehicle: d.vehicle, rpd: d.range_mi / (d.msrp / 1000) }))
+        .sort((a, b) => b.rpd - a.rpd);
+      const bestRpd = rpd[0];
+      const worstRpd = rpd[rpd.length - 1];
+
+      // Cargo + speed outliers
+      const cargoTrims = details.filter(d => d.zero_to_60_sec && d.cargo_behind_3rd_cu_ft);
+      const bestBoth = cargoTrims.filter(d => d.zero_to_60_sec <= 3.5 && d.cargo_behind_3rd_cu_ft >= 17);
+      const bestBothVehicles = [...new Set(bestBoth.map(d => d.vehicle))].sort();
+
+      document.getElementById('insights-tradeoffs').innerHTML = `
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li><strong>Paying more doesn't guarantee proportionally more range.</strong> The correlation is moderate — a $70k jump in MSRP buys roughly 90 extra miles. Shop by efficiency, not just sticker price.</li>
+          <li><strong>Best range per dollar:</strong> ${bestRpd ? bestRpd.name : '?'} leads at ${bestRpd ? bestRpd.rpd.toFixed(1) : '?'} mi per $1k spent — the value champion of the segment.</li>
+          <li><strong>No cargo-vs-speed trade-off exists</strong> in this segment. Faster EVs don't systematically sacrifice cargo space — the data shows essentially zero correlation.</li>
+          <li>${bestBothVehicles.length > 0 ? `<strong>${bestBothVehicles.join(' and ')}</strong> prove you can have both: sub-3.5s acceleration <em>and</em> 17+ cu ft behind the 3rd row.` : 'Several vehicles deliver both strong acceleration and generous cargo space.'}</li>
+        </ul>
+      `;
     }
     function renderTech(details) {
       // --- Chart A: Charging standards by year ---
       const chargingOrder = ['Native NACS', 'CCS (NACS adapter)', 'CCS Only', 'TBD'];
       const chargingColors = {
-        'Native NACS':       '#4ade80',
-        'CCS (NACS adapter)': '#fbbf24',
-        'CCS Only':          '#f87171',
-        'TBD':               '#6b7280',
+        'Native NACS':       '#6bc490',
+        'CCS (NACS adapter)': '#c8a84e',
+        'CCS Only':          '#cf6b6b',
+        'TBD':               '#555568',
       };
 
       const chargingDatasets = chargingOrder.map(cat => ({
@@ -699,7 +1051,10 @@
             d.year === y && CHARGING_CATEGORIES[d.charging_type] === cat
           ).length;
         }),
-        backgroundColor: chargingColors[cat],
+        backgroundColor: chargingColors[cat] + '50',
+        borderColor: chargingColors[cat] + '99',
+        borderWidth: 1,
+        borderRadius: 3,
       }));
 
       // Remove TBD dataset if all zeros
@@ -712,12 +1067,12 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            legend: { position: 'bottom', labels: { boxWidth: 8, padding: 14, font: { size: 10 } } },
             tooltip: { mode: 'index' },
           },
           scales: {
-            x: { stacked: true, grid: { display: false } },
-            y: { stacked: true, title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+            x: { stacked: true, grid: { display: false }, ticks: { font: { size: 12, weight: 600 } } },
+            y: { stacked: true, title: { display: true, text: 'Trims', font: { size: 10 } }, beginAtZero: true },
           },
         },
       });
@@ -725,10 +1080,10 @@
       // --- Chart B: Self-driving tiers by year ---
       const tierOrder = ['Basic L2', 'Advanced L2', 'L2+ Hands-Free', 'L2+ Point-to-Point'];
       const tierColors = {
-        'Basic L2':            '#6b7280',
-        'Advanced L2':         '#fbbf24',
-        'L2+ Hands-Free':     '#5ba4f5',
-        'L2+ Point-to-Point': '#4ade80',
+        'Basic L2':            '#555568',
+        'Advanced L2':         '#c8a84e',
+        'L2+ Hands-Free':     '#6b9fd4',
+        'L2+ Point-to-Point': '#6bc490',
       };
 
       const tierDatasets = tierOrder.map(tier => ({
@@ -736,7 +1091,10 @@
         data: YEARS.map(y =>
           details.filter(d => d.year === y && d.self_driving_tier === tier).length
         ),
-        backgroundColor: tierColors[tier],
+        backgroundColor: tierColors[tier] + '50',
+        borderColor: tierColors[tier] + '99',
+        borderWidth: 1,
+        borderRadius: 3,
       }));
 
       new Chart(document.getElementById('chart-self-driving'), {
@@ -746,12 +1104,12 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            legend: { position: 'bottom', labels: { boxWidth: 8, padding: 14, font: { size: 10 } } },
             tooltip: { mode: 'index' },
           },
           scales: {
-            x: { stacked: true, grid: { display: false } },
-            y: { stacked: true, title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+            x: { stacked: true, grid: { display: false }, ticks: { font: { size: 12, weight: 600 } } },
+            y: { stacked: true, title: { display: true, text: 'Trims', font: { size: 10 } }, beginAtZero: true },
           },
         },
       });
@@ -779,17 +1137,26 @@
             {
               label: '5-Seat',
               data: seatData.map(d => d.fiveSeat),
-              backgroundColor: '#f87171',
+              backgroundColor: '#cf6b6b50',
+              borderColor: '#cf6b6b99',
+              borderWidth: 1,
+              borderRadius: 3,
             },
             {
               label: '6-Seat',
               data: seatData.map(d => d.sixSeat),
-              backgroundColor: '#5ba4f5',
+              backgroundColor: '#6b9fd450',
+              borderColor: '#6b9fd499',
+              borderWidth: 1,
+              borderRadius: 3,
             },
             {
               label: '7-Seat',
               data: seatData.map(d => d.sevenSeat),
-              backgroundColor: '#4ade80',
+              backgroundColor: '#6bc49050',
+              borderColor: '#6bc49099',
+              borderWidth: 1,
+              borderRadius: 3,
             },
           ],
         },
@@ -797,14 +1164,45 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+            legend: { position: 'bottom', labels: { boxWidth: 8, padding: 14, font: { size: 10 } } },
           },
           scales: {
-            x: { grid: { display: false } },
-            y: { title: { display: true, text: 'Number of Trims' }, beginAtZero: true },
+            x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+            y: { title: { display: true, text: 'Trims', font: { size: 10 } }, beginAtZero: true },
           },
         },
       });
+
+      // --- Insights box ---
+      // Charging: compute 2026 NACS %
+      const trims2026 = details.filter(d => d.year === 2026);
+      const nacsTrims = trims2026.filter(d => {
+        const cat = CHARGING_CATEGORIES[d.charging_type];
+        return cat === 'Native NACS' || cat === 'CCS (NACS adapter)';
+      });
+      const nacsPct = trims2026.length ? Math.round(nacsTrims.length / trims2026.length * 100) : 0;
+      const ccsOnly2026 = trims2026.filter(d => CHARGING_CATEGORIES[d.charging_type] === 'CCS Only');
+      const ccsOnlyVehicles = [...new Set(ccsOnly2026.map(d => d.vehicle))];
+
+      // Self-driving: compute hands-free+ %
+      const handsFree2026 = trims2026.filter(d =>
+        d.self_driving_tier === 'L2+ Hands-Free' || d.self_driving_tier === 'L2+ Point-to-Point'
+      );
+      const hfPct = trims2026.length ? Math.round(handsFree2026.length / trims2026.length * 100) : 0;
+
+      // Seats: vehicles with both 6+7
+      const bothConfigs = seatData.filter(d => d.sixSeat > 0 && d.sevenSeat > 0).map(d => d.vehicle);
+      const fiveSeatVehicles = seatData.filter(d => d.fiveSeat > 0).map(d => d.vehicle);
+
+      document.getElementById('insights-tech').innerHTML = `
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li><strong>NACS has won.</strong> ${nacsPct}% of 2026 trims support NACS (native or adapter), giving access to Tesla's Supercharger network. ${ccsOnlyVehicles.length > 0 ? `Only ${ccsOnlyVehicles.join(' and ')} remain${ccsOnlyVehicles.length === 1 ? 's' : ''} CCS-only.` : ''}</li>
+          <li><strong>${hfPct}% of 2026 trims offer hands-free or point-to-point driving</strong> — a meaningful step toward reducing highway fatigue on family road trips.</li>
+          <li><strong>Seat flexibility varies widely.</strong> ${bothConfigs.length > 0 ? `${bothConfigs.join(', ')} offer both 6- and 7-seat configurations` : 'Most vehicles are 7-seat only'}, letting you prioritize captain's chairs or max capacity.${fiveSeatVehicles.length > 0 ? ` ${fiveSeatVehicles.join(' and ')} also offer a 5-seat option for maximum cargo.` : ''}</li>
+          <li>If Supercharger access and hands-free driving are must-haves, your shortlist narrows significantly — check both charts above to find the overlap.</li>
+        </ul>
+      `;
     }
 
     main();

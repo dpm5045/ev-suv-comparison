@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThreeRowEV.com April 26 Updates — April 26, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 640px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent { color: #58a6ff; }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body {
+    padding: 28px 32px 32px;
+  }
+  .update-section {
+    margin-bottom: 24px;
+  }
+  .update-section:last-child { margin-bottom: 0; }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-insight {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+  }
+  .tag-data {
+    background: rgba(56, 139, 253, 0.15);
+    color: #58a6ff;
+  }
+  .tag-new {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+  .tag-trend {
+    background: rgba(244, 63, 94, 0.15);
+    color: #fb7185;
+  }
+  .tag-goodbye {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+  }
+  .update-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span {
+    color: #e6edf3;
+    font-weight: 500;
+  }
+  .divider {
+    height: 1px;
+    background: #30363d;
+    margin: 24px 0;
+  }
+  .letter-footer {
+    padding: 20px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #484f58;
+  }
+  .letter-footer a {
+    color: #58a6ff;
+    text-decoration: none;
+  }
+  .highlight-box {
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.2);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .highlight-box h2 {
+    color: #58a6ff;
+  }
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .stat-box {
+    flex: 1;
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #58a6ff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  .delta-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(30, 30, 40, 0.6);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .delta-card + .delta-card {
+    margin-top: 8px;
+  }
+  .delta-badge {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    line-height: 1;
+  }
+  .delta-badge.down {
+    background: rgba(244, 63, 94, 0.12);
+    color: #fb7185;
+    border: 1px solid rgba(244, 63, 94, 0.25);
+  }
+  .delta-badge.up {
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.25);
+  }
+  .delta-badge.neutral {
+    background: rgba(56, 139, 253, 0.12);
+    color: #58a6ff;
+    border: 1px solid rgba(56, 139, 253, 0.25);
+  }
+  .delta-badge.goodbye {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    font-size: 22px;
+  }
+  .delta-info h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 3px;
+  }
+  .delta-info p {
+    font-size: 12px;
+    color: #8b949e;
+    line-height: 1.4;
+  }
+  .callout {
+    background: rgba(251, 191, 36, 0.06);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #8b949e;
+    line-height: 1.6;
+  }
+  .callout strong { color: #fbbf24; }
+  .callout.goodbye {
+    background: rgba(168, 85, 247, 0.06);
+    border-color: rgba(168, 85, 247, 0.2);
+  }
+  .callout.goodbye strong { color: #c084fc; }
+  @media (max-width: 480px) {
+    .letter-body { padding: 20px 18px 24px; }
+    .letter-header { padding: 28px 18px 22px; }
+    .stat-row { flex-direction: column; }
+    .delta-card { flex-direction: column; text-align: center; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+  <div class="letter">
+    <div class="letter-header">
+      <h1>ThreeRowEV.com <span class="accent">April 26 Updates</span></h1>
+      <div class="subtitle">April 26, 2026</div>
+    </div>
+    <div class="letter-body">
+
+      <!-- Refresh Overview -->
+      <div class="highlight-box">
+        <div class="update-tag tag-data">Incremental Refresh</div>
+        <h2>Pricing Revisions &middot; Spec Corrections &middot; End of an Era</h2>
+        <p style="color: #8b949e; font-size: 14px; line-height: 1.6;">
+          A focused mid-month update: pre-owned pricing corrections on the Kia EV9, a major charging spec fix for the IONIQ 9, a range update on the Lucid Gravity, and the Tesla Model X officially joining the Goodbyelist.
+        </p>
+        <div class="stat-row" style="margin-top: 16px;">
+          <div class="stat-box">
+            <div class="stat-num">8</div>
+            <div class="stat-label">Price Changes</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">10</div>
+            <div class="stat-label">Spec Corrections</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">1</div>
+            <div class="stat-label">Goodbyelist</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TL;DR -->
+      <div class="update-section">
+        <div class="update-tag tag-data">TL;DR</div>
+        <h2>What You Need to Know</h2>
+        <ul class="metric-list">
+          <li><span>Kia EV9 2024 held its value</span> &mdash; pre-owned prices revised upward; 2024 mid/premium trims are stronger than expected</li>
+          <li><span>IONIQ 9 charges at 350 kW</span> &mdash; not 233 kW; dataset corrected across all 6 trims</li>
+          <li><span>Lucid Gravity GT range: 450 mi EPA</span> &mdash; up from the 437 mi figure confirmed just weeks ago</li>
+          <li><span>Tesla Model X discontinued</span> &mdash; moves from comparison to the Goodbyelist; the original is gone</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Kia EV9 2024 Pricing -->
+      <div class="update-section">
+        <div class="update-tag tag-insight">Pricing Correction</div>
+        <h2>Kia EV9 2024: Mid-Tier Trims Held Value Better Than Expected</h2>
+        <p>Three weeks ago we reported that the EV9 used market was collapsing. That held true for 2025&ndash;2026 models &mdash; but the 2024 cohort tells a different story. The 2024 Land and GT-Line are trading meaningfully higher than our previous estimates, suggesting buyers are distinguishing between model years more than we expected.</p>
+        <div class="delta-card">
+          <div class="delta-badge up">&uarr;</div>
+          <div class="delta-info">
+            <h3>2024 GT-Line AWD</h3>
+            <p>Pre-owned estimate revised upward &mdash; 2024 premium trim showing real residual strength</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge up">&uarr;</div>
+          <div class="delta-info">
+            <h3>2024 Land AWD / Land+VIP</h3>
+            <p>Upward revision proportional to GT-Line; VIP package holding a premium</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge down">&darr;</div>
+          <div class="delta-info">
+            <h3>2025 Wind / Light RWD</h3>
+            <p>Downward revision per current listings &mdash; 2025 entry trims softer, consistent with April 3 story</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Nuance:</strong> The 2026 EV9 price collapse story is real, but 2024 is not 2026. If you&rsquo;re shopping used, a 2024 Land or GT-Line may actually cost more than a 2025 &mdash; and justify it on condition and mileage.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- IONIQ 9 Charging -->
+      <div class="update-section">
+        <div class="update-tag tag-data">Spec Correction</div>
+        <h2>Hyundai IONIQ 9: 350 kW, Not 233 kW</h2>
+        <p>Our dataset had the IONIQ 9 pegged at 233 kW DC fast charging across all six trims. That was wrong. Hyundai&rsquo;s official USA spec confirms 800V architecture with 350 kW peak charging &mdash; corrected across the full lineup.</p>
+        <div class="delta-card">
+          <div class="delta-badge up" style="font-size:13px;">350</div>
+          <div class="delta-info">
+            <h3>All IONIQ 9 Trims (6 trims)</h3>
+            <p>dc_fast_charge_kw: 233 kW &rarr; <strong style="color:#4ade80;">350 kW</strong> &nbsp;&middot;&nbsp; 800V platform, 10&ndash;80% in ~24 min</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Why it matters:</strong> 350 kW puts the IONIQ 9 at the top of the charging speed leaderboard alongside the Lucid Gravity. This wasn&rsquo;t a minor rounding error &mdash; 233 vs. 350 kW is a completely different road-trip experience.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Lucid Gravity Range -->
+      <div class="update-section">
+        <div class="update-tag tag-insight">Range Update</div>
+        <h2>Lucid Gravity GT: Now 450 Miles EPA</h2>
+        <p>We corrected the Gravity GT range to 437 mi just three weeks ago. It&rsquo;s already been superseded: Lucid&rsquo;s official site now shows 450 mi EPA for the Grand Touring. The Dream Edition holds at 420 mi.</p>
+        <div class="delta-card">
+          <div class="delta-badge up" style="font-size:14px;">450</div>
+          <div class="delta-info">
+            <h3>Gravity Grand Touring</h3>
+            <p>437 mi &rarr; <strong style="color:#4ade80;">450 mi EPA</strong> &nbsp;&middot;&nbsp; Now 115+ miles ahead of the nearest 3-row rival</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Context:</strong> The gap between Lucid and the rest of the 3-row field keeps widening. The next-closest competitor (Rivian R1S Quad) tops out around 321 mi. 450 mi is a different product category.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Tesla Model X Goodbye -->
+      <div class="update-section">
+        <div class="update-tag tag-goodbye">End of an Era</div>
+        <h2>Tesla Model X: Discontinued</h2>
+        <p>Tesla confirmed the Model X is being discontinued in Q2 2026. The vehicle that essentially invented the 3-row electric SUV &mdash; falcon-wing doors and all &mdash; won&rsquo;t be sold new again. It moves from the comparison to a new section on the site: the <strong style="color:#c084fc;">Goodbyelist</strong>.</p>
+        <div class="delta-card">
+          <div class="delta-badge goodbye">&#x2715;</div>
+          <div class="delta-info">
+            <h3>Tesla Model X (2012&ndash;2026)</h3>
+            <p>Final MSRPs: $99,990 base &middot; $114,990 Plaid &nbsp;&middot;&nbsp; Inventory available while supplies last</p>
+          </div>
+        </div>
+        <div class="callout goodbye">
+          <strong>What it means:</strong> If you&rsquo;ve been watching Model X prices fall and considering one, this is likely as low as they&rsquo;ll get while new. Once inventory clears, it&rsquo;ll only exist in the used market &mdash; and a freshly discontinued vehicle with a loyal community tends to hold value better than normal depreciation would suggest. The Model X shaped every 3-row EV that came after it.
+        </div>
+      </div>
+
+    </div>
+    <div class="letter-footer">
+      <a href="https://threerowev.com">threerowev.com</a> &mdash; 3-Row AWD Electric SUV Comparison
+    </div>
+  </div>
+</body>
+</html>
