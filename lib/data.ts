@@ -127,6 +127,7 @@ export const DATA = rawData as EVData
 /** Vehicles announced but not yet available in the US market */
 export const WATCHLIST_VEHICLES = [
   'Toyota Highlander EV',
+  'Lexus TZ',
   'Subaru Getaway',
   'BMW iX7',
   'Genesis GV90',
@@ -166,5 +167,6 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'BMW iX7': 'v-bmw',
   'Genesis GV90': 'v-genesis',
   'Faraday Future FX Super One': 'v-faraday',
+  'Lexus TZ': 'v-lexus',
 }
 
