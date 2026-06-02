@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThreeRowEV.com June 2 Updates &mdash; June 2, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 640px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent { color: #58a6ff; }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body {
+    padding: 28px 32px 32px;
+  }
+  .update-section {
+    margin-bottom: 24px;
+  }
+  .update-section:last-child { margin-bottom: 0; }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-insight { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+  .tag-data { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
+  .tag-new { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+  .tag-trend { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+  .tag-correction { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
+  .tag-watchlist { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+  .update-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span { color: #e6edf3; font-weight: 500; }
+  .divider {
+    height: 1px;
+    background: #30363d;
+    margin: 24px 0;
+  }
+  .letter-footer {
+    padding: 20px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #484f58;
+  }
+  .letter-footer a { color: #58a6ff; text-decoration: none; }
+  .highlight-box {
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.2);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .highlight-box h2 { color: #58a6ff; }
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .stat-box {
+    flex: 1;
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #58a6ff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  .delta-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(30, 30, 40, 0.6);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .delta-card + .delta-card { margin-top: 8px; }
+  .delta-badge {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    line-height: 1;
+  }
+  .delta-badge.down { background: rgba(244, 63, 94, 0.12); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.25); }
+  .delta-badge.up { background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.25); }
+  .delta-badge.neutral { background: rgba(56, 139, 253, 0.12); color: #58a6ff; border: 1px solid rgba(56, 139, 253, 0.25); }
+  .delta-badge.fix { background: rgba(251, 146, 60, 0.12); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.25); font-size: 20px; }
+  .delta-info h3 { font-size: 14px; font-weight: 600; color: #e6edf3; margin-bottom: 3px; }
+  .delta-info p { font-size: 12px; color: #8b949e; line-height: 1.4; }
+  .callout {
+    background: rgba(251, 191, 36, 0.06);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #8b949e;
+    line-height: 1.6;
+  }
+  .callout strong { color: #fbbf24; }
+  .callout.blue { background: rgba(56, 139, 253, 0.06); border-color: rgba(56, 139, 253, 0.2); }
+  .callout.blue strong { color: #58a6ff; }
+  .callout.green { background: rgba(74, 222, 128, 0.06); border-color: rgba(74, 222, 128, 0.2); }
+  .callout.green strong { color: #4ade80; }
+  .callout.red { background: rgba(244, 63, 94, 0.06); border-color: rgba(244, 63, 94, 0.2); }
+  .callout.red strong { color: #fb7185; }
+  .callout.orange { background: rgba(251, 146, 60, 0.06); border-color: rgba(251, 146, 60, 0.2); }
+  .callout.orange strong { color: #fb923c; }
+  .callout.purple { background: rgba(167, 139, 250, 0.06); border-color: rgba(167, 139, 250, 0.2); }
+  .callout.purple strong { color: #a78bfa; }
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 12px;
+  }
+  .price-table th {
+    text-align: left;
+    padding: 7px 10px;
+    color: #8b949e;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 10px;
+    border-bottom: 1px solid #30363d;
+  }
+  .price-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #21262d;
+    color: #8b949e;
+    vertical-align: middle;
+  }
+  .price-table td.name { color: #e6edf3; font-weight: 500; }
+  .price-table td.old { text-decoration: line-through; color: #484f58; }
+  .price-table td.new { color: #fb7185; font-weight: 600; }
+  .price-table td.new.up { color: #4ade80; }
+  .price-table tr:last-child td { border-bottom: none; }
+  .fix-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 12px;
+  }
+  .fix-table th {
+    text-align: left;
+    padding: 7px 10px;
+    color: #8b949e;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 10px;
+    border-bottom: 1px solid #30363d;
+  }
+  .fix-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #21262d;
+    color: #8b949e;
+    vertical-align: middle;
+  }
+  .fix-table td.vehicle { color: #e6edf3; font-weight: 500; }
+  .fix-table td.was { text-decoration: line-through; color: #484f58; }
+  .fix-table td.now { color: #4ade80; font-weight: 600; }
+  .fix-table tr:last-child td { border-bottom: none; }
+  @media (max-width: 480px) {
+    .letter-body { padding: 20px 18px 24px; }
+    .letter-header { padding: 28px 18px 22px; }
+    .stat-row { flex-direction: column; }
+    .delta-card { flex-direction: column; text-align: center; gap: 10px; }
+    .price-table, .fix-table { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+  <div class="letter">
+    <div class="letter-header">
+      <h1>ThreeRowEV.com <span class="accent">June 2 Updates</span></h1>
+      <div class="subtitle">June 2, 2026</div>
+    </div>
+    <div class="letter-body">
+
+      <!-- Overview -->
+      <div class="highlight-box">
+        <div class="update-tag tag-data">Monthly Refresh</div>
+        <h2>Market Reversal &middot; Data Corrections &middot; Watchlist Fills</h2>
+        <p style="color: #8b949e; font-size: 14px; line-height: 1.6;">
+          The EV9&rsquo;s 2026 used market has flipped &mdash; prices are up, not down. The Tesla Model X is commanding a scarcity premium now that production has ended. And six spec errors were corrected, including a wrong battery size on the Lucid Gravity Dream Edition and charging type mistakes on the VISTIQ and EQS SUV.
+        </p>
+        <div class="stat-row" style="margin-top: 16px;">
+          <div class="stat-box">
+            <div class="stat-num">36</div>
+            <div class="stat-label">Price Updates</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">20</div>
+            <div class="stat-label">Spec Fixes</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">33</div>
+            <div class="stat-label">TBD / Gaps Filled</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TL;DR -->
+      <div class="update-section">
+        <div class="update-tag tag-data">TL;DR</div>
+        <h2>What You Need to Know</h2>
+        <ul class="metric-list">
+          <li><span>Kia EV9 2026 used prices surged</span> &mdash; 2026 GT-Line now $49&ndash;60K used, up from $40&ndash;49K; near-new inventory still commanding strong prices</li>
+          <li><span>Tesla Model X 2026 is a collector&rsquo;s item</span> &mdash; discontinued production means the last Base is at $100&ndash;130K used; Plaid at $125&ndash;175K</li>
+          <li><span>Rivian R1S prices generally fell</span> &mdash; 2026 Dual Large down ~$10K; 2025 Performance Dual Large down $5K; only the Tri Max rose (+$6K)</li>
+          <li><span>Lucid Gravity Dream Edition had a wrong battery</span> &mdash; 89 kWh was a copy/paste error from Touring; correct is <strong style="color:#fb923c;">123 kWh</strong>, with 440 mi range</li>
+          <li><span>VISTIQ &amp; EQS SUV charging types corrected</span> &mdash; both models were incorrectly marked NACS; both use CCS1</li>
+          <li><span>Genesis GV90 production started</span> &mdash; US deliveries expected late 2026 or early 2027; still on watchlist</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- EV9 2026 used market reversal -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Market Reversal</div>
+        <h2>Kia EV9 2026: Near-New Units Are Holding Strong</h2>
+        <p>After months of watching the 2024 and 2025 EV9s crater in value, the 2026 cohort tells a different story. Near-new 2026 units &mdash; many with under 5,000 miles &mdash; are trading at modest discounts to MSRP rather than deep-discount depreciation. The GT-Line especially has seen its floor rise by nearly $10K.</p>
+
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>2026 Trim</th>
+              <th>MSRP (new)</th>
+              <th>Old Range</th>
+              <th>New Range</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name">Light RWD</td>
+              <td>$54,900</td>
+              <td class="old">$34&ndash;40K</td>
+              <td class="new up">$41&ndash;47K</td>
+            </tr>
+            <tr>
+              <td class="name">Light Long Range</td>
+              <td>$57,900</td>
+              <td class="old">$36&ndash;42K</td>
+              <td class="new up">$41&ndash;47K</td>
+            </tr>
+            <tr>
+              <td class="name">Wind</td>
+              <td>$63,900</td>
+              <td class="old">$36&ndash;44K</td>
+              <td class="new up">$43&ndash;50K</td>
+            </tr>
+            <tr>
+              <td class="name">Land</td>
+              <td>$68,900</td>
+              <td class="old">$38&ndash;46K</td>
+              <td class="new up">$45&ndash;52K</td>
+            </tr>
+            <tr>
+              <td class="name">GT-Line</td>
+              <td>$71,900</td>
+              <td class="old">$40&ndash;49K</td>
+              <td class="new up">$49&ndash;60K</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout green">
+          <strong>Why the reversal?</strong> The 2026 lineup didn&rsquo;t sit on lots &mdash; production supply has been tighter, and Kia&rsquo;s switch to NACS and the refreshed feature set created genuine consumer demand. A 2026 GT-Line at $49K is still ~31% below MSRP, but that&rsquo;s a much healthier picture than the 2024 cohort at 45&ndash;50% down. The 2025 models also moved up: Wind jumped from $34&ndash;38K to $39&ndash;43K.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Tesla Model X discontinued premium -->
+      <div class="update-section">
+        <div class="update-tag tag-insight">Scarcity Premium</div>
+        <h2>Tesla Model X 2026: The Discontinued Tax Is Here</h2>
+        <p>Tesla ended Model X production in early 2026. The used market has noticed. What were dealer-priced near-MSRP listings a few months ago are now legitimate market-clearing prices &mdash; and the Plaid is entering collector territory.</p>
+
+        <div class="delta-card">
+          <div class="delta-badge up" style="font-size: 14px;">+$20K</div>
+          <div class="delta-info">
+            <h3>Tesla Model X 2026 Base (Long Range)</h3>
+            <p>Pre-owned range: $89&ndash;98K &rarr; <strong style="color:#4ade80;">$100&ndash;130K</strong> &nbsp;&middot;&nbsp; ~$115K avg across active listings</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge up" style="font-size: 14px;">+$38K</div>
+          <div class="delta-info">
+            <h3>Tesla Model X 2026 Plaid</h3>
+            <p>Pre-owned range: $100&ndash;125K &rarr; <strong style="color:#4ade80;">$125&ndash;175K</strong> &nbsp;&middot;&nbsp; fewer than 5 confirmed priced listings nationwide</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Note:</strong> These are mostly near-new dealer-held units (under 16K miles), not true secondary-market private sales. As more 2026 units enter the private market over the next 6&ndash;12 months, expect these ranges to settle. For now, anyone specifically hunting a &ldquo;last-year&rdquo; Model X is paying a real premium. The 2025 models saw modest increases too: Base up to $70&ndash;85K, Plaid up to $82&ndash;95K.
+        </div>
+
+        <table class="price-table" style="margin-top:16px;">
+          <thead>
+            <tr><th>Model X (Base LR)</th><th>Old Range</th><th>New Range</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="name">2023</td><td class="old">$49&ndash;58K</td><td class="new up">$56&ndash;65K</td></tr>
+            <tr><td class="name">2024</td><td class="old">$61&ndash;70K</td><td class="new">$59&ndash;72K</td></tr>
+            <tr><td class="name">2025</td><td class="old">$72&ndash;82K</td><td class="new up">$70&ndash;85K</td></tr>
+            <tr><td class="name">2026</td><td class="old">$89&ndash;98K</td><td class="new up">$100&ndash;130K</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Rivian R1S repricing -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Repriced</div>
+        <h2>Rivian R1S: Most Trims Down, Tri Max Up</h2>
+        <p>The 2025 and 2026 R1S used market has softened across most configs &mdash; with one exception. The Tri Max, which combines the 141.5 kWh Max battery with the tri-motor setup, is being chased. Live CarGurus listings were tracking $89&ndash;98K, well above the $82&ndash;92K we had.</p>
+
+        <div class="delta-card">
+          <div class="delta-badge up">&uarr;</div>
+          <div class="delta-info">
+            <h3>R1S 2025 Ascend Tri Max</h3>
+            <p>Pre-owned range: $82&ndash;92K &rarr; <strong style="color:#4ade80;">$88&ndash;98K</strong> &nbsp;&middot;&nbsp; Live listings $89&ndash;98K on CarGurus</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge down" style="font-size:14px;">&minus;9K</div>
+          <div class="delta-info">
+            <h3>R1S 2026 Dual Large</h3>
+            <p>Pre-owned range: $76&ndash;88K &rarr; <strong style="color:#fb7185;">$70&ndash;78K</strong> &nbsp;&middot;&nbsp; CarGurus active listings at $70,794&ndash;$73,269</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge down">&minus;5K</div>
+          <div class="delta-info">
+            <h3>R1S 2025 Performance Dual Large</h3>
+            <p>Pre-owned range: $70&ndash;78K &rarr; <strong style="color:#fb7185;">$65&ndash;73K</strong> &nbsp;&middot;&nbsp; KBB + market data consistent</p>
+          </div>
+        </div>
+        <div class="callout blue">
+          <strong>Pattern:</strong> The Performance configs carry less premium in the used market than their new-car pricing suggests &mdash; buyers seem to prioritize range (Dual Max, Tri Max) over the sportier Performance tuning. The Dual Standard remains the entry-point hold, with pricing stable at $68&ndash;76K for 2026.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Spec Corrections -->
+      <div class="update-section">
+        <div class="update-tag tag-correction">Spec Corrections</div>
+        <h2>Six Data Errors Fixed This Cycle</h2>
+        <p>This refresh found a higher-than-usual number of substantive spec errors. Two were copy/paste errors from related trims; four were charging type fields that were set incorrectly when the data was first added.</p>
+
+        <div class="delta-card">
+          <div class="delta-badge fix">&#10007;</div>
+          <div class="delta-info">
+            <h3>Lucid Gravity Dream Edition &mdash; Battery &amp; Range</h3>
+            <p><strong style="color:#fb923c;">battery_kwh: 89 &rarr; 123 kWh &nbsp;&middot;&nbsp; range_mi: 420 &rarr; 440 mi</strong><br>
+            The 89 kWh figure belonged to the Touring trim; Dream Edition shares the 123 kWh pack with the Grand Touring. Physics now make sense: same battery, slightly less range than GT due to extra motor weight.</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge fix">&#10007;</div>
+          <div class="delta-info">
+            <h3>Rivian R1S 2025 Adventure Dual Standard &mdash; Battery</h3>
+            <p><strong style="color:#fb923c;">battery_kwh: 109.4 &rarr; 92.5 kWh</strong><br>
+            The Standard battery pack on Gen 2 R1S is 92.5 kWh (LFP chemistry). The 109.4 figure is the Large pack. The 2026 Dual Standard already had 92.5 correctly; this was a 2025 holdover error.</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge fix">&#10007;</div>
+          <div class="delta-info">
+            <h3>Cadillac VISTIQ &mdash; Charging Type (all 4 trims)</h3>
+            <p><strong style="color:#fb923c;">NACS &rarr; CCS1</strong> (Luxury, Sport, Premium Luxury, Platinum)<br>
+            The 2026 VISTIQ uses CCS1 across all trims. The NACS transition for Cadillac starts with the 2027 model year. Three trims showed NACS incorrectly; a fourth showed &ldquo;CCS&rdquo; without the 1.</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge fix">&#10007;</div>
+          <div class="delta-info">
+            <h3>Mercedes-Benz EQS SUV &mdash; Charging Type (2025 &amp; 2026)</h3>
+            <p><strong style="color:#fb923c;">NACS &rarr; CCS1 (+NACS adpt)</strong> for all 2025 trims; same for 3 mismatched 2026 trims<br>
+            The EQS SUV (all years on this platform) uses CCS1. The 2026 MY adds the NACS adapter included in the box, but the port is still CCS1. Only the new 2026 CLA has native NACS in the Mercedes lineup.</p>
+          </div>
+        </div>
+
+        <table class="fix-table" style="margin-top:16px;">
+          <thead>
+            <tr>
+              <th>Vehicle / Trim</th>
+              <th>Field</th>
+              <th>Was</th>
+              <th>Now</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="vehicle">Lucid Gravity Dream Edition</td>
+              <td>battery_kwh</td>
+              <td class="was">89</td>
+              <td class="now">123</td>
+            </tr>
+            <tr>
+              <td class="vehicle">Lucid Gravity Dream Edition</td>
+              <td>range_mi</td>
+              <td class="was">420</td>
+              <td class="now">440</td>
+            </tr>
+            <tr>
+              <td class="vehicle">R1S 2025 Dual Standard</td>
+              <td>battery_kwh</td>
+              <td class="was">109.4</td>
+              <td class="now">92.5</td>
+            </tr>
+            <tr>
+              <td class="vehicle">VISTIQ (all 4 trims)</td>
+              <td>charging_type</td>
+              <td class="was">NACS / CCS</td>
+              <td class="now">CCS1</td>
+            </tr>
+            <tr>
+              <td class="vehicle">EQS SUV 2025 (4 trims)</td>
+              <td>charging_type</td>
+              <td class="was">NACS</td>
+              <td class="now">CCS1 (+NACS adpt)</td>
+            </tr>
+            <tr>
+              <td class="vehicle">EQS SUV 2026 (5 trims)</td>
+              <td>charging_type</td>
+              <td class="was">NACS / CCS</td>
+              <td class="now">CCS1 (+NACS adpt)</td>
+            </tr>
+            <tr>
+              <td class="vehicle">EV9 2026 GT-Line + Relaxation</td>
+              <td>msrp</td>
+              <td class="was">$72,405</td>
+              <td class="now">$73,900</td>
+            </tr>
+            <tr>
+              <td class="vehicle">EX90 2026 Single Motor Plus/Ultra</td>
+              <td>battery_kwh</td>
+              <td class="was">111</td>
+              <td class="now">92</td>
+            </tr>
+            <tr>
+              <td class="vehicle">Escalade IQ 2026 Luxury</td>
+              <td>charging_type</td>
+              <td class="was">CCS</td>
+              <td class="now">CCS1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Watchlist / TBD fills -->
+      <div class="update-section">
+        <div class="update-tag tag-watchlist">Watchlist &amp; Gaps</div>
+        <h2>Lexus TZ Specs Filled, Subaru Getaway Dimensions Added</h2>
+        <p>The Lexus TZ reveal on May 6 unlocked several confirmed specs. The Subaru Getaway&rsquo;s NY Auto Show appearance confirmed its dimensions (from WardsAuto via Subaru&rsquo;s stated &ldquo;2 inches longer than Ascent&rdquo; and official press release data).</p>
+
+        <div class="delta-card">
+          <div class="delta-badge neutral" style="font-size:14px;">TZ</div>
+          <div class="delta-info">
+            <h3>Lexus TZ &mdash; Both Trims</h3>
+            <p>hp: 402 &nbsp;&middot;&nbsp; center_display: 14&Prime; &nbsp;&middot;&nbsp; fold_flat: Yes &nbsp;&middot;&nbsp; dc_fast_10-80: 35 min &nbsp;&middot;&nbsp; driver_profiles: Smart Digital Key+</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge neutral" style="font-size:14px;">TZ</div>
+          <div class="delta-info">
+            <h3>Lexus TZ Select &mdash; Additional</h3>
+            <p>zero_to_60: 5.4 sec &nbsp;&middot;&nbsp; curb_weight: 5,798 lbs &nbsp;&middot;&nbsp; (both from Motor1 citing Lexus press data)</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge neutral" style="font-size:14px;">GW</div>
+          <div class="delta-info">
+            <h3>Subaru Getaway &mdash; Dimensions</h3>
+            <p>length: 198.8&Prime; &nbsp;&middot;&nbsp; width: 78.3&Prime; &nbsp;&middot;&nbsp; height: 68.9&Prime; &nbsp;&middot;&nbsp; (consistent with &ldquo;2&Prime; longer than Ascent&rdquo; from official release)</p>
+          </div>
+        </div>
+
+        <div class="callout purple">
+          <strong>Genesis GV90 update:</strong> Production at Hyundai&rsquo;s Ulsan factory began in June 2026. Coach doors, 27&Prime; display, and E-GMP platform are confirmed. US deliveries expected late 2026 / early 2027. Still on the Watchlist &mdash; no US pricing or specs yet.<br><br>
+          <strong>Faraday Future caution:</strong> The FX Super One BEV status is now uncertain. Faraday is exploring a hybrid fallback (AIHER) and financing remains unsecured. Confidence in the BEV version has been downgraded.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Data hygiene -->
+      <div class="update-section">
+        <div class="update-tag tag-data">Data Hygiene</div>
+        <h2>6 Duplicate Preowned Entries Removed</h2>
+        <p>The preowned pricing table had accumulated duplicate rows for several Tesla Model X and Rivian R1S trims &mdash; likely from earlier data additions. Removed 6 redundant entries: Tesla Model X 2025 Base &amp; Plaid, Tesla Model X 2026 Base &amp; Plaid, and Rivian R1S 2025 Dual Large and 2026 Dual Max. No pricing data was affected; only the duplicates were cleaned.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Validation summary -->
+      <div class="update-section">
+        <div class="update-tag tag-data">Validation</div>
+        <h2>0 Errors &nbsp;&middot;&nbsp; 143 Trims Across 19 Models</h2>
+        <p>Post-refresh validation passed cleanly. The 12 warnings are all expected: Tesla Model X multi-seat entries sharing a name (intentional), N/A placeholder preowned rows for model years that didn&rsquo;t exist in the US, and watchlist vehicles still missing specs that haven&rsquo;t been officially released. Dataset count is unchanged at 143 trims across 19 models.</p>
+      </div>
+
+    </div>
+    <div class="letter-footer">
+      <a href="https://threerowev.com">threerowev.com</a> &nbsp;&middot;&nbsp; June 2, 2026
+    </div>
+  </div>
+</body>
+</html>
