@@ -156,6 +156,7 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'Tesla Model X': 'v-tesla',
   'Tesla Model Y Long (Asia)': 'v-tesla',
   'Tesla Model Y (3-Row)': 'v-tesla',
+  'Tesla Model Y L': 'v-tesla-yl',
   'VinFast VF9': 'v-vinfast',
   'Toyota Highlander EV': 'v-toyota',
   'Volkswagen ID. Buzz': 'v-vw',

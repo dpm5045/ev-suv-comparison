@@ -431,6 +431,7 @@ tr:hover td {
 .v-lucid { background: #2a1a3a; color: #a78bfa; }
 .v-rivian { background: #3a2a1a; color: #fb923c; }
 .v-tesla { background: #3a1a1a; color: #f87171; }
+.v-tesla-yl { background: #3a1a28; color: #fb7185; }
 .v-toyota { background: #1a3a3a; color: #2dd4bf; }
 .v-vinfast { background: #2a1a1a; color: #f59e0b; }
 .v-vw { background: #2a2a1a; color: #fbbf24; }
@@ -449,6 +450,7 @@ html[data-theme="light"] .v-hyundai { background: #dbeafe; color: #2563eb; }
 html[data-theme="light"] .v-lucid { background: #ede9fe; color: #7c3aed; }
 html[data-theme="light"] .v-rivian { background: #ffedd5; color: #ea580c; }
 html[data-theme="light"] .v-tesla { background: #fee2e2; color: #dc2626; }
+html[data-theme="light"] .v-tesla-yl { background: #fce7f0; color: #be123c; }
 html[data-theme="light"] .v-toyota { background: #ccfbf1; color: #0d9488; }
 html[data-theme="light"] .v-vinfast { background: #fef3c7; color: #b45309; }
 html[data-theme="light"] .v-vw { background: #fef9c3; color: #a16207; }
