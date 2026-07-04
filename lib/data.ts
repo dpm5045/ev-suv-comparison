@@ -131,7 +131,6 @@ export const WATCHLIST_VEHICLES = [
   'Subaru Getaway',
   'BMW iX7',
   'Genesis GV90',
-  'Tesla Model Y Long (Asia)',
   'Faraday Future FX Super One',
 ] as const satisfies readonly string[]
 
@@ -154,7 +153,7 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'Lucid Gravity': 'v-lucid',
   'Rivian R1S': 'v-rivian',
   'Tesla Model X': 'v-tesla',
-  'Tesla Model Y Long (Asia)': 'v-tesla',
+  'Tesla Model Y L': 'v-tesla',
   'Tesla Model Y (3-Row)': 'v-tesla',
   'VinFast VF9': 'v-vinfast',
   'Toyota Highlander EV': 'v-toyota',
