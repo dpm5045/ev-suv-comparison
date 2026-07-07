@@ -21,3 +21,7 @@ lib/ev-data-preview.json
 
 # Google Sheets credentials
 google-credentials.json
+
+# Playwright
+test-results/
+playwright-report/
