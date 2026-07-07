@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThreeRowEV.com June 21 Updates &mdash; June 21, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 640px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent { color: #58a6ff; }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body {
+    padding: 28px 32px 32px;
+  }
+  .update-section {
+    margin-bottom: 24px;
+  }
+  .update-section:last-child { margin-bottom: 0; }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-insight { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+  .tag-data { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
+  .tag-new { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+  .tag-trend { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+  .tag-correction { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
+  .tag-watchlist { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+  .update-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span { color: #e6edf3; font-weight: 500; }
+  .divider {
+    height: 1px;
+    background: #30363d;
+    margin: 24px 0;
+  }
+  .letter-footer {
+    padding: 20px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #484f58;
+  }
+  .letter-footer a { color: #58a6ff; text-decoration: none; }
+  .highlight-box {
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.2);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .highlight-box h2 { color: #58a6ff; }
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .stat-box {
+    flex: 1;
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #58a6ff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  .delta-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(30, 30, 40, 0.6);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .delta-card + .delta-card { margin-top: 8px; }
+  .delta-badge {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    line-height: 1;
+  }
+  .delta-badge.down { background: rgba(244, 63, 94, 0.12); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.25); }
+  .delta-badge.up { background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.25); }
+  .delta-badge.neutral { background: rgba(56, 139, 253, 0.12); color: #58a6ff; border: 1px solid rgba(56, 139, 253, 0.25); }
+  .delta-badge.fix { background: rgba(251, 146, 60, 0.12); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.25); font-size: 20px; }
+  .delta-info h3 { font-size: 14px; font-weight: 600; color: #e6edf3; margin-bottom: 3px; }
+  .delta-info p { font-size: 12px; color: #8b949e; line-height: 1.4; }
+  .callout {
+    background: rgba(251, 191, 36, 0.06);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #8b949e;
+    line-height: 1.6;
+  }
+  .callout strong { color: #fbbf24; }
+  .callout.blue { background: rgba(56, 139, 253, 0.06); border-color: rgba(56, 139, 253, 0.2); }
+  .callout.blue strong { color: #58a6ff; }
+  .callout.green { background: rgba(74, 222, 128, 0.06); border-color: rgba(74, 222, 128, 0.2); }
+  .callout.green strong { color: #4ade80; }
+  .callout.red { background: rgba(244, 63, 94, 0.06); border-color: rgba(244, 63, 94, 0.2); }
+  .callout.red strong { color: #fb7185; }
+  .callout.orange { background: rgba(251, 146, 60, 0.06); border-color: rgba(251, 146, 60, 0.2); }
+  .callout.orange strong { color: #fb923c; }
+  .callout.purple { background: rgba(167, 139, 250, 0.06); border-color: rgba(167, 139, 250, 0.2); }
+  .callout.purple strong { color: #a78bfa; }
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 12px;
+  }
+  .price-table th {
+    text-align: left;
+    padding: 7px 10px;
+    color: #8b949e;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 10px;
+    border-bottom: 1px solid #30363d;
+  }
+  .price-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #21262d;
+    color: #8b949e;
+    vertical-align: middle;
+  }
+  .price-table td.name { color: #e6edf3; font-weight: 500; }
+  .price-table td.old { text-decoration: line-through; color: #484f58; }
+  .price-table td.new { color: #fb7185; font-weight: 600; }
+  .price-table td.new.up { color: #4ade80; }
+  .price-table tr:last-child td { border-bottom: none; }
+  .fix-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 12px;
+  }
+  .fix-table th {
+    text-align: left;
+    padding: 7px 10px;
+    color: #8b949e;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 10px;
+    border-bottom: 1px solid #30363d;
+  }
+  .fix-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #21262d;
+    color: #8b949e;
+    vertical-align: middle;
+  }
+  .fix-table td.vehicle { color: #e6edf3; font-weight: 500; }
+  .fix-table td.was { text-decoration: line-through; color: #484f58; }
+  .fix-table td.now { color: #4ade80; font-weight: 600; }
+  .fix-table tr:last-child td { border-bottom: none; }
+  @media (max-width: 480px) {
+    .letter-body { padding: 20px 18px 24px; }
+    .letter-header { padding: 28px 18px 22px; }
+    .stat-row { flex-direction: column; }
+    .delta-card { flex-direction: column; text-align: center; gap: 10px; }
+    .price-table, .fix-table { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+  <div class="letter">
+    <div class="letter-header">
+      <h1>ThreeRowEV.com <span class="accent">June 21 Updates</span></h1>
+      <div class="subtitle">June 21, 2026</div>
+    </div>
+    <div class="letter-body">
+
+      <!-- Overview -->
+      <div class="highlight-box">
+        <div class="update-tag tag-data">Monthly Refresh</div>
+        <h2>Volvo Holding Firm &middot; Lucid Reality Check &middot; MB EQS Renamed &middot; Lexus TZ Specs</h2>
+        <p style="color: #8b949e; font-size: 14px; line-height: 1.6;">
+          The 2025 Volvo EX90 defied the used-EV depreciation curve &mdash; every trim moved up. The Lucid Gravity Grand Touring got its first real market pricing correction: down ~$7K. Mercedes quietly renamed the EQS SUV lineup for 2026 (450+&rarr;400, 580&rarr;550) and we cleaned up the duplicate entries that had accumulated. The Lexus TZ got a confirmed range estimate and 0&ndash;60 figure.
+        </p>
+        <div class="stat-row" style="margin-top: 16px;">
+          <div class="stat-box">
+            <div class="stat-num">27</div>
+            <div class="stat-label">Price Updates</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">4</div>
+            <div class="stat-label">TBDs Resolved</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">2</div>
+            <div class="stat-label">Trims Removed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TL;DR -->
+      <div class="update-section">
+        <div class="update-tag tag-data">TL;DR</div>
+        <h2>What You Need to Know</h2>
+        <ul class="metric-list">
+          <li><span>Volvo EX90 2025 used prices climbed</span> &mdash; Twin Motor Performance Plus up ~$5K midpoint; Ultra trims up $3&ndash;4.5K; the EX90 is holding value better than most</li>
+          <li><span>Lucid Gravity Grand Touring corrected down</span> &mdash; $96&ndash;101K &rarr; $85&ndash;97K; KBB private party at $82&ndash;88K anchored the new range</li>
+          <li><span>Rivian Tri Max trims softened</span> &mdash; 2025 Ascend Tri Max down $6K, 2026 Tri Max down $8K; KBB resale data shows these peak configs depreciating faster than mid-range</li>
+          <li><span>Tesla 2024 Plaid was underpriced</span> &mdash; up $5.5K midpoint to $74&ndash;86K; 2025 Plaid also moved up to $86&ndash;98K</li>
+          <li><span>MB EQS SUV 2026 trim names updated</span> &mdash; EQS 450+ is now EQS 400, EQS 580 is now EQS 550; duplicate entries removed, notes updated</li>
+          <li><span>Lexus TZ: range ~300 mi est, 0&ndash;60 ~5.4s</span> &mdash; both from Lexus pressroom and Motor1 citing official data; EPA certification still pending</li>
+          <li><span>Nissan confirmed a 3-row BEV for 2028</span> &mdash; no name, no specs; logged on the radar but not added to the dataset yet</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Volvo EX90 2025 -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Holding Firm</div>
+        <h2>Volvo EX90 2025: The Quiet Value-Holder</h2>
+        <p>While most 2025 EVs have shed value quickly, the EX90 has moved the other direction. Every 2025 trim moved up this cycle. CarGurus data showed Performance Plus averaging ~$58,900 and Ultra configs clustering at $57&ndash;65K &mdash; well above where we had them.</p>
+
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>EX90 2025 Trim</th>
+              <th>Old Range</th>
+              <th>New Range</th>
+              <th>Mid &Delta;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name">Twin Motor Plus</td>
+              <td class="old">$47&ndash;55K</td>
+              <td class="new up">$48&ndash;60K</td>
+              <td class="new up">+$3K</td>
+            </tr>
+            <tr>
+              <td class="name">Twin Motor Ultra</td>
+              <td class="old">$50&ndash;58K</td>
+              <td class="new up">$57&ndash;60K</td>
+              <td class="new up">+$4.5K</td>
+            </tr>
+            <tr>
+              <td class="name">Twin Motor Perf. Plus</td>
+              <td class="old">$50&ndash;58K</td>
+              <td class="new up">$55&ndash;63K</td>
+              <td class="new up">+$5K</td>
+            </tr>
+            <tr>
+              <td class="name">Twin Motor Perf. Ultra</td>
+              <td class="old">$53&ndash;63K</td>
+              <td class="new up">$57&ndash;65K</td>
+              <td class="new up">+$3K</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout green">
+          <strong>Why is the EX90 holding?</strong> Supply is a big factor &mdash; Volvo&rsquo;s production ramp has been slow, so there just aren&rsquo;t many used units available. The 2025 was the first true mass-availability year, and most buyers bought to keep. There&rsquo;s also a quality story: the EX90 has received strong long-term reliability signals and the Harman Kardon / Bowers &amp; Wilkins audio setups are genuinely differentiating at this price point.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Lucid Gravity correction -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Repriced Down</div>
+        <h2>Lucid Gravity Grand Touring: First Real Market Data</h2>
+        <p>We&rsquo;ve been carrying an estimated $96&ndash;101K for the Grand Touring since it first hit the used market. This cycle, KBB private-party data gave a clearer anchor: $82&ndash;88K. CarGurus asking prices averaged higher (~$109K), but those are dealer listings with markup. The new range reflects where actual transactions are clearing.</p>
+
+        <div class="delta-card">
+          <div class="delta-badge down" style="font-size:14px;">&minus;$7K</div>
+          <div class="delta-info">
+            <h3>Lucid Gravity 2026 Grand Touring</h3>
+            <p>Pre-owned range: $96&ndash;101K &rarr; <strong style="color:#fb7185;">$85&ndash;97K</strong> &nbsp;&middot;&nbsp; KBB private party $82&ndash;88K; dealer avg $109K</p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>Context:</strong> The Grand Touring at $85&ndash;97K represents roughly 20&ndash;30% off its $113K MSRP in 12&ndash;18 months. That&rsquo;s steep depreciation, typical for debut-year luxury EVs from emerging brands. The Touring trim still has no meaningful used market (confirmed no-change), and the Dream Edition hasn&rsquo;t appeared in used listings at all.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Rivian Tri Max softening -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Softening</div>
+        <h2>Rivian Tri Max: Peak Configs Depreciating Faster</h2>
+        <p>KBB resale data this cycle showed both Tri Max configurations have moved down meaningfully. The 2025 Ascend Tri Max trade-in sits at $70&ndash;82K per KBB, with private party up to $88K &mdash; well below the $88&ndash;98K we had. The 2026 active listings on CarGurus clustered at $88&ndash;96K, not the $95&ndash;110K range.</p>
+
+        <div class="delta-card">
+          <div class="delta-badge down" style="font-size:14px;">&minus;$6K</div>
+          <div class="delta-info">
+            <h3>R1S 2025 Ascend Tri Max</h3>
+            <p>Pre-owned range: $88&ndash;98K &rarr; <strong style="color:#fb7185;">$80&ndash;92K</strong> &nbsp;&middot;&nbsp; KBB private party tops at $88K; resale $85K</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge down" style="font-size:14px;">&minus;$8K</div>
+          <div class="delta-info">
+            <h3>R1S 2026 Tri Max</h3>
+            <p>Pre-owned range: $95&ndash;110K &rarr; <strong style="color:#fb7185;">$90&ndash;102K</strong> &nbsp;&middot;&nbsp; CarGurus active listings $88&ndash;96K (only 3 nationwide)</p>
+          </div>
+        </div>
+
+        <div class="callout blue">
+          <strong>Pattern:</strong> The mid-range Rivian configs (Dual Large, Dual Max) have been more stable. The Tri Max premium at new-car time (~$20K over Dual Max) doesn&rsquo;t carry over used &mdash; buyers hunting used R1S tend to prioritize range, and the Dual Max at 410 miles satisfies that. The Tri setup&rsquo;s appeal is more about feel and towing than pure range.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Tesla Model X Plaid repricing -->
+      <div class="update-section">
+        <div class="update-tag tag-insight">Revalued</div>
+        <h2>Tesla Model X Plaid: 2024 Was Underpriced, 2026 Ceiling Came Down</h2>
+        <p>Two Model X Plaid corrections pointed in opposite directions. The 2024 Plaid had been listed too low &mdash; used Plaid listings for that year are clustering $75&ndash;97K, and we had $68&ndash;83K. Meanwhile the 2026 Plaid ceiling was too aggressive: the $175K upper bound was an outlier. The revised $118&ndash;158K is more defensible.</p>
+
+        <table class="price-table">
+          <thead>
+            <tr><th>Model X Plaid</th><th>Old Range</th><th>New Range</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name">2023 Plaid</td>
+              <td class="old">$68&ndash;76K</td>
+              <td class="new">$65&ndash;74K</td>
+            </tr>
+            <tr>
+              <td class="name">2024 Plaid</td>
+              <td class="old">$68&ndash;83K</td>
+              <td class="new up">$74&ndash;86K</td>
+            </tr>
+            <tr>
+              <td class="name">2025 Plaid</td>
+              <td class="old">$82&ndash;95K</td>
+              <td class="new up">$86&ndash;98K</td>
+            </tr>
+            <tr>
+              <td class="name">2026 Plaid</td>
+              <td class="old">$125&ndash;175K</td>
+              <td class="new">$118&ndash;158K</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <strong>Note on the 2026 Base:</strong> Also moved up, from $100&ndash;130K to <strong style="color: #fbbf24;">$105&ndash;135K</strong>, as CarGurus avg hit $130K (30% above MSRP). Production ended; these remain near-dealer units with markup.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- IONIQ 9 and EV9 updates -->
+      <div class="update-section">
+        <div class="update-tag tag-data">Repriced</div>
+        <h2>IONIQ 9 &amp; EV9: Mixed Signals as the Market Matures</h2>
+        <p>The IONIQ 9&rsquo;s used market is still young &mdash; most listings are near-new fleet or lease returns. The S RWD floor moved up as inventory tightened; the SE showed real deal pricing pulling its floor down to $45K. The EV9&rsquo;s 2024 Land trim had been underpriced; 2026 Land moved up sharply as that cohort ages into a firmer floor.</p>
+
+        <div class="delta-card">
+          <div class="delta-badge up">&uarr;</div>
+          <div class="delta-info">
+            <h3>IONIQ 9 2026 S RWD</h3>
+            <p>Pre-owned range: $46&ndash;52K &rarr; <strong style="color:#4ade80;">$49&ndash;54K</strong> &nbsp;&middot;&nbsp; Thin supply; single CarGurus listing at $51.5K</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge down" style="font-size:15px;">&#8595;</div>
+          <div class="delta-info">
+            <h3>IONIQ 9 2026 Performance Limited</h3>
+            <p>Pre-owned range: $55&ndash;62K &rarr; <strong style="color:#fb7185;">$55&ndash;59K</strong> &nbsp;&middot;&nbsp; CarGurus ceiling $58.5K; $62K was too optimistic</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge up">&uarr;</div>
+          <div class="delta-info">
+            <h3>Kia EV9 2026 Land (both Nightfall editions)</h3>
+            <p>Pre-owned range: $45&ndash;52K &rarr; <strong style="color:#4ade80;">$50&ndash;52K</strong> for Land; $45&ndash;53K &rarr; <strong style="color:#4ade80;">$50&ndash;54K</strong> for Nightfall editions &nbsp;&middot;&nbsp; Floor raised $5K</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- MB EQS rename / cleanup -->
+      <div class="update-section">
+        <div class="update-tag tag-correction">Data Cleanup</div>
+        <h2>Mercedes EQS SUV 2026: Two Trims Renamed, Two Duplicates Removed</h2>
+        <p>Mercedes quietly rebranded the EQS SUV lineup for the 2026 model year as part of a broader naming simplification. The EQS 450+ 4MATIC became the <strong style="color:#fb923c;">EQS 400 4MATIC</strong> and the EQS 580 4MATIC became the <strong style="color:#fb923c;">EQS 550 4MATIC</strong>. Same vehicles, same specs &mdash; Mercedes also cut prices ~$15K from the 2025 versions in the process (that correction happened last cycle).</p>
+        <p style="margin-top: 8px;">The dataset had accumulated both the old and new names as separate entries. The old-named entries are now removed; their preowned rows were renamed to match. Total dataset count updated: <strong style="color:#e6edf3;">143 &rarr; 141 trims</strong>.</p>
+
+        <table class="fix-table" style="margin-top: 14px;">
+          <thead>
+            <tr>
+              <th>Old Name (removed)</th>
+              <th>Replaced By</th>
+              <th>MSRP</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="vehicle" style="text-decoration:line-through; color:#484f58;">EQS 450+ 4MATIC (2026)</td>
+              <td class="now">EQS 400 4MATIC</td>
+              <td>$89,950</td>
+            </tr>
+            <tr>
+              <td class="vehicle" style="text-decoration:line-through; color:#484f58;">EQS 580 4MATIC (2026)</td>
+              <td class="now">EQS 550 4MATIC</td>
+              <td>$112,450</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout orange">
+          <strong>Note:</strong> The trim rename is purely cosmetic &mdash; no powertrain, range, or spec changes between the 450+ and 400 (or 580 and 550). Mercedes made this change across multiple models to reduce naming confusion between the all-electric EQS line and the hybrid versions. The Maybach EQS 680 name is unchanged.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Lexus TZ / Watchlist -->
+      <div class="update-section">
+        <div class="update-tag tag-watchlist">Watchlist &amp; TBDs</div>
+        <h2>Lexus TZ Gets Confirmed Estimates; BMW iX7 &amp; GV90 Updated</h2>
+        <p>The Lexus TZ was officially revealed May 6. Lexus&rsquo;s own pressroom put range at &ldquo;up to 300 miles estimated&rdquo; on the 95.82 kWh pack (EPA certification pending). Motor1, citing Lexus press data, reported 0&ndash;60 in 5.4 seconds. The HUD field was confirmed as &ldquo;available on select trims.&rdquo;</p>
+
+        <div class="delta-card">
+          <div class="delta-badge neutral" style="font-size:13px;">TZ</div>
+          <div class="delta-info">
+            <h3>Lexus TZ Base (expected)</h3>
+            <p>range_mi: <strong style="color:#58a6ff;">TBD (~260 est) &rarr; 300 (est, EPA pending)</strong><br>
+            zero_to_60: <strong style="color:#58a6ff;">null &rarr; 5.4 sec (est)</strong><br>
+            hud: <strong style="color:#58a6ff;">TBD &rarr; Available (select trims)</strong></p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge neutral" style="font-size:13px;">TZ</div>
+          <div class="delta-info">
+            <h3>Lexus TZ Select (expected)</h3>
+            <p>hud: <strong style="color:#58a6ff;">TBD &rarr; Available (select trims)</strong><br>
+            (range &amp; 0&ndash;60 were already set from prior research)</p>
+          </div>
+        </div>
+
+        <div class="callout purple" style="margin-top: 14px;">
+          <strong>BMW iX7 estimates refreshed:</strong> Research from topelectricsuv.com and CarsCoops surfaced better estimates. Battery updated from <strong>~120 kWh est &rarr; ~150+ kWh</strong>. The HP estimate for xDrive50 is now ~570. Tech suite filled in: 17.9&Prime; parallelogram display, BMW Panoramic Vision cluster, 3D HUD, BMW OS X, 14.6&Prime; passenger display &mdash; all flagged as expected, not confirmed.<br><br>
+          <strong>Genesis GV90:</strong> Production at Hyundai&rsquo;s Ulsan factory began June 2026. Battery estimated at ~113 kWh (Samsung SDI prismatic cells, multiple sources). Range ~350 mi est. DC fast charge 350 kW. Center display: 25&Prime; OLED expected. US deliveries late 2026 / early 2027.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- New Vehicle Radar -->
+      <div class="update-section">
+        <div class="update-tag tag-new">On the Radar</div>
+        <h2>Nissan Confirms a 3-Row BEV for 2028</h2>
+        <p>Nissan formally confirmed a three-row fully electric SUV for the 2028 US market as part of their &ldquo;The Arc&rdquo; turnaround strategy. No model name, trim structure, or pricing has been announced. The vehicle will use next-generation NCM cells with ~50% higher energy density vs. the current Ariya, and will be built at Nissan&rsquo;s Canton, Mississippi plant.</p>
+        <div class="callout blue" style="margin-top: 12px;">
+          <strong>Not added yet.</strong> Nissan&rsquo;s 3-row BEV is on the radar but there&rsquo;s nothing meaningful to add &mdash; no name, specs, or trims. It&rsquo;ll enter the watchlist once we have at least a model name and official segment positioning.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Validation summary -->
+      <div class="update-section">
+        <div class="update-tag tag-data">Validation</div>
+        <h2>0 Deploy Errors &nbsp;&middot;&nbsp; 141 Trims Across 19 Models &nbsp;&middot;&nbsp; Build Passed</h2>
+        <p>Post-refresh validation passed cleanly. The 9 &ldquo;errors&rdquo; flagged are all watchlist vehicles with null MSRP (unpriced future models &mdash; Toyota Highlander EV, BMW iX7, Genesis GV90, Lexus TZ, Subaru Getaway, Tesla Model Y Asia). The 12 warnings are all expected: Tesla Model X multi-seat entries sharing a name (intentional), and N/A placeholder preowned rows for non-US model years. TypeScript build succeeded with no errors.</p>
+      </div>
+
+    </div>
+    <div class="letter-footer">
+      <a href="https://threerowev.com">threerowev.com</a> &nbsp;&middot;&nbsp; June 21, 2026
+    </div>
+  </div>
+</body>
+</html>

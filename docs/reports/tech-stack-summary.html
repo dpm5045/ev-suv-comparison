@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThreeRowEV — Tech Stack &amp; Data Pipeline</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  :root {
+    --bg-deep: #0a0c10;
+    --bg-surface: #12151c;
+    --bg-card: #181c26;
+    --bg-elevated: #1e2330;
+    --border: #262d3d;
+    --border-accent: #354160;
+    --text-primary: #e4e8f1;
+    --text-secondary: #8a95b0;
+    --text-muted: #576280;
+    --accent: #5ba4f5;
+    --accent-dim: #3a7ad4;
+    --accent-glow: rgba(91,164,245,0.12);
+    --green: #4ade80;
+    --green-dim: rgba(74,222,128,0.12);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.10);
+    --red: #f87171;
+    --serif: Georgia, 'Times New Roman', serif;
+    --mono: 'Courier New', Courier, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+  }
+
+  body {
+    font-family: var(--sans);
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Noise overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    padding: 6rem 2rem 4rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 600px;
+    background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text-primary);
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.1s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-rule {
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--border-accent);
+    margin: 3rem auto 0;
+    border: none;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.35s forwards;
+  }
+
+  /* ── Container ── */
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    margin: 3rem 0 4rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.45s forwards;
+  }
+
+  .toc-title {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    columns: 2;
+    column-gap: 2rem;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    break-inside: avoid;
+    margin-bottom: 0.5rem;
+  }
+
+  .toc li a {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    transition: color 0.2s;
+  }
+
+  .toc li a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+
+  .toc li a:hover {
+    color: var(--accent);
+  }
+  .toc li a:hover::before {
+    color: var(--accent-dim);
+  }
+
+  /* ── Sections ── */
+  section {
+    margin-bottom: 4rem;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  section.visible {
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .section-number {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 2rem 0 0.75rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  a:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── Tech grid ── */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .tech-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.4rem 1.5rem;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .tech-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .tech-card-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.65rem;
+  }
+
+  .tech-card-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .tech-card-detail {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ── Code blocks ── */
+  pre {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.75;
+    color: var(--text-secondary);
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: var(--bg-elevated);
+    border-radius: 4px;
+    padding: 0.15em 0.45em;
+    color: var(--accent);
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    color: inherit;
+  }
+
+  .code-comment { color: var(--text-muted); }
+  .code-key { color: var(--accent); }
+  .code-string { color: var(--green); }
+  .code-arrow { color: var(--text-muted); }
+
+  /* ── Data schema diagram ── */
+  .schema-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
+    margin: 1.5rem 0;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.8;
+  }
+
+  .schema-block .indent { padding-left: 1.5rem; }
+  .schema-block .indent-2 { padding-left: 3rem; }
+  .schema-key { color: var(--accent); }
+  .schema-type { color: var(--text-muted); font-style: italic; }
+  .schema-comment { color: var(--text-muted); }
+  .schema-brace { color: var(--text-muted); }
+
+  /* ── Pipeline diagram ── */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 2rem 0;
+  }
+
+  .pipeline-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    position: relative;
+  }
+
+  .pipeline-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 36px;
+  }
+
+  .pipeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg-deep);
+    border: 2px solid var(--accent-dim);
+    flex-shrink: 0;
+    z-index: 1;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .pipeline-step:hover .pipeline-dot {
+    border-color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  .pipeline-line {
+    width: 2px;
+    flex-grow: 1;
+    min-height: 28px;
+    background: linear-gradient(to bottom, var(--border-accent), var(--border));
+  }
+
+  .pipeline-content {
+    padding-bottom: 1.75rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .pipeline-step:last-child .pipeline-line {
+    display: none;
+  }
+
+  .pipeline-label {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .pipeline-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* ── Tables ── */
+  .data-table-wrap {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  thead {
+    background: var(--bg-card);
+  }
+
+  th {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr {
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover {
+    background: var(--bg-elevated);
+  }
+
+  td:first-child {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 0.82rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ── Source tags ── */
+  .source-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .source-tag {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.7rem;
+    white-space: nowrap;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .source-tag:hover {
+    border-color: var(--border-accent);
+    color: var(--text-primary);
+  }
+
+  .source-tag.oem { border-left: 3px solid var(--accent); }
+  .source-tag.reference { border-left: 3px solid var(--green); }
+  .source-tag.specs { border-left: 3px solid var(--amber); }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 0.25rem 0.6rem;
+    border-radius: 5px;
+    vertical-align: middle;
+  }
+
+  .badge-blue { background: var(--accent-glow); color: var(--accent); }
+  .badge-green { background: var(--green-dim); color: var(--green); }
+  .badge-amber { background: var(--amber-dim); color: var(--amber); }
+
+  /* ── Formula block ── */
+  .formula {
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent-dim);
+    border-radius: 0 8px 8px 0;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    line-height: 1.9;
+  }
+
+  .formula .label {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  /* ── Guardrail list ── */
+  .guardrails {
+    list-style: none;
+    margin: 1rem 0;
+  }
+
+  .guardrails li {
+    position: relative;
+    padding: 0.65rem 0 0.65rem 1.8rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .guardrails li:last-child {
+    border-bottom: none;
+  }
+
+  .guardrails li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.05rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--accent-dim);
+  }
+
+  /* ── Footer ── */
+  .doc-footer {
+    text-align: center;
+    padding: 3rem 0;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  .doc-footer p {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero { padding: 4rem 1.5rem 3rem; }
+    .container { padding: 0 1.25rem 4rem; }
+    .toc ol { columns: 1; }
+    .tech-grid { grid-template-columns: 1fr; }
+    h2 { font-size: 1.6rem; }
+    .schema-block { padding: 1.25rem; font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<header class="hero">
+  <div class="hero-eyebrow">ThreeRowEV.com &mdash; Technical Documentation</div>
+  <h1>Tech Stack &amp; <em>Data Pipeline</em></h1>
+  <p class="hero-sub">How we built and maintain a comprehensive comparison platform for 3-row electric SUVs &mdash; from live research to production deployment.</p>
+  <hr class="hero-rule">
+</header>
+
+<!-- ═══════════════════════════ BODY ═══════════════════════════ -->
+<main class="container">
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#stack">Tech Stack</a></li>
+      <li><a href="#architecture">Data Architecture</a></li>
+      <li><a href="#sources">Data Sources</a></li>
+      <li><a href="#pipeline">Automated Data Pipeline</a></li>
+      <li><a href="#skills">Skill Commands</a></li>
+      <li><a href="#guardrails">Guardrails &amp; Constraints</a></li>
+      <li><a href="#deployment">Deployment &amp; Integrations</a></li>
+    </ol>
+  </nav>
+
+  <!-- ── 01  TECH STACK ── -->
+  <section id="stack">
+    <div class="section-number">01</div>
+    <h2>Tech Stack</h2>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-label">Framework</div>
+        <div class="tech-card-value">Next.js 14</div>
+        <div class="tech-card-detail">App Router with TypeScript. Server &amp; client components, URL-driven filter state via <code>useSearchParams()</code>.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Language</div>
+        <div class="tech-card-value">TypeScript 5</div>
+        <div class="tech-card-detail">Typed interfaces for every data shape &mdash; DetailRow, PreownedRow, CountRow, GlossaryRow, and more.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Styling</div>
+        <div class="tech-card-value">Custom CSS</div>
+        <div class="tech-card-detail">CSS variables for dark/light theming. DM Sans + JetBrains Mono fonts. Responsive dual-render pattern.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Visualization</div>
+        <div class="tech-card-value">Chart.js + D3</div>
+        <div class="tech-card-detail">Chart.js with react-chartjs-2 for bar/line/mixed charts. D3.js and Observable Plot for advanced visuals.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Deployment</div>
+        <div class="tech-card-value">Vercel</div>
+        <div class="tech-card-detail">Zero-config deploys from Git. HSTS, X-Frame-Options: DENY, strict referrer policy, permissions restrictions.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Integrations</div>
+        <div class="tech-card-value">Google Sheets API</div>
+        <div class="tech-card-detail">Service-account sync pushes the full dataset to a Google Sheet as a backup &amp; shareable reference.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02  DATA ARCHITECTURE ── -->
+  <section id="architecture">
+    <div class="section-number">02</div>
+    <h2>Data Architecture</h2>
+
+    <p>All vehicle data lives in a single source of truth: <code>lib/ev-data.json</code>. TypeScript interfaces in <code>lib/data.ts</code> export a typed <code>DATA</code> singleton consumed by every component.</p>
+
+    <div class="schema-block">
+      <div><span class="schema-brace">{</span></div>
+      <div class="indent"><span class="schema-key">details</span>: <span class="schema-type">DetailRow[]</span> <span class="schema-comment">// ~140 trims across 17 vehicles, ~35 fields each</span></div>
+      <div class="indent"><span class="schema-key">preowned</span>: <span class="schema-type">PreownedRow[]</span> <span class="schema-comment">// pre-owned pricing, synced with details</span></div>
+      <div class="indent"><span class="schema-key">count_data</span>: <span class="schema-type">CountRow[]</span> <span class="schema-comment">// sales &amp; availability by model year (2021-2027)</span></div>
+      <div class="indent"><span class="schema-key">count_totals</span>: <span class="schema-type">CountTotals</span> <span class="schema-comment">// annual sums</span></div>
+      <div class="indent"><span class="schema-key">us_ev_sales</span>: <span class="schema-type">USEVSales</span> <span class="schema-comment">// market context (630K-1.3M vehicles/year)</span></div>
+      <div class="indent"><span class="schema-key">glossary</span>: <span class="schema-type">GlossaryRow[]</span> <span class="schema-comment">// field definitions</span></div>
+      <div class="indent"><span class="schema-key">assumptions</span>: <span class="schema-type">AssumptionRow[]</span> <span class="schema-comment">// PA tax 6%, fees $905</span></div>
+      <div><span class="schema-brace">}</span></div>
+    </div>
+
+    <h3>Out-the-Door Price Formula</h3>
+    <div class="formula">
+      <div class="label">New vehicle:</div>
+      <div>otd_new = (msrp + destination) &times; 1.06 + $905</div>
+      <br>
+      <div class="label">Pre-owned vehicle:</div>
+      <div>otd_preowned = price &times; 1.06 + $905</div>
+      <br>
+      <div class="label">Fee breakdown:</div>
+      <div>$905 = $422 doc + $233 title/reg + $250 EV road-use fee</div>
+    </div>
+
+    <h3>Component Structure</h3>
+    <pre><code><span class="code-key">Dashboard</span> <span class="code-comment">(state + URL routing)</span>
+<span class="code-arrow">├──</span> Header
+<span class="code-arrow">├──</span> NavTabs            <span class="code-comment">tab switcher via ?tab= URL param</span>
+<span class="code-arrow">├──</span> OverviewTab        <span class="code-comment">stats, glance table, charging standards</span>
+<span class="code-arrow">├──</span> ComparisonV2Tab    <span class="code-comment">filterable table + mobile cards</span>
+<span class="code-arrow">├──</span> SideBySideTab      <span class="code-comment">compare up to 3 trims</span>
+<span class="code-arrow">├──</span> ReferenceTab       <span class="code-comment">methodology, models, glossary</span>
+<span class="code-arrow">└──</span> DetailPanel        <span class="code-comment">slide-in sidebar for full specs</span></code></pre>
+  </section>
+
+  <!-- ── 03  DATA SOURCES ── -->
+  <section id="sources">
+    <div class="section-number">03</div>
+    <h2>Data Sources</h2>
+
+    <p>All research is performed <strong>in-session by Claude Code</strong> using web search and fetch against pre-approved sources. Findings are compiled into comparison tables and presented for user approval before any data is written.</p>
+
+    <h3>OEM Sites <span class="badge badge-blue">Official Specs &amp; MSRP</span></h3>
+    <div class="source-tags">
+      <span class="source-tag oem">tesla.com</span>
+      <span class="source-tag oem">rivian.com</span>
+      <span class="source-tag oem">kia.com</span>
+      <span class="source-tag oem">hyundaiusa.com</span>
+      <span class="source-tag oem">cadillac.com</span>
+      <span class="source-tag oem">mbusa.com</span>
+      <span class="source-tag oem">volvocars.com</span>
+      <span class="source-tag oem">lucidmotors.com</span>
+      <span class="source-tag oem">vw.com</span>
+      <span class="source-tag oem">subaru.com</span>
+      <span class="source-tag oem">toyota.com</span>
+    </div>
+
+    <h3>Automotive Reference <span class="badge badge-green">Pricing &amp; Reviews</span></h3>
+    <div class="source-tags">
+      <span class="source-tag reference">edmunds.com</span>
+      <span class="source-tag reference">kbb.com</span>
+      <span class="source-tag reference">cars.com</span>
+      <span class="source-tag reference">caranddriver.com</span>
+      <span class="source-tag reference">truecar.com</span>
+      <span class="source-tag reference">carfax.com</span>
+      <span class="source-tag reference">carbuzz.com</span>
+      <span class="source-tag reference">insideevs.com</span>
+      <span class="source-tag reference">electrek.co</span>
+      <span class="source-tag reference">topspeed.com</span>
+    </div>
+
+    <h3>Specs Databases <span class="badge badge-amber">EPA &amp; Technical</span></h3>
+    <div class="source-tags">
+      <span class="source-tag specs">evkx.net</span>
+      <span class="source-tag specs">evspecifications.com</span>
+      <span class="source-tag specs">fueleconomy.gov</span>
+      <span class="source-tag specs">en.wikipedia.org</span>
+      <span class="source-tag specs">usnews.com/cars</span>
+    </div>
+  </section>
+
+  <!-- ── 04  PIPELINE ── -->
+  <section id="pipeline">
+    <div class="section-number">04</div>
+    <h2>Automated Data Pipeline</h2>
+
+    <p>The pipeline is driven by <strong>Claude Code slash commands</strong> (skills). Each skill defines structured phases with validation gates, user approval checkpoints, and automatic OTD recalculation.</p>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-track">
+          <div class="pipeline-dot"></div>
+          <div class="pipeline-line"></div>
+        </div>
+        <div class="pipeline-content">
+          <div class="pipeline-label">Web Research</div>
+          <div class="pipeline-desc">Claude Code searches OEM sites, EPA databases, and automotive reference sites using <code>WebSearch</code> and <code>WebFetch</code>. Findings are compiled into structured comparison tables.</div>
+        </div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="pipeline-track">
+          <div class="pipeline-dot"></div>
+          <div class="pipeline-line"></div>
+        </div>
+        <div class="pipeline-content">
+          <div class="pipeline-label">User Approval Gate</div>
+          <div class="pipeline-desc">All proposed changes are presented as delta tables. Deltas exceeding thresholds (e.g., pre-owned price changes &gt;$2,000) are flagged for explicit review. No data is written without approval.</div>
+        </div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="pipeline-track">
+          <div class="pipeline-dot"></div>
+          <div class="pipeline-line"></div>
+        </div>
+        <div class="pipeline-content">
+          <div class="pipeline-label">Data Mutation</div>
+          <div class="pipeline-desc">Approved changes are written to <code>lib/ev-data.json</code>. Both <code>details</code> and <code>preowned</code> arrays are updated in sync. Protected fields (seats, cargo dimensions) are never auto-modified.</div>
+        </div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="pipeline-track">
+          <div class="pipeline-dot"></div>
+          <div class="pipeline-line"></div>
+        </div>
+        <div class="pipeline-content">
+          <div class="pipeline-label">OTD Recalculation</div>
+          <div class="pipeline-desc">The <code>recalculateAllOtd()</code> utility recomputes out-the-door prices for every entry based on current MSRP, destination, and pre-owned ranges using the standard formula.</div>
+        </div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="pipeline-track">
+          <div class="pipeline-dot"></div>
+          <div class="pipeline-line"></div>
+        </div>
+        <div class="pipeline-content">
+          <div class="pipeline-label">Validation</div>
+          <div class="pipeline-desc">The data validator checks: required fields, OTD consistency (&lt;$50 tolerance), numeric sanity ranges, count totals reconciliation, details&harr;preowned sync, and TypeScript build. Errors block deployment.</div>
+        </div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="pipeline-track">
+          <div class="pipeline-dot"></div>
+          <div class="pipeline-line"></div>
+        </div>
+        <div class="pipeline-content">
+          <div class="pipeline-label">Git Commit</div>
+          <div class="pipeline-desc">Changes are committed with a descriptive changelog. Vercel auto-deploys from the repository on push.</div>
+        </div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="pipeline-track">
+          <div class="pipeline-dot"></div>
+          <div class="pipeline-line"></div>
+        </div>
+        <div class="pipeline-content">
+          <div class="pipeline-label">Google Sheets Sync</div>
+          <div class="pipeline-desc">The full <code>details</code> array is pushed to a Google Sheet via service account authentication &mdash; a shareable backup with ~140 rows and ~35 columns.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05  SKILL COMMANDS ── -->
+  <section id="skills">
+    <div class="section-number">05</div>
+    <h2>Skill Commands</h2>
+
+    <p>Each slash command is a structured Claude Code skill with defined phases, guardrails, and output expectations.</p>
+
+    <div class="data-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Purpose</th>
+            <th>Key Behavior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/refresh</td>
+            <td>Full 5-phase data refresh</td>
+            <td>Pre-owned pricing &rarr; TBD resolution &rarr; spec corrections &rarr; new vehicle detection &rarr; gap filling. Cross-checks all critical fields against OEM &amp; EPA sources.</td>
+          </tr>
+          <tr>
+            <td>/add-vehicle</td>
+            <td>Add a new 3-row EV</td>
+            <td>Researches all trims, populates all fields, updates 4 files (data, types, CSS, glossary), calculates OTD, validates, and commits.</td>
+          </tr>
+          <tr>
+            <td>/update-pricing</td>
+            <td>MSRP &amp; pre-owned updates</td>
+            <td>Searches KBB, TrueCar, Cars.com. Flags deltas &gt;$2K. Requires user approval. Updates both details and preowned arrays.</td>
+          </tr>
+          <tr>
+            <td>/scan-watchlist</td>
+            <td>Monitor unreleased vehicles</td>
+            <td>3-phase: update existing watchlist &rarr; scan for new 3-row EVs &rarr; check graduation criteria for adding to main dataset.</td>
+          </tr>
+          <tr>
+            <td>/spot-check</td>
+            <td>Quick manual audit</td>
+            <td>User-directed verification of specific vehicles or fields against live sources.</td>
+          </tr>
+          <tr>
+            <td>/validate</td>
+            <td>Read-only integrity check</td>
+            <td>Required fields, OTD consistency, numeric ranges, count totals, array sync, TypeScript build. Errors block deployment.</td>
+          </tr>
+          <tr>
+            <td>/add-field</td>
+            <td>Extend the data model</td>
+            <td>Adds a new spec field to DetailRow across all entries, updates interfaces and UI registry.</td>
+          </tr>
+          <tr>
+            <td>/sync-sheet</td>
+            <td>Push to Google Sheets</td>
+            <td>One-way sync of details array to Google Sheets backup. Graceful no-op if credentials are missing.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 06  GUARDRAILS ── -->
+  <section id="guardrails">
+    <div class="section-number">06</div>
+    <h2>Guardrails &amp; Constraints</h2>
+
+    <ul class="guardrails">
+      <li><strong>Never hardcode counts.</strong> Vehicle and trim counts are always derived from <code>DATA</code> at runtime &mdash; no hardcoded &ldquo;140 trims&rdquo; or &ldquo;17 vehicles&rdquo; anywhere.</li>
+      <li><strong>Protected fields.</strong> Seats, cargo dimensions (behind 3rd/2nd/1st row), fold-flat, and cargo floor width are never auto-modified &mdash; they are intentionally set per seat configuration.</li>
+      <li><strong>Array sync.</strong> The <code>details</code> and <code>preowned</code> arrays must stay in sync: same vehicle names, matching <code>preowned_range</code> values.</li>
+      <li><strong>OTD consistency.</strong> Out-the-door prices are always recalculated via the standard formula. Validator flags errors at &gt;$50 deviation and warnings at &gt;$1.</li>
+      <li><strong>Count totals.</strong> Year-column sums in <code>count_data</code> are reconciled against <code>count_totals</code> after every vehicle add or remove.</li>
+      <li><strong>TBD vs. null vs. N/A.</strong> <code>null</code> = field doesn&rsquo;t apply (no frunk). <code>"TBD"</code> = not yet found. <code>"N/A"</code> = not applicable for this trim.</li>
+      <li><strong>User approval gate.</strong> No data is written to the source of truth without explicit user review and approval of proposed changes.</li>
+    </ul>
+  </section>
+
+  <!-- ── 07  DEPLOYMENT ── -->
+  <section id="deployment">
+    <div class="section-number">07</div>
+    <h2>Deployment &amp; Integrations</h2>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-label">Hosting</div>
+        <div class="tech-card-value">Vercel</div>
+        <div class="tech-card-detail">Auto-deploys from Git on push. Domain: <strong>threerowev.com</strong>.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Data Backup</div>
+        <div class="tech-card-value">Google Sheets</div>
+        <div class="tech-card-detail">Service-account sync via googleapis. Free tier (300 req/min). Graceful no-op if credentials are absent.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">AI Integration</div>
+        <div class="tech-card-value">Claude API</div>
+        <div class="tech-card-detail">News endpoint (currently paused) proxies to Claude with <code>web_search</code> tool for live EV news summaries. 7-day localStorage cache.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Monetization</div>
+        <div class="tech-card-value">Amazon Associates</div>
+        <div class="tech-card-detail">Context-aware affiliate links: charging adapters matched to NACS/CCS, portable chargers, accessories by vehicle.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Email</div>
+        <div class="tech-card-value">Cloudflare Routing</div>
+        <div class="tech-card-detail">contact@threerowev.com routes to Gmail via Cloudflare email routing.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-label">Security</div>
+        <div class="tech-card-value">Hardened Headers</div>
+        <div class="tech-card-detail">HSTS with preload, X-Frame-Options: DENY, strict referrer policy, camera/mic/geo blocked via Permissions-Policy.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="doc-footer">
+    <p>ThreeRowEV.com &mdash; Built with Next.js, TypeScript, and Claude Code</p>
+    <p style="margin-top: 0.5rem;">Last updated March 2026</p>
+  </footer>
+
+</main>
+
+<script>
+  // Intersection Observer for section fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

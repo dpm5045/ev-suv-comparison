@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's New — March 17, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 640px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent { color: #58a6ff; }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body {
+    padding: 28px 32px 32px;
+  }
+  .update-section {
+    margin-bottom: 24px;
+  }
+  .update-section:last-child { margin-bottom: 0; }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-major {
+    background: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
+  }
+  .tag-new {
+    background: rgba(56, 139, 253, 0.15);
+    color: #58a6ff;
+  }
+  .tag-improved {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+  .tag-fix {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+  }
+  .update-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span {
+    color: #e6edf3;
+    font-weight: 500;
+  }
+  .divider {
+    height: 1px;
+    background: #30363d;
+    margin: 24px 0;
+  }
+  .letter-footer {
+    padding: 20px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #484f58;
+  }
+  .letter-footer a {
+    color: #58a6ff;
+    text-decoration: none;
+  }
+  .highlight-box {
+    background: rgba(168, 85, 247, 0.06);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .highlight-box h2 {
+    color: #c084fc;
+  }
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    background: rgba(56, 139, 253, 0.1);
+    border: 1px solid rgba(56, 139, 253, 0.2);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #58a6ff;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    color: #484f58;
+    font-size: 14px;
+  }
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .stat-box {
+    flex: 1;
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #58a6ff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  @media (max-width: 480px) {
+    .letter-body { padding: 20px 18px 24px; }
+    .letter-header { padding: 28px 18px 22px; }
+    .stat-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+  <div class="letter">
+    <div class="letter-header">
+      <h1>3RowEV <span class="accent">Is Live</span></h1>
+      <div class="subtitle">March 17, 2026</div>
+    </div>
+    <div class="letter-body">
+
+      <!-- Hero: Domain Launch -->
+      <div class="highlight-box">
+        <div class="update-tag tag-major">We're Live</div>
+        <h2>threerowev.com</h2>
+        <p style="color: #8b949e; font-size: 14px; line-height: 1.6;">
+          The 3-Row EV Comparison Tool has graduated from a dev app to a <strong style="color: #e6edf3;">real website with its own domain</strong>. Everything you saw on the Vercel preview is now live at <a href="https://threerowev.com" style="color: #58a6ff; text-decoration: none; font-weight: 600;">threerowev.com</a> &mdash; with a ton of new features since the last update.
+        </p>
+        <div class="stat-row" style="margin-top: 16px;">
+          <div class="stat-box">
+            <div class="stat-num">162</div>
+            <div class="stat-label">Pages</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">17</div>
+            <div class="stat-label">Vehicle Pages</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">130+</div>
+            <div class="stat-label">Compare Pages</div>
+          </div>
+        </div>
+        <p style="color: #484f58; font-size: 12px; margin-top: 12px; text-align: center;">
+          Custom domain &middot; SEO optimized &middot; FAQ structured data &middot; Google-indexable
+        </p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Connected Navigation -->
+      <div class="update-section">
+        <div class="update-tag tag-new">New</div>
+        <h2>Connected Navigation</h2>
+        <p>The dashboard and standalone pages are now fully cross-linked. Every vehicle card, detail panel, and badge connects to the vehicle&rsquo;s dedicated page &mdash; and every standalone page links back to the dashboard with context.</p>
+        <div class="flow-diagram" style="margin-top: 12px;">
+          <div class="flow-step">Dashboard</div>
+          <div class="flow-arrow">&harr;</div>
+          <div class="flow-step">Vehicle Pages</div>
+          <div class="flow-arrow">&harr;</div>
+          <div class="flow-step">Compare Pages</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Vehicle Page Redesign -->
+      <div class="update-section">
+        <div class="update-tag tag-new">New</div>
+        <h2>Redesigned Vehicle Pages</h2>
+        <p>Each vehicle now has a dedicated page with a clean, scannable layout &mdash; built for both quick shoppers and deep researchers.</p>
+        <ul class="metric-list">
+          <li><span>Desktop:</span> Side-by-side trim comparison table &mdash; compare every spec across all trims at a glance</li>
+          <li><span>Mobile:</span> Accordion cards with collapsible spec sections and a trim picker for quick navigation</li>
+          <li><span>SEO preserved:</span> All spec data remains in the DOM for search engine crawlers</li>
+          <li><span>&ldquo;Keep Exploring&rdquo; CTAs:</span> Deep links back to the dashboard&rsquo;s Comparison and Side-by-Side tools, pre-filtered to the vehicle</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Mobile Compare Pages -->
+      <div class="update-section">
+        <div class="update-tag tag-new">New</div>
+        <h2>Mobile-Friendly Comparison Pages</h2>
+        <p>The 130+ vehicle-vs-vehicle comparison pages now render beautifully on mobile. The cramped 3-column table is replaced with stacked metric cards showing each vehicle&rsquo;s value with color-coded highlights.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Improvements -->
+      <div class="update-section">
+        <div class="update-tag tag-improved">Improved</div>
+        <h2>Improvements &amp; Enhancements</h2>
+        <ul class="metric-list">
+          <li><span>Full navigation bar everywhere:</span> Vehicle and comparison pages now show the same nav tabs as the dashboard &mdash; jump to any section from any page</li>
+          <li><span>Detail Panel links:</span> &ldquo;View full page&rdquo; link in the spec panel header takes you to the vehicle&rsquo;s dedicated page</li>
+          <li><span>Clickable badges:</span> Vehicle badges in Speed Dating and mobile cards are now linked to their dedicated pages</li>
+          <li><span>6-Seat filter fix:</span> Speed Dating now correctly filters to 6-seat trims only, not all trims from vehicles that offer a 6-seat option</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Bug Fixes -->
+      <div class="update-section">
+        <div class="update-tag tag-fix">Bug Fixes</div>
+        <h2>Fixes &amp; Corrections</h2>
+        <ul class="metric-list">
+          <li><span>Neutral color coding:</span> Seats and Ground Clearance no longer show red/green grading on comparison pages &mdash; these are buyer-preference metrics, not &ldquo;more is better&rdquo;</li>
+          <li><span>Full Monty layout:</span> Fixed clear-filters button overlapping text on smaller screens</li>
+          <li><span>Glossary cleanup:</span> Removed redundant OTD, Make/Model, and Vehicle entries</li>
+          <li><span>Mobile hero image:</span> Fixed aspect ratio and header alignment on mobile</li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="letter-footer">
+      <a href="https://threerowev.com">threerowev.com</a> &mdash; 3-Row AWD Electric SUV Comparison
+    </div>
+  </div>
+</body>
+</html>

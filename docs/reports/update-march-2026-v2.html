@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's New — March 2026 (v2)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 640px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent {
+    color: #58a6ff;
+  }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body {
+    padding: 28px 32px 32px;
+  }
+  .update-section {
+    margin-bottom: 24px;
+  }
+  .update-section:last-child {
+    margin-bottom: 0;
+  }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-major {
+    background: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
+  }
+  .tag-new {
+    background: rgba(56, 139, 253, 0.15);
+    color: #58a6ff;
+  }
+  .tag-improved {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+  .tag-data {
+    background: rgba(232, 179, 75, 0.15);
+    color: #e8b34b;
+  }
+  .update-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 16px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span {
+    color: #e6edf3;
+    font-weight: 500;
+  }
+  .divider {
+    height: 1px;
+    background: #30363d;
+    margin: 24px 0;
+  }
+  .letter-footer {
+    padding: 20px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #484f58;
+  }
+  .highlight-box {
+    background: rgba(168, 85, 247, 0.06);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .highlight-box h2 {
+    color: #c084fc;
+  }
+  .pipeline-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .pipeline-step {
+    background: rgba(168, 85, 247, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #c084fc;
+    white-space: nowrap;
+  }
+  .pipeline-arrow {
+    color: #484f58;
+    font-size: 14px;
+  }
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .stat-box {
+    flex: 1;
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #58a6ff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  .letter-footer a {
+    color: #58a6ff;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+  <div class="letter">
+    <div class="letter-header">
+      <h1>3-Row EV SUV <span class="accent">Comparison</span></h1>
+      <div class="subtitle">What's New &mdash; March 2026 Update #2</div>
+    </div>
+    <div class="letter-body">
+
+      <!-- Hero: Automated Pipeline -->
+      <div class="highlight-box">
+        <div class="update-tag tag-major">Major Feature</div>
+        <h2>Automated Data Pipeline</h2>
+        <p style="color: #8b949e; font-size: 14px; line-height: 1.6;">
+          The app now runs an <strong style="color: #e6edf3;">AI-powered monthly data pipeline</strong> that automatically researches and proposes updates to the dataset &mdash; pre-owned pricing, new vehicle specs, corrections, and even newly announced EVs. Changes are submitted as a pull request for human review before going live.
+        </p>
+        <div class="pipeline-flow">
+          <div class="pipeline-step">AI Research</div>
+          <div class="pipeline-arrow">&rarr;</div>
+          <div class="pipeline-step">Validate</div>
+          <div class="pipeline-arrow">&rarr;</div>
+          <div class="pipeline-step">PR Review</div>
+          <div class="pipeline-arrow">&rarr;</div>
+          <div class="pipeline-step">Auto-Deploy</div>
+        </div>
+        <p style="color: #484f58; font-size: 12px; margin-top: 12px; text-align: center;">
+          5 research phases &middot; Schema validation &middot; OTD recalculation &middot; Gap detection
+        </p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- New Vehicles -->
+      <div class="update-section">
+        <div class="update-tag tag-new">Expanded Coverage</div>
+        <h2>4 New Vehicles Added</h2>
+        <p>The comparison now includes four additional 3-row AWD electric SUVs, significantly broadening the competitive landscape.</p>
+        <ul class="metric-list">
+          <li><span>Cadillac Escalade IQ</span></li>
+          <li><span>Cadillac VISTIQ</span></li>
+          <li><span>Mercedes-Benz EQS SUV</span></li>
+          <li><span>Subaru 3-Row EV</span></li>
+        </ul>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num">75</div>
+            <div class="stat-label">Configurations</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">13</div>
+            <div class="stat-label">Vehicles</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Model Years</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Data Refresh -->
+      <div class="update-section">
+        <div class="update-tag tag-data">Data Refresh</div>
+        <h2>Comprehensive Spec &amp; Pricing Update</h2>
+        <p>A full audit of all vehicle data was performed using live web research. Key updates include:</p>
+        <ul class="metric-list" style="grid-template-columns: 1fr;">
+          <li><span>Tesla Model X</span> &mdash; MSRP reduced to $91,630/$106,630; discontinuation Q2 2026 noted</li>
+          <li><span>Volvo EX90 2026</span> &mdash; Corrected to 800V architecture specs (449/670 HP)</li>
+          <li><span>Toyota Highlander EV</span> &mdash; Updated to MY2027 with confirmed specs (338 HP, 95.8 kWh, 320 mi)</li>
+          <li><span>Pre-owned pricing</span> &mdash; 13 entries refreshed with current market data</li>
+          <li><span>Kia EV9 2026</span> &mdash; GT-Line MSRP updated to $73,395</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Toyota Seating -->
+      <div class="update-section">
+        <div class="update-tag tag-improved">Improved</div>
+        <h2>Toyota Highlander EV Seat Configurations</h2>
+        <p>Added both 6-seat (captain&rsquo;s chairs, standard) and 7-seat (bench, XLE AWD only) configurations for the upcoming 2027 Highlander EV, with full cargo and charging data for each.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Mercedes Seat Configs -->
+      <div class="update-section">
+        <div class="update-tag tag-improved">Improved</div>
+        <h2>Mercedes EQS SUV &mdash; 5 &amp; 7 Seat Options</h2>
+        <p>The Mercedes-Benz EQS SUV is tracked with both 5-seat (standard) and 7-seat (optional 3rd row) configurations across EQS 450+ and EQS 580 trims, with distinct cargo volumes for each layout.</p>
+      </div>
+
+    </div>
+    <div class="letter-footer">
+      3-Row AWD Electric SUV Comparison &mdash; 75 models &middot; 13 vehicles &middot; 4 model years
+    </div>
+  </div>
+</body>
+</html>

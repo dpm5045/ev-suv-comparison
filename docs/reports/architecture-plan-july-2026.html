@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThreeRowEV.com Architecture Assessment &amp; Plan &mdash; July 7, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 760px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent { color: #58a6ff; }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body { padding: 28px 32px 32px; }
+  .update-section { margin-bottom: 26px; }
+  .update-section:last-child { margin-bottom: 0; }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    margin-right: 6px;
+  }
+  .tag-seo        { background: rgba(74, 222, 128, 0.15);  color: #4ade80; }
+  .tag-drift      { background: rgba(244, 63, 94, 0.15);   color: #fb7185; }
+  .tag-data       { background: rgba(56, 139, 253, 0.15);  color: #58a6ff; }
+  .tag-deps       { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+  .tag-hygiene    { background: rgba(251, 191, 36, 0.15);  color: #fbbf24; }
+  .tag-keep       { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+  .tag-priority   { background: rgba(251, 146, 60, 0.15);  color: #fb923c; }
+  .update-section h2 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c9d1d9;
+    margin: 14px 0 6px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #8b949e;
+    margin-bottom: 8px;
+  }
+  .update-section p strong, .metric-list li strong { color: #e6edf3; font-weight: 600; }
+  code {
+    font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: 12.5px;
+    background: rgba(110, 118, 129, 0.15);
+    color: #c9d1d9;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13.5px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span { color: #e6edf3; font-weight: 500; }
+  .divider { height: 1px; background: #30363d; margin: 26px 0; }
+  .highlight-box {
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .highlight-box strong { color: #e6edf3; }
+  .verdict-box {
+    background: rgba(74, 222, 128, 0.06);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 4px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #8b949e;
+  }
+  .verdict-box strong { color: #e6edf3; }
+  .roadmap {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .roadmap-step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .roadmap-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(56, 139, 253, 0.15);
+    color: #58a6ff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .roadmap-step .step-body { font-size: 13.5px; line-height: 1.55; color: #8b949e; }
+  .roadmap-step .step-body strong { color: #e6edf3; display: block; margin-bottom: 2px; font-size: 14px; }
+  .effort {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .effort-s { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+  .effort-m { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+  .effort-l { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+  .letter-footer {
+    padding: 20px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #484f58;
+  }
+  .letter-footer a { color: #58a6ff; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="letter">
+
+  <div class="letter-header">
+    <h1>Architecture Assessment <span class="accent">&amp; Improvement Plan</span></h1>
+    <div class="subtitle">ThreeRowEV.com &middot; July 7, 2026</div>
+  </div>
+
+  <div class="letter-body">
+
+    <div class="update-section">
+      <h2>Overall Verdict</h2>
+      <div class="verdict-box">
+        The architecture is <strong>fundamentally sound and well-matched to the product</strong>: a static JSON dataset rendered through Next.js SSG, URL-driven filter state, and statically generated SEO pages per vehicle and comparison pair. The standout design win is the <code>lib/spec-fields.ts</code> registry &mdash; one file driving five rendering surfaces. Security headers, JSON-LD (Product + FAQ), and the validate/refresh tooling are all above par. The weaknesses are mostly <strong>drift and duplication accumulating around a solid core</strong>.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="update-section">
+      <span class="update-tag tag-seo">Priority 1 &middot; SEO</span>
+      <h2>SEO Architecture &mdash; Highest-Leverage Gap</h2>
+      <p>Given the monetization plan depends on organic traffic, this is where structural work pays off most. It also directly addresses the "discovered &ndash; currently not indexed" issue in Search Console.</p>
+      <ul class="metric-list">
+        <li><span>Promote tabs to real routes.</span> All main tabs live behind <code>?tab=</code> on <code>/</code>, so Google effectively sees one page for Overview, Comparison, Spec &amp; Select, Side-by-Side, and Glossary. Move them to <code>/comparison</code>, <code>/side-by-side</code>, <code>/glossary</code>, etc. with static shells and canonical URLs; keep query params for filters only.</li>
+        <li><span>Fix the frozen sitemap date.</span> <code>app/sitemap.ts</code> hardcodes <code>lastModified: 2026-03-19</code> despite four data refreshes since. Derive it from a <code>last_updated</code> field in <code>ev-data.json</code> and bump it inside the <code>/refresh</code> skill.</li>
+        <li><span>Add <code>/explore</code> to the sitemap</span> &mdash; it's missing entirely.</li>
+      </ul>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-drift">Priority 2 &middot; Drift</span>
+      <h2>Vehicle Visual Identity Defined in Four Diverging Places</h2>
+      <p>Badge and chart colors live in <code>VEHICLE_CLASSES</code> + <code>globals.css</code> (dark and light variants), <code>app/og/route.tsx</code>, <code>DataExplorer.tsx</code>, and <code>MarketInsights.tsx</code> &mdash; the last two with <em>different</em> hex values, and each holding only ~12 of the 20 vehicles. Tesla Model Y L, Toyota Highlander EV, Lexus TZ, and Subaru Getaway silently render gray <code>#888</code> in charts today. This violates the project's own "derive from DATA, no hardcoding" rule in spirit.</p>
+      <div class="highlight-box">
+        <strong>Fix:</strong> a single <code>lib/vehicle-theme.ts</code> exporting <code>{ vehicle &rarr; cssClass, hexDark, hexLight }</code>, with badge CSS emitted as custom properties from the same source. Adding a vehicle becomes a true single-file edit again.
+      </div>
+      <p style="margin-top:10px;">Related: <code>MarketInsights</code> sets Chart.js global defaults to dark-theme colors at module scope (<code>ChartJS.defaults.color = '#9898b0'</code>) &mdash; verify chart legibility in light theme; it is likely broken.</p>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-data">Priority 3 &middot; Data Model</span>
+      <h2>Stringly-Typed Data Taxes Every Consumer</h2>
+      <p>Nearly every numeric field is <code>number | string | null</code>, forcing <code>typeof</code> guards in every renderer, and <code>parsePrice()</code> regex-parses display strings like <code>"$45,000&ndash;$52,000"</code> to do math (duplicated in OverviewTab and ComparisonV2Tab).</p>
+      <ul class="metric-list">
+        <li><span>Store structured values, derive display strings</span> &mdash; e.g. <code>preowned_low</code> / <code>preowned_high</code> numbers plus an optional status note, formatting the range at render time.</li>
+        <li><span>Compute OTD at load time instead of storing it.</span> The formula is fixed &mdash; storing the result is why the checklist has a manual "recalculate OTD" step.</li>
+        <li><span>Derive the <code>preowned</code> array from <code>details</code></span> where duplicated; the sync requirement exists only because of the duplication.</li>
+        <li><span>Run <code>scripts/validate-data.js</code> in the build</span> (prebuild step) so a bad refresh can't deploy. The validator is good; it currently only runs when someone remembers.</li>
+      </ul>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-deps">Priority 4 &middot; Dependencies</span>
+      <h2>Consolidate to One Chart Library</h2>
+      <p>The app ships <strong>both</strong> chart.js + react-chartjs-2 (MarketInsights) <strong>and</strong> @observablehq/plot + full d3 (DataExplorer). The dynamic import softens the blow, but full <code>d3</code> is heavy when Plot already bundles what it needs, and two libraries means two theming systems. Observable Plot can express MarketInsights' bar/scatter charts; converging on one drops a dependency family and halves the chart theming surface.</p>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-hygiene">Priority 5 &middot; Smaller Items</span>
+      <h2>Smaller but Real</h2>
+      <ul class="metric-list">
+        <li><span>Filter history spam:</span> <code>updateParams</code> uses <code>router.push</code> for every filter change, so the back button steps through each checkbox click. Use <code>replace</code> for filter refinement; reserve <code>push</code> for tab changes.</li>
+        <li><span>Bucket filters aren't shareable:</span> MSRP/Range/HP buckets in ComparisonV2Tab are local <code>useState</code> while all other filters are URL params &mdash; those URLs don't round-trip, contradicting the design intent.</li>
+        <li><span>globals.css is a 3,213-line monolith</span> with sections already marked "legacy." Prune dead sections; extract the biggest self-contained blocks before it hits 5k lines.</li>
+        <li><span>No tests despite Playwright being installed.</span> A handful of smoke tests (each tab renders, a vehicle page renders, filters produce results) plus validate-data in CI would catch the real regression classes: data-shape breakage and render drift.</li>
+        <li><span>Repo hygiene:</span> the root has untracked report HTMLs, a PDF, screenshots, and <code>tsconfig.tsbuildinfo</code>. Move reports to <code>docs/</code>, gitignore <code>*.tsbuildinfo</code>.</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="update-section">
+      <span class="update-tag tag-keep">No Change</span>
+      <h2>Explicitly Keep As-Is</h2>
+      <p>The <code>spec-fields.ts</code> registry pattern, URL-as-state for shareable filters, the dual table/card responsive render, SSG vehicle/compare pages with generated FAQ JSON-LD, the security headers in <code>next.config.mjs</code>, and the skills-driven data refresh workflow. The disabled news API stub is the right call versus dead code.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="update-section">
+      <span class="update-tag tag-priority">Roadmap</span>
+      <h2>Sequenced Plan</h2>
+      <div class="roadmap">
+        <div class="roadmap-step">
+          <div class="roadmap-num">1</div>
+          <div class="step-body">
+            <strong>SEO routes + sitemap fixes <span class="effort effort-m">Medium</span></strong>
+            Promote tabs to real routes with canonicals; derive sitemap <code>lastModified</code> from the data; add <code>/explore</code>. Directly serves the traffic goal.
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="roadmap-num">2</div>
+          <div class="step-body">
+            <strong>Vehicle theme consolidation <span class="effort effort-s">Small</span></strong>
+            Single <code>lib/vehicle-theme.ts</code> source of truth for badge classes and chart colors; verify light-theme charts. Cheap, and stops active drift.
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="roadmap-num">3</div>
+          <div class="step-body">
+            <strong>Data model refactor + build-time validation <span class="effort effort-l">Large</span></strong>
+            Structured price fields, computed OTD, derived preowned array, validator wired into the build so the change lands safely.
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="roadmap-num">4</div>
+          <div class="step-body">
+            <strong>Chart library convergence <span class="effort effort-m">Medium</span></strong>
+            Port MarketInsights to Observable Plot (or DataExplorer to Chart.js); drop the other dependency family.
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="roadmap-num">5</div>
+          <div class="step-body">
+            <strong>Hygiene sweep <span class="effort effort-s">Small</span></strong>
+            History push&rarr;replace, bucket filters to URL params, CSS pruning, Playwright smoke tests, repo cleanup.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="letter-footer">
+    Architecture assessment &middot; <a href="https://threerowev.com">threerowev.com</a> &middot; July 7, 2026
+  </div>
+
+</div>
+</body>
+</html>

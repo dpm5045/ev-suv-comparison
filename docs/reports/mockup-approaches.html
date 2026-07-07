@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Insights — Approach Options</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e0e0e8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+
+  .header { text-align: center; padding: 48px 24px 32px; border-bottom: 1px solid #1a1a2e; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .header p { color: #888; font-size: 15px; max-width: 600px; margin: 0 auto; }
+
+  .approaches { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  .approach { background: #111118; border: 1px solid #1e1e30; border-radius: 16px; margin-bottom: 40px; overflow: hidden; }
+  .approach-header { padding: 24px 28px 16px; border-bottom: 1px solid #1a1a2e; }
+  .approach-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #666; margin-bottom: 6px; }
+  .approach-title { font-size: 22px; font-weight: 700; color: #fff; }
+  .approach-subtitle { font-size: 14px; color: #888; margin-top: 4px; }
+  .recommended { display: inline-block; background: #22c55e22; color: #22c55e; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-left: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  .approach-body { padding: 24px 28px; }
+
+  /* Wireframe mockups */
+  .wireframe { background: #0d0d14; border: 1px solid #1a1a2e; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .wireframe-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+  /* Approach A: Curated Story */
+  .story-flow { display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap; }
+  .story-section { flex: 1; min-width: 140px; background: #13131e; border: 1px solid #222238; border-radius: 10px; padding: 14px; text-align: center; position: relative; }
+  .story-section::after { content: '→'; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: #333; font-size: 18px; }
+  .story-section:last-child::after { display: none; }
+  .story-section .num { font-size: 24px; font-weight: 800; color: #6366f1; }
+  .story-section .label { font-size: 12px; color: #aaa; margin-top: 4px; }
+  .story-section .chart-type { font-size: 10px; color: #555; margin-top: 6px; font-style: italic; }
+
+  /* Approach B: Dashboard Grid */
+  .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .dash-cell { background: #13131e; border: 1px solid #222238; border-radius: 8px; padding: 12px; height: 90px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .dash-cell .icon { font-size: 22px; margin-bottom: 4px; opacity: 0.6; }
+  .dash-cell .label { font-size: 11px; color: #888; text-align: center; }
+  .dash-filter-bar { background: #13131e; border: 1px solid #222238; border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; display: flex; gap: 10px; align-items: center; }
+  .dash-filter-pill { background: #1a1a2e; border: 1px solid #2a2a40; border-radius: 20px; padding: 4px 12px; font-size: 11px; color: #888; }
+
+  /* Approach C: Scrollytelling */
+  .scroll-preview { display: flex; flex-direction: column; gap: 8px; }
+  .scroll-frame { display: flex; gap: 16px; align-items: center; background: #13131e; border: 1px solid #222238; border-radius: 10px; padding: 16px; }
+  .scroll-frame.alt { flex-direction: row-reverse; }
+  .scroll-text { flex: 1; }
+  .scroll-text .headline { font-size: 14px; font-weight: 700; color: #ddd; }
+  .scroll-text .body { font-size: 11px; color: #777; margin-top: 4px; }
+  .scroll-chart { flex: 1.2; height: 70px; background: #0d0d14; border: 1px solid #1a1a2e; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .scroll-chart .placeholder { font-size: 11px; color: #444; font-style: italic; }
+  .scroll-indicator { display: flex; justify-content: center; gap: 6px; padding: 8px 0; }
+  .scroll-dot { width: 8px; height: 8px; border-radius: 50%; background: #222238; }
+  .scroll-dot.active { background: #6366f1; }
+
+  /* Pros/Cons */
+  .tradeoffs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .pro, .con { padding: 12px 14px; border-radius: 8px; font-size: 13px; }
+  .pro { background: #22c55e0a; border: 1px solid #22c55e22; }
+  .con { background: #ef444408; border: 1px solid #ef444420; }
+  .pro-label, .con-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .pro-label { color: #22c55e; }
+  .con-label { color: #ef4444; }
+  .pro ul, .con ul { padding-left: 16px; color: #aaa; font-size: 12px; }
+  .pro li, .con li { margin-bottom: 3px; }
+
+  /* Chart type legend */
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #1a1a2e; }
+  .chart-tag { background: #1a1a2e; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #888; }
+
+  @media (max-width: 768px) {
+    .story-flow { flex-direction: column; }
+    .story-section::after { display: none; }
+    .dash-grid { grid-template-columns: repeat(2, 1fr); }
+    .tradeoffs { grid-template-columns: 1fr; }
+    .scroll-frame, .scroll-frame.alt { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Market Insights — 3 Approaches</h1>
+  <p>How should we structure market-level analysis of the 3-Row EV dataset? Each approach uses Chart.js with the same underlying data.</p>
+</div>
+
+<div class="approaches">
+
+  <!-- APPROACH A -->
+  <div class="approach">
+    <div class="approach-header">
+      <div class="approach-label">Approach A <span class="recommended">Recommended</span></div>
+      <div class="approach-title">Curated Market Story</div>
+      <div class="approach-subtitle">A linear sequence of charts that builds a narrative arc about the 3-row EV market</div>
+    </div>
+    <div class="approach-body">
+      <div class="wireframe">
+        <div class="wireframe-label">Page Flow</div>
+        <div class="story-flow">
+          <div class="story-section">
+            <div class="num">1</div>
+            <div class="label">Market Growth</div>
+            <div class="chart-type">Stacked bar</div>
+          </div>
+          <div class="story-section">
+            <div class="num">2</div>
+            <div class="label">Price Landscape</div>
+            <div class="chart-type">Box plot / strip</div>
+          </div>
+          <div class="story-section">
+            <div class="num">3</div>
+            <div class="label">Capability Gains</div>
+            <div class="chart-type">Multi-line</div>
+          </div>
+          <div class="story-section">
+            <div class="num">4</div>
+            <div class="label">Market Trade-offs</div>
+            <div class="chart-type">Scatter / bubble</div>
+          </div>
+          <div class="story-section">
+            <div class="num">5</div>
+            <div class="label">Tech Adoption</div>
+            <div class="chart-type">Stacked area / donut</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tradeoffs">
+        <div class="pro">
+          <div class="pro-label">Strengths</div>
+          <ul>
+            <li>Tells a coherent story — builds understanding progressively</li>
+            <li>Each section directly feeds blog content</li>
+            <li>Opinionated — highlights what matters most</li>
+            <li>Simple to build — static sections, no complex interactivity</li>
+          </ul>
+        </div>
+        <div class="con">
+          <div class="con-label">Trade-offs</div>
+          <ul>
+            <li>Less exploratory — user sees what you curate</li>
+            <li>Adding new analyses means extending the page</li>
+            <li>Long page if many sections</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="chart-legend">
+        <div class="chart-tag">Stacked Bar</div>
+        <div class="chart-tag">Line (Multi-series)</div>
+        <div class="chart-tag">Scatter / Bubble</div>
+        <div class="chart-tag">Stacked Area</div>
+        <div class="chart-tag">Doughnut</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPROACH B -->
+  <div class="approach">
+    <div class="approach-header">
+      <div class="approach-label">Approach B</div>
+      <div class="approach-title">Interactive Dashboard</div>
+      <div class="approach-subtitle">A grid of independent chart widgets with shared global filters</div>
+    </div>
+    <div class="approach-body">
+      <div class="wireframe">
+        <div class="wireframe-label">Layout</div>
+        <div class="dash-filter-bar">
+          <div class="dash-filter-pill">Year: All</div>
+          <div class="dash-filter-pill">Vehicles: All</div>
+          <div class="dash-filter-pill">Price: All</div>
+        </div>
+        <div class="dash-grid">
+          <div class="dash-cell"><div class="icon">📊</div><div class="label">Trims by Year</div></div>
+          <div class="dash-cell"><div class="icon">💰</div><div class="label">Price Distribution</div></div>
+          <div class="dash-cell"><div class="icon">🔋</div><div class="label">Range Trends</div></div>
+          <div class="dash-cell"><div class="icon">⚡</div><div class="label">Charging Speeds</div></div>
+          <div class="dash-cell"><div class="icon">🚗</div><div class="label">Self-Driving Tiers</div></div>
+          <div class="dash-cell"><div class="icon">📦</div><div class="label">Cargo vs Price</div></div>
+        </div>
+      </div>
+
+      <div class="tradeoffs">
+        <div class="pro">
+          <div class="pro-label">Strengths</div>
+          <ul>
+            <li>Highly interactive — users explore their own questions</li>
+            <li>Filters let you slice data any way you want</li>
+            <li>Dense — lots of info at a glance</li>
+          </ul>
+        </div>
+        <div class="con">
+          <div class="con-label">Trade-offs</div>
+          <ul>
+            <li>No narrative — user has to find the story themselves</li>
+            <li>Harder to turn into blog content</li>
+            <li>More complex to build (shared filter state, responsive grid)</li>
+            <li>Overlaps with what the Explorer already does</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPROACH C -->
+  <div class="approach">
+    <div class="approach-header">
+      <div class="approach-label">Approach C</div>
+      <div class="approach-title">Scrollytelling</div>
+      <div class="approach-subtitle">Scroll-driven narrative where charts animate and transition as you read</div>
+    </div>
+    <div class="approach-body">
+      <div class="wireframe">
+        <div class="wireframe-label">Scroll Sections</div>
+        <div class="scroll-preview">
+          <div class="scroll-frame">
+            <div class="scroll-text">
+              <div class="headline">In 2021, your only option was a Tesla Model X.</div>
+              <div class="body">The 3-row EV market barely existed. By 2026, shoppers have 12 vehicles and 48 trims to choose from.</div>
+            </div>
+            <div class="scroll-chart"><div class="placeholder">[ animated bar chart ]</div></div>
+          </div>
+          <div class="scroll-frame alt">
+            <div class="scroll-text">
+              <div class="headline">Prices dropped as competition grew.</div>
+              <div class="body">The median MSRP fell as mainstream brands entered the segment below $60k.</div>
+            </div>
+            <div class="scroll-chart"><div class="placeholder">[ price trend line ]</div></div>
+          </div>
+          <div class="scroll-frame">
+            <div class="scroll-text">
+              <div class="headline">Range went up. Charge times went down.</div>
+              <div class="body">Average range improved 40% while DC fast charging times nearly halved.</div>
+            </div>
+            <div class="scroll-chart"><div class="placeholder">[ dual-axis line ]</div></div>
+          </div>
+        </div>
+        <div class="scroll-indicator">
+          <div class="scroll-dot active"></div>
+          <div class="scroll-dot"></div>
+          <div class="scroll-dot"></div>
+          <div class="scroll-dot"></div>
+          <div class="scroll-dot"></div>
+        </div>
+      </div>
+
+      <div class="tradeoffs">
+        <div class="pro">
+          <div class="pro-label">Strengths</div>
+          <ul>
+            <li>Most engaging — reads like a visual essay</li>
+            <li>Perfect for blog embeds and social sharing</li>
+            <li>Guides users through insights progressively</li>
+          </ul>
+        </div>
+        <div class="con">
+          <div class="con-label">Trade-offs</div>
+          <ul>
+            <li>Significantly more complex to build (scroll observers, animations)</li>
+            <li>Harder to maintain — narrative text baked into the experience</li>
+            <li>Can feel heavy/slow on mobile</li>
+            <li>Overkill for a local-only first version</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

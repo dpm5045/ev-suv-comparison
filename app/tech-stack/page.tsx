@@ -90,7 +90,7 @@ export default function TechStackPage() {
           <h3>Component Structure</h3>
           <pre className={styles.pre}><code>{`Dashboard (state + URL routing)
 ├── Header
-├── NavTabs            tab switcher via ?tab= URL param
+├── DashboardNav       header nav (route links)
 ├── OverviewTab        stats, glance table, charging standards
 ├── ComparisonV2Tab    filterable table + mobile cards
 ├── SideBySideTab      compare up to 3 trims

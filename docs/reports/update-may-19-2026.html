@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThreeRowEV.com May 19 Updates — May 19, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 640px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent { color: #58a6ff; }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body {
+    padding: 28px 32px 32px;
+  }
+  .update-section {
+    margin-bottom: 24px;
+  }
+  .update-section:last-child { margin-bottom: 0; }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-insight {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+  }
+  .tag-data {
+    background: rgba(56, 139, 253, 0.15);
+    color: #58a6ff;
+  }
+  .tag-new {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+  .tag-trend {
+    background: rgba(244, 63, 94, 0.15);
+    color: #fb7185;
+  }
+  .tag-correction {
+    background: rgba(251, 146, 60, 0.15);
+    color: #fb923c;
+  }
+  .update-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span {
+    color: #e6edf3;
+    font-weight: 500;
+  }
+  .divider {
+    height: 1px;
+    background: #30363d;
+    margin: 24px 0;
+  }
+  .letter-footer {
+    padding: 20px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #484f58;
+  }
+  .letter-footer a {
+    color: #58a6ff;
+    text-decoration: none;
+  }
+  .highlight-box {
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.2);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .highlight-box h2 {
+    color: #58a6ff;
+  }
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .stat-box {
+    flex: 1;
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #58a6ff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  .delta-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(30, 30, 40, 0.6);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .delta-card + .delta-card {
+    margin-top: 8px;
+  }
+  .delta-badge {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    line-height: 1;
+  }
+  .delta-badge.down {
+    background: rgba(244, 63, 94, 0.12);
+    color: #fb7185;
+    border: 1px solid rgba(244, 63, 94, 0.25);
+  }
+  .delta-badge.up {
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.25);
+  }
+  .delta-badge.neutral {
+    background: rgba(56, 139, 253, 0.12);
+    color: #58a6ff;
+    border: 1px solid rgba(56, 139, 253, 0.25);
+  }
+  .delta-badge.new {
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.25);
+    font-size: 20px;
+  }
+  .delta-info h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 3px;
+  }
+  .delta-info p {
+    font-size: 12px;
+    color: #8b949e;
+    line-height: 1.4;
+  }
+  .callout {
+    background: rgba(251, 191, 36, 0.06);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #8b949e;
+    line-height: 1.6;
+  }
+  .callout strong { color: #fbbf24; }
+  .callout.blue {
+    background: rgba(56, 139, 253, 0.06);
+    border-color: rgba(56, 139, 253, 0.2);
+  }
+  .callout.blue strong { color: #58a6ff; }
+  .callout.green {
+    background: rgba(74, 222, 128, 0.06);
+    border-color: rgba(74, 222, 128, 0.2);
+  }
+  .callout.green strong { color: #4ade80; }
+  .callout.red {
+    background: rgba(244, 63, 94, 0.06);
+    border-color: rgba(244, 63, 94, 0.2);
+  }
+  .callout.red strong { color: #fb7185; }
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 12px;
+  }
+  .price-table th {
+    text-align: left;
+    padding: 7px 10px;
+    color: #8b949e;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 10px;
+    border-bottom: 1px solid #30363d;
+  }
+  .price-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #21262d;
+    color: #8b949e;
+    vertical-align: middle;
+  }
+  .price-table td.name { color: #e6edf3; font-weight: 500; }
+  .price-table td.old { text-decoration: line-through; color: #484f58; }
+  .price-table td.new { color: #fb7185; font-weight: 600; }
+  .price-table td.new.up { color: #4ade80; }
+  .price-table tr:last-child td { border-bottom: none; }
+  @media (max-width: 480px) {
+    .letter-body { padding: 20px 18px 24px; }
+    .letter-header { padding: 28px 18px 22px; }
+    .stat-row { flex-direction: column; }
+    .delta-card { flex-direction: column; text-align: center; gap: 10px; }
+    .price-table { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+  <div class="letter">
+    <div class="letter-header">
+      <h1>ThreeRowEV.com <span class="accent">May 19 Updates</span></h1>
+      <div class="subtitle">May 19, 2026</div>
+    </div>
+    <div class="letter-body">
+
+      <!-- Overview -->
+      <div class="highlight-box">
+        <div class="update-tag tag-data">Monthly Refresh</div>
+        <h2>Used Market Repricing &middot; New Entrant &middot; Spec Corrections</h2>
+        <p style="color: #8b949e; font-size: 14px; line-height: 1.6;">
+          The EV9&rsquo;s 2024 depreciation story deepened, the Volvo EX90 Performance Ultra took a hard step down in resale value, and the Lexus TZ made its official debut &mdash; 19 car models now tracked, 143 trims total.
+        </p>
+        <div class="stat-row" style="margin-top: 16px;">
+          <div class="stat-box">
+            <div class="stat-num">12</div>
+            <div class="stat-label">Price Updates</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">1</div>
+            <div class="stat-label">New Vehicle</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">7</div>
+            <div class="stat-label">Spec Fixes</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TL;DR -->
+      <div class="update-section">
+        <div class="update-tag tag-data">TL;DR</div>
+        <h2>What You Need to Know</h2>
+        <ul class="metric-list">
+          <li><span>Kia EV9 2024 Wind &amp; Land have crashed</span> &mdash; down 40&ndash;45% from MSRP; Land now starts at $33K used on a ~$58K new car</li>
+          <li><span>Volvo EX90 Performance Ultra repriced down $9K</span> &mdash; KBB resale now $56K; our old range of $62&ndash;72K was stale</li>
+          <li><span>Lexus TZ added to the Watchlist</span> &mdash; officially revealed May 6; luxury sibling to the Highlander EV, on sale end of 2026</li>
+          <li><span>Lucid Gravity GT used prices up</span> &mdash; near-MSRP resale at $97&ndash;115K; limited supply is supporting prices</li>
+          <li><span>Highlander EV XLE range corrected</span> &mdash; XLE AWD is 270 mi, not 320 (that&rsquo;s the Limited)</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- EV9 Depreciation -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Depreciation Alert</div>
+        <h2>Kia EV9 2024: The Collapse Has Spread to Wind &amp; Land</h2>
+        <p>A month ago we noted that 2026 EV9 prices were weak. Now the 2024 cohort is telling a bleaker story. The Wind and Land trims &mdash; which used to anchor the mid-range used market &mdash; are now trading 40&ndash;45% below their original MSRPs. KBB private party values confirm this isn&rsquo;t just a bad-listing problem.</p>
+
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>2024 Trim</th>
+              <th>MSRP (new)</th>
+              <th>Old Range</th>
+              <th>New Range</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name">Light RWD</td>
+              <td>$56,395</td>
+              <td class="old">$24&ndash;31K</td>
+              <td class="new">$27&ndash;34K</td>
+            </tr>
+            <tr>
+              <td class="name">Wind</td>
+              <td>~$60K</td>
+              <td class="old">$36&ndash;43K</td>
+              <td class="new">$31&ndash;39K</td>
+            </tr>
+            <tr>
+              <td class="name">Land</td>
+              <td>~$64K</td>
+              <td class="old">$41&ndash;44K</td>
+              <td class="new">$33&ndash;40K</td>
+            </tr>
+            <tr>
+              <td class="name">GT-Line</td>
+              <td>~$70K</td>
+              <td class="old">$37&ndash;49K</td>
+              <td class="new">$37&ndash;45K</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout red">
+          <strong>What&rsquo;s happening:</strong> The EV9 launched with strong early demand and healthy initial resale. But a combination of rapid MSRP cuts, increased supply, and softening EV appetite has compacted the entire model year&rsquo;s residual values. The 2024 Land &mdash; originally ~$64K new &mdash; now starts at $33K used. That&rsquo;s a 48% drop in under two years.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Volvo EX90 -->
+      <div class="update-section">
+        <div class="update-tag tag-trend">Repriced</div>
+        <h2>Volvo EX90 Performance Ultra: Down $9K on the Low End</h2>
+        <p>The EX90 Performance Ultra launched at nearly $98K new. One year later, KBB pegs resale at $56,200 &mdash; a 37% first-year depreciation. Our previous range of $62&ndash;72K was significantly overstating the market.</p>
+        <div class="delta-card">
+          <div class="delta-badge down" style="font-size: 14px;">&minus;9K</div>
+          <div class="delta-info">
+            <h3>EX90 Performance Ultra (both 6 &amp; 7-seat)</h3>
+            <p>Pre-owned range: $62,000&ndash;$72,000 &rarr; <strong style="color:#fb7185;">$53,000&ndash;$63,000</strong> &nbsp;&middot;&nbsp; KBB resale: $56,200</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Context:</strong> This puts a year-old EX90 Performance Ultra ($53&ndash;63K) now price-competitive with a new Kia EV9 Land or IONIQ 9 SE &mdash; vehicles with arguably more practical features for family buyers. That&rsquo;s a compelling value proposition for used luxury shoppers.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Lexus TZ -->
+      <div class="update-section">
+        <div class="update-tag tag-new">New Vehicle</div>
+        <h2>Lexus TZ Joins the Watchlist</h2>
+        <p>Officially revealed May 6, 2026. The Lexus TZ is the luxury-brand sibling to the Toyota Highlander EV, built on the same Georgetown, KY line. It&rsquo;s the 19th vehicle on the site and 8th on the Watchlist &mdash; expected on sale by end of 2026.</p>
+        <div class="delta-card">
+          <div class="delta-badge new">+</div>
+          <div class="delta-info">
+            <h3>Lexus TZ &mdash; Base (expected)</h3>
+            <p>77 kWh &middot; AWD &middot; Range TBD (~260 est) &middot; MSRP ~$70K+ &middot; NACS &middot; 150 kW DC fast</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge new">+</div>
+          <div class="delta-info">
+            <h3>Lexus TZ &mdash; Select (expected)</h3>
+            <p>95.8 kWh &middot; AWD &middot; 300 mi range &middot; MSRP ~$80K+ &middot; 35 min 10&ndash;80% &middot; Mark Levinson 21-speaker</p>
+          </div>
+        </div>
+        <div class="callout blue">
+          <strong>What&rsquo;s notable:</strong> The TZ fills a gap between the Volvo EX90 (~$60&ndash;80K) and the Lucid Gravity ($100K+). It lands squarely in the premium-but-not-ultra tier. Two things stand out: DIRECT4 AWD is standard on every grade (no base FWD option unlike the Highlander), and there is <strong>no frunk</strong> &mdash; a notable omission Electrek flagged at reveal. Trims and final pricing arrive later in 2026.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Lucid Gravity resale -->
+      <div class="update-section">
+        <div class="update-tag tag-insight">Resale Anomaly</div>
+        <h2>Lucid Gravity GT: Used Prices at (or Above) MSRP</h2>
+        <p>While nearly every other EV on the list is shedding value fast, the Lucid Gravity Grand Touring is doing the opposite. New MSRP is $100,750 &mdash; and used listings are ranging from $96K to $120K, with some examples selling at a modest premium.</p>
+        <div class="delta-card">
+          <div class="delta-badge up">&uarr;</div>
+          <div class="delta-info">
+            <h3>Lucid Gravity Grand Touring</h3>
+            <p>Pre-owned range revised: $95&ndash;110K &rarr; <strong style="color:#4ade80;">$97&ndash;115K</strong> &nbsp;&middot;&nbsp; TrueCar: real listings $96K&ndash;$120K</p>
+          </div>
+        </div>
+        <div class="callout green">
+          <strong>Why:</strong> Supply is genuinely constrained. Lucid has limited production capacity, and early adopters aren&rsquo;t parting with their cars cheaply. This is the only vehicle in the 3-row EV space currently appreciating in the used market.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Spec corrections -->
+      <div class="update-section">
+        <div class="update-tag tag-correction">Spec Corrections</div>
+        <h2>Highlander EV XLE Range Corrected &amp; Rivian 2026 Notes Updated</h2>
+        <p>Two cleanup items from the refresh:</p>
+        <div class="delta-card">
+          <div class="delta-badge neutral" style="font-size: 14px;">270</div>
+          <div class="delta-info">
+            <h3>Toyota Highlander EV, XLE (expected)</h3>
+            <p>range_mi: 320 &rarr; <strong style="color:#58a6ff;">270 miles</strong> &nbsp;&middot;&nbsp; Edmunds/Toyota confirm XLE AWD = 270 mi; 320 is Limited-only</p>
+          </div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-badge neutral" style="font-size: 20px;">&#10003;</div>
+          <div class="delta-info">
+            <h3>Rivian R1S 2026 (all 4 trims)</h3>
+            <p>Notes updated &mdash; removed stale &ldquo;specs TBD&rdquo; language; all specs (range, battery, HP) now confirmed on rivian.com</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>XLE vs. Limited:</strong> Both the XLE AWD and Limited AWD use the 95.8 kWh battery, but the Limited ekes out 320 mi vs. 270 mi for the XLE &mdash; likely due to wheel size differences (the Limited presumably gets more aerodynamic 20&rdquo; wheels vs. larger options on XLE). Not a huge deal for most buyers, but worth knowing before the vehicle goes on sale.
+        </div>
+      </div>
+
+    </div>
+    <div class="letter-footer">
+      <a href="https://threerowev.com">threerowev.com</a> &mdash; 3-Row AWD Electric SUV Comparison
+    </div>
+  </div>
+</body>
+</html>

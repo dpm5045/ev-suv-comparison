@@ -25,3 +25,8 @@ google-credentials.json
 # Playwright
 test-results/
 playwright-report/
+
+*.tsbuildinfo
+
+# Superpowers session scratch
+.superpowers/

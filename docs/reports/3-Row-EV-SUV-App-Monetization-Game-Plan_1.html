@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monetization Game Plan — 3-Row EV SUV Web App</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1729;
+    --navy-mid: #1a2744;
+    --navy-light: #243352;
+    --teal: #0d9488;
+    --teal-bright: #14b8a6;
+    --teal-glow: #0d948833;
+    --teal-pale: #ccfbf1;
+    --slate: #94a3b8;
+    --slate-light: #cbd5e1;
+    --off-white: #f1f5f9;
+    --white: #ffffff;
+    --dark: #1e293b;
+    --warning: #f59e0b;
+    --body-bg: #fafbfd;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--body-bg);
+    color: var(--dark);
+    line-height: 1.7;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--navy);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(13,148,136,0.15), transparent),
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(13,148,136,0.08), transparent);
+    color: var(--white);
+    padding: 6rem 2rem 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal-bright);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.4s;
+  }
+
+  .hero h1 span { color: var(--teal-bright); }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--slate);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.6s;
+  }
+
+  .hero-meta {
+    display: inline-flex;
+    gap: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--slate);
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.8s;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── NAV ─── */
+  .toc {
+    background: var(--white);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.92);
+  }
+
+  .toc-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .toc-inner::-webkit-scrollbar { display: none; }
+
+  .toc a {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--slate);
+    text-decoration: none;
+    padding: 0.4rem 0.85rem;
+    border-radius: 100px;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .toc a:hover {
+    color: var(--teal);
+    background: var(--teal-pale);
+  }
+
+  /* ─── CONTENT ─── */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+  }
+
+  /* ─── SECTIONS ─── */
+  section { margin-bottom: 4rem; }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--teal);
+    display: inline-block;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 2rem 0 0.6rem;
+  }
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--teal);
+    margin: 1.5rem 0 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  p { margin-bottom: 1rem; font-size: 1rem; }
+
+  /* ─── CALLOUT BOX ─── */
+  .callout {
+    background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+    padding: 1.4rem 1.6rem;
+    margin: 1.5rem 0;
+  }
+
+  .callout-title {
+    font-weight: 700;
+    color: var(--teal);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+  }
+
+  .callout p { margin-bottom: 0; color: var(--dark); font-size: 0.95rem; }
+
+  /* ─── PHASE HEADERS ─── */
+  .phase-banner {
+    background: var(--navy);
+    background-image: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 1.6rem 2rem;
+    margin: 3rem 0 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-banner::after {
+    content: '';
+    position: absolute;
+    top: -40%; right: -5%;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, var(--teal-glow), transparent 70%);
+    pointer-events: none;
+  }
+
+  .phase-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--teal-bright);
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .phase-banner h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    color: var(--white);
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+  }
+
+  .phase-timeline {
+    font-size: 0.85rem;
+    color: var(--slate);
+    margin-top: 0.3rem;
+    font-weight: 300;
+  }
+
+  /* ─── LISTS ─── */
+  ul {
+    margin: 0.5rem 0 1.25rem 1.5rem;
+    list-style: none;
+  }
+
+  ul li {
+    position: relative;
+    padding-left: 1.2rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.98rem;
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+
+  ul li strong { color: var(--navy); }
+
+  ol {
+    margin: 0.5rem 0 1.25rem 0;
+    list-style: none;
+    counter-reset: steps;
+  }
+
+  ol li {
+    counter-increment: steps;
+    position: relative;
+    padding-left: 3rem;
+    margin-bottom: 1rem;
+    font-size: 0.98rem;
+  }
+
+  ol li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0; top: 0;
+    width: 2rem; height: 2rem;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--teal-bright);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ─── TABLES ─── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  thead th:last-child { text-align: center; }
+
+  tbody td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  tbody td:last-child {
+    text-align: center;
+    font-weight: 600;
+    color: var(--teal);
+  }
+
+  tbody tr:nth-child(even) { background: #f8fafc; }
+  tbody tr:last-child td { border-bottom: none; }
+
+  /* Revenue total row */
+  .rev-total td {
+    background: var(--teal) !important;
+    color: var(--white) !important;
+    font-weight: 700 !important;
+  }
+
+  /* ─── TECH STACK TABLE ─── */
+  .tech-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--navy);
+  }
+
+  /* ─── RISK CARDS ─── */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+
+  .risk-card {
+    background: var(--white);
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.3rem 1.4rem;
+    transition: box-shadow 0.2s;
+  }
+
+  .risk-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+  .risk-card h4 {
+    margin: 0 0 0.5rem;
+    color: var(--navy);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  .risk-label {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.6rem;
+  }
+
+  .risk-label.risk { background: #fef2f2; color: #dc2626; }
+  .risk-label.mitigation { background: #f0fdf4; color: #16a34a; }
+
+  .risk-card p { font-size: 0.9rem; margin-bottom: 0.5rem; line-height: 1.6; }
+
+  /* ─── FOOTER ─── */
+  .doc-footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--slate);
+    font-size: 0.82rem;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 2rem;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .hero { padding: 4rem 1.5rem 3.5rem; }
+    .hero-meta { flex-direction: column; gap: 0.5rem; }
+    .content { padding: 2rem 1.25rem 4rem; }
+    .phase-banner { padding: 1.2rem 1.4rem; }
+    .risk-grid { grid-template-columns: 1fr; }
+    .toc-inner { gap: 0; }
+  }
+
+  @media print {
+    .toc { display: none; }
+    .hero { padding: 3rem 2rem; }
+    .phase-banner { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<header class="hero">
+  <div class="hero-label">Strategic Roadmap</div>
+  <h1>Monetization <span>Game Plan</span></h1>
+  <p class="hero-sub">Taking your 3-Row EV SUV web app from React prototype to revenue-generating platform in 18 months.</p>
+  <div class="hero-meta">
+    <span>March 2026</span>
+    <span>3 Phases</span>
+    <span>6 Revenue Streams</span>
+  </div>
+</header>
+
+<!-- ═══════ STICKY NAV ═══════ -->
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#summary">Summary</a>
+    <a href="#phase1">Phase 1</a>
+    <a href="#phase2">Phase 2</a>
+    <a href="#phase3">Phase 3</a>
+    <a href="#revenue">Revenue</a>
+    <a href="#tech">Tech Stack</a>
+    <a href="#risks">Risks</a>
+    <a href="#next">Next Steps</a>
+  </div>
+</nav>
+
+<!-- ═══════ CONTENT ═══════ -->
+<main class="content">
+
+  <!-- ── EXECUTIVE SUMMARY ── -->
+  <section id="summary">
+    <h2>Executive Summary</h2>
+    <p>You have a working React app that serves a growing and underserved market: families shopping for 3-row electric SUVs. The EV SUV segment is projected to see significant growth through 2028, and right now, there is no dominant, purpose-built comparison tool for this specific niche. That is your edge.</p>
+    <p>This game plan lays out an 18-month path from your current prototype to a multi-stream revenue platform. The strategy is phased: build audience first through SEO and content, layer in low-friction monetization (affiliate links and ads), then scale into higher-value streams like premium features, newsletter sponsorships, and dealer lead generation.</p>
+
+    <div class="callout">
+      <div class="callout-title">Core Principle</div>
+      <p>Monetize the trust you build, not the traffic you rent. Every phase prioritizes growing an owned audience (email subscribers, return visitors) over short-term ad revenue. Owned audiences compound; rented traffic does not.</p>
+    </div>
+  </section>
+
+  <!-- ── PHASE 1 ── -->
+  <section id="phase1">
+    <div class="phase-banner">
+      <div class="phase-num">Phase 1</div>
+      <h2>Foundation &amp; SEO Growth</h2>
+      <div class="phase-timeline">Timeline: Months 1–4</div>
+    </div>
+
+    <h3>1.1 &nbsp;Technical Readiness</h3>
+    <p>Before monetizing, your React app needs a few upgrades to become search-engine friendly and production-ready.</p>
+
+    <h4>Server-Side Rendering (SSR) or Static Generation</h4>
+    <p>Single-page React apps are largely invisible to search crawlers. Migrate to Next.js (recommended) or Gatsby to enable server-side rendering. This is the single highest-impact technical change for your monetization strategy, because without it, SEO — your primary growth channel — will not work.</p>
+    <ul>
+      <li><strong>Next.js:</strong> Best fit for your use case. Supports SSR, static generation, and API routes. You can incrementally adopt it by wrapping your existing React components.</li>
+      <li><strong>Meta tags &amp; Open Graph:</strong> Add dynamic meta titles and descriptions for every vehicle page (e.g., "2026 Kia EV9 vs. Rivian R1S — Full Comparison"). Use Next.js Head component.</li>
+      <li><strong>Structured data:</strong> Add JSON-LD schema markup for Product and Review types. This enables rich snippets in Google results, dramatically improving click-through rates.</li>
+    </ul>
+
+    <h4>Performance &amp; Analytics</h4>
+    <ul>
+      <li><strong>Core Web Vitals:</strong> Target LCP under 2.5s, CLS under 0.1. Google uses these as ranking signals.</li>
+      <li><strong>Analytics:</strong> Set up Google Analytics 4 and Google Search Console from day one. You need data on which pages attract traffic and which queries bring people in.</li>
+      <li><strong>Plausible or Fathom:</strong> Consider a privacy-friendly analytics tool as a complement. EV buyers tend to be privacy-conscious.</li>
+    </ul>
+
+    <h3>1.2 &nbsp;Content &amp; SEO Strategy</h3>
+    <p>Your app already has structured vehicle data. The goal is to turn that data into search-optimized pages that capture high-intent traffic.</p>
+
+    <h4>Page Architecture</h4>
+    <ul>
+      <li><strong>Individual vehicle pages:</strong> One page per vehicle (e.g., /vehicles/2026-kia-ev9) with specs, pricing, range, charging details, and your analysis. These are your landing pages.</li>
+      <li><strong>Head-to-head comparison pages:</strong> Auto-generated pages for every pair (e.g., /compare/kia-ev9-vs-rivian-r1s). This captures "vs" search queries, which have very high purchase intent.</li>
+      <li><strong>Category ranking pages:</strong> "Best 3-Row EV SUVs for Families," "Most Affordable 3-Row EVs," "Longest Range 3-Row Electric SUVs." These capture broad informational queries.</li>
+      <li><strong>Blog/editorial:</strong> Weekly articles covering new model announcements, price changes, real-world range tests, and charging network updates. Fresh content signals to Google that your site is active and authoritative.</li>
+    </ul>
+
+    <h4>Keyword Targets</h4>
+    <p>Focus on long-tail keywords with clear buyer intent. The 3-row EV SUV space is narrow enough that you can realistically rank on page one within 3–6 months:</p>
+    <ul>
+      <li>"best 3 row electric SUV 2026"</li>
+      <li>"Kia EV9 vs Rivian R1S comparison"</li>
+      <li>"3 row EV SUV range comparison"</li>
+      <li>"cheapest 3 row electric SUV"</li>
+      <li>"electric SUV with third row for families"</li>
+    </ul>
+
+    <h3>1.3 &nbsp;Email List Building</h3>
+    <p>Your email list is the single most valuable asset you will build. It is an audience you own, independent of Google's algorithm or social media reach.</p>
+    <ul>
+      <li><strong>Lead magnet:</strong> Offer a free downloadable "2026 3-Row EV SUV Buyer's Guide" PDF in exchange for email signup. Gate it behind a simple form on every page.</li>
+      <li><strong>Exit-intent popup:</strong> Trigger a signup popup when users move to close the tab. Keep it clean — one appearance per session.</li>
+      <li><strong>Tool:</strong> Use Beehiiv or ConvertKit. Both support free tiers and have built-in monetization features you will use later.</li>
+      <li><strong>Target:</strong> 500 subscribers by month 4.</li>
+    </ul>
+
+    <h3>Phase 1 Milestones</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td>Next.js migration complete</td><td>Month 1–2</td></tr>
+          <tr><td>Individual + comparison pages live</td><td>Month 2</td></tr>
+          <tr><td>Google Search Console indexed pages</td><td>50+ pages</td></tr>
+          <tr><td>Monthly organic visitors</td><td>1,000–3,000</td></tr>
+          <tr><td>Email subscribers</td><td>500</td></tr>
+          <tr><td>Weekly blog cadence established</td><td>1 post/week</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── PHASE 2 ── -->
+  <section id="phase2">
+    <div class="phase-banner">
+      <div class="phase-num">Phase 2</div>
+      <h2>First Revenue Streams</h2>
+      <div class="phase-timeline">Timeline: Months 4–8</div>
+    </div>
+
+    <h3>2.1 &nbsp;Affiliate Marketing</h3>
+    <p>This is your highest-ROI monetization channel. Your users are actively shopping for vehicles worth $45,000–$90,000. Even modest conversion rates generate meaningful affiliate revenue.</p>
+
+    <h4>Affiliate Programs to Join</h4>
+    <ul>
+      <li><strong>Automotive lead gen:</strong> TrueCar, Cars.com, CarGurus, and Edmunds all have affiliate programs that pay $1–$10+ per qualified lead.</li>
+      <li><strong>EV charging:</strong> ChargePoint, Electrify America, and home charger brands (Grizzl-E, JuiceBox, Emporia) offer affiliate commissions on hardware sales. A $500 home charger at 8% commission is $40 per sale.</li>
+      <li><strong>EV accessories:</strong> Floor mats, cargo liners, roof racks, towing accessories. WeatherTech, Amazon Associates, and brand-specific programs.</li>
+      <li><strong>Insurance:</strong> EV-specific insurance comparisons. Policygenius and similar aggregators pay per lead.</li>
+    </ul>
+
+    <h4>Integration Approach</h4>
+    <p>Affiliate links should feel like a natural part of the user experience, not an interruption. Embed them contextually:</p>
+    <ul>
+      <li>"Check current pricing" buttons on vehicle pages that link to dealer inventory via TrueCar/CarGurus</li>
+      <li>"Find charging deals" section with home charger recommendations after range comparisons</li>
+      <li>"Get an EV insurance quote" CTA on cost-of-ownership pages</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-title">Disclosure Requirement</div>
+      <p>FTC requires clear affiliate disclosure. Add a brief, visible statement on pages with affiliate links: "Some links on this page are affiliate links. We may earn a commission at no cost to you." This actually builds trust with your audience.</p>
+    </div>
+
+    <h3>2.2 &nbsp;Display Advertising</h3>
+    <p>Display ads are your secondary revenue stream — reliable but lower-margin than affiliates. Start simple and upgrade as traffic grows.</p>
+    <ul>
+      <li><strong>Under 10K monthly pageviews:</strong> Google AdSense. Easy to set up, low barrier. Expect $3–$8 CPM for automotive content.</li>
+      <li><strong>10K–50K monthly pageviews:</strong> Apply to Ezoic. Better optimization, higher CPMs ($8–$15 range).</li>
+      <li><strong>50K+ monthly pageviews:</strong> Apply to Mediavine or AdThrive. Premium ad networks with CPMs of $15–$30+ for automotive content.</li>
+    </ul>
+    <p>Place ads in non-intrusive positions: sidebar on desktop, between content sections on mobile. Never let ads interfere with your comparison tools or data tables — that is your core value proposition.</p>
+
+    <h3>2.3 &nbsp;Newsletter Monetization</h3>
+    <p>Once your email list passes 1,000 subscribers, you can begin monetizing it.</p>
+    <ul>
+      <li><strong>Sponsored slots:</strong> Beehiiv's ad marketplace connects you with sponsors. A niche EV audience is attractive to charging companies, insurance brands, and accessory makers. Expect $25–$75 per 1,000 subscribers per sponsored send.</li>
+      <li><strong>Affiliate content:</strong> Include affiliate links in your weekly newsletter — new deals, price drops, product reviews.</li>
+      <li><strong>Cadence:</strong> Weekly newsletter with EV SUV news, new model updates, deals, and one featured comparison from your site. Keep it genuinely useful; subscriber retention matters more than any single sponsorship.</li>
+    </ul>
+
+    <h3>Phase 2 Milestones</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td>Monthly organic visitors</td><td>5,000–15,000</td></tr>
+          <tr><td>Email subscribers</td><td>1,000–2,500</td></tr>
+          <tr><td>Affiliate programs active</td><td>3–5 programs</td></tr>
+          <tr><td>Monthly affiliate revenue</td><td>$200–$500</td></tr>
+          <tr><td>Monthly ad revenue</td><td>$50–$300</td></tr>
+          <tr><td>First newsletter sponsor</td><td>Secured</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── PHASE 3 ── -->
+  <section id="phase3">
+    <div class="phase-banner">
+      <div class="phase-num">Phase 3</div>
+      <h2>Scale &amp; Diversify</h2>
+      <div class="phase-timeline">Timeline: Months 8–18</div>
+    </div>
+
+    <h3>3.1 &nbsp;Premium Tier (Freemium Model)</h3>
+    <p>With a proven audience and engagement data, introduce a paid tier that unlocks advanced features. The free version remains the growth engine; premium is the margin engine.</p>
+
+    <h4>Free vs. Premium Feature Split</h4>
+    <p><strong>Free tier</strong> (keeps driving traffic and signups):</p>
+    <ul>
+      <li>Basic vehicle specs and comparisons</li>
+      <li>Top-level range and pricing data</li>
+      <li>General buyer's guide content</li>
+    </ul>
+    <p><strong>Premium tier</strong> ($4.99/month or $39.99/year):</p>
+    <ul>
+      <li>Total Cost of Ownership calculator (financing, insurance, electricity costs, maintenance savings vs. ICE)</li>
+      <li>Depreciation projections by model</li>
+      <li>Personalized recommendations based on driving patterns and family size</li>
+      <li>Saved comparisons and alerts when models get price changes or new reviews</li>
+      <li>Charging route planner integration for road trips with a 3-row EV</li>
+      <li>Ad-free experience</li>
+    </ul>
+
+    <h3>3.2 &nbsp;Dealer Lead Generation</h3>
+    <p>This is the highest-value monetization channel and the long-term play. Dealerships pay $20–$75+ per qualified lead for EV buyers. If your app helps a user narrow their choice and they are ready to contact a dealer, that lead is extremely valuable.</p>
+    <ul>
+      <li><strong>Build a "Find a Dealer" feature:</strong> Let users input their zip code and see local dealers with inventory for their chosen model. Sell these leads directly to dealer groups or through lead aggregators.</li>
+      <li><strong>Start with aggregators:</strong> Partner with existing lead platforms (TrueCar, AutoTrader) initially. Once you have volume, approach dealer groups directly for higher per-lead rates.</li>
+      <li><strong>Volume target:</strong> Even 50 qualified leads per month at $30 each is $1,500/month from this channel alone.</li>
+    </ul>
+
+    <h3>3.3 &nbsp;Sponsored Content &amp; Partnerships</h3>
+    <p>With an established, niche audience, you become attractive to brands in the EV ecosystem.</p>
+    <ul>
+      <li><strong>Sponsored comparisons:</strong> An EV manufacturer pays for a featured, in-depth review of their model. Clearly label as sponsored. Typical rates: $500–$2,000 per sponsored article for a niche site.</li>
+      <li><strong>Charging network partnerships:</strong> ChargePoint, Electrify America, or EVgo sponsors a "Charging Compatibility" section on your site.</li>
+      <li><strong>Brand integrations:</strong> Insurance companies, aftermarket accessory brands, or EV-focused financial products.</li>
+    </ul>
+
+    <h3>3.4 &nbsp;Digital Products</h3>
+    <p>Leverage the data and expertise you have already built into one-time purchase products:</p>
+    <ul>
+      <li><strong>Premium Buyer's Guide PDF:</strong> An in-depth, annually updated guide ($9.99–$19.99). Covers every 3-row EV SUV in detail with expert analysis, comparison matrices, and buying recommendations.</li>
+      <li><strong>Fleet Buyer's Report:</strong> A B2B product for companies evaluating 3-row EVs for fleet use ($49–$99). Includes TCO analysis, maintenance projections, and charging infrastructure requirements.</li>
+    </ul>
+
+    <h3>Phase 3 Milestones</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td>Monthly organic visitors</td><td>20,000–50,000+</td></tr>
+          <tr><td>Email subscribers</td><td>5,000–10,000</td></tr>
+          <tr><td>Premium subscribers</td><td>100–300</td></tr>
+          <tr><td>Monthly total revenue</td><td>$4,800–$16,000</td></tr>
+          <tr><td>Revenue streams active</td><td>4–6 streams</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── REVENUE PROJECTIONS ── -->
+  <section id="revenue">
+    <h2>Revenue Projection Summary</h2>
+    <p>These estimates assume consistent execution on content, SEO, and audience building. Ranges reflect the inherent uncertainty in traffic growth and conversion rates.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Revenue Stream</th><th>Month 6</th><th>Month 12</th><th>Month 18</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Affiliate Links</td><td>$200–$500</td><td>$800–$2,000</td><td>$2,000–$5,000</td></tr>
+          <tr><td>Display Ads</td><td>$50–$150</td><td>$300–$800</td><td>$800–$2,000</td></tr>
+          <tr><td>Newsletter Sponsors</td><td>—</td><td>$200–$600</td><td>$500–$2,000</td></tr>
+          <tr><td>Premium Tier</td><td>—</td><td>$100–$500</td><td>$500–$2,000</td></tr>
+          <tr><td>Dealer Leads</td><td>—</td><td>—</td><td>$1,000–$5,000</td></tr>
+          <tr class="rev-total"><td>TOTAL (est.)</td><td>$250–$650</td><td>$1,400–$3,900</td><td>$4,800–$16,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">Key Assumption</div>
+      <p>These projections assume the 3-row EV SUV market continues to grow with new model launches (Mercedes EQS SUV, Volkswagen ID. Buzz LWB, Hyundai Ioniq 9, etc.), which drives sustained search interest. Each new model launch is a content and traffic opportunity for your site.</p>
+    </div>
+  </section>
+
+  <!-- ── TECH STACK ── -->
+  <section id="tech">
+    <h2>Recommended Tech Stack</h2>
+    <p>Your current React app is the foundation. Here is what to add at each phase:</p>
+
+    <div class="table-wrap">
+      <table class="tech-table">
+        <thead><tr><th>Layer</th><th>Tool</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Framework</td><td>Next.js</td><td>SSR/SSG for SEO</td></tr>
+          <tr><td>Hosting</td><td>Vercel</td><td>Zero-config Next.js deploys, edge CDN</td></tr>
+          <tr><td>Analytics</td><td>GA4 + Search Console</td><td>Traffic and keyword tracking</td></tr>
+          <tr><td>Email</td><td>Beehiiv or ConvertKit</td><td>List building and newsletter monetization</td></tr>
+          <tr><td>Ads</td><td>AdSense → Mediavine</td><td>Display ad management (scale up over time)</td></tr>
+          <tr><td>Payments</td><td>Stripe</td><td>Premium subscriptions</td></tr>
+          <tr><td>CMS</td><td>Sanity or Contentful</td><td>Blog content management</td></tr>
+          <tr><td>Database</td><td>Supabase or PlanetScale</td><td>User accounts, saved comparisons</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── RISKS ── -->
+  <section id="risks">
+    <h2>Risks &amp; Mitigations</h2>
+
+    <div class="risk-grid">
+      <div class="risk-card">
+        <h4>SEO Dependency</h4>
+        <div><span class="risk-label risk">Risk</span></div>
+        <p>Google algorithm changes could reduce organic traffic overnight.</p>
+        <div><span class="risk-label mitigation">Mitigation</span></div>
+        <p>Diversify traffic sources early. Build your email list aggressively (owned channel). Explore YouTube as a secondary content channel — EV comparison videos perform well and drive traffic back to your app.</p>
+      </div>
+      <div class="risk-card">
+        <h4>Niche Size Ceiling</h4>
+        <div><span class="risk-label risk">Risk</span></div>
+        <p>The 3-row EV SUV market is currently small (under 10 models), limiting total addressable search volume.</p>
+        <div><span class="risk-label mitigation">Mitigation</span></div>
+        <p>Expand scope over time to include all EV SUVs, then all EVs. Your comparison engine and brand authority transfer. Start niche, grow broad.</p>
+      </div>
+      <div class="risk-card">
+        <h4>Competitive Entry</h4>
+        <div><span class="risk-label risk">Risk</span></div>
+        <p>A well-funded competitor (Edmunds, KBB) builds a similar tool.</p>
+        <div><span class="risk-label mitigation">Mitigation</span></div>
+        <p>Move fast, build community, and own the niche before incumbents notice. Your advantage is focus and speed — large players optimize for breadth, not depth.</p>
+      </div>
+      <div class="risk-card">
+        <h4>Market Timing</h4>
+        <div><span class="risk-label risk">Risk</span></div>
+        <p>EV adoption slows or 3-row models get delayed.</p>
+        <div><span class="risk-label mitigation">Mitigation</span></div>
+        <p>Your content strategy is flexible. Model delays are themselves newsworthy. The comparison framework works regardless of model count.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEXT STEPS ── -->
+  <section id="next">
+    <h2>Immediate Next Steps</h2>
+    <p>What to do this week to start executing:</p>
+
+    <ol>
+      <li><strong>Set up a Next.js project</strong> and migrate your existing React components into it. Use Claude Code to accelerate this — it handles the boilerplate well.</li>
+      <li><strong>Register a domain</strong> if you haven't already. Something short, memorable, and EV-related.</li>
+      <li><strong>Deploy to Vercel</strong> with your domain. Get the site live and indexable.</li>
+      <li><strong>Submit to Google Search Console</strong> and request indexing of your key pages.</li>
+      <li><strong>Set up Beehiiv</strong> and create your lead magnet PDF. Add a signup form to your app.</li>
+      <li><strong>Apply to 2–3 affiliate programs</strong> (TrueCar, Amazon Associates, one EV charger brand). Get approved before you need them.</li>
+    </ol>
+
+    <div class="callout">
+      <div class="callout-title">Final Thought</div>
+      <p>You are building in a space with high buyer intent, high transaction values, and low competition from purpose-built tools. The market is only going to grow as more 3-row EVs launch. The best time to establish authority in this niche is right now. Execute on the fundamentals — SEO, content, email — and the revenue will follow.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  3-Row EV SUV App — Monetization Game Plan &nbsp;·&nbsp; March 2026
+</footer>
+
+</body>
+</html>
