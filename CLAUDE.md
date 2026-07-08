@@ -61,20 +61,22 @@ When modifying `lib/ev-data.json`, always verify:
 - `details` and `preowned` arrays are in sync (matching `name`, matching `preowned_range`)
 - `count_data` row totals match actual detail entries per vehicle/year
 - `count_totals` sums match `count_data` column sums
-- OTD values recalculated if `msrp`, `destination`, or `preowned_range` changed
+- Never store `otd_new` / `otd_preowned` in the JSON — they are computed at load in `lib/data.ts` (the validator errors if a stored OTD field appears)
 - `VEHICLE_CLASSES` + `CLASS_THEMES` in `lib/vehicle-theme.ts` have entries for any new vehicle
 - CSS class exists in `globals.css` for any new vehicle class (colors must match `CLASS_THEMES`)
 - No hardcoded model/vehicle counts anywhere (always derive from DATA at runtime)
 - `last_updated` (root-level key in `ev-data.json`) bumped to today's date on any data change — drives sitemap `lastModified`
 
-### OTD formula
+### OTD formula (computed at load, never stored)
+
+`otd_new`, `otd_preowned`, `preowned_low`, and `preowned_high` are derived in `lib/data.ts` (`enrich()`) — the JSON stores only `msrp`, `destination`, and `preowned_range`:
 
 ```
 otd_new      = (msrp + destination) * 1.06 + 905
-otd_preowned = price * 1.06 + 905
+otd_preowned = price * 1.06 + 905   (applied to both ends of preowned_range)
 ```
 
-Assumptions (from `ev-data.json` → `assumptions` array): PA sales tax 6%, doc fee $422, title+reg $233, EV road-use fee $250. Total fees = $905.
+Assumptions (from `ev-data.json` → `assumptions` array): PA sales tax 6%, doc fee $422, title+reg $233, EV road-use fee $250. Total fees = $905. The constants live in `lib/data.ts` as `OTD_TAX_RATE` / `OTD_FIXED_FEES`.
 
 ### Protected fields
 

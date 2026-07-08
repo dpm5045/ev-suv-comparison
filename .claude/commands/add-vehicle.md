@@ -40,40 +40,25 @@ Add a new 3-row electric vehicle to the dataset.
 
 8. **`lib/ev-data.json`** — Add to these sections:
    - `details` array: One entry per trim with all fields. Use `null` for genuinely unknown values, `"TBD"` for values that should be available but weren't found.
-   - `preowned` array: One entry per trim with fields: `name`, `vehicle`, `year`, `trim`, `preowned_range`, `otd_preowned`.
+   - `preowned` array: One entry per trim with fields: `name`, `vehicle`, `year`, `trim`, `preowned_range`. (Never store `otd_new`/`otd_preowned` — they are computed at load in `lib/data.ts`.)
    - `count_data`: Add a new row for this vehicle with year columns (`y2021`–`y2026`). Set count to the number of trims available for each year.
    - `count_totals`: Recalculate all year totals and the grand total by summing the `count_data` rows.
 
-9. **`lib/data.ts`** — Add an entry to `VEHICLE_CLASSES`:
+9. **`lib/vehicle-theme.ts`** — Add an entry to `VEHICLE_CLASSES`:
    - Key = the exact vehicle name (e.g., `'BMW iX3'`)
    - Value = CSS class following the `v-{manufacturer}` pattern (e.g., `'v-bmw'`)
    - If the manufacturer already has a class (e.g., `v-cadillac` for Escalade IQ and VISTIQ), reuse it.
+   - If the class is NEW, also add a `CLASS_THEMES` entry (badge bg/fg + chart hex for dark and light themes).
 
-10. **`app/globals.css`** — If a NEW CSS class is needed (manufacturer not yet in the stylesheet), add it near the other `.v-*` classes:
-    ```css
-    .v-manufacturer { background: #XXXXXX; color: #XXXXXX; }
-    ```
-    Use a dark tinted background with a bright accent color, consistent with the existing dark-theme pattern.
+10. **`app/globals.css`** — If a NEW CSS class was added, add matching `.v-manufacturer` badge styles near the other `.v-*` classes. Colors must match the `CLASS_THEMES` entry for both themes.
 
 11. **`lib/ev-data.json` glossary** — Add entries ONLY if this vehicle introduces fields not already defined.
 
-## Calculate OTD
-
-12. For each new detail entry:
-    - If `msrp` is a number: `otd_new = (msrp + destination) * 1.06 + 905` (round to 2 decimals)
-    - If `preowned_range` is parseable: `otd_preowned = "$low_otd - $high_otd"` where each = `price * 1.06 + 905`
-
 ## Validate
 
-13. After all edits, run the validation checks:
-    - No duplicate names
-    - All required fields present
-    - OTD values consistent
-    - Count totals correct
-    - VEHICLE_CLASSES has the new entry
-    - `npm run build` succeeds
+12. After all edits, run `npm run validate` (checks required fields, duplicate names, no stored OTD, count totals), confirm `VEHICLE_CLASSES` has the new entry, and verify `npm run build` succeeds. OTD prices need no manual step — they are computed at load from `msrp`/`destination`/`preowned_range`.
 
-14. Summarize: number of trims added, files modified, any fields left as TBD.
+13. Summarize: number of trims added, files modified, any fields left as TBD.
 
 ## Post-Add
 

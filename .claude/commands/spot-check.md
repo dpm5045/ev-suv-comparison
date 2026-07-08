@@ -38,8 +38,8 @@ Status values:
 6. When applying corrections:
    - Edit `lib/ev-data.json` details entries
    - **Never modify these protected fields**: `seats`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `cargo_floor_width_in`
-   - If `msrp` or `destination` changed, recalculate `otd_new = (msrp + destination) * 1.06 + 905`
-   - If `preowned_range` changed, recalculate `otd_preowned` for both low and high: `price * 1.06 + 905`, format as `"$XX,XXX - $XX,XXX"`. Update both the `details` entry and the matching `preowned` entry.
+   - If `preowned_range` changed, update both the `details` entry and the matching `preowned` entry (they must stay in sync).
+   - Do NOT write `otd_new`/`otd_preowned` — OTD is computed at load in `lib/data.ts` from `msrp`/`destination`/`preowned_range` (the validator errors on stored OTD).
 
 7. Summarize what was changed.
 

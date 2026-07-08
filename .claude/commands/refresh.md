@@ -122,10 +122,7 @@ Only include vehicles with at least "medium" confidence (officially announced wi
 
 After all 5 phases:
 
-1. **Recalculate OTD values** for all entries:
-   - `otd_new = (msrp + destination) * 1.06 + 905` (for entries where msrp is a number)
-   - `otd_preowned`: parse `preowned_range`, apply `price * 1.06 + 905` to both low and high, format as `"$XX,XXX - $XX,XXX"`
-   - Run: `node -e "import{recalculateAllOtd}from'./scripts/lib/otd-calculator.mjs';import{readFileSync,writeFileSync}from'fs';const d=JSON.parse(readFileSync('lib/ev-data.json','utf-8'));recalculateAllOtd(d);writeFileSync('lib/ev-data.json',JSON.stringify(d,null,2)+'\n');console.log('OTD recalculated')"`
+1. **OTD values** — no recalculation step. `otd_new`/`otd_preowned` are computed at load in `lib/data.ts` from `msrp`/`destination`/`preowned_range`. Never write `otd_*` fields to `ev-data.json` (the validator errors on stored OTD).
 
 2. **Update count totals** — sum each year column across `count_data` rows, update `count_totals`.
 
@@ -145,7 +142,6 @@ Phase 4 — New Vehicles: N detected (not auto-added)
 Phase 5 — Gap Filling: N fields filled
 
 Post-processing:
-  - OTD values recalculated
   - Count totals updated
   - Validation: X errors, Y warnings
 

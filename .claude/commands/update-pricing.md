@@ -28,9 +28,7 @@ Only show rows where the delta is significant:
 5. Apply approved updates to `lib/ev-data.json`:
    - Update `preowned_range` in both the `details` array and the `preowned` array (they must stay in sync)
    - Update `msrp` and/or `destination` if changed
-   - Recalculate OTD values for all changed entries:
-     - `otd_new = (msrp + destination) * 1.06 + 905` (round to 2 decimal places)
-     - `otd_preowned`: parse range, apply `price * 1.06 + 905` to both low and high, format as `"$XX,XXX - $XX,XXX"`
+   - Do NOT write `otd_new`/`otd_preowned` — OTD is computed at load in `lib/data.ts` from `msrp`/`destination`/`preowned_range` (the validator errors on stored OTD)
 
 6. Report summary: number of entries updated, average direction of price changes.
 

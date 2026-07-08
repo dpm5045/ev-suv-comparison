@@ -4,19 +4,16 @@ Validate the integrity of `lib/ev-data.json`. This is a **read-only** command �
 
 1. Read `lib/ev-data.json` and `lib/data.ts`.
 
-2. Run all of these checks, reporting each as ERROR (would block a deploy), WARNING (should review), or INFO:
+2. Run `npm run validate` (`scripts/validate-data.js` — also runs automatically as `prebuild`). It covers required fields, duplicate names, the stored-OTD guard, and count totals. Then run/report the remaining checks below, each as ERROR (would block a deploy), WARNING (should review), or INFO:
 
 ### Required fields (ERROR if missing)
-Every entry in `details` must have: `name`, `vehicle`, `year`, `trim`, `seats`, `drivetrain`, `msrp`, `otd_new`, `preowned_range`, `otd_preowned`, `range_mi`, `hp`, `battery_kwh`, `charging_type`.
+Every entry in `details` must have: `name`, `vehicle`, `year`, `trim`, `seats`, `drivetrain`, `msrp`, `preowned_range`, `range_mi`, `hp`, `battery_kwh`, `charging_type`.
 
 ### Duplicate names (WARNING)
 Flag any duplicate `name` values in `details`. Some duplicates are intentional (different seat configs) — note this.
 
-### OTD new consistency (ERROR if >$50 off, WARNING if >$1 off)
-For every detail where `msrp` is a number, recalculate: `otd_new = (msrp + destination) * 1.06 + 905`. Compare against stored `otd_new`.
-
-### OTD preowned consistency (WARNING)
-For every detail with a parseable `preowned_range` (format `"$XX,XXX - $XX,XXX"`), recalculate: `otd_preowned_low = low_price * 1.06 + 905`. Compare against stored `otd_preowned`.
+### No stored OTD (ERROR)
+`otd_new` / `otd_preowned` must NOT appear anywhere in the JSON — they are computed at load in `lib/data.ts` from `msrp`/`destination`/`preowned_range`. Flag any entry (in `details` or `preowned`) that stores them.
 
 ### Numeric range sanity (WARNING)
 - `range_mi`: 150–500
@@ -31,7 +28,7 @@ Sum each year column (`y2021`–`y2026`) across `count_data` rows. Compare again
 Every name in the `preowned` array should have a matching entry in `details`.
 
 ### VEHICLE_CLASSES sync (WARNING)
-- Every vehicle name in `VEHICLE_CLASSES` (in `lib/data.ts`) should have at least one detail entry.
+- Every vehicle name in `VEHICLE_CLASSES` (in `lib/vehicle-theme.ts`) should have at least one detail entry.
 - Every unique `vehicle` value in `details` should have an entry in `VEHICLE_CLASSES`.
 
 ### Data completeness (INFO)
