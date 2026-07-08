@@ -1,10 +1,73 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { DATA, WATCHLIST_VEHICLES } from '@/lib/data'
 import type { DetailRow } from '@/lib/data'
 import { chartColor } from '@/lib/vehicle-theme'
 import { useIsLightTheme } from './useIsLightTheme'
+import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend } from 'chart.js'
+import { Scatter } from 'react-chartjs-2'
+
+ChartJS.register(LinearScale, PointElement, Tooltip, Legend)
+
+// ── Small math helpers ─────────────────────────────────────────────
+
+function median(vals: number[]): number | null {
+  if (!vals.length) return null
+  const s = [...vals].sort((a, b) => a - b)
+  const m = Math.floor(s.length / 2)
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2
+}
+
+function extent(vals: number[]): [number, number] {
+  return [Math.min(...vals), Math.max(...vals)]
+}
+
+const fmtUsd = (v: number) => '$' + Math.round(v).toLocaleString()
+
+// ── Median crosshair + quadrant label plugin ───────────────────────
+
+const quadrantPlugin = {
+  id: 'quadrant',
+  afterDatasetsDraw(chart: any, _args: any, opts: any) {
+    if (!opts || opts.xMed == null || opts.yMed == null) return
+    const { ctx, chartArea, scales } = chart
+    const xp = scales.x.getPixelForValue(opts.xMed)
+    const yp = scales.y.getPixelForValue(opts.yMed)
+    ctx.save()
+    ctx.strokeStyle = opts.lineColor || '#2a3347'
+    ctx.setLineDash([6, 4])
+    ctx.lineWidth = 1
+    ctx.beginPath(); ctx.moveTo(xp, chartArea.top); ctx.lineTo(xp, chartArea.bottom); ctx.stroke()
+    ctx.beginPath(); ctx.moveTo(chartArea.left, yp); ctx.lineTo(chartArea.right, yp); ctx.stroke()
+    ctx.setLineDash([])
+    const labels = opts.labels
+    if (labels) {
+      ctx.fillStyle = opts.labelColor || '#5c6780'
+      ctx.font = 'italic 13px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      // Labels may contain \n (e.g. "Good Price,\nWeak Range") — draw each line
+      const drawLabel = (text: string, x: number, y: number) => {
+        const lines = text.split('\n')
+        const lh = 16
+        lines.forEach((line: string, i: number) => {
+          ctx.fillText(line, x, y + (i - (lines.length - 1) / 2) * lh)
+        })
+      }
+      const midL = (chartArea.left + xp) / 2
+      const midR = (xp + chartArea.right) / 2
+      const midT = (chartArea.top + yp) / 2
+      const midB = (yp + chartArea.bottom) / 2
+      if (labels.topLeft) drawLabel(labels.topLeft, midL, midT)
+      if (labels.topRight) drawLabel(labels.topRight, midR, midT)
+      if (labels.bottomLeft) drawLabel(labels.bottomLeft, midL, midB)
+      if (labels.bottomRight) drawLabel(labels.bottomRight, midR, midB)
+    }
+    ctx.restore()
+  },
+}
+ChartJS.register(quadrantPlugin)
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -143,7 +206,8 @@ function preprocessData(): ProcessedRow[] {
     .map(d => {
       const row: Record<string, unknown> = { ...d }
       for (const f of NUMERIC_FIELDS) {
-        const v = Number(row[f])
+        // Number(null) and Number('') are 0 — treat missing values as null, not $0
+        const v = row[f] == null || row[f] === '' ? NaN : Number(row[f])
         row[f] = Number.isNaN(v) ? null : v
       }
       row.self_driving_score = SELF_DRIVING_TIERS[d.self_driving_tier ?? ''] ?? null
@@ -330,24 +394,6 @@ export default function DataExplorer() {
   const [yAxis, setYAxis] = useState('range_mi')
   const [bubbleSize, setBubbleSize] = useState('none')
 
-  // Libs loaded dynamically
-  const [libs, setLibs] = useState<{ Plot: typeof import('@observablehq/plot'); d3: typeof import('d3') } | null>(null)
-  const chartRef = useRef<HTMLDivElement>(null)
-
-  // Load Plot + d3 on mount
-  useEffect(() => {
-    let cancelled = false
-    async function load() {
-      const [Plot, d3] = await Promise.all([
-        import('@observablehq/plot'),
-        import('d3'),
-      ])
-      if (!cancelled) setLibs({ Plot, d3 })
-    }
-    load()
-    return () => { cancelled = true }
-  }, [])
-
   // Filtered data
   const filtered = allData.filter(d => {
     if (!selectedVehicles.has(d.vehicle)) return false
@@ -358,174 +404,98 @@ export default function DataExplorer() {
     return true
   })
 
-  // Chart rendering
-  const renderChart = useCallback(() => {
-    if (!libs || !chartRef.current) return
-    const { Plot, d3 } = libs
-    const container = chartRef.current
-    container.innerHTML = ''
+  // ── Chart.js data + options ──────────────────────────────────────
 
-    const plotData = filtered.filter(d => d[xAxis] != null && d[yAxis] != null)
+  const plotData = filtered.filter(d => d[xAxis] != null && d[yAxis] != null) as ProcessedRow[]
+  const visibleVehicles = [...new Set(plotData.map(d => d.vehicle))].sort()
+  const isCurrency = (f: string) => ['msrp', 'otd_new', 'destination'].includes(f)
 
-    if (plotData.length === 0) {
-      container.innerHTML = '<p class="explorer-empty">No data for this combination.</p>'
-      return
-    }
+  // Bubble radius: linear scale over the size field's extent → [4, 20] px
+  const sizeVals = bubbleSize !== 'none'
+    ? plotData.filter(d => d[bubbleSize] != null).map(d => d[bubbleSize] as number)
+    : []
+  const [sMin, sMax] = sizeVals.length ? extent(sizeVals) : [0, 1]
+  const radiusFor = (d: ProcessedRow): number => {
+    if (bubbleSize === 'none' || d[bubbleSize] == null) return 6
+    const span = sMax - sMin || 1
+    return 4 + 16 * (((d[bubbleSize] as number) - sMin) / span)
+  }
 
-    const visibleVehicles = [...new Set(plotData.map(d => d.vehicle))].sort()
-    const isCurrency = (f: string) => ['msrp', 'otd_new', 'destination'].includes(f)
-    const xFormat = isCurrency(xAxis) ? d3.format('$,.0f') : undefined
-    const yFormat = isCurrency(yAxis) ? d3.format('$,.0f') : undefined
+  const chartData = {
+    datasets: visibleVehicles.map(v => ({
+      label: v,
+      data: plotData
+        .filter(d => d.vehicle === v)
+        .map(d => ({ x: d[xAxis] as number, y: d[yAxis] as number, row: d })),
+      backgroundColor: chartColor(v, isLight) + 'cc',
+      borderColor: isLight ? '#ffffff' : '#151921',
+      borderWidth: 1,
+      pointRadius: (ctx: any) => (ctx.raw ? radiusFor(ctx.raw.row) : 6),
+      pointHoverRadius: (ctx: any) => (ctx.raw ? radiusFor(ctx.raw.row) + 2 : 8),
+    })),
+  }
 
-    // Read CSS variables from root
-    const rootStyle = getComputedStyle(document.documentElement)
-    const textMuted = rootStyle.getPropertyValue('--text-muted').trim() || '#8b96ad'
-    const surfaceColor = rootStyle.getPropertyValue('--surface').trim() || '#151921'
-    const borderColor = rootStyle.getPropertyValue('--border').trim() || '#2a3347'
-    const textDim = rootStyle.getPropertyValue('--text-dim').trim() || '#5c6780'
+  const xMed = median(plotData.map(d => d[xAxis] as number))
+  const yMed = median(plotData.map(d => d[yAxis] as number))
 
-    const tierLabels = Object.entries(SELF_DRIVING_TIERS)
+  const tierEntries = Object.entries(SELF_DRIVING_TIERS)
+  const tierTick = (v: number) => {
+    const t = tierEntries.find(([, n]) => n === v)
+    return t ? TIER_SHORT[t[0]] : ''
+  }
 
-    const buildAxisConfig = (field: string, fmt: ((n: number) => string) | undefined) => {
-      if (field === 'self_driving_score') {
-        return {
-          label: FIELD_LABELS[field],
-          domain: [2.0, 2.5] as [number, number],
-          ticks: tierLabels.map(([, v]) => v),
-          tickFormat: (v: number) => {
-            const t = tierLabels.find(([, n]) => n === v)
-            return t ? TIER_SHORT[t[0]] : ''
-          },
+  const axisScale = (field: string) => ({
+    type: 'linear' as const,
+    title: { display: true, text: FIELD_LABELS[field] },
+    grid: { color: isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)' },
+    ...(field === 'self_driving_score'
+      ? {
+          min: 2.0,
+          max: 2.5,
+          ticks: { autoSkip: false, callback: tierTick, stepSize: 0.1 },
         }
-      }
-      return { label: FIELD_LABELS[field], tickFormat: fmt }
-    }
+      : {
+          ticks: isCurrency(field)
+            ? { callback: (v: any) => fmtUsd(Number(v)) }
+            : {},
+        }),
+  })
 
-    const xConfig = buildAxisConfig(xAxis, xFormat)
-    const yConfig = buildAxisConfig(yAxis, yFormat)
+  const fmtVal = (field: string, v: unknown) =>
+    isCurrency(field) && typeof v === 'number' ? fmtUsd(v) : String(v)
 
-    const marks: any[] = []
-
-    // Quadrant crosshair lines and labels
-    const xMedian = d3.median(plotData, d => d[xAxis] as number)
-    const yMedian = d3.median(plotData, d => d[yAxis] as number)
-
-    if (xMedian != null && yMedian != null) {
-      marks.push(
-        Plot.ruleX([xMedian], { stroke: borderColor, strokeWidth: 1, strokeDasharray: '6,4' }),
-        Plot.ruleY([yMedian], { stroke: borderColor, strokeWidth: 1, strokeDasharray: '6,4' }),
-      )
-
-      const labels = getQuadrantLabels(xAxis, yAxis)
-      if (labels) {
-        const xMin = d3.min(plotData, d => d[xAxis] as number) ?? 0
-        const xMax = d3.max(plotData, d => d[xAxis] as number) ?? 0
-        const yMin = d3.min(plotData, d => d[yAxis] as number) ?? 0
-        const yMax = d3.max(plotData, d => d[yAxis] as number) ?? 0
-        const xLow  = xMedian - (xMedian - xMin) * 0.5
-        const xHigh = xMedian + (xMax - xMedian) * 0.5
-        const yLow  = yMedian - (yMedian - yMin) * 0.5
-        const yHigh = yMedian + (yMax - yMedian) * 0.5
-
-        const quadrants = [
-          { x: xLow,  y: yHigh, text: labels.topLeft },
-          { x: xHigh, y: yHigh, text: labels.topRight },
-          { x: xLow,  y: yLow,  text: labels.bottomLeft },
-          { x: xHigh, y: yLow,  text: labels.bottomRight },
-        ].filter(q => q.text)
-
-        marks.push(
-          Plot.text(quadrants, {
-            x: 'x', y: 'y', text: 'text', textAnchor: 'middle',
-            fill: textDim, fontStyle: 'italic', fontSize: 13, lineAnchor: 'middle',
-          })
-        )
-      }
-    }
-
-    // Dot mark
-    const dotOpts: Record<string, any> = {
-      x: xAxis,
-      y: yAxis,
-      fill: 'vehicle',
-      fillOpacity: 0.8,
-      stroke: surfaceColor,
-      strokeWidth: 1,
-      tip: true,
-    }
-
-    const buildTitle = (d: ProcessedRow) => {
-      let t = `${d.name}\n${FIELD_LABELS[xAxis]}: ${isCurrency(xAxis) ? '$' + d3.format(',')(d[xAxis] as number) : d[xAxis]}`
-      t += `\n${FIELD_LABELS[yAxis]}: ${isCurrency(yAxis) ? '$' + d3.format(',')(d[yAxis] as number) : d[yAxis]}`
-      return t
-    }
-
-    if (bubbleSize !== 'none') {
-      const sizeData = plotData.filter(d => d[bubbleSize] != null)
-      dotOpts.r = bubbleSize
-      dotOpts.title = (d: ProcessedRow) => {
-        let t = buildTitle(d)
-        if (d[bubbleSize] != null) t += `\n${FIELD_LABELS[bubbleSize]}: ${d[bubbleSize]}`
-        return t
-      }
-
-        const plotConfig: Record<string, any> = {
-        width: container.clientWidth || 900,
-        height: (container.clientWidth || 900) >= 1200 ? 700 : 560,
-        marginTop: 20,
-        marginRight: 20,
-        marginBottom: 45,
-        marginLeft: 60,
-        style: { background: 'transparent', color: textMuted, fontSize: '12px' },
-        grid: true,
-        x: xConfig,
-        y: yConfig,
-        color: {
-          domain: visibleVehicles,
-          range: visibleVehicles.map(v => chartColor(v, isLight)),
+  const chartOptions: any = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    scales: { x: axisScale(xAxis), y: axisScale(yAxis) },
+    plugins: {
+      legend: { display: false }, // page renders its own legend
+      quadrant: {
+        xMed,
+        yMed,
+        labels: xMed != null && yMed != null ? getQuadrantLabels(xAxis, yAxis) : null,
+        lineColor: isLight ? 'rgba(0,0,0,0.15)' : '#2a3347',
+        labelColor: isLight ? '#9098a8' : '#5c6780',
+      },
+      tooltip: {
+        callbacks: {
+          label: (ctx: any) => {
+            const d: ProcessedRow = ctx.raw.row
+            const lines = [
+              d.name,
+              `${FIELD_LABELS[xAxis]}: ${fmtVal(xAxis, d[xAxis])}`,
+              `${FIELD_LABELS[yAxis]}: ${fmtVal(yAxis, d[yAxis])}`,
+            ]
+            if (bubbleSize !== 'none' && d[bubbleSize] != null) {
+              lines.push(`${FIELD_LABELS[bubbleSize]}: ${fmtVal(bubbleSize, d[bubbleSize])}`)
+            }
+            return lines
+          },
         },
-        r: { domain: d3.extent(sizeData, d => d[bubbleSize] as number), range: [4, 20] },
-        marks: [...marks, Plot.dot(plotData, dotOpts)],
-      }
-      const plot = Plot.plot(plotConfig)
-      container.appendChild(plot)
-    } else {
-      dotOpts.r = 6
-      dotOpts.title = buildTitle
-
-        const plotConfig: Record<string, any> = {
-        width: container.clientWidth || 900,
-        height: (container.clientWidth || 900) >= 1200 ? 700 : 560,
-        marginTop: 20,
-        marginRight: 20,
-        marginBottom: 45,
-        marginLeft: 60,
-        style: { background: 'transparent', color: textMuted, fontSize: '12px' },
-        grid: true,
-        x: xConfig,
-        y: yConfig,
-        color: {
-          domain: visibleVehicles,
-          range: visibleVehicles.map(v => chartColor(v, isLight)),
-        },
-        marks: [...marks, Plot.dot(plotData, dotOpts)],
-      }
-      const plot = Plot.plot(plotConfig)
-      container.appendChild(plot)
-    }
-  }, [libs, filtered, xAxis, yAxis, bubbleSize, isLight])
-
-  // Re-render chart when dependencies change
-  useEffect(() => {
-    renderChart()
-  }, [renderChart])
-
-  // Re-render on resize
-  useEffect(() => {
-    function handleResize() { renderChart() }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [renderChart])
+      },
+    },
+  }
 
   // Visible vehicles for legend
   const legendVehicles = [...new Set(filtered.map(d => d.vehicle))].sort()
@@ -659,14 +629,16 @@ export default function DataExplorer() {
 
       {/* Chart */}
       <div className="explorer-chart-area">
-        {!libs ? (
-          <p className="explorer-loading">Loading chart engine...</p>
-        ) : (
-          <div className="explorer-chart-container" ref={chartRef} />
-        )}
+        <div className="explorer-chart-container">
+          {plotData.length === 0 ? (
+            <p className="explorer-empty">No data for this combination.</p>
+          ) : (
+            <Scatter data={chartData} options={chartOptions} />
+          )}
+        </div>
 
         {/* Legend */}
-        {libs && legendVehicles.length > 0 && (
+        {legendVehicles.length > 0 && (
           <div className="explorer-legend">
             {legendVehicles.map(v => (
               <span key={v} className="explorer-legend-item">

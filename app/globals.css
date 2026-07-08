@@ -2917,17 +2917,13 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   font-style: italic;
 }
 
-/* ── Observable Plot tooltip overrides ── */
-.explorer-chart-container [aria-label="tip"] {
-  color: #1a1a2e !important;
-  font-size: 0.82rem;
-  font-family: var(--font) !important;
+/* ── Chart canvas container (Chart.js needs explicit height) ── */
+.explorer-chart-container {
+  position: relative;
+  height: 560px;
 }
-.explorer-chart-container figure [aria-label="tip"] text {
-  fill: #1a1a2e !important;
-}
-.explorer-chart-container figure text {
-  font-family: var(--font) !important;
+@media (min-width: 1200px) {
+  .explorer-chart-container { height: 700px; }
 }
 
 /* ── Explore Teaser Card ── */

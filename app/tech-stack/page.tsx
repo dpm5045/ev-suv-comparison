@@ -48,7 +48,7 @@ export default function TechStackPage() {
             <TechCard label="Framework" value="Next.js 14" detail="App Router with TypeScript. Server & client components, URL-driven filter state via useSearchParams()." />
             <TechCard label="Language" value="TypeScript 5" detail="Typed interfaces for every data shape — DetailRow, PreownedRow, CountRow, GlossaryRow, and more." />
             <TechCard label="Styling" value="Custom CSS" detail="CSS variables for dark/light theming. DM Sans + JetBrains Mono fonts. Responsive dual-render pattern." />
-            <TechCard label="Visualization" value="Chart.js + D3" detail="Chart.js with react-chartjs-2 for bar/line/mixed charts. D3.js and Observable Plot for advanced visuals." />
+            <TechCard label="Visualization" value="Chart.js" detail="Chart.js with react-chartjs-2 for every chart — bar, line, mixed, and the Explore scatter with a custom quadrant plugin." />
             <TechCard label="Deployment" value="Vercel" detail="Zero-config deploys from Git. HSTS, X-Frame-Options: DENY, strict referrer policy, permissions restrictions." />
             <TechCard label="Integrations" value="Google Sheets API" detail="Service-account sync pushes the full dataset to a Google Sheet as a backup & shareable reference." />
           </div>
