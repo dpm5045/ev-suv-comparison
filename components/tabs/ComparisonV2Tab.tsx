@@ -7,7 +7,7 @@ import { fmtMoney, fmtNum } from '@/lib/utils'
 import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
 import { toSlug } from '@/lib/slugs'
-import type { ComparisonFilters } from '../Dashboard'
+import type { ComparisonFilters } from '../filter-types'
 
 /* ── Range bucket definitions ── */
 

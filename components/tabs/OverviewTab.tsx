@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { DATA, WATCHLIST_VEHICLES, GOODBYELIST_VEHICLES, isWatchlistVehicle } from '@/lib/data'
-import type { InsightFilters } from '../Dashboard'
+import type { InsightFilters } from '../filter-types'
 import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
 import ExploreTeaser from '@/components/ExploreTeaser'

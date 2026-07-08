@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import Dashboard from '@/components/Dashboard'
+import HomeClient from '@/components/pages/HomeClient'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getUniqueVehicles } from '@/lib/slugs'
 import { DATA } from '@/lib/data'
@@ -35,7 +35,7 @@ export default function Home() {
         },
       }} />
       <Suspense>
-        <Dashboard />
+        <HomeClient />
       </Suspense>
     </>
   )
