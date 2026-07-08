@@ -129,9 +129,11 @@ After all 5 phases:
 
 2. **Update count totals** — sum each year column across `count_data` rows, update `count_totals`.
 
-3. **Run validation** via `/project:validate` checks (or `node -e` with the validator).
+3. **Bump `last_updated`** — set the root-level `last_updated` field in `lib/ev-data.json` to today's date (`YYYY-MM-DD`). This drives the sitemap `lastModified` for SEO.
 
-4. **Present a consolidated changelog:**
+4. **Run validation** via `/project:validate` checks (or `node -e` with the validator).
+
+5. **Present a consolidated changelog:**
 
 ```
 === Data Refresh Changelog — YYYY-MM-DD ===
@@ -154,11 +156,11 @@ Include the detailed comparison tables from each phase below the summary.
 
 All 5 phases are always listed, even if a phase found 0 changes.
 
-5. **Ask: "Commit these changes?"** (In autonomous mode, changes are already applied to disk — this is the single approval gate.)
+6. **Ask: "Commit these changes?"** (In autonomous mode, changes are already applied to disk — this is the single approval gate.)
    - If approved: create a checkpoint commit with a descriptive message.
    - If rejected: run `git checkout -- lib/ev-data.json` to revert all phase changes.
 
-6. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets. If sync fails, warn the user but do not roll back data changes.
+7. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets. If sync fails, warn the user but do not roll back data changes.
 
 **Error handling:** If a phase fails mid-way (network error, ambiguous data), skip that phase, note the failure in the changelog (e.g., "Phase 3 — Spec Corrections: SKIPPED (network error)"), and continue with remaining phases.
 

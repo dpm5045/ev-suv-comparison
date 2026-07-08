@@ -110,6 +110,8 @@ export interface USEVSalesNotes {
 }
 
 export interface EVData {
+  /** ISO date (YYYY-MM-DD) of the last data refresh — drives sitemap lastModified */
+  last_updated: string
   scope: string
   count_note: string
   count_data: CountRow[]

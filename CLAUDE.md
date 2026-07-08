@@ -65,6 +65,7 @@ When modifying `lib/ev-data.json`, always verify:
 - `VEHICLE_CLASSES` in `data.ts` has entry for any new vehicle
 - CSS class exists in `globals.css` for any new vehicle class
 - No hardcoded model/vehicle counts anywhere (always derive from DATA at runtime)
+- `last_updated` (root-level key in `ev-data.json`) bumped to today's date on any data change — drives sitemap `lastModified`
 
 ### OTD formula
 
