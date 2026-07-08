@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThreeRowEV.com Architecture Improvements &mdash; Shipped July 8, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c0f14;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .letter {
+    max-width: 760px;
+    width: 100%;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .letter-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    padding: 36px 32px 28px;
+    border-bottom: 1px solid #30363d;
+    text-align: center;
+  }
+  .letter-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .letter-header .accent { color: #58a6ff; }
+  .letter-header .subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .letter-body { padding: 28px 32px 32px; }
+  .update-section { margin-bottom: 26px; }
+  .update-section:last-child { margin-bottom: 0; }
+  .update-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    margin-right: 6px;
+  }
+  .tag-seo        { background: rgba(74, 222, 128, 0.15);  color: #4ade80; }
+  .tag-drift      { background: rgba(244, 63, 94, 0.15);   color: #fb7185; }
+  .tag-data       { background: rgba(56, 139, 253, 0.15);  color: #58a6ff; }
+  .tag-deps       { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+  .tag-hygiene    { background: rgba(251, 191, 36, 0.15);  color: #fbbf24; }
+  .tag-merge      { background: rgba(251, 146, 60, 0.15);  color: #fb923c; }
+  .tag-done       { background: rgba(74, 222, 128, 0.15);  color: #4ade80; }
+  .update-section h2 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-bottom: 8px;
+  }
+  .update-section p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #8b949e;
+    margin-bottom: 8px;
+  }
+  .update-section p strong, .metric-list li strong { color: #e6edf3; font-weight: 600; }
+  code {
+    font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: 12.5px;
+    background: rgba(110, 118, 129, 0.15);
+    color: #c9d1d9;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .metric-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+    margin-top: 10px;
+  }
+  .metric-list li {
+    font-size: 13.5px;
+    color: #8b949e;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .metric-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30363d;
+  }
+  .metric-list li span { color: #e6edf3; font-weight: 500; }
+  .divider { height: 1px; background: #30363d; margin: 26px 0; }
+  .highlight-box {
+    background: rgba(56, 139, 253, 0.06);
+    border: 1px solid rgba(56, 139, 253, 0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #8b949e;
+  }
+  .highlight-box strong { color: #e6edf3; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .stat-card {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .stat-card .num { font-size: 20px; font-weight: 700; color: #58a6ff; }
+  .stat-card .lbl { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
+  .footer {
+    padding: 18px 32px;
+    border-top: 1px solid #30363d;
+    text-align: center;
+    font-size: 12px;
+    color: #6e7681;
+  }
+</style>
+</head>
+<body>
+<div class="letter">
+  <div class="letter-header">
+    <h1>Architecture Improvements <span class="accent">Shipped</span></h1>
+    <div class="subtitle">threerowev.com &middot; merged to master &amp; deployed &middot; July 8, 2026</div>
+  </div>
+  <div class="letter-body">
+
+    <div class="update-section">
+      <h2>Overview</h2>
+      <p>
+        The July 7 architecture assessment identified five improvement areas, sequenced by leverage.
+        All five are now complete, merged to <code>master</code> (merge commit <code>d367fb7</code>,
+        15 commits), and verified live on threerowev.com. Net diff: <strong>~7,400 insertions /
+        ~1,900 deletions across 59 files</strong>, with two fewer runtime dependencies.
+      </p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="num">5 / 5</div><div class="lbl">Plan steps done</div></div>
+        <div class="stat-card"><div class="num">9 / 9</div><div class="lbl">Smoke tests pass</div></div>
+        <div class="stat-card"><div class="num">0</div><div class="lbl">Validator errors</div></div>
+        <div class="stat-card"><div class="num">206</div><div class="lbl">Static pages built</div></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="update-section">
+      <span class="update-tag tag-seo">1 &middot; SEO Routes</span>
+      <h2>Dashboard tabs promoted to real routes</h2>
+      <p>
+        The site was a single-page dashboard driven by <code>?tab=</code> URL params &mdash; invisible
+        to search engines as distinct pages. Each tab is now a real route
+        (<code>/comparison</code>, <code>/side-by-side</code>, <code>/spec-select</code>,
+        <code>/glossary</code>, <code>/explore</code>) with its own metadata and canonical URL,
+        built as a thin server page wrapping a small client component.
+      </p>
+      <ul class="metric-list">
+        <li><span>301 redirects</span> from all old <code>?tab=</code> URLs; internal links updated.</li>
+        <li>Sitemap <span>lastModified</span> now driven by the dataset's <code>last_updated</code> field.</li>
+        <li>Dead <code>Dashboard</code> / <code>NavTabs</code> components deleted.</li>
+      </ul>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-drift">2 &middot; Visual Identity</span>
+      <h2>Vehicle theming single-sourced</h2>
+      <p>
+        Badge CSS classes and chart colors were defined in four diverging places. Now
+        <code>lib/vehicle-theme.ts</code> is the single source of truth
+        (<code>VEHICLE_CLASSES</code> + <code>CLASS_THEMES</code>), re-exported for existing imports.
+        Also fixed light-theme chart colors and gray chart fallbacks.
+      </p>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-data">3 &middot; Data Model</span>
+      <h2>Computed prices + build-time validation</h2>
+      <p>
+        Out-the-door prices (<code>otd_new</code>, <code>otd_preowned</code>) and pre-owned
+        low/high were stored in <code>ev-data.json</code> and could drift from MSRP. They are now
+        computed at load in <code>lib/data.ts</code> from <code>msrp</code> /
+        <code>destination</code> / <code>preowned_range</code>, with named tax/fee constants.
+      </p>
+      <ul class="metric-list">
+        <li>A validator (<code>scripts/validate-data.js</code>) is <span>wired into the build</span> and errors if a stored OTD field ever reappears.</li>
+        <li>Also checks required fields, count-total consistency, preowned&harr;details sync, duplicate names.</li>
+      </ul>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-deps">4 &middot; Chart Convergence</span>
+      <h2>One chart library: Chart.js</h2>
+      <p>
+        The Explore scatter used Observable Plot + d3 while every other chart used Chart.js.
+        <code>DataExplorer</code> was ported to Chart.js / react-chartjs-2 with a custom plugin
+        reproducing the median crosshair and quadrant labels. <code>@observablehq/plot</code>,
+        <code>d3</code>, and <code>@types/d3</code> removed entirely.
+      </p>
+      <div class="highlight-box">
+        <strong>Bug found along the way:</strong> <code>Number(null)</code> coerced missing prices
+        to <code>0</code>, plotting phantom $0 dots on price axes. Pre-existing; fixed and verified
+        with screenshots in both themes.
+      </div>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-hygiene">5 &middot; Hygiene</span>
+      <h2>Housekeeping sweep</h2>
+      <ul class="metric-list">
+        <li>Filter clicks use <span>router.replace()</span> &mdash; no more history-stack spam; filters live in shareable URL params.</li>
+        <li><span>Playwright smoke harness</span> covering all nine routes, with a <code>PW_PORT</code> override to run beside a busy dev server.</li>
+        <li>Report files organized into <code>docs/</code>; dead CSS and code pruned.</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="update-section">
+      <span class="update-tag tag-merge">Merge</span>
+      <h2>Reconciling parallel Tesla Model Y L additions</h2>
+      <p>
+        While the branch was in flight, PR #9 landed on master adding the Tesla Model Y L by
+        graduating the &ldquo;Model Y Long (Asia)&rdquo; watchlist placeholder &mdash; the branch had
+        added Model Y L independently and kept the placeholder. Resolution:
+      </p>
+      <ul class="metric-list">
+        <li>Kept the branch's <span>richer, source-cited Model Y L row</span> (new computed-OTD schema).</li>
+        <li>Adopted the PR's <span>removal of the placeholder</span> everywhere: details, preowned, counts, watchlist array, theme map, narrative strings.</li>
+        <li>Dataset reconciled at <span>141 trims across 19 models</span>; fixed the Model Y L count row (was all-zero).</li>
+      </ul>
+    </div>
+
+    <div class="update-section">
+      <span class="update-tag tag-done">Verified</span>
+      <h2>Deployment confirmed live</h2>
+      <ul class="metric-list">
+        <li>Vercel deployment status on <code>d367fb7</code>: <span>success</span>.</li>
+        <li>Sitemap <code>lastmod</code> = 2026-07-08 &mdash; the exact stamp from the merge.</li>
+        <li><code>/vehicles/tesla-model-y-l</code> &rarr; 200; retired placeholder page &rarr; 404.</li>
+        <li><code>/explore</code> live on Chart.js: &ldquo;132 trims across 13 vehicles&rdquo; (watchlist correctly excluded).</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="footer">
+    Architecture improvements &middot; threerowev.com &middot; merged &amp; deployed July 8, 2026
+  </div>
+</div>
+</body>
+</html>
