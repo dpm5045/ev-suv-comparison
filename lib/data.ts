@@ -186,7 +186,6 @@ export const WATCHLIST_VEHICLES = [
   'Subaru Getaway',
   'BMW iX7',
   'Genesis GV90',
-  'Tesla Model Y Long (Asia)',
   'Faraday Future FX Super One',
 ] as const satisfies readonly string[]
 

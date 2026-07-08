@@ -40,7 +40,6 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'Lucid Gravity': 'v-lucid',
   'Rivian R1S': 'v-rivian',
   'Tesla Model X': 'v-tesla',
-  'Tesla Model Y Long (Asia)': 'v-tesla',
   'Tesla Model Y (3-Row)': 'v-tesla',
   'Tesla Model Y L': 'v-tesla-yl',
   'VinFast VF9': 'v-vinfast',
