@@ -12,12 +12,6 @@ import { toSlug } from '@/lib/slugs'
 
 /* ── helpers ── */
 
-function parsePrice(s: string | null | undefined): number | null {
-  if (!s) return null
-  const m = s.replace(/[$,]/g, '').match(/[\d.]+/)
-  return m ? parseFloat(m[0]) : null
-}
-
 type Row = (typeof DATA.details)[number]
 type NumRow<K extends keyof Row> = Row & { [P in K]: number }
 
@@ -76,7 +70,7 @@ function tilesForRange(d: Row[], isPreowned: boolean): Tile[] {
   if (isPreowned) {
     // Best range value using pre-owned price
     const withPrice = rows.filter((r) => hasPreowned(r))
-    const priced = withPrice.map((r) => ({ ...r, prePrice: parsePrice(r.preowned_range)! })).filter((r) => r.prePrice > 0)
+    const priced = withPrice.map((r) => ({ ...r, prePrice: r.preowned_low! })).filter((r) => r.prePrice > 0)
     if (priced.length) {
       const best = priced.reduce((a, b) => (a.range_mi / a.prePrice > b.range_mi / b.prePrice ? a : b))
       tiles.push({ label: 'Best Range Value', value: `${best.range_mi} mi`, detail: `${best.vehicle} ${best.trim} \u2014 ~$${Math.round(best.prePrice / 1000)}k pre-owned` })
@@ -121,7 +115,7 @@ function tilesForPower(d: Row[], isPreowned: boolean): Tile[] {
   }
   if (isPreowned) {
     const withPrice = rows.filter((r) => hasPreowned(r))
-    const priced = withPrice.map((r) => ({ ...r, prePrice: parsePrice(r.preowned_range)! })).filter((r) => r.prePrice > 0)
+    const priced = withPrice.map((r) => ({ ...r, prePrice: r.preowned_low! })).filter((r) => r.prePrice > 0)
     if (priced.length) {
       // Best value = lowest (price × 0-60) product — fast AND cheap
       const best = priced.reduce((a, b) => (a.zero_to_60_sec * a.prePrice < b.zero_to_60_sec * b.prePrice ? a : b))
@@ -149,7 +143,7 @@ function tilesForCharging(d: Row[], isPreowned: boolean): Tile[] {
       const c = r.charging_type.toLowerCase()
       return c.includes('nacs') && !c.startsWith('ccs') && hasPreowned(r)
     })
-    const priced = nacsWithPrice.map((r) => ({ ...r, prePrice: parsePrice(r.preowned_range)! })).filter((r) => r.prePrice > 0)
+    const priced = nacsWithPrice.map((r) => ({ ...r, prePrice: r.preowned_low! })).filter((r) => r.prePrice > 0)
     if (priced.length) {
       const best = priced.reduce((a, b) => (a.prePrice < b.prePrice ? a : b))
       tiles.push({ label: 'Best NACS Value', value: `~$${Math.round(best.prePrice / 1000)}k`, detail: `${best.vehicle} ${best.year} ${best.trim} \u2014 pre-owned` })
@@ -177,7 +171,7 @@ function tilesForSixSeat(d: Row[], isPreowned: boolean): Tile[] {
   }
   if (isPreowned) {
     const withPrice = sixSeatRows.filter((r) => hasPreowned(r))
-    const priced = withPrice.map((r) => ({ ...r, prePrice: parsePrice(r.preowned_range)! })).filter((r) => r.prePrice > 0)
+    const priced = withPrice.map((r) => ({ ...r, prePrice: r.preowned_low! })).filter((r) => r.prePrice > 0)
     if (priced.length) {
       const cheapest = priced.reduce((a, b) => (a.prePrice < b.prePrice ? a : b))
       tiles.push({ label: 'Cheapest 6-Seat', value: `~$${Math.round(cheapest.prePrice / 1000)}k`, detail: `${cheapest.vehicle} ${cheapest.trim} \u2014 pre-owned` })
@@ -216,7 +210,7 @@ function tilesForSelfDriving(d: Row[], isPreowned: boolean): Tile[] {
   if (isPreowned) {
     const priced = withTier
       .filter((r) => hasPreowned(r))
-      .map((r) => ({ ...r, prePrice: parsePrice(r.preowned_range)! }))
+      .map((r) => ({ ...r, prePrice: r.preowned_low! }))
       .filter((r) => r.prePrice > 0)
     if (priced.length) {
       const maxTier = Math.max(...priced.map((r) => selfDrivingOrdinal(r.self_driving_tier)))
@@ -413,17 +407,17 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   const activePref2 = pref2
 
   const budgetBuckets = isPreowned ? PREOWNED_BUDGET_BUCKETS : NEW_BUDGET_BUCKETS
-  const bucketFilter = budgetBuckets.find((b) => b.id === activeBudget)?.filter ?? (() => true)
 
   /* --- filtered details --- */
   const filteredDetails = useMemo(() => {
+    const bucketFilter = budgetBuckets.find((b) => b.id === activeBudget)?.filter ?? (() => true)
     let rows = DATA.details as Row[]
     if (isPreowned) {
       // Only trims with valid pre-owned data
       rows = rows.filter(hasPreowned)
       if (activeBudget !== 'all') {
         rows = rows.filter((r) => {
-          const price = parsePrice(r.preowned_range)
+          const price = r.preowned_low
           return price !== null && bucketFilter(price)
         })
       }
@@ -436,7 +430,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       rows = rows.filter((r) => r.seats === 6)
     }
     return rows
-  }, [activeCondition, activeBudget, bucketFilter, isPreowned, activePref1, activePref2])
+  }, [activeBudget, budgetBuckets, isPreowned, activePref1, activePref2])
 
   /* --- dynamic tiles --- */
   const tiles = useMemo(() => {
@@ -451,7 +445,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         detail: `across ${vehicles.length} vehicle${vehicles.length === 1 ? '' : 's'}`,
         category: 'count',
       })
-      const prices = d.map((r) => parsePrice(r.preowned_range)).filter((p): p is number => p !== null && p > 0)
+      const prices = d.map((r) => r.preowned_low).filter((p): p is number => p !== null && p > 0)
       if (prices.length) {
         result.push({
           label: 'Pre-Owned Price Range',
@@ -503,11 +497,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
       const ranges = rows.map((r) => r.range_mi).filter((x) => typeof x === 'number') as number[]
       const accelTimes = rows.map((r) => r.zero_to_60_sec).filter((x) => typeof x === 'number') as number[]
       const bats = rows.map((r) => r.battery_kwh).filter((x) => typeof x === 'number') as number[]
-      const preLows = rows.map((r) => parsePrice(r.preowned_range)).filter((x) => x !== null) as number[]
-      const preHighs = rows.map((r) => {
-        const parts = (r.preowned_range || '').split(/\s*[-\u2013]\s*/)
-        return parts.length > 1 ? parsePrice(parts[1]) : parsePrice(r.preowned_range)
-      }).filter((x) => x !== null) as number[]
+      const preLows = rows.map((r) => r.preowned_low).filter((x) => x !== null) as number[]
+      const preHighs = rows.map((r) => r.preowned_high).filter((x) => x !== null) as number[]
       const cargo3s = rows.map((r) => r.cargo_behind_3rd_cu_ft).filter((x) => typeof x === 'number') as number[]
       const cargo2s = rows.map((r) => r.cargo_behind_2nd_cu_ft).filter((x) => typeof x === 'number') as number[]
       const dcChargeTimes = rows.map((r) => r.dc_fast_charge_10_80_min).filter((x) => typeof x === 'number') as number[]

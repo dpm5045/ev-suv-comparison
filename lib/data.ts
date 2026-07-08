@@ -32,9 +32,14 @@ export interface DetailRow {
   drivetrain: string
   msrp: number | string | null
   destination: number | null
+  /** Computed at load — (msrp + destination) * 1.06 + 905; 'TBD' passthrough; null when N/A */
   otd_new: number | string | null
   preowned_range: string
+  /** Computed at load from preowned_range; sentinel text passed through */
   otd_preowned: string
+  /** Parsed from preowned_range at load; null when no used market */
+  preowned_low: number | null
+  preowned_high: number | null
   self_driving: string
   sae_level: 2 | 3 | 4 | 5 | null
   self_driving_tier: 'Basic L2' | 'Advanced L2' | 'L2+ Hands-Free' | 'L2+ Point-to-Point' | null
@@ -80,7 +85,6 @@ export interface PreownedRow {
   year: number
   trim: string
   preowned_range: string
-  otd_preowned: string
 }
 
 export interface GlossaryRow {
@@ -124,7 +128,56 @@ export interface EVData {
   assumptions: AssumptionRow[]
 }
 
-export const DATA = rawData as EVData
+/* ── Derived pricing (computed at load; formula documented in CLAUDE.md) ── */
+
+export const OTD_TAX_RATE = 1.06   // PA sales tax 6%
+export const OTD_FIXED_FEES = 905  // doc $422 + title/reg $233 + EV road-use fee $250
+
+/** Raw JSON row: DetailRow minus the fields computed at load. */
+type RawDetailRow = Omit<DetailRow, 'otd_new' | 'otd_preowned' | 'preowned_low' | 'preowned_high'>
+
+interface RawEVData extends Omit<EVData, 'details'> {
+  details: RawDetailRow[]
+}
+
+/** Parse "$49,000 - $60,000" / "$52,000" → { low, high }; null for N/A/TBD text. */
+export function parsePriceRange(s: string | null | undefined): { low: number; high: number } | null {
+  if (!s) return null
+  const matches = s.replace(/,/g, '').match(/\$\s*\d+(?:\.\d+)?/g)
+  if (!matches || matches.length === 0) return null
+  const vals = matches.map(m => parseFloat(m.replace(/[^\d.]/g, '')))
+  return { low: Math.min(...vals), high: Math.max(...vals) }
+}
+
+function otdPreownedPrice(price: number): number {
+  return Math.round(price * OTD_TAX_RATE + OTD_FIXED_FEES)
+}
+
+function enrich(r: RawDetailRow): DetailRow {
+  const range = parsePriceRange(r.preowned_range)
+  const otd_new =
+    typeof r.msrp === 'number' && typeof r.destination === 'number'
+      ? (r.msrp + r.destination) * OTD_TAX_RATE + OTD_FIXED_FEES
+      : typeof r.msrp === 'string' && r.msrp.toUpperCase().includes('TBD')
+        ? 'TBD'
+        : null
+  const otd_preowned = range
+    ? range.low === range.high
+      ? `$${otdPreownedPrice(range.low).toLocaleString()}`
+      : `$${otdPreownedPrice(range.low).toLocaleString()} - $${otdPreownedPrice(range.high).toLocaleString()}`
+    : r.preowned_range || ''
+  return {
+    ...r,
+    otd_new,
+    otd_preowned,
+    preowned_low: range ? range.low : null,
+    preowned_high: range ? range.high : null,
+  }
+}
+
+const raw = rawData as unknown as RawEVData
+
+export const DATA: EVData = { ...raw, details: raw.details.map(enrich) }
 
 /** Vehicles announced but not yet available in the US market */
 export const WATCHLIST_VEHICLES = [

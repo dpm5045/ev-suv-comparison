@@ -6,11 +6,16 @@ const warnings = [];
 const info = [];
 
 // === Required fields ===
-const required = ['name','vehicle','year','trim','seats','drivetrain','msrp','otd_new','preowned_range','otd_preowned','range_mi','hp','battery_kwh','charging_type'];
+// otd_new / otd_preowned are computed at load in lib/data.ts — not stored, not required.
+const required = ['name','vehicle','year','trim','seats','drivetrain','msrp','preowned_range','range_mi','hp','battery_kwh','charging_type'];
+// Pre-release rows (2027+, "(expected)" trims) and non-US rows (Asia-market)
+// may legitimately lack US pricing/specs.
+const isPreRelease = d => d.year >= 2027 || /\(expected\)/i.test(d.trim || '') || /\bAsia\b/i.test(d.trim || '');
 data.details.forEach(d => {
   required.forEach(f => {
     if (d[f] === null || d[f] === undefined || d[f] === '') {
-      errors.push('Missing required field [' + f + ']: ' + d.name);
+      if (isPreRelease(d)) warnings.push('Missing field on pre-release row [' + f + ']: ' + d.name);
+      else errors.push('Missing required field [' + f + ']: ' + d.name);
     }
   });
 });
@@ -22,30 +27,12 @@ Object.entries(nameCount).filter(([k,v])=>v>1).forEach(([k,v]) => {
   warnings.push('Duplicate name (x'+v+'): ' + k);
 });
 
-// === OTD new consistency ===
+// === Stored OTD guard (OTD must NOT be stored — computed at load in lib/data.ts) ===
 data.details.forEach(d => {
-  if (typeof d.msrp === 'number' && typeof d.destination === 'number') {
-    const expected = Math.round(((d.msrp + d.destination) * 1.06 + 905) * 10) / 10;
-    const stored = Math.round((d.otd_new||0) * 10) / 10;
-    const diff = Math.abs(expected - stored);
-    if (diff > 10) errors.push('OTD new mismatch [expected ' + expected + ' got ' + stored + ']: ' + d.name);
-    else if (diff > 1) warnings.push('OTD new small diff [expected ' + expected + ' got ' + stored + ']: ' + d.name);
-  }
+  if ('otd_new' in d || 'otd_preowned' in d) errors.push('Stored OTD field found (must be computed, not stored): ' + d.name);
 });
-
-// === OTD preowned consistency ===
-const rangeRe = /\$([\d,]+)\s*-\s*\$([\d,]+)/;
-data.details.forEach(d => {
-  const m = (d.preowned_range||'').match(rangeRe);
-  if (!m) return;
-  const low = parseInt(m[1].replace(/,/g,''));
-  const expLow = Math.round(low * 1.06 + 905);
-  const storedM = (d.otd_preowned||'').match(/\$([\d,]+)/);
-  if (!storedM) return;
-  const storedLow = parseInt(storedM[1].replace(/,/g,''));
-  if (Math.abs(expLow - storedLow) > 5) {
-    warnings.push('OTD preowned mismatch [low: expected ' + expLow + ' got ' + storedLow + ']: ' + d.name);
-  }
+data.preowned.forEach(p => {
+  if ('otd_preowned' in p) errors.push('Stored OTD field found in preowned (must be computed, not stored): ' + p.name);
 });
 
 // === Numeric range sanity ===
@@ -91,3 +78,4 @@ if (errors.length) { console.log('\nERRORS:'); errors.forEach(e => console.log('
 if (warnings.length) { console.log('\nWARNINGS:'); warnings.forEach(w => console.log('  - ' + w)); }
 if (info.length) { console.log('\nINFO:'); info.forEach(i => console.log('  - ' + i)); }
 if (errors.length === 0) console.log('\nAll checks passed (no errors).');
+process.exit(errors.length ? 1 : 0);

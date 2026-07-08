@@ -7,12 +7,6 @@ import VehicleBadge from '../VehicleBadge'
 
 /* ── helpers ── */
 
-function parsePrice(s: string | null | undefined): number | null {
-  if (!s) return null
-  const m = s.replace(/[$,]/g, '').match(/[\d.]+/)
-  return m ? parseFloat(m[0]) : null
-}
-
 function hasPreowned(r: Row): boolean {
   const p = r.preowned_range || ''
   return p.length > 0 && p.indexOf('N/A') < 0 && p.indexOf('No ') < 0
@@ -88,7 +82,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
         ],
         test: (r, sel) => {
           if (!sel.length) return true
-          const v = parsePrice(r.preowned_range)
+          const v = r.preowned_low
           if (v === null) return false
           return sel.some(id => {
             if (id === 'under40') return v < 40000

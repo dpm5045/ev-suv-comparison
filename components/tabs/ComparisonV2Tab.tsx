@@ -124,12 +124,6 @@ const FLOOR_BUCKETS: Bucket[] = [
   { label: '50"+', test: (v) => v > 50 },
 ]
 
-function parsePreownedLow(s: string | null | undefined): number | null {
-  if (!s) return null
-  const m = s.replace(/[$,]/g, '').match(/[\d.]+/)
-  return m ? parseFloat(m[0]) : null
-}
-
 function matchesBuckets(value: number | string | null | undefined, buckets: Bucket[], selectedLabels: string[]): boolean {
   if (selectedLabels.length === 0) return true
   if (typeof value !== 'number') return false
@@ -325,7 +319,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
     if (bucketFilters.hp?.length) rows = rows.filter((r) => matchesBuckets(r.hp, HP_BUCKETS, bucketFilters.hp))
     if (bucketFilters.range?.length) rows = rows.filter((r) => matchesBuckets(r.range_mi, RANGE_BUCKETS, bucketFilters.range))
     if (bucketFilters.battery?.length) rows = rows.filter((r) => matchesBuckets(r.battery_kwh, BATTERY_BUCKETS, bucketFilters.battery))
-    if (bucketFilters.preowned?.length) rows = rows.filter((r) => matchesBuckets(parsePreownedLow(r.preowned_range), PREOWNED_BUCKETS, bucketFilters.preowned))
+    if (bucketFilters.preowned?.length) rows = rows.filter((r) => matchesBuckets(r.preowned_low, PREOWNED_BUCKETS, bucketFilters.preowned))
     if (bucketFilters.torque?.length) rows = rows.filter((r) => matchesBuckets(r.torque_lb_ft, TORQUE_BUCKETS, bucketFilters.torque))
     if (bucketFilters.zero60?.length) rows = rows.filter((r) => matchesBuckets(r.zero_to_60_sec, ZERO60_BUCKETS, bucketFilters.zero60))
     if (bucketFilters.weight?.length) rows = rows.filter((r) => matchesBuckets(r.curb_weight_lbs, WEIGHT_BUCKETS, bucketFilters.weight))
