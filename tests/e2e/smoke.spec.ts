@@ -6,14 +6,29 @@ test('home renders overview', async ({ page }) => {
   await expect(page.locator('main.main')).toBeVisible()
 })
 
-test('comparison tab renders a data table', async ({ page }) => {
-  await page.goto('/?tab=comparison')
+test('comparison route renders a data table', async ({ page }) => {
+  await page.goto('/comparison')
   await expect(page.locator('table').first()).toBeVisible()
 })
 
-test('glossary tab renders', async ({ page }) => {
-  await page.goto('/?tab=glossary')
+test('glossary route renders', async ({ page }) => {
+  await page.goto('/glossary')
   await expect(page.locator('main.main')).toContainText(/glossary/i)
+})
+
+test('old ?tab= URL redirects to route', async ({ page }) => {
+  await page.goto('/?tab=comparison&vehicle=Kia%20EV9')
+  await expect(page).toHaveURL(/\/comparison/)
+})
+
+test('side-by-side route renders', async ({ page }) => {
+  await page.goto('/side-by-side')
+  await expect(page.locator('main.main')).toBeVisible()
+})
+
+test('spec-select route renders', async ({ page }) => {
+  await page.goto('/spec-select')
+  await expect(page.locator('main.main')).toBeVisible()
 })
 
 test('vehicle page renders hero and trim table', async ({ page }) => {

@@ -273,7 +273,7 @@ export default async function ComparePage({ params }: Props) {
 
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
           <Link
-            href={`/?tab=sidebyside&v1=${encodeURIComponent(nameA)}&v2=${encodeURIComponent(nameB)}`}
+            href={`/side-by-side?v1=${encodeURIComponent(nameA)}&v2=${encodeURIComponent(nameB)}`}
             className="back-link"
             style={{ fontSize: 15 }}
           >

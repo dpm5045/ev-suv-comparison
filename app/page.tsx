@@ -18,7 +18,7 @@ export default function Home() {
         description: `Compare ${trimCount} trims across ${vehicleCount} vehicles — pricing, range, charging, cargo & more for every 3-row electric vehicle.`,
         potentialAction: {
           '@type': 'SearchAction',
-          target: `${SITE_URL}/?tab=comparison&q={search_term_string}`,
+          target: `${SITE_URL}/comparison?q={search_term_string}`,
           'query-input': 'required name=search_term_string',
         },
       }} />

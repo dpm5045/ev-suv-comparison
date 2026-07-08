@@ -29,18 +29,21 @@ All vehicle data lives in **`lib/ev-data.json`** and is typed + exported via **`
 
 ### Component structure
 
+Each former dashboard tab is a real route (thin server page with metadata wrapping a small client component in `components/pages/`):
+
 ```
-Dashboard (state + URL routing)
-├── Header
-├── NavTabs            — tab switcher; active tab stored in ?tab= URL param
-├── OverviewTab        — key insights stats, glance table/cards, charging standards
-├── ComparisonV2Tab    — filterable table + mobile cards; filters in URL params (?vehicle=, ?year=, ?q=)
-├── SideBySideTab      — side-by-side comparison of up to 3 trims
-├── ReferenceTab       — approach/methodology, models analyzed, glossary
-└── DetailPanel        — slide-in sidebar for full specs; opened via row/card click
+app/
+├── page.tsx            → HomeClient (OverviewTab + VehicleSummaryPanel)
+├── comparison/         → ComparisonClient (ComparisonV2Tab + DetailPanel)
+├── side-by-side/       → SideBySideTab
+├── spec-select/        → SpecSelectClient (SpecSelectTab + DetailPanel)
+├── glossary/           → GlossaryTab
+├── explore/            → DataExplorer (scatter chart)
+├── vehicles/[slug]/    → static per-vehicle page
+└── compare/[slug]/     → static pairwise comparison page
 ```
 
-**Filter state is URL-driven.** `Dashboard` reads all filter values from `useSearchParams()` and pushes updates via `router.push()`. This means filters survive page refresh and are shareable.
+**Filter state is URL-driven.** Each route's client component reads filter values from `useSearchParams()` and applies updates via `router.replace()` (no history entry per filter click). Filters survive refresh and are shareable. Old `/?tab=X` URLs 301-redirect to the routes (see `redirects()` in `next.config.mjs`).
 
 `DetailPanel` is controlled by local `detailIdx` state (index into `DATA.details`) since it doesn't need to be shareable.
 

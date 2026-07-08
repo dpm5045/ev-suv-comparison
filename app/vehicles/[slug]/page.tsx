@@ -185,10 +185,10 @@ export default async function VehiclePage({ params }: Props) {
           <span className={`vehicle-badge ${cls}`}>{vehicle}</span>
           <p className="vehicle-hero-sub">{yearRange} &middot; {trims.length} trim{trims.length !== 1 ? 's' : ''} &middot; {seats.join(' or ')}-seat</p>
           <div className="vehicle-hero-actions">
-            <Link href={`/?tab=comparison&vehicle=${encodeURIComponent(vehicle)}`}>
+            <Link href={`/comparison?vehicle=${encodeURIComponent(vehicle)}`}>
               Compare trims →
             </Link>
-            <Link href={`/?tab=sidebyside&v1=${encodeURIComponent(vehicle)}`}>
+            <Link href={`/side-by-side?v1=${encodeURIComponent(vehicle)}`}>
               Side-by-side →
             </Link>
           </div>
@@ -299,13 +299,13 @@ export default async function VehiclePage({ params }: Props) {
           <h2>Keep Exploring</h2>
           <div className="vehicle-cta-buttons">
             <Link
-              href={`/?tab=comparison&vehicle=${encodeURIComponent(vehicle)}`}
+              href={`/comparison?vehicle=${encodeURIComponent(vehicle)}`}
               className="vehicle-cta-btn"
             >
               Compare all {vehicle} trims
             </Link>
             <Link
-              href={`/?tab=sidebyside&v1=${encodeURIComponent(vehicle)}`}
+              href={`/side-by-side?v1=${encodeURIComponent(vehicle)}`}
               className="vehicle-cta-btn secondary"
             >
               Compare {vehicle} side-by-side

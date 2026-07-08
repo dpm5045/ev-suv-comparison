@@ -169,7 +169,7 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
             )}
 
             <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-              <Link href={`/?tab=comparison&vehicle=${encodeURIComponent(vehicle)}`} className="vsp-fullpage-link" onClick={onClose}>
+              <Link href={`/comparison?vehicle=${encodeURIComponent(vehicle)}`} className="vsp-fullpage-link" onClick={onClose}>
                 Compare all trims <span aria-hidden="true">→</span>
               </Link>
             </div>

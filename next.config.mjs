@@ -20,6 +20,22 @@ const config = {
       },
     ]
   },
+  async redirects() {
+    // Legacy ?tab= dashboard URLs → real routes (other query params carry over)
+    const tabRoutes = [
+      ['comparison', '/comparison'],
+      ['sidebyside', '/side-by-side'],
+      ['specselect', '/spec-select'],
+      ['glossary', '/glossary'],
+      ['reference', '/glossary'],
+    ]
+    return tabRoutes.map(([tab, destination]) => ({
+      source: '/',
+      has: [{ type: 'query', key: 'tab', value: tab }],
+      destination,
+      permanent: true,
+    }))
+  },
 }
 
 export default config

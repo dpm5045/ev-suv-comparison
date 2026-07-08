@@ -74,7 +74,7 @@ export default function AboutPage() {
             </p>
             <p>
               For charging terminology and field definitions, see
-              the <Link href="/?tab=glossary" className="info-link">Glossary</Link> tab
+              the <Link href="/glossary" className="info-link">Glossary</Link> page
               on the main comparison tool.
             </p>
           </section>
