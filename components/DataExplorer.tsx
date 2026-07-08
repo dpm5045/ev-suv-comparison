@@ -3,23 +3,10 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { DATA, WATCHLIST_VEHICLES } from '@/lib/data'
 import type { DetailRow } from '@/lib/data'
+import { chartColor } from '@/lib/vehicle-theme'
+import { useIsLightTheme } from './useIsLightTheme'
 
 // ── Constants ──────────────────────────────────────────────────────
-
-const VEHICLE_COLORS: Record<string, string> = {
-  'Kia EV9':               '#4ade80',
-  'Hyundai IONIQ 9':       '#5ba4f5',
-  'Lucid Gravity':         '#a78bfa',
-  'Rivian R1S':            '#fb923c',
-  'Tesla Model X':         '#f87171',
-  'Tesla Model Y (3-Row)': '#f87171',
-  'Volkswagen ID. Buzz':   '#fbbf24',
-  'VinFast VF9':           '#f59e0b',
-  'Volvo EX90':            '#f472b6',
-  'Cadillac Escalade IQ':  '#a78bfa',
-  'Cadillac VISTIQ':       '#c084fc',
-  'Mercedes-Benz EQS SUV': '#d4d4d8',
-}
 
 const WATCHLIST: readonly string[] = WATCHLIST_VEHICLES
 
@@ -325,6 +312,7 @@ function MultiSelectDropdown({
 // ── Main DataExplorer component ────────────────────────────────────
 
 export default function DataExplorer() {
+  const isLight = useIsLightTheme()
   // Preprocess data once
   const [allData] = useState<ProcessedRow[]>(() => preprocessData())
   const vehicles = [...new Set(allData.map(d => d.vehicle))].sort()
@@ -494,7 +482,7 @@ export default function DataExplorer() {
         y: yConfig,
         color: {
           domain: visibleVehicles,
-          range: visibleVehicles.map(v => VEHICLE_COLORS[v] || '#888'),
+          range: visibleVehicles.map(v => chartColor(v, isLight)),
         },
         r: { domain: d3.extent(sizeData, d => d[bubbleSize] as number), range: [4, 20] },
         marks: [...marks, Plot.dot(plotData, dotOpts)],
@@ -518,14 +506,14 @@ export default function DataExplorer() {
         y: yConfig,
         color: {
           domain: visibleVehicles,
-          range: visibleVehicles.map(v => VEHICLE_COLORS[v] || '#888'),
+          range: visibleVehicles.map(v => chartColor(v, isLight)),
         },
         marks: [...marks, Plot.dot(plotData, dotOpts)],
       }
       const plot = Plot.plot(plotConfig)
       container.appendChild(plot)
     }
-  }, [libs, filtered, xAxis, yAxis, bubbleSize])
+  }, [libs, filtered, xAxis, yAxis, bubbleSize, isLight])
 
   // Re-render chart when dependencies change
   useEffect(() => {
@@ -545,7 +533,7 @@ export default function DataExplorer() {
   // Vehicle options with colors
   const vehicleOptions: MultiSelectOption[] = vehicles.map(v => ({
     value: v,
-    color: VEHICLE_COLORS[v] || '#888',
+    color: chartColor(v, isLight),
   }))
 
   const yearOptions: MultiSelectOption[] = years.map(y => ({ value: String(y) }))
@@ -682,7 +670,7 @@ export default function DataExplorer() {
           <div className="explorer-legend">
             {legendVehicles.map(v => (
               <span key={v} className="explorer-legend-item">
-                <span className="explorer-color-dot" style={{ background: VEHICLE_COLORS[v] || '#888' }} />
+                <span className="explorer-color-dot" style={{ background: chartColor(v, isLight) }} />
                 {v}
               </span>
             ))}

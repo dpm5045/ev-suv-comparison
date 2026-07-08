@@ -150,26 +150,7 @@ export const GOODBYELIST_VEHICLES: { vehicle: string; summary: string }[] = [
   },
 ]
 
-export const VEHICLE_CLASSES: Record<string, string> = {
-  'Kia EV9': 'v-kia',
-  'Hyundai IONIQ 9': 'v-hyundai',
-  'Lucid Gravity': 'v-lucid',
-  'Rivian R1S': 'v-rivian',
-  'Tesla Model X': 'v-tesla',
-  'Tesla Model Y Long (Asia)': 'v-tesla',
-  'Tesla Model Y (3-Row)': 'v-tesla',
-  'Tesla Model Y L': 'v-tesla-yl',
-  'VinFast VF9': 'v-vinfast',
-  'Toyota Highlander EV': 'v-toyota',
-  'Volkswagen ID. Buzz': 'v-vw',
-  'Volvo EX90': 'v-volvo',
-  'Cadillac Escalade IQ': 'v-cadillac',
-  'Cadillac VISTIQ': 'v-cadillac',
-  'Mercedes-Benz EQS SUV': 'v-mercedes',
-  'Subaru Getaway': 'v-subaru',
-  'BMW iX7': 'v-bmw',
-  'Genesis GV90': 'v-genesis',
-  'Faraday Future FX Super One': 'v-faraday',
-  'Lexus TZ': 'v-lexus',
-}
+// Vehicle → CSS class map lives in vehicle-theme.ts (single source for
+// badge classes and chart colors); re-exported here for existing imports.
+export { VEHICLE_CLASSES } from './vehicle-theme'
 

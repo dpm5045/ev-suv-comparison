@@ -1,30 +1,14 @@
 import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
-import { DATA, VEHICLE_CLASSES } from '@/lib/data'
+import { DATA } from '@/lib/data'
+import { CLASS_THEMES, VEHICLE_CLASSES } from '@/lib/vehicle-theme'
 import { getVehicleBySlug, getTrimsForVehicle, getUniqueVehicles, toSlug } from '@/lib/slugs'
 
 export const runtime = 'edge'
 
-const BRAND_COLORS: Record<string, { bg: string; fg: string }> = {
-  'v-kia':      { bg: '#1a3a2a', fg: '#4ade80' },
-  'v-hyundai':  { bg: '#1a2a3a', fg: '#5ba4f5' },
-  'v-lucid':    { bg: '#2a1a3a', fg: '#a78bfa' },
-  'v-rivian':   { bg: '#3a2a1a', fg: '#fb923c' },
-  'v-tesla':    { bg: '#3a1a1a', fg: '#f87171' },
-  'v-toyota':   { bg: '#1a3a3a', fg: '#2dd4bf' },
-  'v-vinfast':  { bg: '#2a1a1a', fg: '#f59e0b' },
-  'v-vw':       { bg: '#2a2a1a', fg: '#fbbf24' },
-  'v-volvo':    { bg: '#2a1a2a', fg: '#f472b6' },
-  'v-cadillac': { bg: '#1a1a2a', fg: '#a78bfa' },
-  'v-mercedes': { bg: '#2a2a2a', fg: '#d4d4d8' },
-  'v-subaru':   { bg: '#1a2a2a', fg: '#34d399' },
-  'v-bmw':      { bg: '#1a1a3a', fg: '#60a5fa' },
-  'v-genesis':  { bg: '#2a1a1a', fg: '#f97316' },
-}
-
 function getBrandColor(vehicle: string) {
-  const cls = VEHICLE_CLASSES[vehicle] ?? ''
-  return BRAND_COLORS[cls] ?? { bg: '#1a2a3a', fg: '#5ba4f5' }
+  const t = CLASS_THEMES[VEHICLE_CLASSES[vehicle] ?? '']
+  return t ? { bg: t.darkBg, fg: t.darkFg } : { bg: '#1a2a3a', fg: '#5ba4f5' }
 }
 
 function HomeImage() {

@@ -18,6 +18,8 @@ import {
 } from 'chart.js'
 import { Bar, Scatter } from 'react-chartjs-2'
 import { DATA, WATCHLIST_VEHICLES, type DetailRow, type CountRow, type USEVSales } from '@/lib/data'
+import { chartColor } from '@/lib/vehicle-theme'
+import { useIsLightTheme } from './useIsLightTheme'
 
 ChartJS.register(
   CategoryScale,
@@ -32,36 +34,24 @@ ChartJS.register(
   Filler,
 )
 
-// ── Global dark theme defaults ──────────────────────────────────────────────
-ChartJS.defaults.color = '#9898b0'
-ChartJS.defaults.borderColor = 'rgba(255,255,255,0.05)'
-ChartJS.defaults.font.family = "'JetBrains Mono', 'SF Mono', monospace"
-ChartJS.defaults.font.size = 12
-ChartJS.defaults.plugins.tooltip.backgroundColor = 'rgba(19,19,25,0.95)'
-ChartJS.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.10)'
-ChartJS.defaults.plugins.tooltip.borderWidth = 1
-ChartJS.defaults.plugins.tooltip.cornerRadius = 10
-ChartJS.defaults.plugins.tooltip.padding = 10
-ChartJS.defaults.plugins.tooltip.titleColor = '#c8c8e0'
-ChartJS.defaults.plugins.tooltip.bodyColor = '#9898b0'
-ChartJS.defaults.plugins.legend.labels.usePointStyle = true
-ChartJS.defaults.plugins.legend.labels.pointStyle = 'circle'
-
-// ── Constants ────────────────────────────────────────────────────────────────
-const VEHICLE_COLORS: Record<string, string> = {
-  'Kia EV9':                '#6bc490',
-  'Hyundai IONIQ 9':        '#6b9fd4',
-  'Lucid Gravity':          '#9a8cc8',
-  'Rivian R1S':             '#d48a56',
-  'Tesla Model X':          '#cf6b6b',
-  'Tesla Model Y (3-Row)':  '#cf6b6b',
-  'Volkswagen ID. Buzz':    '#c8a84e',
-  'VinFast VF9':            '#c49340',
-  'Volvo EX90':             '#c47a9e',
-  'Cadillac Escalade IQ':   '#8a7fba',
-  'Cadillac VISTIQ':        '#a98fd4',
-  'Mercedes-Benz EQS SUV':  '#9a9aaa',
+// ── Theme-aware Chart.js global defaults ────────────────────────────────────
+function applyChartJsTheme(light: boolean) {
+  ChartJS.defaults.color = light ? '#5a5a72' : '#9898b0'
+  ChartJS.defaults.borderColor = light ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.05)'
+  ChartJS.defaults.font.family = "'JetBrains Mono', 'SF Mono', monospace"
+  ChartJS.defaults.font.size = 12
+  const tt = ChartJS.defaults.plugins.tooltip
+  tt.backgroundColor = light ? 'rgba(255,255,255,0.97)' : 'rgba(19,19,25,0.95)'
+  tt.borderColor = light ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.10)'
+  tt.borderWidth = 1
+  tt.cornerRadius = 10
+  tt.padding = 10
+  tt.titleColor = light ? '#2a2a3a' : '#c8c8e0'
+  tt.bodyColor = light ? '#5a5a72' : '#9898b0'
+  ChartJS.defaults.plugins.legend.labels.usePointStyle = true
+  ChartJS.defaults.plugins.legend.labels.pointStyle = 'circle'
 }
+applyChartJsTheme(false)
 
 const WATCHLIST: readonly string[] = WATCHLIST_VEHICLES
 
@@ -86,20 +76,6 @@ function fmtEvSales(v: number): string {
 }
 
 // ── Theme-aware colors ──────────────────────────────────────────────────────
-function useIsLightTheme() {
-  const [light, setLight] = useState(false)
-  useEffect(() => {
-    function check() {
-      setLight(document.documentElement.getAttribute('data-theme') === 'light')
-    }
-    check()
-    const obs = new MutationObserver(check)
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-    return () => obs.disconnect()
-  }, [])
-  return light
-}
-
 function themeGrid(light: boolean) {
   return light ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)'
 }
@@ -195,7 +171,7 @@ function GrowthChart({ onVehicleClick }: { onVehicleClick?: (vehicle: string) =>
 
   // Per-vehicle stacked bar datasets
   const barDatasets = count_data.map((row) => {
-    const color = VEHICLE_COLORS[row.model] ?? '#888888'
+    const color = chartColor(row.model, isLight)
     return {
       type: 'bar' as const,
       label: row.model,
@@ -386,8 +362,8 @@ function PriceRangeChart({ onVehicleClick }: { onVehicleClick?: (vehicle: string
       {
         label: 'MSRP Range',
         data: ranges.map((r) => r.min === r.max ? [r.min - 500, r.max + 500] : [r.min, r.max]),
-        backgroundColor: ranges.map((r) => colorAlpha(VEHICLE_COLORS[r.vehicle] ?? '#888888', '99')),
-        borderColor: ranges.map((r) => colorAlpha(VEHICLE_COLORS[r.vehicle] ?? '#888888', 'ee')),
+        backgroundColor: ranges.map((r) => colorAlpha(chartColor(r.vehicle, isLight), '99')),
+        borderColor: ranges.map((r) => colorAlpha(chartColor(r.vehicle, isLight), 'ee')),
         borderWidth: 1.5,
         borderRadius: 3,
         borderSkipped: false,
@@ -574,7 +550,7 @@ function RangeVsPriceChart({ onVehicleClick }: { onVehicleClick?: (vehicle: stri
   })
 
   const scatterDatasets = Object.entries(byVehicle).map(([vehicle, points]) => {
-    const color = VEHICLE_COLORS[vehicle] ?? '#888888'
+    const color = chartColor(vehicle, isLight)
     return {
       label: vehicle,
       data: points,
@@ -709,8 +685,11 @@ function RangeVsPriceChart({ onVehicleClick }: { onVehicleClick?: (vehicle: stri
 
 // ── Default export ────────────────────────────────────────────────────────────
 export default function MarketInsights({ onVehicleClick }: { onVehicleClick?: (vehicle: string) => void } = {}) {
+  const isLight = useIsLightTheme()
+  // Update Chart.js global defaults, then remount all charts (via key) so they re-read them
+  applyChartJsTheme(isLight)
   return (
-    <section className="mi-section">
+    <section className="mi-section" key={isLight ? 'light' : 'dark'}>
       <div className="mi-header">
         <h2 className="mi-title">Market Insights</h2>
         <p className="mi-intro">Now that you&apos;ve found your match, here&apos;s how the 3-row EV landscape stacks up — growth trends, pricing tiers, and what you really get for your money.</p>

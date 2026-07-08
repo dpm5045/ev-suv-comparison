@@ -417,7 +417,7 @@ tr:hover td {
   max-width: 260px;
 }
 
-/* ── Vehicle badge colors ── */
+/* ── Vehicle badge colors — mirrored in lib/vehicle-theme.ts (keep in sync) ── */
 .vehicle-badge {
   display: inline-block;
   font-size: 16px;

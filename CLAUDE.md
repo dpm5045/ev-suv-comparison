@@ -62,8 +62,8 @@ When modifying `lib/ev-data.json`, always verify:
 - `count_data` row totals match actual detail entries per vehicle/year
 - `count_totals` sums match `count_data` column sums
 - OTD values recalculated if `msrp`, `destination`, or `preowned_range` changed
-- `VEHICLE_CLASSES` in `data.ts` has entry for any new vehicle
-- CSS class exists in `globals.css` for any new vehicle class
+- `VEHICLE_CLASSES` + `CLASS_THEMES` in `lib/vehicle-theme.ts` have entries for any new vehicle
+- CSS class exists in `globals.css` for any new vehicle class (colors must match `CLASS_THEMES`)
 - No hardcoded model/vehicle counts anywhere (always derive from DATA at runtime)
 - `last_updated` (root-level key in `ev-data.json`) bumped to today's date on any data change — drives sitemap `lastModified`
 
