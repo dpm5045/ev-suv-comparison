@@ -2313,7 +2313,7 @@
       "drivetrain": "AWD",
       "msrp": 83990,
       "destination": 1895,
-      "preowned_range": "$70,000 - $78,000",
+      "preowned_range": "$68,000 - $76,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2360,7 +2360,7 @@
       "drivetrain": "AWD",
       "msrp": 90990,
       "destination": 1895,
-      "preowned_range": "$82,000 - $92,000",
+      "preowned_range": "$80,000 - $89,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2407,7 +2407,7 @@
       "drivetrain": "AWD",
       "msrp": 76990,
       "destination": 1895,
-      "preowned_range": "$68,000 - $76,000",
+      "preowned_range": "$66,000 - $74,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2454,7 +2454,7 @@
       "drivetrain": "AWD",
       "msrp": 106990,
       "destination": 1895,
-      "preowned_range": "$90,000 - $102,000",
+      "preowned_range": "$87,000 - $99,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2501,7 +2501,7 @@
       "drivetrain": "AWD",
       "msrp": 84700,
       "destination": 0,
-      "preowned_range": "$64,000 - $72,000",
+      "preowned_range": "$61,000 - $69,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2548,7 +2548,7 @@
       "drivetrain": "AWD",
       "msrp": 91700,
       "destination": 0,
-      "preowned_range": "$72,000 - $82,000",
+      "preowned_range": "$69,000 - $79,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2595,7 +2595,7 @@
       "drivetrain": "AWD",
       "msrp": 77700,
       "destination": 0,
-      "preowned_range": "$60,000 - $68,000",
+      "preowned_range": "$58,000 - $65,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2642,7 +2642,7 @@
       "drivetrain": "AWD",
       "msrp": 107700,
       "destination": 0,
-      "preowned_range": "$73,000 - $85,000",
+      "preowned_range": "$70,000 - $82,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2689,7 +2689,7 @@
       "drivetrain": "AWD",
       "msrp": 89700,
       "destination": 0,
-      "preowned_range": "$70,000 - $78,000",
+      "preowned_range": "$67,000 - $75,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -2736,7 +2736,7 @@
       "drivetrain": "AWD",
       "msrp": 96700,
       "destination": 0,
-      "preowned_range": "$75,000 - $85,000",
+      "preowned_range": "$72,000 - $82,000",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7136,70 +7136,70 @@
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Adventure Dual Standard",
-      "preowned_range": "$60,000 - $68,000"
+      "preowned_range": "$58,000 - $65,000"
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Large (\"Dual Long\")",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Adventure Dual Large (\"Dual Long\")",
-      "preowned_range": "$64,000 - $72,000"
+      "preowned_range": "$61,000 - $69,000"
     },
     {
       "name": "Rivian R1S, 2025, Adventure Dual Max",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Adventure Dual Max",
-      "preowned_range": "$72,000 - $82,000"
+      "preowned_range": "$69,000 - $79,000"
     },
     {
       "name": "Rivian R1S, 2025, Performance Dual Large",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Performance Dual Large",
-      "preowned_range": "$70,000 - $78,000"
+      "preowned_range": "$67,000 - $75,000"
     },
     {
       "name": "Rivian R1S, 2025, Performance Dual Max",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Performance Dual Max",
-      "preowned_range": "$75,000 - $85,000"
+      "preowned_range": "$72,000 - $82,000"
     },
     {
       "name": "Rivian R1S, 2025, Ascend Tri Max",
       "vehicle": "Rivian R1S",
       "year": 2025,
       "trim": "Ascend Tri Max",
-      "preowned_range": "$73,000 - $85,000"
+      "preowned_range": "$70,000 - $82,000"
     },
     {
       "name": "Rivian R1S, 2026, Dual Standard",
       "vehicle": "Rivian R1S",
       "year": 2026,
       "trim": "Dual Standard",
-      "preowned_range": "$68,000 - $76,000"
+      "preowned_range": "$66,000 - $74,000"
     },
     {
       "name": "Rivian R1S, 2026, Dual Large",
       "vehicle": "Rivian R1S",
       "year": 2026,
       "trim": "Dual Large",
-      "preowned_range": "$70,000 - $78,000"
+      "preowned_range": "$68,000 - $76,000"
     },
     {
       "name": "Rivian R1S, 2026, Dual Max (\"Max Battery\")",
       "vehicle": "Rivian R1S",
       "year": 2026,
       "trim": "Dual Max (\"Max Battery\")",
-      "preowned_range": "$82,000 - $92,000"
+      "preowned_range": "$80,000 - $89,000"
     },
     {
       "name": "Rivian R1S, 2026, Tri Max",
       "vehicle": "Rivian R1S",
       "year": 2026,
       "trim": "Tri Max",
-      "preowned_range": "$90,000 - $102,000"
+      "preowned_range": "$87,000 - $99,000"
     },
     {
       "name": "Tesla Model X, 2026, Base",
