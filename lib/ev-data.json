@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-08",
+  "last_updated": "2026-08-10",
   "scope": "Scope of Car Models Analyzed: 141 trims were analyzed across seven years & 19 car models.",
   "count_note": "Notes: Six vehicles are on the Watchlist (not yet available in the US): Toyota Highlander EV, Subaru Getaway, BMW iX7, Genesis GV90, Faraday Future FX Super One, and Lexus TZ. The Tesla Model Y (3-Row) has a child-sized third row. Rivian R1S Gen1 (2022â€“2024) and Gen2 (2025+) models are both included.",
   "count_data": [
@@ -6852,7 +6852,7 @@
       "notes": "Stretched, long-wheelbase 6-seat (2+2+2) three-row Model Y variant, distinct from the standard-wheelbase \"Tesla Model Y (3-Row)\" (7-seat). Launched in the US 2026-07-02 as the \"Launch Series\" trim. Row 2 heated/ventilated captain's chairs with powered armrests and one-touch fold; heated 3rd row with power recline and child-seat anchors. Wheelbase +5.9in / overall length +~7in vs standard Model Y. Launch incentives (not permanent specs): 12 months FSD, 12 months Supercharging, and one free paint/interior/wheel selection. Production at Giga Texas (Austin); deliveries expected Sept-Oct 2026. Towing rating carried over from standard Model Y AWD platform (Tesla has not published a distinct figure for the L). Behind-3rd-row and behind-2nd-row cargo volumes not yet independently published by Tesla; only the max cargo figure (both rows folded) has been confirmed. Sources: electrek.co/2026/07/02/tesla-model-y-l-us-launch-61990, forbes.com/sites/brookecrothers/2026/07/02/longer-tesla-model-y-l-launches-in-us, notateslaapp.com/news/4390, edmunds.com (2027-tesla-model-y-l-debut-first-look), evspecifications.com.",
       "towing_lbs": 3500,
       "dc_fast_charge_kw": 250,
-      "dc_fast_charge_10_80_min": null,
+      "dc_fast_charge_10_80_min": 31,
       "curb_weight_lbs": 4603,
       "length_in": 195.9,
       "width_in": 78,
