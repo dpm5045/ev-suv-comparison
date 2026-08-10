@@ -7,26 +7,46 @@ Run the full 5-phase data refresh for `lib/ev-data.json`. All research is done i
 
 Check `$ARGUMENTS` for the `--interactive` flag. If present, follow the "Ask" prompts in each phase. If absent (default), skip all per-phase "Ask" prompts and continue to the next phase.
 
-Process vehicles in batches of 3–4 to keep each phase manageable.
+Process vehicles in batches of 3–4 to keep each phase manageable. Batching is about pacing the work, **not** about collapsing several vehicles into one broad query — research each vehicle on its own terms. Combining vehicles into a single aggregate search averages away per-vehicle movement and produces false "no change" results.
 
 ---
 
 ## Phase 1: Pre-owned Pricing
 
+Drive this phase off **per-model-year percentage movement**, not per-trim dollar research. See "Why percentage, not per-trim" below before deviating.
+
 1. Read `lib/ev-data.json`. Extract all `preowned` entries where `preowned_range` is NOT `"No meaningful used market yet"`.
 
-2. For each vehicle, WebSearch for current used market pricing from KBB, TrueCar, Cars.com, CarGurus. Look for fair market value ranges — not outlier listings.
+2. For each **vehicle** (not each trim), WebFetch the CarGurus price-trends page to get the average used price and the **30-day percentage change**, broken out by model year where published:
 
-3. Present a comparison table:
+   `https://www.cargurus.com/research/price-trends/<Make>-<Model>-d<id>`
 
-| Vehicle/Trim | Current Range | Researched Range | Delta | Source |
-|---|---|---|---|---|
+   Find the `d<id>` with a WebSearch for `"cargurus.com/research/price-trends" <Make> <Model>` if you don't have it. **WebFetch the page — do not rely on the search-result summary.** Summaries have been observed to contradict the page itself (e.g. reporting EX90 at −5.56% when the page said −3.01%).
 
-Only show rows where the delta is >$2,000.
+3. **Trigger: apply when the 30-day move is ≥3%** (in either direction). Below 3%, record the figure and change nothing.
 
-4. **Interactive mode only — Ask: "Apply pre-owned pricing updates?"** In autonomous mode, apply changes and continue.
+   Do not use an absolute dollar threshold. On a monthly cadence typical movement is well under $2,000 on mid-priced rows, so a dollar trigger silently no-ops the whole phase while real drift accumulates.
 
-5. Update BOTH the `details` and `preowned` arrays (they must stay in sync — matching `name` and `preowned_range`).
+4. To apply, scale both ends of each affected `preowned_range` by the percentage and round to the nearest $1,000. Use the model-year-specific figure when CarGurus publishes one; fall back to the model-wide figure and say so.
+
+5. Present a comparison table — **every vehicle gets a row, including the ones that didn't move**, so a no-op is visibly a measurement rather than a skipped step:
+
+| Vehicle | Model Year | Avg Used Price | 30-Day Move | Applied? | Rows Changed |
+|---|---|---|---|---|---|
+
+6. **Interactive mode only — Ask: "Apply pre-owned pricing updates?"** In autonomous mode, apply changes and continue.
+
+7. Update BOTH the `details` and `preowned` arrays (they must stay in sync — matching `name` and `preowned_range`). Verify sync afterward; do not hand-edit 10+ rows, write a script.
+
+### Why percentage, not per-trim
+
+The per-trim dollar approach was tried and does not work with the tools available:
+
+- **KBB and Edmunds return HTTP 403 to WebFetch.** Their per-trim values are reachable only through AI-summarized search snippets, which have repeatedly returned values that fail sanity checks — quoting 2025 EV9 Wind identical to 2024 Wind, and used 2026 Model X Plaid at $66.5k against a $129,990 new price. Do not write data from a snippet you could not fetch and sanity-check.
+- **CarGurus fetches reliably but publishes model-year averages only**, with no trim breakdown. Its all-trim average is *not* comparable to a per-trim range — a low average against high stored ranges may just be trim/mileage mix. Never reprice on that comparison alone.
+- **Aggregate model-line searching hides real movement.** An Aug 2026 run reported "0 updates" across 59 rows because Rivian's −4.05% was averaged against a flat −0.42% Kia EV9. Researching each vehicle's own percentage separately is what catches this.
+
+If you find a per-trim source that actually fetches, prefer it and note it here.
 
 ---
 

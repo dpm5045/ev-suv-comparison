@@ -10,17 +10,17 @@ Research and update pre-owned and/or MSRP pricing for vehicles in the dataset.
    - If "all": process all vehicles that have pre-owned data (where `preowned_range` is not "No meaningful used market yet")
    - If a year: match all entries for that model year
 
-2. Research current pricing via WebSearch for each in-scope vehicle:
-   - **Pre-owned**: Search KBB, TrueCar, Cars.com, CarGurus for used market pricing. Look for fair market value ranges, not outlier listings.
+2. Research current pricing for each in-scope vehicle **individually** — never combine vehicles into one broad query, which averages away per-vehicle movement:
+   - **Pre-owned**: WebFetch the CarGurus price-trends page (`https://www.cargurus.com/research/price-trends/<Make>-<Model>-d<id>`) for the average used price and 30-day percentage change by model year. Fetch the page; do not trust the search-result summary. KBB and Edmunds return HTTP 403 and cannot be fetched — do not write data from their search snippets, which have returned values failing basic sanity checks. See the "Why percentage, not per-trim" note in `refresh.md` for the full rationale.
    - **MSRP**: Check the OEM site for current MSRP and destination charge. Only flag MSRP changes if they differ from current data.
 
-3. Present a comparison table for user review:
+3. Present a comparison table for user review — include every vehicle researched, including those that didn't move, so a no-op reads as a measurement rather than a skipped step:
 
-| Vehicle/Trim | Field | Current | Researched | Delta | Source |
-|--------------|-------|---------|------------|-------|--------|
+| Vehicle | Model Year | Field | Current | Researched | Move | Source |
+|---|---|---|---|---|---|---|
 
-Only show rows where the delta is significant:
-- Pre-owned: >$2,000 change
+Apply only where the change is significant:
+- Pre-owned: **30-day move ≥3%** (scale both ends of the range, round to nearest $1,000). Do not use an absolute dollar trigger — on a monthly cadence typical movement falls under $2,000 and silently no-ops the phase while real drift accumulates.
 - MSRP: any change
 
 4. **Wait for user approval before making any edits.**
