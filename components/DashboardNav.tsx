@@ -8,6 +8,7 @@ const TABS: { id: TabId; label: string; href: string }[] = [
   { id: 'specselect', label: 'Spec & Select', href: '/spec-select' },
   { id: 'sidebyside', label: 'Side-by-Side', href: '/side-by-side' },
   { id: 'comparison', label: 'The Full Monty', href: '/comparison' },
+  { id: 'carseats', label: 'Car Seats', href: '/car-seats' },
   { id: 'glossary', label: 'Glossary', href: '/glossary' },
 ]
 

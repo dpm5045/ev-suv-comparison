@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-18",
+  "last_updated": "2026-10-29",
   "scope": "Scope of Car Models Analyzed: 140 trims were analyzed across seven years & 19 car models.",
   "count_note": "Notes: Six vehicles are on the Watchlist (not yet available in the US): Toyota Highlander EV, Subaru Getaway, BMW iX7, Genesis GV90, Faraday Future FX Super One, and Lexus TZ. The Tesla Model Y (3-Row) has a child-sized third row. Rivian R1S Gen1 (2022â€“2024) and Gen2 (2025+) models are both included.",
   "count_data": [
@@ -7597,6 +7597,875 @@
       "assumption": "L2 Charging Efficiency",
       "value": "0.9",
       "notes": "Wall-to-battery efficiency assumption"
+    }
+  ],
+  "car_seat_fit": [
+    {
+      "vehicle": "Kia EV9",
+      "seats": 6,
+      "layout": "2-2-2 (2nd-row captain's chairs)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "Exposed lower anchors; tethers midway down seatback. A rear-facing seat here leaves almost no 3rd-row legroom behind it."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Fixed head restraints push forward-facing seats and boosters off the seatback."
+        }
+      ],
+      "third_row_access": {
+        "type": "pass-through",
+        "paths": [
+          []
+        ],
+        "note": "Small walkway between captain's chairs; power seats slide slowly."
+      },
+      "confidence": "verified",
+      "notes": "",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2025 Kia EV9",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2025-kia-ev9-518678"
+        },
+        {
+          "label": "Cars.com Car Seat Check — 2024 Kia EV9",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2024-kia-ev9-484686"
+        }
+      ]
+    },
+    {
+      "vehicle": "Kia EV9",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "Bench layout not tested by Cars.com; anchor layout assumed from the federal minimum (2 lower-anchor sets, 3 tethers)."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Fixed head restraints push forward-facing seats and boosters off the seatback."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": "Outboard bench sections slide forward; a harnessed seat on that side usually has to come out first."
+      },
+      "confidence": "partial",
+      "notes": "3rd-row data from the captain's-chair test; 2nd-row bench not independently tested.",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2025 Kia EV9",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2025-kia-ev9-518678"
+        }
+      ]
+    },
+    {
+      "vehicle": "Hyundai IONIQ 9",
+      "seats": 6,
+      "layout": "2-2-2 (2nd-row captain's chairs)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "A grades across the board for infant, rear-facing, forward-facing and booster."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Fixed head restraints; very little legroom with the 2nd row pushed back."
+        }
+      ],
+      "third_row_access": {
+        "type": "pass-through",
+        "paths": [
+          []
+        ],
+        "note": "Pass-through between captain's chairs; one-touch power slide is slow."
+      },
+      "confidence": "verified",
+      "notes": "2026 recall: keep 2nd-row seats empty when using the power-fold function until repaired.",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2026 Hyundai IONIQ 9",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2026-hyundai-ioniq-9-512644"
+        }
+      ]
+    },
+    {
+      "vehicle": "Hyundai IONIQ 9",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "Bench layout not tested by Cars.com; anchor layout assumed from the federal minimum."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Fixed head restraints; very little legroom with the 2nd row pushed back."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": ""
+      },
+      "confidence": "partial",
+      "notes": "3rd-row data from the captain's-chair test. 2026 recall: keep 2nd-row seats empty when power-folding until repaired.",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2026 Hyundai IONIQ 9",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2026-hyundai-ioniq-9-512644"
+        }
+      ]
+    },
+    {
+      "vehicle": "Volvo EX90",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": "tight",
+          "note": "Three across came close in testing; narrower seats should fit. Center seat has a built-in booster cushion."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Top tether strap is hard to route around the head restraint."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": "Seats are heavy and the opening is small."
+      },
+      "confidence": "verified",
+      "notes": "",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2025 Volvo EX90",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2025-volvo-ex90-515653"
+        }
+      ]
+    },
+    {
+      "vehicle": "Volvo EX90",
+      "seats": 6,
+      "layout": "2-2-2 (2nd-row captain's chairs)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": ""
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Top tether strap is hard to route around the head restraint."
+        }
+      ],
+      "third_row_access": {
+        "type": "pass-through",
+        "paths": [
+          []
+        ],
+        "note": ""
+      },
+      "confidence": "partial",
+      "notes": "Captain's-chair layout inferred from the bench-seat test.",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2025 Volvo EX90",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2025-volvo-ex90-515653"
+        }
+      ]
+    },
+    {
+      "vehicle": "Rivian R1S",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": "tight",
+          "note": "Cars.com could not fit three of its test seats; Rivian says three slim seats fit across."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Lower anchors less than an inch into the seat bight — easy to use."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": "Outboard seats fold and slide at the push of a button; high step-in."
+      },
+      "confidence": "verified",
+      "notes": "",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2024 Rivian R1S",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2024-rivian-r1s-486190"
+        },
+        {
+          "label": "Rivian — car seat safety tips",
+          "url": "https://stories.rivian.com/car-seat-safety-tips"
+        }
+      ]
+    },
+    {
+      "vehicle": "Tesla Model X",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": "no",
+          "note": "Center seat: seat-belt installs only. Tether anchors are buried in carpet."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Large rear-facing seats need the 2nd-row seat moved forward. Some later builds reportedly dropped 3rd-row lower anchors — check yours."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "note": "A car seat in the 2nd-row center blocks 3rd-row access from both sides. Gullwing doors make the opening low."
+      },
+      "confidence": "verified",
+      "notes": "Tests are from the 2018–2019 Model X.",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2019 Tesla Model X",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2019-tesla-model-x-412225"
+        },
+        {
+          "label": "Tesla Model X Owner's Manual — Child Safety Seats",
+          "url": "https://www.tesla.com/ownersmanual/modelx/en_us/GUID-A864FCDF-4694-45E6-9F06-B25C7495955C.html"
+        }
+      ]
+    },
+    {
+      "vehicle": "Tesla Model X",
+      "seats": 6,
+      "layout": "2-2-2 (2nd-row captain's chairs)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "Turn off Easy Entry for a seat with a child in it so it does not slide forward."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Large rear-facing seats need the 2nd-row seat moved forward. Some later builds reportedly dropped 3rd-row lower anchors — check yours."
+        }
+      ],
+      "third_row_access": {
+        "type": "pass-through",
+        "paths": [
+          []
+        ],
+        "note": "Walk-through between captain's chairs; gullwing doors make the opening low."
+      },
+      "confidence": "partial",
+      "notes": "Inferred from the 7-seat test and owner's manual.",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2019 Tesla Model X",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2019-tesla-model-x-412225"
+        },
+        {
+          "label": "Tesla Model X Owner's Manual — Child Safety Seats",
+          "url": "https://www.tesla.com/ownersmanual/modelx/en_us/GUID-A864FCDF-4694-45E6-9F06-B25C7495955C.html"
+        }
+      ]
+    },
+    {
+      "vehicle": "Lucid Gravity",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "Center seat: seat-belt installs only."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "T",
+            "T"
+          ],
+          "rear_facing": "no",
+          "three_across": null,
+          "note": "Owners report no lower anchors in the 3rd row; forward-facing seats install with the seat belt plus top tether."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": "2nd-row seats power-fold."
+      },
+      "confidence": "unverified",
+      "notes": "No independent car-seat test yet; based on owner reports. Check the Child Safety section of the Gravity owner's manual.",
+      "sources": [
+        {
+          "label": "Lucid Gravity Owner's Manual (PDF)",
+          "url": "https://lucidmotors.com/media/document/OM_Gravity_enUS_v12_2.pdf"
+        }
+      ]
+    },
+    {
+      "vehicle": "Volkswagen ID. Buzz",
+      "seats": 6,
+      "layout": "2-2-2 (2nd-row captain's chairs)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "Wide, flat seats; rear-facing seats don't cut into front legroom."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "A grades for LATCH and forward-facing seats."
+        }
+      ],
+      "third_row_access": {
+        "type": "pass-through",
+        "paths": [
+          []
+        ],
+        "note": "Sliding doors and a low step-in."
+      },
+      "confidence": "verified",
+      "notes": "",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2025 Volkswagen ID. Buzz",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2025-volkswagen-id-buzz-505728"
+        }
+      ]
+    },
+    {
+      "vehicle": "Volkswagen ID. Buzz",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "Bench layout not tested by Cars.com."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": ""
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": "Sliding doors and a low step-in."
+      },
+      "confidence": "partial",
+      "notes": "3rd-row data from the captain's-chair test.",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2025 Volkswagen ID. Buzz",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2025-volkswagen-id-buzz-505728"
+        }
+      ]
+    },
+    {
+      "vehicle": "Cadillac Escalade IQ",
+      "seats": 7,
+      "layout": "2-2-3 (2nd-row captain's chairs, 3-seat 3rd row)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": "Seatback screens stick out a bit."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "T",
+            "T",
+            "T"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "No lower anchors — install with the seat belt. Fixed outboard head restraints push seats forward."
+        }
+      ],
+      "third_row_access": {
+        "type": "pass-through",
+        "paths": [
+          []
+        ],
+        "note": "2nd-row seats tilt and slide easily; A grade for 3rd-row entry."
+      },
+      "confidence": "verified",
+      "notes": "",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2026 Cadillac Escalade IQ",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2026-cadillac-escalade-iq-520539/"
+        }
+      ]
+    },
+    {
+      "vehicle": "Cadillac VISTIQ",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": ""
+        },
+        {
+          "row": 3,
+          "positions": [
+            "T",
+            "T"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "Lower anchors in the 3rd row not confirmed."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": ""
+      },
+      "confidence": "unverified",
+      "notes": "No independent car-seat test yet. Check the Child Restraints section of the VISTIQ owner's manual.",
+      "sources": []
+    },
+    {
+      "vehicle": "Mercedes-Benz EQS SUV",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": "no",
+          "note": "Based on the EQS sedan test: lower anchors under fold-away flaps, three labeled tethers."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "T",
+            "T"
+          ],
+          "rear_facing": "no",
+          "three_across": null,
+          "note": "Owners report no lower anchors; small 3rd row best suited to forward-facing kids."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": ""
+      },
+      "confidence": "unverified",
+      "notes": "No independent test of the SUV. 2nd row based on the EQS sedan; 3rd row on owner reports.",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2024 EQS 450+ sedan",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2024-mercedes-benz-eqs-450-489901"
+        },
+        {
+          "label": "MBWorld — EQS SUV car seat in third row",
+          "url": "https://mbworld.org/forums/eqs-suv/856093-car-seat-third-row.html"
+        }
+      ]
+    },
+    {
+      "vehicle": "Tesla Model Y (3-Row)",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": "no",
+          "note": "Tethers need extra clearance; center seat is belt-install only."
+        },
+        {
+          "row": 3,
+          "positions": [
+            "T",
+            "T"
+          ],
+          "rear_facing": "no",
+          "three_across": null,
+          "note": "Very tight 3rd row; Cars.com reported major issues. Lower anchors not confirmed."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": ""
+      },
+      "confidence": "partial",
+      "notes": "",
+      "sources": [
+        {
+          "label": "Cars.com Car Seat Check — 2021 Tesla Model Y",
+          "url": "https://www.cars.com/articles/how-do-car-seats-fit-in-a-2021-tesla-model-y-436721"
+        }
+      ]
+    },
+    {
+      "vehicle": "Tesla Model Y L",
+      "seats": 6,
+      "layout": "2-2-2 (2nd-row captain's chairs)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": ""
+        },
+        {
+          "row": 3,
+          "positions": [
+            "T",
+            "T"
+          ],
+          "rear_facing": "no",
+          "three_across": null,
+          "note": "3rd-row anchors not confirmed."
+        }
+      ],
+      "third_row_access": {
+        "type": "pass-through",
+        "paths": [
+          []
+        ],
+        "note": ""
+      },
+      "confidence": "unverified",
+      "notes": "No independent car-seat test yet.",
+      "sources": []
+    },
+    {
+      "vehicle": "VinFast VF9",
+      "seats": 7,
+      "layout": "2-3-2 (2nd-row bench)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "T",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": ""
+        },
+        {
+          "row": 3,
+          "positions": [
+            "T",
+            "T"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "3rd-row anchors not confirmed."
+        }
+      ],
+      "third_row_access": {
+        "type": "tilt-slide",
+        "paths": [
+          [
+            0
+          ],
+          [
+            2
+          ]
+        ],
+        "note": ""
+      },
+      "confidence": "unverified",
+      "notes": "No independent car-seat test yet.",
+      "sources": []
+    },
+    {
+      "vehicle": "VinFast VF9",
+      "seats": 6,
+      "layout": "2-2-2 (2nd-row captain's chairs)",
+      "rows": [
+        {
+          "row": 2,
+          "positions": [
+            "LT",
+            "LT"
+          ],
+          "rear_facing": "yes",
+          "three_across": null,
+          "note": ""
+        },
+        {
+          "row": 3,
+          "positions": [
+            "T",
+            "T"
+          ],
+          "rear_facing": "tight",
+          "three_across": null,
+          "note": "3rd-row anchors not confirmed."
+        }
+      ],
+      "third_row_access": {
+        "type": "pass-through",
+        "paths": [
+          []
+        ],
+        "note": ""
+      },
+      "confidence": "unverified",
+      "notes": "No independent car-seat test yet.",
+      "sources": []
     }
   ]
 }

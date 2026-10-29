@@ -71,6 +71,31 @@ data.details.forEach(d => {
 });
 info.push('Data completeness: ' + fullyPop + '/' + data.details.length + ' entries fully populated');
 
+// === Car seat fit (car_seat_fit) ===
+const WATCHLIST = ['Toyota Highlander EV','Lexus TZ','Subaru Getaway','BMW iX7','Genesis GV90','Faraday Future FX Super One'];
+const csf = data.car_seat_fit || [];
+const csKeys = new Set();
+csf.forEach(l => {
+  const key = l.vehicle + ' / ' + l.seats + ' seats';
+  if (csKeys.has(key)) errors.push('Duplicate car_seat_fit layout: ' + key);
+  csKeys.add(key);
+  if (!data.details.some(d => d.vehicle === l.vehicle && d.seats === l.seats)) warnings.push('car_seat_fit layout has no matching detail trims: ' + key);
+  const rearSeats = (l.rows || []).reduce((s, r) => s + r.positions.length, 0);
+  if (rearSeats + 2 !== l.seats) errors.push('car_seat_fit seat count mismatch (' + (rearSeats + 2) + ' positions vs seats=' + l.seats + '): ' + key);
+  (l.rows || []).forEach(r => {
+    r.positions.forEach(p => { if (!['LT','T','L','-'].includes(p)) errors.push('car_seat_fit invalid position code "' + p + '": ' + key); });
+    if (!['yes','tight','no'].includes(r.rear_facing)) errors.push('car_seat_fit invalid rear_facing: ' + key);
+    if (r.three_across !== null && !['yes','tight','no'].includes(r.three_across)) errors.push('car_seat_fit invalid three_across: ' + key);
+  });
+  if (!['verified','partial','unverified'].includes(l.confidence)) errors.push('car_seat_fit invalid confidence: ' + key);
+  const row2 = (l.rows || []).find(r => r.row === 2);
+  (l.third_row_access?.paths || []).flat().forEach(i => { if (!row2 || i >= row2.positions.length) errors.push('car_seat_fit access path index out of range: ' + key); });
+});
+// Every on-sale 3-row seat configuration should have a car seat layout
+[...new Set(data.details.filter(d => d.seats >= 6 && !WATCHLIST.includes(d.vehicle)).map(d => d.vehicle + ' / ' + d.seats + ' seats'))]
+  .filter(k => !csKeys.has(k))
+  .forEach(k => warnings.push('No car_seat_fit layout for: ' + k));
+
 // === Print report ===
 console.log('=== EV Data Validation Report ===');
 console.log(errors.length + ' errors, ' + warnings.length + ' warnings, ' + info.length + ' info items');

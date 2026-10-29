@@ -1,4 +1,5 @@
 import rawData from './ev-data.json'
+import type { CarSeatLayout } from './car-seats'
 
 export interface CountRow {
   model: string
@@ -126,6 +127,8 @@ export interface EVData {
   preowned: PreownedRow[]
   glossary: GlossaryRow[]
   assumptions: AssumptionRow[]
+  /** Child-seat anchor layout per vehicle + seat configuration (see lib/car-seats.ts) */
+  car_seat_fit: CarSeatLayout[]
 }
 
 /* ── Derived pricing (computed at load; formula documented in CLAUDE.md) ── */

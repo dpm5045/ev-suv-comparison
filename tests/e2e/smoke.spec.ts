@@ -48,3 +48,11 @@ test('explore page renders a chart', async ({ page }) => {
   // Plot renders <svg> today; Chart.js renders <canvas> after the chart port — accept either
   await expect(page.locator('.explorer svg, .explorer canvas').first()).toBeVisible({ timeout: 15_000 })
 })
+
+test('car seat planner places kids and updates URL', async ({ page }) => {
+  await page.goto('/car-seats')
+  await expect(page.locator('.cs-card').first()).toBeVisible()
+  await page.getByRole('button', { name: '+ Backless booster' }).click()
+  await expect(page).toHaveURL(/kids=rf(%2C|,)ff(%2C|,)hb(%2C|,)bb/)
+  await expect(page.locator('.cs-kid')).toHaveCount(4)
+})

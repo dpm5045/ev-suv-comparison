@@ -24,6 +24,7 @@ All vehicle data lives in **`lib/ev-data.json`** and is typed + exported via **`
 - `DATA.glossary` — field definitions
 - `DATA.preowned` — pre-owned price rows
 - `VEHICLE_CLASSES` — map of vehicle name → CSS class (for color-coded badges)
+- `DATA.car_seat_fit` — child-seat anchor layout per vehicle + seat count (rows → positions coded `LT`/`T`/`L`/`-`, rear-facing + three-across ratings, 3rd-row access paths, confidence, sources). Typed and consumed by `lib/car-seats.ts`, whose `planLayout()` places a family's car seats into each layout for the `/car-seats` planner.
 
 `lib/utils.ts` exports `fmtMoney` and `fmtNum`, which return `{ text, className }` objects used across all table/card rendering.
 
@@ -39,6 +40,7 @@ app/
 ├── spec-select/        → SpecSelectClient (SpecSelectTab + DetailPanel)
 ├── glossary/           → GlossaryTab
 ├── explore/            → DataExplorer (scatter chart)
+├── car-seats/          → CarSeatsTab (car seat fit planner)
 ├── vehicles/[slug]/    → static per-vehicle page
 └── compare/[slug]/     → static pairwise comparison page
 ```
@@ -65,6 +67,7 @@ When modifying `lib/ev-data.json`, always verify:
 - `VEHICLE_CLASSES` + `CLASS_THEMES` in `lib/vehicle-theme.ts` have entries for any new vehicle
 - CSS class exists in `globals.css` for any new vehicle class (colors must match `CLASS_THEMES`)
 - No hardcoded model/vehicle counts anywhere (always derive from DATA at runtime)
+- Any new on-sale 6/7-seat configuration has a `car_seat_fit` entry (validator warns if missing; positions + 2 must equal `seats`)
 - `last_updated` (root-level key in `ev-data.json`) bumped to today's date on any data change — drives sitemap `lastModified`
 
 ### OTD formula (computed at load, never stored)

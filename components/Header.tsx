@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import DashboardNav from './DashboardNav'
 
-export type TabId = 'overview' | 'specselect' | 'comparison' | 'sidebyside' | 'glossary' | 'about'
+export type TabId = 'overview' | 'specselect' | 'comparison' | 'sidebyside' | 'carseats' | 'glossary' | 'about'
 
 interface Props {
   activeTab?: TabId
