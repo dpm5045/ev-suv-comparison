@@ -16,6 +16,14 @@ test('glossary route renders', async ({ page }) => {
   await expect(page.locator('main.main')).toContainText(/glossary/i)
 })
 
+test('watch list route renders and is the first tab after the brand', async ({ page }) => {
+  await page.goto('/watch-list')
+  await expect(page.locator('main.main')).toContainText(/watchlist/i)
+  const tabs = page.locator('nav.header-nav a.nav-tab')
+  await expect(tabs.nth(0)).toHaveText('3RowEV')
+  await expect(tabs.nth(1)).toHaveText('Watch List')
+})
+
 test('old ?tab= URL redirects to route', async ({ page }) => {
   await page.goto('/?tab=comparison&vehicle=Kia%20EV9')
   await expect(page).toHaveURL(/\/comparison/)
