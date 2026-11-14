@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-18",
+  "last_updated": "2026-11-14",
   "scope": "Scope of Car Models Analyzed: 140 trims were analyzed across seven years & 19 car models.",
   "count_note": "Notes: Six vehicles are on the Watchlist (not yet available in the US): Toyota Highlander EV, Subaru Getaway, BMW iX7, Genesis GV90, Faraday Future FX Super One, and Lexus TZ. The Tesla Model Y (3-Row) has a child-sized third row. Rivian R1S Gen1 (2022â€“2024) and Gen2 (2025+) models are both included.",
   "count_data": [
@@ -1185,7 +1185,7 @@
       "drivetrain": "AWD",
       "msrp": 74990,
       "destination": 1600,
-      "preowned_range": "$57,000 - $61,000",
+      "preowned_range": "$54,000 - $58,000",
       "self_driving": "Hyundai HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -1232,7 +1232,7 @@
       "drivetrain": "AWD",
       "msrp": 76490,
       "destination": 1600,
-      "preowned_range": "$59,000 - $65,000",
+      "preowned_range": "$56,000 - $62,000",
       "self_driving": "Hyundai HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -1279,7 +1279,7 @@
       "drivetrain": "AWD",
       "msrp": 71250,
       "destination": 1600,
-      "preowned_range": "$50,000 - $55,000",
+      "preowned_range": "$48,000 - $52,000",
       "self_driving": "Hyundai HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -1326,7 +1326,7 @@
       "drivetrain": "AWD",
       "msrp": 62765,
       "destination": 1600,
-      "preowned_range": "$45,000 - $56,000",
+      "preowned_range": "$43,000 - $53,000",
       "self_driving": "Hyundai HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -1373,7 +1373,7 @@
       "drivetrain": "AWD",
       "msrp": 66320,
       "destination": 1600,
-      "preowned_range": "$49,000 - $58,000",
+      "preowned_range": "$47,000 - $55,000",
       "self_driving": "Hyundai HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -1420,7 +1420,7 @@
       "drivetrain": "RWD",
       "msrp": 58955,
       "destination": 1600,
-      "preowned_range": "$49,000 - $54,000",
+      "preowned_range": "$47,000 - $51,000",
       "self_driving": "Hyundai HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -3112,7 +3112,7 @@
       "drivetrain": "AWD",
       "msrp": 99990,
       "destination": 0,
-      "preowned_range": "$105,000 - $135,000",
+      "preowned_range": "$100,000 - $128,000",
       "self_driving": "Tesla Autopilot / Full Self-Driving (optional)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Point-to-Point",
@@ -3159,7 +3159,7 @@
       "drivetrain": "AWD",
       "msrp": 99990,
       "destination": 0,
-      "preowned_range": "$100,000 - $130,000",
+      "preowned_range": "$95,000 - $123,000",
       "self_driving": "Tesla Autopilot / Full Self-Driving (optional)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Point-to-Point",
@@ -3224,7 +3224,7 @@
       "trim": "Base",
       "msrp": 99990,
       "destination": 0,
-      "preowned_range": "$100,000 - $130,000",
+      "preowned_range": "$95,000 - $123,000",
       "range_mi": 352,
       "hp": 670,
       "l2_10_100": 12.6,
@@ -3253,7 +3253,7 @@
       "drivetrain": "AWD",
       "msrp": 114990,
       "destination": 0,
-      "preowned_range": "$118,000 - $158,000",
+      "preowned_range": "$112,000 - $150,000",
       "self_driving": "Tesla Autopilot / Full Self-Driving (optional)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Point-to-Point",
@@ -3300,7 +3300,7 @@
       "drivetrain": "AWD",
       "msrp": 114990,
       "destination": 0,
-      "preowned_range": "$125,000 - $175,000",
+      "preowned_range": "$118,000 - $166,000",
       "self_driving": "Tesla Autopilot / Full Self-Driving (optional)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Point-to-Point",
@@ -3365,7 +3365,7 @@
       "trim": "Plaid",
       "msrp": 114990,
       "destination": 0,
-      "preowned_range": "$125,000 - $175,000",
+      "preowned_range": "$118,000 - $166,000",
       "range_mi": 335,
       "hp": 1020,
       "l2_10_100": 10.8,
@@ -6963,42 +6963,42 @@
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "S RWD",
-      "preowned_range": "$49,000 - $54,000"
+      "preowned_range": "$47,000 - $51,000"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, SE",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "SE",
-      "preowned_range": "$45,000 - $56,000"
+      "preowned_range": "$43,000 - $53,000"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, SEL",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "SEL",
-      "preowned_range": "$49,000 - $58,000"
+      "preowned_range": "$47,000 - $55,000"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Limited",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "Performance Limited",
-      "preowned_range": "$50,000 - $55,000"
+      "preowned_range": "$48,000 - $52,000"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "Performance Calligraphy",
-      "preowned_range": "$57,000 - $61,000"
+      "preowned_range": "$54,000 - $58,000"
     },
     {
       "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy Design",
       "vehicle": "Hyundai IONIQ 9",
       "year": 2026,
       "trim": "Performance Calligraphy Design",
-      "preowned_range": "$59,000 - $65,000"
+      "preowned_range": "$56,000 - $62,000"
     },
     {
       "name": "Hyundai IONIQ 9, 2025, N/A (first model year is 2026 in US)",
@@ -7159,14 +7159,14 @@
       "vehicle": "Tesla Model X",
       "year": 2026,
       "trim": "Base",
-      "preowned_range": "$105,000 - $135,000"
+      "preowned_range": "$100,000 - $128,000"
     },
     {
       "name": "Tesla Model X, 2026, Plaid",
       "vehicle": "Tesla Model X",
       "year": 2026,
       "trim": "Plaid",
-      "preowned_range": "$118,000 - $158,000"
+      "preowned_range": "$112,000 - $150,000"
     },
     {
       "name": "Tesla Model X, 2024, Base",
