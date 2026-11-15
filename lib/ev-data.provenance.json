@@ -656,9 +656,9 @@
     },
     "Lucid Gravity, 2026, Grand Touring": {
       "range_mi": {
-        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49670",
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50029",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Gravity GT w/20F21R wheels (2R): 450 mi"
+        "evidence": "EPA 2026 Gravity GT w/20F21R wheels (3R): 437 mi"
       }
     },
     "Lucid Gravity, 2026, Touring": {
@@ -677,9 +677,9 @@
     },
     "Lucid Gravity, 2027, Grand Touring": {
       "range_mi": {
-        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50652",
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50653",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 Gravity GT w/20F21R wheels (2R): 450 mi"
+        "evidence": "EPA 2027 Gravity GT w/20F21R wheels (3R): 437 mi"
       }
     },
     "Volkswagen ID. Buzz, 2025, 1st Edition with 4MOTION": {
@@ -960,6 +960,48 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51041",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 TZ 450e 11kW (20 inch Wheels): 253 mi"
+      }
+    },
+    "Tesla Model X, 2024, Base": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47915",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 Model X: 335 mi"
+      }
+    },
+    "Tesla Model X, 2024, Plaid": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47916",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 Model X Plaid (20in wheels): 326 mi"
+      }
+    },
+    "Lucid Gravity, 2026, Dream Edition": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49675",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Gravity Dream w/20F21R wheels (3R): 420 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2026, Maybach EQS 680 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49690",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EQS 680 4matic Maybach (SUV): 300 mi"
+      }
+    },
+    "VinFast VF9, 2025, Plus (7-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49088",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 VF 9 Plus: 287 mi"
+      }
+    },
+    "VinFast VF9, 2025, Plus (6-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49088",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 VF 9 Plus: 287 mi"
       }
     }
   }

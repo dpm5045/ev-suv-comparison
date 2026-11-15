@@ -80,7 +80,7 @@ function driveMatches(rowDrive, epaDrive) {
  * @returns {{ rows: object[], groups: object[] }} one result per detail row and
  *          a per vehicle + model year roll-up for the report
  */
-export function checkRanges(data, index) {
+export function checkRanges(data, index, accepted = {}) {
   const rows = []
   for (const row of data.details) {
     const r = { name: row.name, vehicle: row.vehicle, year: row.year, stored: row.range_mi }
@@ -98,6 +98,9 @@ export function checkRanges(data, index) {
         r.state = 'consistent'
         r.sourceUrl = VEHICLE_URL(hits[0].id)
         r.evidence = `EPA ${row.year} ${hits[0].model}: ${hits[0].range} mi` + (hits.length > 1 ? ` (and ${hits.length - 1} other EPA variant(s) with the same range)` : '')
+      } else if (accepted[row.name]) {
+        r.state = 'accepted'
+        r.reason = accepted[row.name]
       } else {
         r.state = 'mismatch'
       }
@@ -109,11 +112,12 @@ export function checkRanges(data, index) {
   const groups = new Map()
   for (const r of rows) {
     const key = `${r.vehicle}|${r.year}`
-    if (!groups.has(key)) groups.set(key, { vehicle: r.vehicle, year: r.year, total: 0, consistent: 0, mismatch: [], noStored: 0, notInEpa: false, otherYears: r.otherYears, epaRanges: r.epaRanges })
+    if (!groups.has(key)) groups.set(key, { vehicle: r.vehicle, year: r.year, total: 0, consistent: 0, mismatch: [], accepted: [], noStored: 0, notInEpa: false, otherYears: r.otherYears, epaRanges: r.epaRanges })
     const g = groups.get(key)
     g.total++
     if (r.state === 'consistent') g.consistent++
     if (r.state === 'mismatch') { g.mismatch.push(r); g.epaRanges = r.epaRanges }
+    if (r.state === 'accepted') g.accepted.push(r)
     if (r.state === 'no_stored_range') { g.noStored++; g.epaRanges = r.epaRanges }
     if (r.state === 'not_in_epa') g.notInEpa = true
   }

@@ -55,3 +55,42 @@ export function checkPage(amounts, stored, previous) {
 }
 
 export const fmt = (n) => `$${n.toLocaleString('en-US')}`
+
+/**
+ * Third-party tripwire (Car and Driver model pages). These print one headline
+ * line, "MSRP $56,635–$73,635", which includes destination and follows the
+ * newest model year. A change in that line is a prompt to check the
+ * manufacturer; it is never a source for a stored value.
+ */
+export function extractHeadline(html) {
+  const text = html
+    .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+  const m = text.match(/MSRP\s+\$([\d,]+)(?:\s?[–-]\s?\$([\d,]+))?(\s+est)?/)
+  if (!m) throw new Error('MSRP headline not found (page layout changed or blocked)')
+  const title = html.match(/<title[^>]*>\s*(20\d\d)\b/)
+  const low = Number(m[1].replace(/,/g, ''))
+  return { model_year: title ? Number(title[1]) : null, low, high: m[2] ? Number(m[2].replace(/,/g, '')) : low, estimated: Boolean(m[3]) }
+}
+
+/** Lowest and highest stored MSRP plus destination for one model year, or null. */
+export function storedPriceSpan(data, vehicle, year) {
+  const totals = data.details
+    .filter((r) => r.vehicle === vehicle && r.year === year && typeof r.msrp === 'number')
+    .map((r) => r.msrp + (typeof r.destination === 'number' ? r.destination : 0))
+  return totals.length ? { low: Math.min(...totals), high: Math.max(...totals) } : null
+}
+
+export function checkHeadline(headline, previous) {
+  const flags = []
+  if (previous) {
+    const span = (h) => (h.low === h.high ? fmt(h.low) : `${fmt(h.low)}–${fmt(h.high)}`) + (h.estimated ? ' est' : '')
+    if (previous.model_year !== headline.model_year) flags.push(`page moved from model year ${previous.model_year} to ${headline.model_year}`)
+    if (previous.estimated && !headline.estimated) flags.push(`estimated pricing became actual pricing: ${span(headline)}`)
+    else if (previous.low !== headline.low || previous.high !== headline.high || previous.estimated !== headline.estimated) {
+      flags.push(`MSRP line changed from ${span(previous)} to ${span(headline)}`)
+    }
+  }
+  return flags
+}
