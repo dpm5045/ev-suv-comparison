@@ -8,6 +8,19 @@ import VehicleBadge from '../VehicleBadge'
 import ExploreTeaser from '@/components/ExploreTeaser'
 import MarketInsights from '@/components/MarketInsights'
 import { toSlug } from '@/lib/slugs'
+import {
+  NEW_BUDGET_BUCKETS,
+  PREOWNED_BUDGET_BUCKETS,
+  PREFERENCE_OPTIONS,
+  SELF_DRIVING_TIER_ORDER,
+  SPEED_DATING_DEFAULTS,
+  computeRanks,
+  extractMetric,
+  formatRawMetric,
+  hasPreowned,
+  selfDrivingOrdinal,
+  summarizeInBudget,
+} from '@/lib/speed-dating'
 
 
 /* ── helpers ── */
@@ -19,37 +32,7 @@ function numericRows<K extends keyof Row>(d: Row[], key: K): NumRow<K>[] {
   return d.filter((r) => typeof r[key] === 'number') as NumRow<K>[]
 }
 
-function hasPreowned(r: Row): boolean {
-  const p = r.preowned_range || ''
-  return p.length > 0 && p.indexOf('N/A') < 0 && p.indexOf('No ') < 0
-}
 
-/* ── constants ── */
-
-const NEW_BUDGET_BUCKETS = [
-  { id: 'all', label: 'All Prices', filter: () => true },
-  { id: 'under60', label: 'Under $60k', filter: (v: number) => v < 60000 },
-  { id: '60to90', label: '$60k\u2013$90k', filter: (v: number) => v >= 60000 && v <= 90000 },
-  { id: '90plus', label: '$90k+', filter: (v: number) => v > 90000 },
-] as const
-
-const PREOWNED_BUDGET_BUCKETS = [
-  { id: 'all', label: 'All Prices', filter: () => true },
-  { id: 'under40', label: 'Under $40k', filter: (v: number) => v < 40000 },
-  { id: '40to55', label: '$40k\u2013$55k', filter: (v: number) => v >= 40000 && v <= 55000 },
-  { id: '55plus', label: '$55k+', filter: (v: number) => v > 55000 },
-] as const
-
-const PREFERENCE_OPTIONS = [
-  { id: 'range', label: 'Range' },
-  { id: 'storage', label: 'Storage' },
-  { id: 'power', label: '0 to 60' },
-  { id: 'charging', label: 'Charging Speed' },
-  { id: 'selfdriving', label: 'Self-Driving' },
-  { id: 'sixseat', label: '6-Seat Options' },
-] as const
-
-const STARTER_PREFS = ['range', 'storage', 'charging']
 
 interface Tile {
   label: string
@@ -186,16 +169,6 @@ function tilesForSixSeat(d: Row[], isPreowned: boolean): Tile[] {
   return tiles
 }
 
-const SELF_DRIVING_TIER_ORDER: Record<string, number> = {
-  'Basic L2': 1,
-  'Advanced L2': 2,
-  'L2+ Hands-Free': 3,
-  'L2+ Point-to-Point': 4,
-}
-
-function selfDrivingOrdinal(tier: string | null): number {
-  return tier ? (SELF_DRIVING_TIER_ORDER[tier] ?? 0) : 0
-}
 
 function tilesForSelfDriving(d: Row[], isPreowned: boolean): Tile[] {
   const tiles: Tile[] = []
@@ -242,133 +215,6 @@ const TILE_GENERATORS: Record<string, TileGenerator> = {
   sixseat: tilesForSixSeat,
 }
 
-/* ── scoring engine ── */
-
-interface VehicleScorable {
-  vehicle: string
-  rangeHigh: number | null
-  zeroTo60Best: number | null
-  cargo3High: number | null
-  cargo2High: number | null
-  dcChargeMin: number | null
-  selfDrivingMax: number
-}
-
-function extractMetric(s: VehicleScorable, pref: string): number | null {
-  switch (pref) {
-    case 'range': return s.rangeHigh
-    case 'power': return s.zeroTo60Best
-    case 'storage': return (s.cargo3High !== null && s.cargo3High > 0) ? s.cargo3High : s.cargo2High
-    case 'charging': return s.dcChargeMin
-    case 'selfdriving': return s.selfDrivingMax
-    default: return null
-  }
-}
-
-function normalizeScores(
-  summaries: VehicleScorable[],
-  pref: string
-): Map<string, number> {
-  const scores = new Map<string, number>()
-  const lowerIsBetter = pref === 'charging' || pref === 'power'
-  const values: number[] = []
-
-  for (const s of summaries) {
-    const v = extractMetric(s, pref)
-    if (v !== null && v !== 0) values.push(v)
-  }
-
-  if (!values.length) return scores
-
-  const min = Math.min(...values)
-  const max = Math.max(...values)
-  const spread = max - min
-
-  for (const s of summaries) {
-    const v = extractMetric(s, pref)
-    if (v === null || v === 0) {
-      scores.set(s.vehicle, 0)
-    } else if (spread === 0) {
-      scores.set(s.vehicle, 1)
-    } else {
-      const norm = (v - min) / spread
-      scores.set(s.vehicle, lowerIsBetter ? 1 - norm : norm)
-    }
-  }
-
-  return scores
-}
-
-interface RankResult {
-  ranks: Map<string, number>
-  composites: Map<string, number>
-  normalizedByPref: Map<string, Map<string, number>>
-  effectivePrefs: string[]
-}
-
-function computeRanks(
-  summaries: VehicleScorable[],
-  pref1: string,
-  pref2: string
-): RankResult {
-  const ranks = new Map<string, number>()
-  const compositeMap = new Map<string, number>()
-  const normalizedByPref = new Map<string, Map<string, number>>()
-  const empty: RankResult = { ranks, composites: compositeMap, normalizedByPref, effectivePrefs: [] }
-  if (!pref1 && !pref2) return empty
-
-  // Determine effective prefs (excluding sixseat which is a filter)
-  const effectivePrefs: string[] = []
-  if (pref1 && pref1 !== 'sixseat') effectivePrefs.push(pref1)
-  if (pref2 && pref2 !== 'sixseat') effectivePrefs.push(pref2)
-
-  if (!effectivePrefs.length) return empty
-
-  const scores1 = normalizeScores(summaries, effectivePrefs[0])
-  normalizedByPref.set(effectivePrefs[0], scores1)
-  const scores2 = effectivePrefs.length > 1 ? normalizeScores(summaries, effectivePrefs[1]) : null
-  if (scores2) normalizedByPref.set(effectivePrefs[1], scores2)
-
-  // Composite score
-  const composites: { vehicle: string; score: number }[] = []
-  for (const s of summaries) {
-    const s1 = scores1.get(s.vehicle) ?? 0
-    if (scores2) {
-      const s2 = scores2.get(s.vehicle) ?? 0
-      composites.push({ vehicle: s.vehicle, score: 0.6 * s1 + 0.4 * s2 })
-    } else {
-      composites.push({ vehicle: s.vehicle, score: s1 })
-    }
-  }
-
-  // Sort descending
-  composites.sort((a, b) => b.score - a.score)
-
-  // Dense ranking
-  let rank = 1
-  for (let i = 0; i < composites.length; i++) {
-    if (i > 0 && composites[i].score < composites[i - 1].score) rank++
-    ranks.set(composites[i].vehicle, rank)
-    compositeMap.set(composites[i].vehicle, composites[i].score)
-  }
-
-  return { ranks, composites: compositeMap, normalizedByPref, effectivePrefs }
-}
-
-function formatRawMetric(pref: string, value: number | null): string {
-  if (value === null || value === 0) return '\u2014'
-  switch (pref) {
-    case 'range': return `${Math.round(value)} mi`
-    case 'power': return `${value}s`
-    case 'storage': return `${Math.round(value)} cu ft`
-    case 'charging': return `${Math.round(value)} min`
-    case 'selfdriving': {
-      const entry = Object.entries(SELF_DRIVING_TIER_ORDER).find(([, ord]) => ord === value)
-      return entry ? entry[0] : '\u2014'
-    }
-    default: return String(value)
-  }
-}
 
 /* ── component ── */
 
@@ -387,31 +233,36 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
     if (initialized) return
     setInitialized(true)
     const defaults: Partial<InsightFilters> = {}
-    if (!condition) defaults.condition = 'new'
-    if (!budget) defaults.budget = 'all'
+    if (!condition) defaults.condition = SPEED_DATING_DEFAULTS.condition
+    if (!budget) defaults.budget = SPEED_DATING_DEFAULTS.budget
     if (!pref1 && !pref2) {
-      const shuffled = [...STARTER_PREFS].sort(() => Math.random() - 0.5)
-      defaults.pref1 = shuffled[0]
-      defaults.pref2 = shuffled[1]
+      defaults.pref1 = SPEED_DATING_DEFAULTS.pref1
+      defaults.pref2 = SPEED_DATING_DEFAULTS.pref2
     }
     if (Object.keys(defaults).length) {
-      onFiltersChange({ condition: condition || 'new', budget: budget || 'all', pref1: pref1 || defaults.pref1 || '', pref2: pref2 || defaults.pref2 || '' }, true)
+      onFiltersChange({
+        condition: condition || SPEED_DATING_DEFAULTS.condition,
+        budget: budget || SPEED_DATING_DEFAULTS.budget,
+        pref1: pref1 || defaults.pref1 || '',
+        pref2: pref2 || defaults.pref2 || '',
+      }, true)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const activeCondition = condition || 'new'
+  const activeCondition = condition || SPEED_DATING_DEFAULTS.condition
   const isPreowned = activeCondition === 'preowned'
-  const activeBudget = budget || 'all'
   const activePref1 = pref1
   const activePref2 = pref2
 
   const budgetBuckets = isPreowned ? PREOWNED_BUDGET_BUCKETS : NEW_BUDGET_BUCKETS
+  const requestedBudget = budget || SPEED_DATING_DEFAULTS.budget
+  const activeBudget: string = budgetBuckets.some((b) => b.id === requestedBudget) ? requestedBudget : 'all'
 
   /* --- filtered details --- */
   const filteredDetails = useMemo(() => {
     const bucketFilter = budgetBuckets.find((b) => b.id === activeBudget)?.filter ?? (() => true)
-    let rows = DATA.details as Row[]
+    let rows = (DATA.details as Row[]).filter((r) => !isWatchlistVehicle(r.vehicle))
     if (isPreowned) {
       // Only trims with valid pre-owned data
       rows = rows.filter(hasPreowned)
@@ -529,8 +380,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
     })
 
     // Compute ranks only for vehicles in the filtered set (respects budget + 6-seat filter)
-    const scorable = rawSummaries.filter((s) => inBudget.has(s.vehicle))
-    const rankResult = computeRanks(scorable, activePref1, activePref2)
+    const rankResult = computeRanks(summarizeInBudget(filteredDetails, isPreowned), activePref1, activePref2)
     const ranks = rankResult.ranks
 
     // Sort by rank (ranked vehicles first, then alphabetical for unranked)
@@ -544,7 +394,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
     })
 
     return { vehicleSummaries, vehiclesInBudget: inBudget, ranks, rankResult }
-  }, [filteredDetails, activePref1, activePref2])
+  }, [filteredDetails, activePref1, activePref2, isPreowned])
 
   const [expandedVehicle, setExpandedVehicle] = useState<string | null>(null)
 
