@@ -7,6 +7,7 @@ import {
   getTrimsForVehicle, getBrandFromVehicle, getAllComparisonPairs,
 } from '@/lib/slugs'
 import { VEHICLE_CLASSES } from '@/lib/data'
+import { WATCHLIST_META, WATCH_STATUS_LABEL } from '@/lib/watchlist'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import { SPEC_SECTIONS } from '@/lib/spec-fields'
 import Header from '@/components/Header'
@@ -64,6 +65,7 @@ export default async function VehiclePage({ params }: Props) {
 
   const trims = getTrimsForVehicle(vehicle)
   const cls = VEHICLE_CLASSES[vehicle] ?? ''
+  const watchMeta = WATCHLIST_META[vehicle]
   const brand = getBrandFromVehicle(vehicle)
   const years = [...new Set(trims.map(t => t.year))].sort()
   const yearRange = years.length === 1 ? String(years[0]) : `${years[0]}–${years[years.length - 1]}`
@@ -184,6 +186,13 @@ export default async function VehiclePage({ params }: Props) {
         <div className="vehicle-hero">
           <span className={`vehicle-badge ${cls}`}>{vehicle}</span>
           <p className="vehicle-hero-sub">{yearRange} &middot; {trims.length} trim{trims.length !== 1 ? 's' : ''} &middot; {seats.join(' or ')}-seat</p>
+          {watchMeta && (
+            <p className="vehicle-hero-watch">
+              <span className={`wl-chip wl-chip--${watchMeta.status}`}>{WATCH_STATUS_LABEL[watchMeta.status]}</span>
+              <span>{watchMeta.windowLabel}</span>
+              <Link href="/watch-list">Watch List →</Link>
+            </p>
+          )}
           <div className="vehicle-hero-actions">
             <Link href={`/comparison?vehicle=${encodeURIComponent(vehicle)}`}>
               Compare trims →
@@ -287,9 +296,9 @@ export default async function VehiclePage({ params }: Props) {
                 const other = pair.nameA === vehicle ? pair.nameB : pair.nameA
                 const otherCls = VEHICLE_CLASSES[other] ?? ''
                 return (
-                  <Link key={pair.slug} href={`/compare/${pair.slug}`} className="related-link-card">
+                  <Link key={pair.slug} href={`/compare/${pair.slug}`} className="related-link-card" aria-label={`Compare ${vehicle} with ${other}`}>
                     <span className={`vehicle-badge ${otherCls}`} style={{ fontSize: 13, padding: '3px 10px' }}>{other}</span>
-                    <span className="related-link-vs">{vehicle} vs {other}</span>
+                    <span className="related-link-arrow" aria-hidden="true">→</span>
                   </Link>
                 )
               })}
