@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import VehicleBadge from '../VehicleBadge'
+import PageHeader, { dataCountEyebrow } from '../PageHeader'
 
 /* ── helpers ── */
 
@@ -566,10 +567,9 @@ export default function SpecSelectTab({ onRowClick }: Props) {
 
   return (
     <>
-      <h2 className="section-title">Spec &amp; Select</h2>
-      <p className="section-desc">
+      <PageHeader eyebrow={dataCountEyebrow()} title="Spec & Select">
         Build your dream spec sheet. Select your criteria and see matching vehicles update live.
-      </p>
+      </PageHeader>
 
       {/* ── Reset button ── */}
       {activeFilterCount > 0 && (

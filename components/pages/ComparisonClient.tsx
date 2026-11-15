@@ -43,7 +43,7 @@ export default function ComparisonClient() {
   return (
     <>
       <Header activeTab="comparison" />
-      <main className="main">
+      <main className="main main--wide">
         <ComparisonTab filters={filters} onFiltersChange={setFilters} onRowClick={setDetailIdx} />
       </main>
       <DetailPanel idx={detailIdx} onClose={() => setDetailIdx(null)} />

@@ -3,6 +3,7 @@
 import { Fragment } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { DATA, type DetailRow } from '@/lib/data'
+import PageHeader, { dataCountEyebrow } from '../PageHeader'
 import { SPEC_SECTIONS, type SpecSection as SpecSectionDef, type FieldDef } from '@/lib/spec-fields'
 import VehicleBadge from '../VehicleBadge'
 
@@ -115,8 +116,9 @@ export default function SideBySideTab() {
 
   return (
     <>
-      <h2 className="section-title">Side-by-Side</h2>
-      <p className="section-desc">Select up to 3 configurations to compare every metric side by side.</p>
+      <PageHeader eyebrow={dataCountEyebrow()} title="Side-by-Side">
+        Select up to 3 configurations to compare every metric side by side.
+      </PageHeader>
 
       {/* ── Slot selectors ── */}
       <div className="sbs-selectors">

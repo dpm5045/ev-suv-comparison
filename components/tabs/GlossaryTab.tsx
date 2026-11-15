@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { DATA } from '@/lib/data'
+import PageHeader from '../PageHeader'
 
 const CHARGING_STANDARDS = [
   {
@@ -121,10 +122,9 @@ export default function GlossaryTab() {
 
   return (
     <>
-      <h2 className="section-title">Glossary</h2>
-      <p className="section-desc">
+      <PageHeader eyebrow="Reference" title="Glossary">
         Definitions, charging standards, and notation used throughout the comparison tables. Click a section to expand.
-      </p>
+      </PageHeader>
 
       <div className="glossary-accordions">
         {GLOSSARY_SECTIONS.map((section, idx) => {

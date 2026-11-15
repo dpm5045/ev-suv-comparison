@@ -6,6 +6,7 @@ import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
+import PageHeader, { dataCountEyebrow } from '../PageHeader'
 import { toSlug } from '@/lib/slugs'
 import type { ComparisonFilters } from '../filter-types'
 
@@ -357,23 +358,25 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
 
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6, flexWrap: 'wrap', gap: 8 }}>
-        <h2 className="section-title" style={{ marginBottom: 0 }}>Detailed Comparison</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          {activeFilterCount > 0 && (
-            <button className="multi-select-clear" style={{ whiteSpace: 'nowrap', flexShrink: 0 }} onClick={clearAllFilters}>
-              Clear all filters ({activeFilterCount})
-            </button>
-          )}
-          <div className="mobile-view-toggle">
-            <button className={`view-toggle-btn${mobileView === 'cards' ? ' active' : ''}`} onClick={() => setMobileView('cards')}>Cards</button>
-            <button className={`view-toggle-btn${mobileView === 'table' ? ' active' : ''}`} onClick={() => setMobileView('table')}>Table</button>
-          </div>
-        </div>
-      </div>
-      <p className="section-desc" style={{ marginBottom: 8 }}>
+      <PageHeader
+        eyebrow={dataCountEyebrow()}
+        title="Detailed Comparison"
+        actions={
+          <>
+            {activeFilterCount > 0 && (
+              <button className="multi-select-clear" style={{ whiteSpace: 'nowrap', flexShrink: 0 }} onClick={clearAllFilters}>
+                Clear all filters ({activeFilterCount})
+              </button>
+            )}
+            <div className="mobile-view-toggle">
+              <button className={`view-toggle-btn${mobileView === 'cards' ? ' active' : ''}`} onClick={() => setMobileView('cards')}>Cards</button>
+              <button className={`view-toggle-btn${mobileView === 'table' ? ' active' : ''}`} onClick={() => setMobileView('table')}>Table</button>
+            </div>
+          </>
+        }
+      >
         Click any column header to filter. Click any row or card to view complete specs.
-      </p>
+      </PageHeader>
 
       {/* ── Mobile filter bar (hidden on desktop via CSS) ── */}
       <div className="mobile-filters">
