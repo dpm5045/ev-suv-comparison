@@ -685,7 +685,7 @@ export default function SpecSelectTab({ onRowClick }: Props) {
                     <span className="spec-card-stat-value">{typeof r.towing_lbs === 'number' ? `${r.towing_lbs.toLocaleString()}` : '\u2014'}</span>
                   </div>
                   <div className="spec-card-stat">
-                    <span className="spec-card-stat-label">0\u201360</span>
+                    <span className="spec-card-stat-label">0–60</span>
                     <span className="spec-card-stat-value">{typeof r.zero_to_60_sec === 'number' ? `${r.zero_to_60_sec}s` : '\u2014'}</span>
                   </div>
                 </div>
