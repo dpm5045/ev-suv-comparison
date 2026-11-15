@@ -42,7 +42,10 @@ export default function DashboardNav({ activeTab }: Props) {
     setDrawerOpen(false)
   }
 
-  const activeTabLabel = TABS.find(t => t.id === activeTab)?.label ?? 'Home'
+  const activeTabLabel =
+    activeTab === 'overview' ? 'Home'
+    : activeTab === 'about' ? 'About'
+    : TABS.find(t => t.id === activeTab)?.label ?? '3RowEV'
 
   return (
     <>

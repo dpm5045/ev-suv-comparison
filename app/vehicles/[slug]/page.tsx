@@ -173,7 +173,7 @@ export default async function VehiclePage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       {faqJsonLd && <JsonLd data={faqJsonLd} />}
-      <Header activeTab="overview" />
+      <Header activeTab="none" />
       <main className="vehicle-page">
         <Breadcrumb items={[
           { label: 'Home', href: '/' },

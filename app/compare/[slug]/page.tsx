@@ -182,7 +182,7 @@ export default async function ComparePage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       {faqJsonLd && <JsonLd data={faqJsonLd} />}
-      <Header activeTab="overview" />
+      <Header activeTab="none" />
       <main className="compare-page">
         <Breadcrumb items={[
           { label: 'Home', href: '/' },

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ExplorePage() {
   return (
     <>
-      <Header activeTab="overview" />
+      <Header activeTab="none" />
       <main className="main">
         <DataExplorer />
       </main>
