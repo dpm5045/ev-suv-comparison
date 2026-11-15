@@ -227,7 +227,7 @@ export default async function VehiclePage({ params }: Props) {
 
         {/* Desktop: comparison table */}
         <div className="cmp-table-view">
-          <div className="table-wrap">
+          <div className="table-wrap trim-table-wrap">
             <table className="trim-compare-table">
               <thead>
                 <tr>
@@ -241,7 +241,8 @@ export default async function VehiclePage({ params }: Props) {
                 {specSections.map(sec => (
                   <Fragment key={sec.title}>
                     <tr className="compare-section-row">
-                      <td colSpan={trims.length + 1}>{sec.title}</td>
+                      <td className="col-sticky">{sec.title}</td>
+                      <td colSpan={trims.length} />
                     </tr>
                     {sec.rows.map(row => (
                       <tr key={row.label}>
@@ -256,7 +257,8 @@ export default async function VehiclePage({ params }: Props) {
                 {trims.some(t => t.notes) && (
                   <>
                     <tr className="compare-section-row">
-                      <td colSpan={trims.length + 1}>Notes</td>
+                      <td className="col-sticky">Notes</td>
+                      <td colSpan={trims.length} />
                     </tr>
                     {trims.map((t, i) => t.notes ? (
                       <tr key={i} className="notes-row">

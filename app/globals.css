@@ -360,6 +360,13 @@ th {
 .cmp-table-view td.col-sticky {
   z-index: 2;
 }
+/* Vehicle page trim table: own height/border (overrides Full Monty's fixed-height rule above) */
+.cmp-table-view .trim-table-wrap {
+  height: auto;
+  max-height: 75vh;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
 th.col-sticky {
   text-align: left;
 }
@@ -2687,6 +2694,8 @@ html[data-theme="light"] .overview-stat[data-category="selfdriving"] { --stat-gl
   letter-spacing: 0.06em;
   color: var(--accent) !important;
   padding: 10px 14px !important;
+  text-align: left;
+  white-space: nowrap;
 }
 .trim-compare-table .compare-metric-label {
   color: var(--text-muted) !important;
