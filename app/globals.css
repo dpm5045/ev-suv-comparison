@@ -434,6 +434,8 @@ tr:hover td {
   font-family: var(--mono);
   font-size: 15px;
 }
+.cmp-trim-cell { max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cmp-table-view .cell-range { white-space: nowrap; }
 .cell-range {
   color: var(--teal);
   font-family: var(--mono);

@@ -444,7 +444,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                       </div>
                     </td>
                     <td>{r.year || '—'}</td>
-                    <td>{r.trim || ''}</td>
+                    <td className="cmp-trim-cell" title={r.trim || undefined}>{r.trim || ''}</td>
                     <td>{r.drivetrain || '—'}</td>
                     <td className="num">{r.seats ?? '—'}</td>
                     <td className="num"><span className={msrp.className}>{msrp.text}</span></td>
