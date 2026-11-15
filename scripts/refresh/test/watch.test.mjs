@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { deflateRawSync } from 'node:zlib'
 import { unzipFirst } from '../lib/zip.mjs'
 import { parseCsv, buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance } from '../lib/epa.mjs'
-import { extractAmounts, storedMsrps, checkPage } from '../lib/pages.mjs'
+import { extractAmounts, storedMsrps, checkPage, extractHeadline, storedPriceSpan, checkHeadline } from '../lib/pages.mjs'
 
 const csv = readFileSync(new URL('./fixtures/epa-sample.txt' /* .txt: the repo ignores *.csv */, import.meta.url), 'utf-8')
 // The real file has tens of thousands of rows; pad so the truncation guard passes.
@@ -116,4 +116,42 @@ test('page check flags a stored price that vanished and a new one in the band', 
 test('a page showing none of the stored prices is not watchable', () => {
   const r = checkPage([77500, 78400], [77395, 91895], { found: [], other_in_band: [] })
   assert.deepEqual([r.watchable, r.flags], [false, []])
+})
+
+test('an accepted row is not reported as a mismatch', () => {
+  const idx = buildEpaIndex(padded, models)
+  const data = { details: [row('Kia EV9', 2026, 'Wind', 'AWD', 305), row('Kia EV9', 2026, 'Land', 'AWD', 299)] }
+  const { rows, groups } = checkRanges(data, idx, { 'Kia EV9, 2026, Wind': 'Maker estimate.' })
+  assert.deepEqual(rows.map((r) => r.state), ['accepted', 'mismatch'])
+  assert.equal(groups[0].accepted[0].reason, 'Maker estimate.')
+  assert.deepEqual(updateRangeProvenance({}, rows, '2026-11-15'), {}) // accepted rows get no EPA source
+})
+
+const cdPage = (title, line) => `<html><head><title>${title}</title><script>var x = "MSRP $1,000"</script></head><body><div>Car and Driver <span>MSRP</span> ${line} <a>Shop New</a></div></body></html>`
+
+test('headline extraction reads the range, a single price, and the estimate marker', () => {
+  assert.deepEqual(extractHeadline(cdPage('2027 Kia EV9 Review, Pricing, and Specs', '$56,635–$73,635')), { model_year: 2027, low: 56635, high: 73635, estimated: false })
+  assert.deepEqual(extractHeadline(cdPage('2027 VinFast VF9 Review', '$64,290')), { model_year: 2027, low: 64290, high: 64290, estimated: false })
+  assert.deepEqual(extractHeadline(cdPage('2028 Subaru Getaway Review', '$55,000–$65,000 est')), { model_year: 2028, low: 55000, high: 65000, estimated: true })
+  assert.throws(() => extractHeadline('<html><title>404</title><body>Not found</body></html>'), /headline not found/)
+})
+
+test('headline check flags price, model-year and estimate changes only', () => {
+  const base = { model_year: 2027, low: 56635, high: 73635, estimated: false }
+  assert.deepEqual(checkHeadline(base, undefined), [])
+  assert.deepEqual(checkHeadline(base, { url: 'x', ...base }), [])
+  assert.deepEqual(checkHeadline({ ...base, low: 57635 }, base), ['MSRP line changed from $56,635–$73,635 to $57,635–$73,635'])
+  assert.deepEqual(checkHeadline({ ...base, model_year: 2028 }, base), ['page moved from model year 2027 to 2028'])
+  assert.deepEqual(checkHeadline(base, { ...base, low: 55000, high: 75000, estimated: true }), ['estimated pricing became actual pricing: $56,635–$73,635'])
+})
+
+test('stored price span adds destination and ignores unpriced rows', () => {
+  const data = { details: [
+    { vehicle: 'Kia EV9', year: 2027, msrp: 54990, destination: 1645 },
+    { vehicle: 'Kia EV9', year: 2027, msrp: 71990, destination: 1645 },
+    { vehicle: 'Kia EV9', year: 2027, msrp: 'TBD', destination: 1645 },
+    { vehicle: 'Kia EV9', year: 2026, msrp: 10, destination: 1 },
+  ] }
+  assert.deepEqual(storedPriceSpan(data, 'Kia EV9', 2027), { low: 56635, high: 73635 })
+  assert.equal(storedPriceSpan(data, 'Kia EV9', 2028), null)
 })

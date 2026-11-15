@@ -128,6 +128,6 @@ export const MODEL_YEAR_NEWS: ModelYearNews[] = [
     year: 2027,
     tag: 'New top trim',
     headline: 'A 1,070 hp GT-S joins, while Touring and Grand Touring hold their prices.',
-    bullets: ['GT-S range projected at 373 miles, EPA pending', 'Grand Touring keeps its 450-mile rating', 'More features standard across the line'],
+    bullets: ['GT-S range projected at 373 miles, EPA pending', 'Grand Touring keeps its ratings: 437 miles with three rows, 450 with two', 'More features standard across the line'],
   },
 ]

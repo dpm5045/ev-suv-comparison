@@ -11,26 +11,86 @@
   "epa": {
     "download_url": "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip",
     "models": {
-      "Kia EV9": { "make": "Kia", "model": "^EV9\\b" },
-      "Hyundai IONIQ 9": { "make": "Hyundai", "model": "^Ioniq 9\\b" },
-      "Volvo EX90": { "make": "Volvo", "model": "^EX90\\b" },
-      "Rivian R1S": { "make": "Rivian", "model": "^R1S\\b" },
-      "Tesla Model X": { "make": "Tesla", "model": "^Model X\\b" },
-      "Tesla Model Y (3-Row)": { "make": "Tesla", "model": "^Model Y\\b(?! L\\b)" },
-      "Tesla Model Y L": { "make": "Tesla", "model": "^Model Y L\\b" },
-      "Lucid Gravity": { "make": "Lucid", "model": "^Gravity\\b" },
-      "Volkswagen ID. Buzz": { "make": "Volkswagen", "model": "^ID\\. ?Buzz\\b" },
-      "Toyota Highlander EV": { "make": "Toyota", "model": "Highlander" },
-      "Cadillac Escalade IQ": { "make": "Cadillac", "model": "^Escalade IQ" },
-      "Cadillac VISTIQ": { "make": "Cadillac", "model": "^VISTIQ\\b" },
-      "Mercedes-Benz EQS SUV": { "make": "Mercedes-Benz", "model": "EQS.*SUV" },
-      "Mercedes-Benz GLB Electric": { "make": "Mercedes-Benz", "model": "^GLB" },
-      "Subaru Getaway": { "make": "Subaru", "model": "Getaway" },
-      "VinFast VF9": { "make": "VinFast", "model": "^VF ?9\\b" },
-      "BMW iX7": { "make": "BMW", "model": "^iX7" },
-      "Genesis GV90": { "make": "Genesis", "model": "GV90" },
-      "Faraday Future FX Super One": { "make": "Faraday Future", "model": "Super One" },
-      "Lexus TZ": { "make": "Lexus", "model": "^TZ\\b" }
+      "Kia EV9": {
+        "make": "Kia",
+        "model": "^EV9\\b"
+      },
+      "Hyundai IONIQ 9": {
+        "make": "Hyundai",
+        "model": "^Ioniq 9\\b"
+      },
+      "Volvo EX90": {
+        "make": "Volvo",
+        "model": "^EX90\\b"
+      },
+      "Rivian R1S": {
+        "make": "Rivian",
+        "model": "^R1S\\b"
+      },
+      "Tesla Model X": {
+        "make": "Tesla",
+        "model": "^Model X\\b"
+      },
+      "Tesla Model Y (3-Row)": {
+        "make": "Tesla",
+        "model": "^Model Y\\b(?! L\\b)"
+      },
+      "Tesla Model Y L": {
+        "make": "Tesla",
+        "model": "^Model Y L\\b"
+      },
+      "Lucid Gravity": {
+        "make": "Lucid",
+        "model": "^Gravity\\b"
+      },
+      "Volkswagen ID. Buzz": {
+        "make": "Volkswagen",
+        "model": "^ID\\. ?Buzz\\b"
+      },
+      "Toyota Highlander EV": {
+        "make": "Toyota",
+        "model": "Highlander"
+      },
+      "Cadillac Escalade IQ": {
+        "make": "Cadillac",
+        "model": "^Escalade IQ"
+      },
+      "Cadillac VISTIQ": {
+        "make": "Cadillac",
+        "model": "^VISTIQ\\b"
+      },
+      "Mercedes-Benz EQS SUV": {
+        "make": "Mercedes-Benz",
+        "model": "EQS.*SUV"
+      },
+      "Mercedes-Benz GLB Electric": {
+        "make": "Mercedes-Benz",
+        "model": "^GLB"
+      },
+      "Subaru Getaway": {
+        "make": "Subaru",
+        "model": "Getaway"
+      },
+      "VinFast VF9": {
+        "make": "VinFast",
+        "model": "^VF ?9\\b"
+      },
+      "BMW iX7": {
+        "make": "BMW",
+        "model": "^iX7"
+      },
+      "Genesis GV90": {
+        "make": "Genesis",
+        "model": "GV90"
+      },
+      "Faraday Future FX Super One": {
+        "make": "Faraday Future",
+        "model": "Super One"
+      },
+      "Lexus TZ": {
+        "make": "Lexus",
+        "model": "^TZ\\b"
+      }
     }
   },
   "pricing_pages": {
@@ -41,8 +101,26 @@
     "Cadillac Escalade IQ": "https://www.cadillac.com/electric/escalade-iq",
     "Cadillac VISTIQ": "https://www.cadillac.com/electric/vistiq",
     "Mercedes-Benz EQS SUV": "https://www.mbusa.com/en/vehicles/class/eqs/suv",
-    "Volkswagen ID. Buzz": "https://www.vw.com/en/models/id-buzz.html",
-    "VinFast VF9": "https://vinfastauto.us/vehicles/vf-9",
-    "Lexus TZ": "https://www.lexus.com/models/TZ"
+    "VinFast VF9": "https://vinfastauto.us/vehicles/vf-9"
+  },
+  "third_party_pages": {
+    "Kia EV9": "https://www.caranddriver.com/kia/ev9",
+    "Hyundai IONIQ 9": "https://www.caranddriver.com/hyundai/ioniq-9",
+    "Volvo EX90": "https://www.caranddriver.com/volvo/ex90",
+    "Rivian R1S": "https://www.caranddriver.com/rivian/r1s",
+    "Tesla Model X": "https://www.caranddriver.com/tesla/model-x",
+    "Tesla Model Y (3-Row)": "https://www.caranddriver.com/tesla/model-y",
+    "Tesla Model Y L": "https://www.caranddriver.com/tesla/model-y",
+    "Lucid Gravity": "https://www.caranddriver.com/lucid-motors/gravity",
+    "Volkswagen ID. Buzz": "https://www.caranddriver.com/volkswagen/id-buzz",
+    "Toyota Highlander EV": "https://www.caranddriver.com/toyota/highlander-ev",
+    "Cadillac Escalade IQ": "https://www.caranddriver.com/cadillac/escalade-iq",
+    "Cadillac VISTIQ": "https://www.caranddriver.com/cadillac/vistiq",
+    "Mercedes-Benz EQS SUV": "https://www.caranddriver.com/mercedes-benz/eqs-suv",
+    "Mercedes-Benz GLB Electric": "https://www.caranddriver.com/mercedes-benz/glb-class-ev",
+    "Subaru Getaway": "https://www.caranddriver.com/subaru/getaway",
+    "VinFast VF9": "https://www.caranddriver.com/vinfast/vf9",
+    "Genesis GV90": "https://www.caranddriver.com/genesis/gv90",
+    "Lexus TZ": "https://www.caranddriver.com/lexus/tz"
   }
 }

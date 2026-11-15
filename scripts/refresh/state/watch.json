@@ -1776,22 +1776,140 @@
       ],
       "other_in_band": []
     },
-    "Volkswagen ID. Buzz": {
-      "url": "https://www.vw.com/en/models/id-buzz.html",
-      "found": [],
-      "other_in_band": []
-    },
     "VinFast VF9": {
       "url": "https://vinfastauto.us/vehicles/vf-9",
       "found": [],
       "other_in_band": [
         62900
       ]
+    }
+  },
+  "tripwires": {
+    "Kia EV9": {
+      "url": "https://www.caranddriver.com/kia/ev9",
+      "model_year": 2027,
+      "low": 56635,
+      "high": 73635,
+      "estimated": false
+    },
+    "Hyundai IONIQ 9": {
+      "url": "https://www.caranddriver.com/hyundai/ioniq-9",
+      "model_year": 2027,
+      "low": 61000,
+      "high": 85000,
+      "estimated": true
+    },
+    "Volvo EX90": {
+      "url": "https://www.caranddriver.com/volvo/ex90",
+      "model_year": 2027,
+      "low": 79000,
+      "high": 91000,
+      "estimated": true
+    },
+    "Rivian R1S": {
+      "url": "https://www.caranddriver.com/rivian/r1s",
+      "model_year": 2027,
+      "low": 85885,
+      "high": 123885,
+      "estimated": false
+    },
+    "Tesla Model X": {
+      "url": "https://www.caranddriver.com/tesla/model-x",
+      "model_year": 2026,
+      "low": 116630,
+      "high": 161060,
+      "estimated": false
+    },
+    "Tesla Model Y (3-Row)": {
+      "url": "https://www.caranddriver.com/tesla/model-y",
+      "model_year": 2027,
+      "low": 41630,
+      "high": 63630,
+      "estimated": false
+    },
+    "Tesla Model Y L": {
+      "url": "https://www.caranddriver.com/tesla/model-y",
+      "model_year": 2027,
+      "low": 41630,
+      "high": 63630,
+      "estimated": false
+    },
+    "Lucid Gravity": {
+      "url": "https://www.caranddriver.com/lucid-motors/gravity",
+      "model_year": 2027,
+      "low": 81750,
+      "high": 127750,
+      "estimated": false
+    },
+    "Volkswagen ID. Buzz": {
+      "url": "https://www.caranddriver.com/volkswagen/id-buzz",
+      "model_year": 2025,
+      "low": 61545,
+      "high": 72540,
+      "estimated": false
+    },
+    "Toyota Highlander EV": {
+      "url": "https://www.caranddriver.com/toyota/highlander-ev",
+      "model_year": 2028,
+      "low": 54000,
+      "high": 60000,
+      "estimated": true
+    },
+    "Cadillac Escalade IQ": {
+      "url": "https://www.caranddriver.com/cadillac/escalade-iq",
+      "model_year": 2027,
+      "low": 132695,
+      "high": 210190,
+      "estimated": false
+    },
+    "Cadillac VISTIQ": {
+      "url": "https://www.caranddriver.com/cadillac/vistiq",
+      "model_year": 2027,
+      "low": 80395,
+      "high": 99495,
+      "estimated": false
+    },
+    "Mercedes-Benz EQS SUV": {
+      "url": "https://www.caranddriver.com/mercedes-benz/eqs-suv",
+      "model_year": 2027,
+      "low": 91400,
+      "high": 120900,
+      "estimated": false
+    },
+    "Mercedes-Benz GLB Electric": {
+      "url": "https://www.caranddriver.com/mercedes-benz/glb-class-ev",
+      "model_year": 2027,
+      "low": 51350,
+      "high": 69000,
+      "estimated": false
+    },
+    "Subaru Getaway": {
+      "url": "https://www.caranddriver.com/subaru/getaway",
+      "model_year": 2028,
+      "low": 55000,
+      "high": 65000,
+      "estimated": true
+    },
+    "VinFast VF9": {
+      "url": "https://www.caranddriver.com/vinfast/vf9",
+      "model_year": 2027,
+      "low": 64290,
+      "high": 64290,
+      "estimated": false
+    },
+    "Genesis GV90": {
+      "url": "https://www.caranddriver.com/genesis/gv90",
+      "model_year": 2028,
+      "low": 110000,
+      "high": 160000,
+      "estimated": true
     },
     "Lexus TZ": {
-      "url": "https://www.lexus.com/models/TZ",
-      "found": [],
-      "other_in_band": []
+      "url": "https://www.caranddriver.com/lexus/tz",
+      "model_year": 2027,
+      "low": 64050,
+      "high": 80550,
+      "estimated": false
     }
   }
 }
