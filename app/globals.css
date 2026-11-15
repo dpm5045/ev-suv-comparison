@@ -368,7 +368,9 @@ th {
   border-radius: 0;
   border: none;
   overflow: auto;
-  height: calc(100vh - 160px);
+  /* leaves room for the page header above and the result count below */
+  height: calc(100vh - 300px);
+  min-height: 360px;
   border-top: 1px solid var(--border);
 }
 .cmp-table-view th {
@@ -1749,6 +1751,9 @@ html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --car
   font-family: var(--mono);
   letter-spacing: -0.02em;
   line-height: 1.1;
+}
+@media (max-width: 600px) {
+  .overview-stat-value { font-size: 20px; }
 }
 .overview-stat-detail {
   font-size: 13px;
