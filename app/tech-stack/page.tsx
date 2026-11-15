@@ -89,12 +89,12 @@ export default function TechStackPage() {
 
           <h3>Component Structure</h3>
           <pre className={styles.pre}><code>{`app/ (each tab is a real route)
-├── /                  OverviewTab — stats, glance table
+├── /                  OverviewTab — Speed Dating matches
 ├── /comparison        ComparisonV2Tab — filterable table
 ├── /side-by-side      SideBySideTab — compare up to 3 trims
 ├── /spec-select       SpecSelectTab — guided filtering
 ├── /glossary          GlossaryTab — field definitions
-├── /explore           DataExplorer — scatter chart
+├── /data              DataStories + DataExplorer — charts
 └── DetailPanel        slide-in sidebar for full specs`}</code></pre>
         </section>
 

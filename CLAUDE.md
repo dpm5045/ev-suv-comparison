@@ -25,7 +25,7 @@ All vehicle data lives in **`lib/ev-data.json`** and is typed + exported via **`
 - `DATA.preowned` — pre-owned price rows
 - `VEHICLE_CLASSES` — map of vehicle name → CSS class (for color-coded badges)
 
-`lib/utils.ts` exports `fmtMoney` and `fmtNum`, which return `{ text, className }` objects used across all table/card rendering.
+`lib/utils.ts` exports `fmtMoney` and `fmtNum`, which return `{ text, className }` objects used across all table/card rendering, and `fmtDate` for display dates.
 
 ### Component structure
 
@@ -33,15 +33,18 @@ Each former dashboard tab is a real route (thin server page with metadata wrappi
 
 ```
 app/
-├── page.tsx            → HomeClient (OverviewTab + VehicleSummaryPanel)
+├── page.tsx            → HomeClient (OverviewTab — Speed Dating + chart teaser — and VehicleSummaryPanel)
+├── news-radar/         → WatchListTab (arrivals, model-year news, departures)
 ├── comparison/         → ComparisonClient (ComparisonV2Tab + DetailPanel)
 ├── side-by-side/       → SideBySideTab
 ├── spec-select/        → SpecSelectClient (SpecSelectTab + DetailPanel)
 ├── glossary/           → GlossaryTab
-├── explore/            → DataExplorer (scatter chart)
+├── data/               → DataStories (four chart stories) + DataExplorer (scatter chart)
 ├── vehicles/[slug]/    → static per-vehicle page
 └── compare/[slug]/     → static pairwise comparison page
 ```
+
+Speed Dating ranking logic lives in `lib/speed-dating.ts` (scores only the trims that fit the chosen budget); chart data and headlines for the Data tab live in `lib/data-stories.ts`. Old `/watch-list` and `/explore` URLs redirect to `/news-radar` and `/data`.
 
 **Filter state is URL-driven.** Each route's client component reads filter values from `useSearchParams()` and applies updates via `router.replace()` (no history entry per filter click). Filters survive refresh and are shareable. Old `/?tab=X` URLs 301-redirect to the routes (see `redirects()` in `next.config.mjs`).
 
@@ -49,7 +52,7 @@ app/
 
 ### Responsive layout pattern
 
-Both `OverviewTab` and `ComparisonV2Tab` use a dual-render pattern: a desktop `<table>` (`.cmp-table-view`) and a mobile card grid (`.cmp-card-view`). On mobile, a Cards/Table toggle button controls which is visible via CSS classes (`.cmp-table-forced` / `.cmp-card-hidden`). All styles are in `app/globals.css`.
+`ComparisonV2Tab` uses a dual-render pattern: a desktop `<table>` (`.cmp-table-view`) and a mobile card grid (`.cmp-card-view`). On mobile, a Cards/Table toggle button controls which is visible via CSS classes (`.cmp-table-forced` / `.cmp-card-hidden`). All styles are in `app/globals.css`.
 
 ### API route
 
