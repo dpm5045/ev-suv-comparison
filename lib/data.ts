@@ -195,9 +195,10 @@ export function isWatchlistVehicle(vehicle: string): boolean {
 }
 
 /** Vehicles that have been discontinued or are exiting the US market */
-export const GOODBYELIST_VEHICLES: { vehicle: string; summary: string }[] = [
+export const GOODBYELIST_VEHICLES: { vehicle: string; summary: string; years?: string }[] = [
   {
     vehicle: 'Tesla Model X',
+    years: '2015–2026',
     summary: 'Discontinued Q2 2026. Tesla announced the end of Model X production, closing the book on the original 3-row electric SUV.',
   },
 ]

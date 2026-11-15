@@ -18,7 +18,8 @@ test('glossary route renders', async ({ page }) => {
 
 test('watch list route renders and is the first tab after the brand', async ({ page }) => {
   await page.goto('/watch-list')
-  await expect(page.locator('main.main')).toContainText(/watchlist/i)
+  await expect(page.locator('main.main')).toContainText(/arrivals/i)
+  await expect(page.locator('main.main')).toContainText(/departures/i)
   const tabs = page.locator('nav.header-nav a.nav-tab')
   await expect(tabs.nth(0)).toHaveText('3RowEV')
   await expect(tabs.nth(1)).toHaveText('Watch List')
