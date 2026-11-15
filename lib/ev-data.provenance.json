@@ -673,6 +673,16 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50658",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 Gravity Touring w/20F21R wheels: 337 mi"
+      },
+      "msrp": {
+        "source_url": "https://lucidmotors.com/gravity",
+        "verified_on": "2026-11-15",
+        "evidence": "Buy from $79,900"
+      },
+      "destination": {
+        "source_url": "https://www.cars.com/articles/2027-lucid-gravity-news-523376/",
+        "verified_on": "2026-11-15",
+        "evidence": "Derived: Cars.com price including destination ($81,750) minus Lucid price excluding destination ($79,900)"
       }
     },
     "Lucid Gravity, 2027, Grand Touring": {
@@ -680,6 +690,16 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50653",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 Gravity GT w/20F21R wheels (3R): 437 mi"
+      },
+      "msrp": {
+        "source_url": "https://lucidmotors.com/gravity",
+        "verified_on": "2026-11-15",
+        "evidence": "Buy from $98,900"
+      },
+      "destination": {
+        "source_url": "https://www.cars.com/articles/2027-lucid-gravity-news-523376/",
+        "verified_on": "2026-11-15",
+        "evidence": "Derived: Cars.com price including destination ($100,750) minus Lucid price excluding destination ($98,900)"
       }
     },
     "Volkswagen ID. Buzz, 2025, 1st Edition with 4MOTION": {
@@ -1002,6 +1022,160 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49088",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 VF 9 Plus: 287 mi"
+      }
+    },
+    "Lucid Gravity, 2027, GT-S": {
+      "msrp": {
+        "source_url": "https://lucidmotors.com/gravity",
+        "verified_on": "2026-11-15",
+        "evidence": "Buy from $125,900"
+      },
+      "destination": {
+        "source_url": "https://www.cars.com/articles/what-is-the-2027-lucid-gravity-gt-s-527959/",
+        "verified_on": "2026-11-15",
+        "evidence": "Derived: Cars.com price including destination ($127,750) minus Lucid price excluding destination ($125,900)"
+      }
+    },
+    "Cadillac VISTIQ, 2027, Luxury": {
+      "msrp": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "LUXURY From: $78,400"
+      },
+      "destination": {
+        "source_url": "https://www.caranddriver.com/cadillac/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com"
+      },
+      "charging_type": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "with standard NACS charging port"
+      },
+      "seats": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "AVAILABLE FEATURES Second-row captain’s chairs (six-passenger seating)"
+      },
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50624",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 VISTIQ 11kW Charger: 305 mi"
+      }
+    },
+    "Cadillac VISTIQ, 2027, Sport": {
+      "msrp": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "SPORT From: $79,000"
+      },
+      "destination": {
+        "source_url": "https://www.caranddriver.com/cadillac/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com"
+      },
+      "charging_type": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "with standard NACS charging port"
+      },
+      "seats": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "AVAILABLE FEATURES Second-row captain’s chairs (six-passenger seating)"
+      },
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50624",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 VISTIQ 11kW Charger: 305 mi"
+      }
+    },
+    "Cadillac VISTIQ, 2027, Premium Luxury": {
+      "msrp": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "PREMIUM LUXURY From: $92,900"
+      },
+      "destination": {
+        "source_url": "https://www.caranddriver.com/cadillac/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com"
+      },
+      "charging_type": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "with standard NACS charging port"
+      },
+      "seats": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "Second-row captain’s chairs (six-passenger seating)"
+      },
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50625",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 VISTIQ 19kW Charger: 300 mi"
+      }
+    },
+    "Cadillac VISTIQ, 2027, Platinum": {
+      "msrp": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "PLATINUM From: $97,500"
+      },
+      "destination": {
+        "source_url": "https://www.caranddriver.com/cadillac/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com"
+      },
+      "charging_type": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "with standard NACS charging port"
+      },
+      "seats": {
+        "source_url": "https://www.cadillac.com/electric/vistiq",
+        "verified_on": "2026-11-15",
+        "evidence": "Second-row captain’s chairs (six-passenger seating)"
+      },
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50625",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 VISTIQ 19kW Charger: 300 mi"
+      }
+    },
+    "VinFast VF9, 2027, Plus (7-seat)": {
+      "msrp": {
+        "source_url": "https://vinfastauto.us/vehicles/vf-9",
+        "verified_on": "2026-11-15",
+        "evidence": "From $62,900 Starting MSRP"
+      },
+      "destination": {
+        "source_url": "https://vinfastauto.us/vehicles/vf-9",
+        "verified_on": "2026-11-15",
+        "evidence": "MSRP of $64,290, including destination and handling fee of $1,390"
+      },
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50641",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 VF 9 Plus: 287 mi"
+      }
+    },
+    "VinFast VF9, 2027, Plus (6-seat)": {
+      "msrp": {
+        "source_url": "https://vinfastauto.us/vehicles/vf-9",
+        "verified_on": "2026-11-15",
+        "evidence": "From $62,900 Starting MSRP"
+      },
+      "destination": {
+        "source_url": "https://vinfastauto.us/vehicles/vf-9",
+        "verified_on": "2026-11-15",
+        "evidence": "MSRP of $64,290, including destination and handling fee of $1,390"
+      },
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50641",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 VF 9 Plus: 287 mi"
       }
     }
   }

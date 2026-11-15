@@ -130,4 +130,18 @@ export const MODEL_YEAR_NEWS: ModelYearNews[] = [
     headline: 'A 1,070 hp GT-S joins, while Touring and Grand Touring hold their prices.',
     bullets: ['GT-S range projected at 373 miles, EPA pending', 'Grand Touring keeps its ratings: 437 miles with three rows, 450 with two', 'More features standard across the line'],
   },
+  {
+    vehicle: 'Cadillac VISTIQ',
+    year: 2027,
+    tag: 'Now listed',
+    headline: 'A NACS charge port becomes standard, and prices rise about $1,000.',
+    bullets: ['Luxury now starts at $78,400', 'Premium Luxury and Platinum come with six seats as standard', 'EPA range unchanged at up to 305 miles'],
+  },
+  {
+    vehicle: 'VinFast VF9',
+    year: 2027,
+    tag: 'Price cut',
+    headline: 'The Plus now starts at $62,900, which is $10,900 below the 2025 model.',
+    bullets: ['VinFast lists only the Plus for 2027', 'EPA range of 287 miles', 'Six or seven seats'],
+  },
 ]
