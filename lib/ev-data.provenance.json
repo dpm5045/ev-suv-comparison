@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "preowned": {
+    "Kia EV9": {
+      "source_url": "https://www.cargurus.com/research/price-trends/Kia-EV9-d3322",
+      "years": {
+        "2024": {
+          "basis": "model_year",
+          "avg_price": 41280,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2025": {
+          "basis": "model",
+          "avg_price": 41711,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2026": {
+          "basis": "model_year",
+          "avg_price": 46418,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        }
+      }
+    },
+    "Hyundai IONIQ 9": {
+      "source_url": "https://www.cargurus.com/research/price-trends/Hyundai-IONIQ-9-d3437",
+      "years": {
+        "2026": {
+          "basis": "model_year",
+          "avg_price": 48585,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        }
+      }
+    },
+    "Volvo EX90": {
+      "source_url": "https://www.cargurus.com/research/price-trends/Volvo-EX90-d3372",
+      "years": {
+        "2025": {
+          "basis": "model_year",
+          "avg_price": 51105,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        }
+      }
+    },
+    "Rivian R1S": {
+      "source_url": "https://www.cargurus.com/research/price-trends/Rivian-R1S-d2839",
+      "years": {
+        "2022": {
+          "basis": "model_year",
+          "avg_price": 56569,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2023": {
+          "basis": "model_year",
+          "avg_price": 59409,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2024": {
+          "basis": "model_year",
+          "avg_price": 64277,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2025": {
+          "basis": "model_year",
+          "avg_price": 69888,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2026": {
+          "basis": "model",
+          "avg_price": 62584,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        }
+      }
+    },
+    "Tesla Model X": {
+      "source_url": "https://www.cargurus.com/research/price-trends/Tesla-Model-X-d2132",
+      "years": {
+        "2021": {
+          "basis": "model_year",
+          "avg_price": 37151,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2022": {
+          "basis": "model_year",
+          "avg_price": 53421,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2023": {
+          "basis": "model_year",
+          "avg_price": 59230,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2024": {
+          "basis": "model_year",
+          "avg_price": 71014,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2025": {
+          "basis": "model",
+          "avg_price": 45240,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2026": {
+          "basis": "model_year",
+          "avg_price": 135273,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        }
+      }
+    },
+    "Volkswagen ID. Buzz": {
+      "source_url": "https://www.cargurus.com/research/price-trends/Volkswagen-ID.Buzz-d3233",
+      "years": {
+        "2025": {
+          "basis": "model_year",
+          "avg_price": 62744,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        }
+      }
+    },
+    "Mercedes-Benz EQS SUV": {
+      "source_url": "https://www.cargurus.com/research/price-trends/Mercedes-Benz-EQS-SUV-d3275",
+      "years": {
+        "2023": {
+          "basis": "model",
+          "avg_price": 51479,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2024": {
+          "basis": "model_year",
+          "avg_price": 51479,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        },
+        "2025": {
+          "basis": "model",
+          "avg_price": 51479,
+          "as_of": "2026-11-15",
+          "last_repriced": null,
+          "last_move_pct": null
+        }
+      }
+    }
+  },
+  "fields": {}
+}

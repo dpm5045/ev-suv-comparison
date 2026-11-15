@@ -11,7 +11,7 @@ Research and update pre-owned and/or MSRP pricing for vehicles in the dataset.
    - If a year: match all entries for that model year
 
 2. Research current pricing for each in-scope vehicle **individually** — never combine vehicles into one broad query, which averages away per-vehicle movement:
-   - **Pre-owned**: WebFetch the CarGurus price-trends page (`https://www.cargurus.com/research/price-trends/<Make>-<Model>-d<id>`) for the average used price and 30-day percentage change by model year. Fetch the page; do not trust the search-result summary. KBB and Edmunds return HTTP 403 and cannot be fetched — do not write data from their search snippets, which have returned values failing basic sanity checks. See the "Why percentage, not per-trim" note in `refresh.md` for the full rationale.
+   - **Pre-owned**: run `npm run refresh:preowned` (dry run) and use its report. Do not research used prices by hand; the script fetches CarGurus price trends per vehicle and model year. See Phase 1 in `refresh.md`.
    - **MSRP**: Check the OEM site for current MSRP and destination charge. Only flag MSRP changes if they differ from current data.
 
 3. Present a comparison table for user review — include every vehicle researched, including those that didn't move, so a no-op reads as a measurement rather than a skipped step:
@@ -20,13 +20,13 @@ Research and update pre-owned and/or MSRP pricing for vehicles in the dataset.
 |---|---|---|---|---|---|---|
 
 Apply only where the change is significant:
-- Pre-owned: **30-day move ≥3%** (scale both ends of the range, round to nearest $1,000). Do not use an absolute dollar trigger — on a monthly cadence typical movement falls under $2,000 and silently no-ops the phase while real drift accumulates.
+- Pre-owned: whatever the script reports as `repriced` (a 3% or larger move since the last reprice). Apply with `npm run refresh:preowned -- --apply`.
 - MSRP: any change
 
 4. **Wait for user approval before making any edits.**
 
 5. Apply approved updates to `lib/ev-data.json`:
-   - Update `preowned_range` in both the `details` array and the `preowned` array (they must stay in sync)
+   - Pre-owned ranges are written by the script (`details` and `preowned` together); do not hand-edit them
    - Update `msrp` and/or `destination` if changed
    - Do NOT write `otd_new`/`otd_preowned` — OTD is computed at load in `lib/data.ts` from `msrp`/`destination`/`preowned_range` (the validator errors on stored OTD)
 

@@ -1,0 +1,77 @@
+name: Pre-owned Pricing Refresh
+
+# Runs scripts/refresh/preowned.mjs and opens a data-only PR when something
+# changed. Nothing is merged or deployed by this workflow.
+
+on:
+  schedule:
+    - cron: '0 13 1 * *'    # 1st of every month, 13:00 UTC
+    - cron: '0 13 15 * *'   # 15th of every month, 13:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: preowned-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Unit tests
+        run: npm run test:refresh
+
+      - name: Skip if an earlier refresh PR is still open
+        id: open
+        run: |
+          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("data-refresh/preowned-"))] | length')
+          echo "count=$open" >> "$GITHUB_OUTPUT"
+          if [ "$open" != "0" ]; then
+            echo "An earlier pre-owned refresh PR is still open; merge or close it first." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Fetch and reprice
+        if: steps.open.outputs.count == '0'
+        run: |
+          node scripts/refresh/preowned.mjs --apply --report "$RUNNER_TEMP/report.md"
+          cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate data
+        if: steps.open.outputs.count == '0'
+        run: npm run validate
+
+      - name: Open pull request
+        if: steps.open.outputs.count == '0'
+        run: |
+          if git diff --quiet; then
+            echo "No changes; no PR." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          # Data-only guard: this job may touch these two files and nothing else.
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -vxE 'lib/ev-data\.json|lib/ev-data\.provenance\.json' || true)
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected files changed: $unexpected" >&2
+            exit 1
+          fi
+          branch="data-refresh/preowned-$(date -u +%F)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add lib/ev-data.json lib/ev-data.provenance.json
+          git commit -m "data: pre-owned pricing refresh $(date -u +%F)"
+          git push origin "$branch"
+          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" \
+            --title "Pre-owned pricing refresh $(date -u +%F)" \
+            --body-file "$RUNNER_TEMP/report.md"
