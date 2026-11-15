@@ -1,0 +1,10 @@
+atvType,drive,id,make,model,range,year,evMotor
+EV,All-Wheel Drive,49669,Kia,EV9 GT,260,2026,"139 and 235 kW PMSM (IPM)"
+EV,All-Wheel Drive,49670,Kia,EV9 Long Range AWD,283,2026,"141 and 141 kW PMSM"
+EV,Rear-Wheel Drive,49671,Kia,EV9 Long Range RWD,305,2026,150 kW PMSM
+EV,Rear-Wheel Drive,49672,Kia,EV9 Standard Range RWD,230,2026,160 kW PMSM
+EV,All-Wheel Drive,49700,Kia,"EV6 Long Range AWD (19 inch Wheels)",295,2026,x
+,All-Wheel Drive,49800,Kia,Sorento AWD,0,2026,
+EV,All-Wheel Drive,50001,Tesla,Model Y Long Range AWD,327,2026,x
+EV,All-Wheel Drive,50002,Tesla,Model Y L (20in Wheels),328,2027,x
+EV,All-Wheel Drive,50003,Vinfast,VF 9 Plus,287,2025,x

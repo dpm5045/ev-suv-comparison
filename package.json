@@ -6,6 +6,7 @@
     "dev": "next dev",
     "validate": "node scripts/validate-data.js",
     "refresh:preowned": "node scripts/refresh/preowned.mjs",
+    "refresh:watch": "node scripts/refresh/watch.mjs",
     "test:refresh": "node --test scripts/refresh/test/*.test.mjs",
     "prebuild": "node scripts/validate-data.js",
     "build": "next build",

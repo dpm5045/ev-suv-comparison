@@ -177,5 +177,790 @@
       }
     }
   },
-  "fields": {}
+  "fields": {
+    "Kia EV9, 2026, GT-Line": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49668",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EV9 Long Range AWD GT-Line: 280 mi"
+      }
+    },
+    "Kia EV9, 2026, GT-Line + 2nd Row Relaxation Package": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49668",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EV9 Long Range AWD GT-Line: 280 mi"
+      }
+    },
+    "Kia EV9, 2026, Land": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49667",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi"
+      }
+    },
+    "Kia EV9, 2026, Land Nightfall Edition (6-pass)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49667",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi"
+      }
+    },
+    "Kia EV9, 2026, Land Nightfall Edition (7-pass)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49667",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi"
+      }
+    },
+    "Kia EV9, 2026, Wind": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49667",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi"
+      }
+    },
+    "Kia EV9, 2025, GT-Line": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48369",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EV9 Long Range AWD GT-Line: 270 mi"
+      }
+    },
+    "Kia EV9, 2025, Land": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48368",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EV9 Long Range AWD: 280 mi"
+      }
+    },
+    "Kia EV9, 2025, Wind": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48368",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EV9 Long Range AWD: 280 mi"
+      }
+    },
+    "Kia EV9, 2024, GT-Line": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47453",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EV9 Long Range AWD GT-Line: 270 mi"
+      }
+    },
+    "Kia EV9, 2024, GT-Line + 2nd Row VIP Relaxation Package": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47453",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EV9 Long Range AWD GT-Line: 270 mi"
+      }
+    },
+    "Kia EV9, 2024, Land": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47452",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi"
+      }
+    },
+    "Kia EV9, 2024, Land + 2nd Row VIP Relaxation Package": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47452",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi"
+      }
+    },
+    "Kia EV9, 2024, Wind": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47452",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi"
+      }
+    },
+    "Kia EV9, 2024, Light RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47451",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EV9 Standard Range RWD: 230 mi"
+      }
+    },
+    "Kia EV9, 2024, Light Long Range RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47450",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EV9 Long Range RWD: 304 mi"
+      }
+    },
+    "Kia EV9, 2025, Light RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48367",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EV9 Standard Range RWD: 230 mi"
+      }
+    },
+    "Kia EV9, 2025, Light Long Range RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48366",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EV9 Long Range RWD: 304 mi"
+      }
+    },
+    "Kia EV9, 2026, Light RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49665",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EV9 Standard Range RWD: 230 mi"
+      }
+    },
+    "Kia EV9, 2026, Light Long Range RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49666",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EV9 Long Range RWD: 305 mi"
+      }
+    },
+    "Kia EV9, 2027, Light": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51036",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 EV9 Standard Range RWD: 230 mi"
+      }
+    },
+    "Kia EV9, 2027, Light Long Range RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51035",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 EV9 Long Range RWD: 305 mi"
+      }
+    },
+    "Kia EV9, 2027, Wind": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51033",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 EV9 Long Range AWD: 283 mi"
+      }
+    },
+    "Kia EV9, 2027, Land": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51033",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 EV9 Long Range AWD: 283 mi"
+      }
+    },
+    "Kia EV9, 2027, GT-Line": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51034",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 EV9 Long Range AWD GT-Line: 280 mi"
+      }
+    },
+    "Hyundai IONIQ 9, 2026, Performance Calligraphy": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49663",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi"
+      }
+    },
+    "Hyundai IONIQ 9, 2026, Performance Calligraphy Design": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49663",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi"
+      }
+    },
+    "Hyundai IONIQ 9, 2026, Performance Limited": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49663",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi"
+      }
+    },
+    "Hyundai IONIQ 9, 2026, SE": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49662",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Ioniq 9 AWD: 320 mi"
+      }
+    },
+    "Hyundai IONIQ 9, 2026, SEL": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49662",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Ioniq 9 AWD: 320 mi"
+      }
+    },
+    "Hyundai IONIQ 9, 2026, S RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49661",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Ioniq 9 RWD: 335 mi"
+      }
+    },
+    "Volvo EX90, 2025, Twin Motor Performance Plus 6-Seater": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48777",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2025, Twin Motor Performance Plus 7-Seater": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48777",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2025, Twin Motor Performance Ultra 6-Seater": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48778",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2025, Twin Motor Performance Ultra 7-Seater": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48778",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2025, Twin Motor Plus 6-Seater": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48777",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2025, Twin Motor Plus 7-Seater": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48777",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2025, Twin Motor Ultra 6-Seater": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48778",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2025, Twin Motor Ultra 7-Seater": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48778",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2022, Launch Edition (Quad Motor, Large)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=44461",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2022 R1S: 316 mi"
+      }
+    },
+    "Rivian R1S, 2022, Adventure (Quad Motor, Large)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=44461",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2022 R1S: 316 mi"
+      }
+    },
+    "Rivian R1S, 2023, Explore (Dual Motor, Large)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46996",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 R1S 21 inch Dual Large: 352 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2023, Adventure (Dual Motor, Large)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46996",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 R1S 21 inch Dual Large: 352 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2023, Adventure (Quad Motor, Large)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46315",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 R1S (20 inch wheels): 289 mi"
+      }
+    },
+    "Rivian R1S, 2024, Adventure Dual-Motor Standard": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47895",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 R1S Dual Standard (21in): 270 mi"
+      }
+    },
+    "Rivian R1S, 2024, Adventure Dual-Motor Large": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47891",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 R1S Dual Large (21in): 352 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2024, Adventure Dual-Motor Max": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47893",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 R1S Dual Max (21in): 400 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2024, Performance Dual-Motor Large": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47906",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 R1S Quad Large (21in): 321 mi"
+      }
+    },
+    "Rivian R1S, 2024, Quad-Motor Large": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47906",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 R1S Quad Large (21in): 321 mi"
+      }
+    },
+    "Rivian R1S, 2026, Dual Large": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49731",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 R1S All-Terrain Tri Max (20in): 329 mi (and 2 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2026, Dual Max (\"Max Battery\")": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49719",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2026, Dual Standard": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49716",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 R1S Dual Standard (22in): 270 mi"
+      }
+    },
+    "Rivian R1S, 2026, Tri Max": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49730",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 R1S Tri Max (22in): 371 mi"
+      }
+    },
+    "Rivian R1S, 2025, Adventure Dual Large (\"Dual Long\")": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48432",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 R1S Dual Large Plus (22in): 330 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2025, Adventure Dual Max": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48434",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2025, Adventure Dual Standard": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48436",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 R1S Dual Standard (22in): 270 mi"
+      }
+    },
+    "Rivian R1S, 2025, Ascend Tri Max": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48751",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 R1S Tri Max (22in): 371 mi"
+      }
+    },
+    "Rivian R1S, 2025, Performance Dual Large": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48432",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 R1S Dual Large Plus (22in): 330 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2025, Performance Dual Max": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48434",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Tesla Model X, 2021, Long Range Plus": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=43403",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2021 Model X Long Range Plus: 371 mi"
+      }
+    },
+    "Tesla Model X, 2022, Base": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=45020",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2022 Model X: 348 mi"
+      }
+    },
+    "Tesla Model X, 2022, Plaid": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=45021",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2022 Model X Plaid (20 inch wheels): 333 mi"
+      }
+    },
+    "Tesla Model X, 2026, Base": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49745",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Model X: 352 mi"
+      }
+    },
+    "Tesla Model X, 2026, Plaid": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49746",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Model X Plaid: 335 mi"
+      }
+    },
+    "Tesla Model X, 2025, Base": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49125",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 Model X: 329 mi"
+      }
+    },
+    "Tesla Model X, 2025, Plaid": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48768",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 Model X Plaid (20in wheels): 314 mi"
+      }
+    },
+    "Tesla Model X, 2023, Base": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46208",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 Model X: 348 mi"
+      }
+    },
+    "Tesla Model X, 2023, Plaid": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46209",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 Model X Plaid (20 inch wheels): 333 mi"
+      }
+    },
+    "Lucid Gravity, 2026, Grand Touring": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49670",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Gravity GT w/20F21R wheels (2R): 450 mi"
+      }
+    },
+    "Lucid Gravity, 2026, Touring": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50221",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Gravity Touring w/20F21R wheels: 337 mi"
+      }
+    },
+    "Lucid Gravity, 2027, Touring": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50658",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 Gravity Touring w/20F21R wheels: 337 mi"
+      }
+    },
+    "Lucid Gravity, 2027, Grand Touring": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50652",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 Gravity GT w/20F21R wheels (2R): 450 mi"
+      }
+    },
+    "Volkswagen ID. Buzz, 2025, 1st Edition with 4MOTION": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48445",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 ID. Buzz 4motion: 231 mi"
+      }
+    },
+    "Volkswagen ID. Buzz, 2025, Pro S Plus with 4MOTION": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48445",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 ID. Buzz 4motion: 231 mi"
+      }
+    },
+    "Volkswagen ID. Buzz, 2025, Pro S RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 ID. Buzz: 234 mi"
+      }
+    },
+    "Volkswagen ID. Buzz, 2025, Pro S Plus RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 ID. Buzz: 234 mi"
+      }
+    },
+    "Volkswagen ID. Buzz, 2025, 1st Edition RWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 ID. Buzz: 234 mi"
+      }
+    },
+    "Cadillac VISTIQ, 2026, Luxury": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49636",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 VISTIQ (11 kW Charger): 305 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2025, EQS 450+": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48392",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EQS 450 Plus (SUV): 323 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2025, EQS 450 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48395",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EQS 450 4matic (SUV): 312 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2025, EQS 580 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48396",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EQS 580 4matic (SUV): 317 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2023, EQS 450+": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46011",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 EQS 450 Plus (SUV): 305 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2023, EQS 450 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46010",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 EQS 450 4matic (SUV): 285 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2023, EQS 580 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46010",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 EQS 450 4matic (SUV): 285 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2024, EQS 450+": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47847",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EQS 450 Plus (SUV): 339 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2024, EQS 450 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47850",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EQS 450 4matic (SUV): 330 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2024, EQS 580 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47850",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EQS 450 4matic (SUV): 330 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2024, Maybach EQS 680 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47852",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 EQS 680 4matic Maybach (SUV): 321 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2025, Maybach EQS 680 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48397",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 EQS 680 4matic Maybach (SUV): 302 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2026, EQS 400 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49688",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EQS 400 4matic (SUV): 312 mi"
+      }
+    },
+    "Mercedes-Benz EQS SUV, 2026, EQS 550 4MATIC": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49689",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EQS 550 4matic (SUV): 317 mi"
+      }
+    },
+    "Cadillac VISTIQ, 2026, Sport": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49636",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 VISTIQ (11 kW Charger): 305 mi"
+      }
+    },
+    "Cadillac VISTIQ, 2026, Premium Luxury": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49637",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 VISTIQ (19 kW Charger): 300 mi"
+      }
+    },
+    "Cadillac VISTIQ, 2026, Platinum": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49637",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 VISTIQ (19 kW Charger): 300 mi"
+      }
+    },
+    "Rivian R1S, 2024, Adventure Dual-Motor Standard+": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47897",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 R1S Dual Standard Plus (21in): 315 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2024, Performance Dual-Motor Standard+": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47897",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 R1S Dual Standard Plus (21in): 315 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2024, Performance Dual-Motor Max": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47893",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 R1S Dual Max (21in): 400 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2027, Premium (7-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50665",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 R1S Performance (20in AT): 329 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2027, Premium (6-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50665",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 R1S Performance (20in AT): 329 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Rivian R1S, 2027, Premium Long Range (7-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50673",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 R1S Premium Long Range (22in): 410 mi"
+      }
+    },
+    "Rivian R1S, 2027, Premium Long Range (6-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50673",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 R1S Premium Long Range (22in): 410 mi"
+      }
+    },
+    "Rivian R1S, 2027, Performance (7-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50667",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 R1S Performance (22in): 371 mi"
+      }
+    },
+    "Rivian R1S, 2027, Performance (6-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50667",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 R1S Performance (22in): 371 mi"
+      }
+    },
+    "Rivian R1S, 2027, Quad (7-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50676",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 R1S Quad (22in): 374 mi"
+      }
+    },
+    "Rivian R1S, 2027, Quad (6-seat)": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50676",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 R1S Quad (22in): 374 mi"
+      }
+    },
+    "Volvo EX90, 2026, Single Motor Plus": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50255",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EX90 (21 Inch Wheels): 291 mi"
+      }
+    },
+    "Volvo EX90, 2026, Twin Motor Plus": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50257",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EX90 Twin Motor (21 Inch Wheels): 305 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2026, Twin Motor Ultra": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50257",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EX90 Twin Motor (21 Inch Wheels): 305 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2026, Twin Motor Performance Plus": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50256",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EX90 Twin Motor: 298 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Volvo EX90, 2026, Twin Motor Performance Ultra": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50256",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 EX90 Twin Motor: 298 mi (and 1 other EPA variant(s) with the same range)"
+      }
+    },
+    "Tesla Model Y (3-Row), 2026, Long Range AWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49744",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Model Y Long Range AWD: 327 mi"
+      }
+    },
+    "Lexus TZ, 2027, Premium AWD": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51041",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2027 TZ 450e 11kW (20 inch Wheels): 253 mi"
+      }
+    }
+  }
 }

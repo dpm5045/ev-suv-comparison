@@ -29,7 +29,7 @@ This phase is a script, not research. **Do not WebSearch or WebFetch pricing her
    - `no_source` — the vehicle has a used price range but no CarGurus page yet (Lucid Gravity as of Nov 2026). Add the URL to `scripts/refresh/sources.json` once CarGurus publishes one.
    - A vehicle that has gained a real used market — set its first `preowned_range` by hand; the script only scales ranges that already exist.
 
-The same script runs on the 1st and 15th in GitHub Actions (`.github/workflows/preowned-refresh.yml`) and opens a pull request when something changed. If such a PR is open or was merged recently, this phase will report no change.
+The same script runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`) and opens a pull request when something changed. If such a PR is open or was merged recently, this phase will report no change.
 
 ### Why CarGurus percentages, not per-trim prices
 
@@ -59,6 +59,16 @@ The same script runs on the 1st and 15th in GitHub Actions (`.github/workflows/p
 ---
 
 ## Phase 3: Spec Corrections
+
+**Start from the watch report, not from a blank search.** Run `npm run refresh:watch` (dry run, no LLM). It checks every stored `range_mi` against the EPA vehicle file and checks manufacturer pages for the stored MSRPs. Research only what it lists:
+
+- **Range mismatch** — the stored range is not a figure EPA publishes for that vehicle, model year and drive type. Open the EPA entries, work out which variant the trim is, and correct the row or leave it with a note in `notes` explaining why it differs (for example a manufacturer estimate for a trim EPA has not rated).
+- **Not in EPA file** — nothing to check against yet; leave it.
+- **EPA added / changed / removed a variant** — check whether a trim's range, or a new trim, follows from it.
+- **Page changed** — a stored MSRP disappeared from the manufacturer page or a new price appeared in its band. Fetch the page and check `msrp` and `destination` for that vehicle.
+- **Stored MSRPs not on page / not watchable / unavailable** — the page does not print those prices or cannot be fetched (Tesla and Volvo block scripts and are not registered). Check `msrp` and `destination` for those vehicles by hand, as before.
+
+Do not re-research `range_mi` for rows the report shows as matching EPA; the script has already recorded their source. The same script runs every Monday in GitHub Actions (`.github/workflows/data-watch.yml`) and opens a PR when something it watches has changed. If one is open, work on that branch: add the data corrections to it and merge the two together.
 
 1. For each vehicle, cross-check these high-value fields against OEM sites and EPA:
    - `msrp`, `destination`
@@ -139,7 +149,7 @@ Only include vehicles with at least "medium" confidence (officially announced wi
 }
 ```
 
-- **Before researching a field, look it up.** Skip it if `verified_on` is within the last 180 days. Exception: `msrp`, `destination` and `range_mi` on the two newest model years of each vehicle are checked on every refresh.
+- **Before researching a field, look it up.** Skip it if `verified_on` is within the last 180 days. Exception: `msrp` and `destination` on the two newest model years of each vehicle are checked on every refresh unless the watch report shows the stored price on the manufacturer page with no change. `range_mi` sources are written by the watch script.
 - **After checking a field against a page you actually fetched, write or update its entry** — whether the value changed or was confirmed. `evidence` is a short exact quote from the page. Keys are the row `name`; rows that share a name (seat variants) share an entry.
 - **No source, no change.** Do not change a value you cannot attach a fetched `source_url` to, and do not record a search-result summary as a source.
 - Do not add entries for fields you did not check. The validator rejects entries for unknown rows or fields.

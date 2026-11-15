@@ -5,8 +5,7 @@ name: Pre-owned Pricing Refresh
 
 on:
   schedule:
-    - cron: '0 13 1 * *'    # 1st of every month, 13:00 UTC
-    - cron: '0 13 15 * *'   # 15th of every month, 13:00 UTC
+    - cron: '0 13 * * 1'    # every Monday, 13:00 UTC
   workflow_dispatch: {}
 
 permissions:
