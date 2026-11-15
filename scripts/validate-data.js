@@ -58,6 +58,35 @@ data.preowned.forEach(p => {
   if (!detailNames.has(p.name)) warnings.push('Preowned entry has no details match: ' + p.name);
 });
 
+// === Provenance sidecar (lib/ev-data.provenance.json) ===
+// Optional file. `preowned` holds the CarGurus baselines written by
+// scripts/refresh/preowned.mjs; `fields` holds per-row, per-field sources.
+if (fs.existsSync('lib/ev-data.provenance.json')) {
+  const prov = JSON.parse(fs.readFileSync('lib/ev-data.provenance.json','utf-8'));
+  const isDate = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v);
+  const isUrl = v => typeof v === 'string' && /^https:\/\//.test(v);
+  const vehicles = new Set(data.details.map(d => d.vehicle));
+  const fieldNames = new Set(data.details.flatMap(d => Object.keys(d)));
+  Object.entries(prov.preowned || {}).forEach(([vehicle, v]) => {
+    if (!vehicles.has(vehicle)) warnings.push('Provenance baseline for unknown vehicle: ' + vehicle);
+    if (!isUrl(v.source_url)) errors.push('Provenance baseline missing https source_url: ' + vehicle);
+    Object.entries(v.years || {}).forEach(([year, b]) => {
+      if (typeof b.avg_price !== 'number' || !isDate(b.as_of) || !['model_year','model'].includes(b.basis)) {
+        errors.push('Malformed provenance baseline: ' + vehicle + ' ' + year);
+      }
+    });
+  });
+  Object.entries(prov.fields || {}).forEach(([name, fields]) => {
+    if (!detailNames.has(name)) errors.push('Provenance entry for unknown row: ' + name);
+    Object.entries(fields).forEach(([field, p]) => {
+      if (!fieldNames.has(field)) errors.push('Provenance entry for unknown field [' + field + ']: ' + name);
+      if (!isUrl(p.source_url) || !isDate(p.verified_on)) errors.push('Provenance entry needs https source_url and YYYY-MM-DD verified_on [' + field + ']: ' + name);
+    });
+  });
+  const provCount = Object.values(prov.fields || {}).reduce((n, f) => n + Object.keys(f).length, 0);
+  info.push('Provenance: ' + provCount + ' field source(s) recorded, ' + Object.keys(prov.preowned || {}).length + ' vehicle(s) with pre-owned baselines');
+}
+
 // === Data completeness ===
 const completenessFields = ['onboard_ac_kw','l2_10_100','l2_10_80','charging_type','frunk_cu_ft','cargo_behind_3rd_cu_ft','cargo_behind_2nd_cu_ft','cargo_behind_1st_cu_ft','fold_flat','hp','battery_kwh','range_mi','self_driving','car_software','center_display'];
 let fullyPop = 0;

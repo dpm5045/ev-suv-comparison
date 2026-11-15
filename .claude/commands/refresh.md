@@ -13,40 +13,29 @@ Process vehicles in batches of 3–4 to keep each phase manageable. Batching is 
 
 ## Phase 1: Pre-owned Pricing
 
-Drive this phase off **per-model-year percentage movement**, not per-trim dollar research. See "Why percentage, not per-trim" below before deviating.
+This phase is a script, not research. **Do not WebSearch or WebFetch pricing here.**
 
-1. Read `lib/ev-data.json`. Extract all `preowned` entries where `preowned_range` is NOT `"No meaningful used market yet"`.
+1. Run `npm run refresh:preowned` (dry run). It fetches the CarGurus price-trends page for each vehicle listed in `scripts/refresh/sources.json`, compares each model year's average used price with the baseline stored in `lib/ev-data.provenance.json`, and prints a report with a row for every vehicle + model year.
 
-2. For each **vehicle** (not each trim), WebFetch the CarGurus price-trends page to get the average used price and the **30-day percentage change**, broken out by model year where published:
+2. Rule the script applies: **reprice when the average has moved 3% or more since that group was last repriced.** Both ends of each stored range are scaled by the move and rounded to the nearest $1,000, and the baseline resets. Smaller moves change nothing and keep the old baseline, so slow drift adds up until it crosses 3%. Moves over 15% are reported as `needs_review` and not applied. A page that fails to load or parse changes nothing.
 
-   `https://www.cargurus.com/research/price-trends/<Make>-<Model>-d<id>`
+3. Include the script's report in the changelog as-is.
 
-   Find the `d<id>` with a WebSearch for `"cargurus.com/research/price-trends" <Make> <Model>` if you don't have it. **WebFetch the page — do not rely on the search-result summary.** Summaries have been observed to contradict the page itself (e.g. reporting EX90 at −5.56% when the page said −3.01%).
+4. **Interactive mode only — Ask: "Apply pre-owned pricing updates?"** Then (or straight away in autonomous mode) run `npm run refresh:preowned -- --apply`. It updates `details`, `preowned`, `last_updated` and the baselines together.
 
-3. **Trigger: apply when the 30-day move is ≥3%** (in either direction). Below 3%, record the figure and change nothing.
+5. Follow up only on what the report flags:
+   - `needs_review` — look at the CarGurus page and decide by hand.
+   - `source_unavailable` — the page was blocked or its layout changed; if it is the layout, fix `scripts/refresh/lib/cargurus.mjs` and its test.
+   - `no_source` — the vehicle has a used price range but no CarGurus page yet (Lucid Gravity as of Nov 2026). Add the URL to `scripts/refresh/sources.json` once CarGurus publishes one.
+   - A vehicle that has gained a real used market — set its first `preowned_range` by hand; the script only scales ranges that already exist.
 
-   Do not use an absolute dollar threshold. On a monthly cadence typical movement is well under $2,000 on mid-priced rows, so a dollar trigger silently no-ops the whole phase while real drift accumulates.
+The same script runs on the 1st and 15th in GitHub Actions (`.github/workflows/preowned-refresh.yml`) and opens a pull request when something changed. If such a PR is open or was merged recently, this phase will report no change.
 
-4. To apply, scale both ends of each affected `preowned_range` by the percentage and round to the nearest $1,000. Use the model-year-specific figure when CarGurus publishes one; fall back to the model-wide figure and say so.
+### Why CarGurus percentages, not per-trim prices
 
-5. Present a comparison table — **every vehicle gets a row, including the ones that didn't move**, so a no-op is visibly a measurement rather than a skipped step:
-
-| Vehicle | Model Year | Avg Used Price | 30-Day Move | Applied? | Rows Changed |
-|---|---|---|---|---|---|
-
-6. **Interactive mode only — Ask: "Apply pre-owned pricing updates?"** In autonomous mode, apply changes and continue.
-
-7. Update BOTH the `details` and `preowned` arrays (they must stay in sync — matching `name` and `preowned_range`). Verify sync afterward; do not hand-edit 10+ rows, write a script.
-
-### Why percentage, not per-trim
-
-The per-trim dollar approach was tried and does not work with the tools available:
-
-- **KBB and Edmunds return HTTP 403 to WebFetch.** Their per-trim values are reachable only through AI-summarized search snippets, which have repeatedly returned values that fail sanity checks — quoting 2025 EV9 Wind identical to 2024 Wind, and used 2026 Model X Plaid at $66.5k against a $129,990 new price. Do not write data from a snippet you could not fetch and sanity-check.
-- **CarGurus fetches reliably but publishes model-year averages only**, with no trim breakdown. Its all-trim average is *not* comparable to a per-trim range — a low average against high stored ranges may just be trim/mileage mix. Never reprice on that comparison alone.
-- **Aggregate model-line searching hides real movement.** An Aug 2026 run reported "0 updates" across 59 rows because Rivian's −4.05% was averaged against a flat −0.42% Kia EV9. Researching each vehicle's own percentage separately is what catches this.
-
-If you find a per-trim source that actually fetches, prefer it and note it here.
+- **KBB and Edmunds return HTTP 403**, and search-snippet values for them have repeatedly failed sanity checks. Do not write data from a snippet.
+- **CarGurus publishes model-year averages only**, with no trim breakdown. Its average is not comparable to a per-trim range, so the script only ever uses the *relative move* of the average, never its level.
+- **Each vehicle and model year is measured on its own.** Aggregating across vehicles hid real movement in Aug 2026.
 
 ---
 
@@ -135,6 +124,25 @@ Only include vehicles with at least "medium" confidence (officially announced wi
    - L2 times in hours as decimals
 
 6. **Interactive mode only — Ask: "Apply gap fills?"** In autonomous mode, apply changes and continue.
+
+---
+
+## Sources and the provenance file (Phases 2, 3 and 5)
+
+`lib/ev-data.provenance.json` → `fields` records where a value came from and when it was last checked:
+
+```json
+"fields": {
+  "Kia EV9, 2026, GT-Line": {
+    "msrp": { "source_url": "https://www.kia.com/...", "verified_on": "2026-11-15", "evidence": "GT-Line starting MSRP $71,900" }
+  }
+}
+```
+
+- **Before researching a field, look it up.** Skip it if `verified_on` is within the last 180 days. Exception: `msrp`, `destination` and `range_mi` on the two newest model years of each vehicle are checked on every refresh.
+- **After checking a field against a page you actually fetched, write or update its entry** — whether the value changed or was confirmed. `evidence` is a short exact quote from the page. Keys are the row `name`; rows that share a name (seat variants) share an entry.
+- **No source, no change.** Do not change a value you cannot attach a fetched `source_url` to, and do not record a search-result summary as a source.
+- Do not add entries for fields you did not check. The validator rejects entries for unknown rows or fields.
 
 ---
 

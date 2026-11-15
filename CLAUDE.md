@@ -8,9 +8,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev      # Start dev server (localhost:3000)
 npm run build    # Production build
 npm run lint     # ESLint via Next.js
+npm run validate # Data checks (also runs before every build)
+npm run refresh:preowned   # Pre-owned repricing from CarGurus; dry run unless --apply
+npm run test:refresh       # Unit tests for scripts/refresh (node --test)
 ```
 
-No test framework is configured.
+The app itself has no unit tests; `tests/e2e` holds a Playwright smoke test.
 
 ## Architecture
 
@@ -69,6 +72,10 @@ When modifying `lib/ev-data.json`, always verify:
 - CSS class exists in `globals.css` for any new vehicle class (colors must match `CLASS_THEMES`)
 - No hardcoded model/vehicle counts anywhere (always derive from DATA at runtime)
 - `last_updated` (root-level key in `ev-data.json`) bumped to today's date on any data change — drives sitemap `lastModified`
+
+### Pre-owned pricing and provenance
+
+Pre-owned ranges are repriced by `scripts/refresh/preowned.mjs`, not by hand or by web research. It runs on the 1st and 15th in GitHub Actions (`.github/workflows/preowned-refresh.yml`) and opens a data-only PR. `lib/ev-data.provenance.json` holds the CarGurus baselines the script compares against (`preowned`) and per-row, per-field sources with a last-verified date (`fields`). The site does not import this file. See `.claude/commands/refresh.md` for the rules.
 
 ### OTD formula (computed at load, never stored)
 
