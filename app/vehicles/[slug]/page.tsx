@@ -190,7 +190,7 @@ export default async function VehiclePage({ params }: Props) {
             <p className="vehicle-hero-watch">
               <span className={`wl-chip wl-chip--${watchMeta.status}`}>{WATCH_STATUS_LABEL[watchMeta.status]}</span>
               <span>{watchMeta.windowLabel}</span>
-              <Link href="/watch-list">Watch List →</Link>
+              <Link href="/news-radar">News Radar →</Link>
             </p>
           )}
           <div className="vehicle-hero-actions">

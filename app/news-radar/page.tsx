@@ -5,10 +5,10 @@ import WatchListTab from '@/components/tabs/WatchListTab'
 import { SITE_URL } from '@/lib/slugs'
 
 export const metadata: Metadata = {
-  title: 'Watch List — Upcoming & Discontinued 3-Row EVs',
+  title: 'News Radar — New, Upcoming & Discontinued 3-Row EVs',
   description:
-    'Three-row electric SUVs announced but not yet on sale in the US, plus the ones that have been discontinued.',
-  alternates: { canonical: `${SITE_URL}/watch-list` },
+    'Three-row electric SUVs on the way to the US, the latest model-year announcements, and the ones that have been discontinued.',
+  alternates: { canonical: `${SITE_URL}/news-radar` },
 }
 
 export default function WatchListPage() {

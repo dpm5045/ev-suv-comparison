@@ -29,12 +29,15 @@ const config = {
       ['glossary', '/glossary'],
       ['reference', '/glossary'],
     ]
-    return tabRoutes.map(([tab, destination]) => ({
-      source: '/',
-      has: [{ type: 'query', key: 'tab', value: tab }],
-      destination,
-      permanent: true,
-    }))
+    return [
+      ...tabRoutes.map(([tab, destination]) => ({
+        source: '/',
+        has: [{ type: 'query', key: 'tab', value: tab }],
+        destination,
+        permanent: true,
+      })),
+      { source: '/watch-list', destination: '/news-radar', permanent: true },
+    ]
   },
 }
 

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import type { TabId } from './Header'
 
 const TABS: { id: TabId; label: string; href: string }[] = [
-  { id: 'watchlist', label: 'Watch List', href: '/watch-list' },
+  { id: 'watchlist', label: 'News Radar', href: '/news-radar' },
   { id: 'specselect', label: 'Spec & Select', href: '/spec-select' },
   { id: 'sidebyside', label: 'Side-by-Side', href: '/side-by-side' },
   { id: 'comparison', label: 'The Full Monty', href: '/comparison' },

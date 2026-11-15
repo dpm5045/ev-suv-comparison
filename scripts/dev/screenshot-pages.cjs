@@ -21,7 +21,7 @@ if (!out) {
 
 const routes = [
   ['home', '/'],
-  ['watch', '/watch-list'],
+  ['watch', '/news-radar'],
   ['spec', '/spec-select'],
   ['sbs', '/side-by-side'],
   ['full', '/comparison'],

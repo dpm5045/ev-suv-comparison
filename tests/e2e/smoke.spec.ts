@@ -16,13 +16,18 @@ test('glossary route renders', async ({ page }) => {
   await expect(page.locator('main.main')).toContainText(/glossary/i)
 })
 
-test('watch list route renders and is the first tab after the brand', async ({ page }) => {
-  await page.goto('/watch-list')
+test('news radar route renders and is the first tab after the brand', async ({ page }) => {
+  await page.goto('/news-radar')
   await expect(page.locator('main.main')).toContainText(/arrivals/i)
   await expect(page.locator('main.main')).toContainText(/departures/i)
   const tabs = page.locator('nav.header-nav a.nav-tab')
   await expect(tabs.nth(0)).toHaveText('3RowEV')
-  await expect(tabs.nth(1)).toHaveText('Watch List')
+  await expect(tabs.nth(1)).toHaveText('News Radar')
+})
+
+test('old /watch-list URL redirects to news radar', async ({ page }) => {
+  await page.goto('/watch-list')
+  await expect(page).toHaveURL(/\/news-radar/)
 })
 
 test('old ?tab= URL redirects to route', async ({ page }) => {
