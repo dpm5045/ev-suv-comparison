@@ -30,7 +30,7 @@ const routes = [
   ['vehicle-watch', '/vehicles/lexus-tz'],
   ['compare', '/compare/kia-ev9-vs-rivian-r1s'],
   ['about', '/about'],
-  ['explore', '/explore'],
+  ['data', '/data'],
 ]
 
 ;(async () => {

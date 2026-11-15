@@ -16,3 +16,11 @@ export function fmtNum(v: number | string | null | undefined): { text: string; c
 export function isNaLike(s: string): boolean {
   return s.includes('N/A') || s.includes('TBD') || s.includes('No ') || s === '-' || s === ''
 }
+
+/** "Nov 14, 2026" from an ISO date (YYYY-MM-DD); returns the input if unparseable. */
+export function fmtDate(iso: string): string {
+  const d = new Date(`${iso}T12:00:00Z`)
+  return Number.isNaN(d.getTime())
+    ? iso
+    : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+}

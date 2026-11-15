@@ -25,6 +25,7 @@
   --mono: 'JetBrains Mono', monospace;
   --header-bg: rgba(12, 15, 20, 0.92);
   --page-width: 1200px;
+  --chart-muted: #46536e;
 }
 
 /* ── Light theme ── */
@@ -50,6 +51,7 @@ html[data-theme="light"] {
   --pink: #db2777;
   --orange: #ea580c;
   --header-bg: rgba(250, 248, 245, 0.92);
+  --chart-muted: #b8b0a6;
 }
 
 * {
@@ -609,6 +611,74 @@ a.wl-make:hover { filter: brightness(1.15); }
 .wl-departure-years { font-family: var(--mono); font-size: clamp(32px, 5vw, 52px); line-height: 1; letter-spacing: -0.02em; }
 .wl-link { font-size: 14px; color: var(--accent); padding: 12px 0; text-decoration: none; }
 .wl-link:hover { text-decoration: underline; }
+
+/* ── Data stories (components/DataStories.tsx) ── */
+.ds-column { max-width: 880px; margin: 0 auto; }
+.ds-story {
+  margin-top: 72px; border-top: 1px solid var(--border); padding-top: 28px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.ds-story:first-of-type { margin-top: 40px; }
+.ds-rule { width: 48px; height: 4px; background: var(--accent); }
+.ds-kicker {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.ds-kicker--accent { color: var(--accent); }
+.ds-headline { font-size: 32px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
+.ds-dek { font-size: 16px; line-height: 1.55; color: var(--text-muted); max-width: 720px; }
+.ds-source { font-size: 12px; line-height: 1.5; color: var(--text-muted); }
+.ds-figure { margin: 14px 0 0; }
+.ds-chart-title { font-size: 14px; font-weight: 600; }
+.ds-mark--hi { background: var(--accent) !important; }
+
+/* column charts */
+.ds-colcharts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 32px 48px; }
+.ds-colchart { display: flex; flex-direction: column; gap: 12px; }
+.ds-cols { display: grid; gap: 10px; align-items: end; height: 232px; border-bottom: 1px solid var(--border-light); }
+.ds-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; height: 100%; }
+.ds-col-value { font-family: var(--mono); font-size: 13px; }
+.ds-col-bar { width: 100%; max-height: calc(100% - 24px); border-radius: 4px 4px 0 0; background: var(--chart-muted); }
+.ds-col-axis { display: grid; gap: 10px; font-family: var(--mono); font-size: 12px; color: var(--text-muted); text-align: center; }
+
+/* horizontal bars (price ranges, cost per mile) */
+.ds-scroll { overflow-x: auto; }
+.ds-hbars { display: flex; flex-direction: column; gap: 8px; }
+.ds-hbars--price { min-width: 620px; }
+.ds-hbar-row { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 12px; align-items: center; font-size: 13px; }
+.ds-hbar-name { text-align: right; color: var(--text-muted); }
+.ds-hbar-track { position: relative; height: 16px; }
+.ds-hbar-track--bg { background: color-mix(in srgb, var(--surface) 60%, transparent); }
+.ds-hbar-axis .ds-hbar-track { height: 18px; }
+.ds-tick-label { position: absolute; transform: translateX(-50%); font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+.ds-gridline-v { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border); }
+.ds-range-bar { position: absolute; top: 2px; bottom: 2px; border-radius: 4px; background: var(--chart-muted); }
+.ds-range-label { position: absolute; top: 0; line-height: 16px; font-family: var(--mono); font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.ds-cpm { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.ds-cpm-bar { height: 14px; border-radius: 0 4px 4px 0; background: var(--chart-muted); flex-shrink: 0; }
+.ds-cpm-value { font-family: var(--mono); font-size: 13px; }
+
+/* scatter */
+.ds-scatter { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; }
+.ds-scatter-y { position: relative; height: 420px; font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+.ds-scatter-y span { position: absolute; right: 0; transform: translateY(50%); }
+.ds-scatter-plot { position: relative; height: 420px; border-left: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
+.ds-gridline-h { position: absolute; left: 0; right: 0; height: 1px; background: var(--border); opacity: 0.6; }
+.ds-band { position: absolute; left: 0; right: 0; background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.ds-band-label { position: absolute; right: 10px; font-size: 12px; color: var(--text-muted); }
+.ds-dot {
+  position: absolute; width: 12px; height: 12px; margin: 0 0 -6px -6px; border-radius: 50%;
+  background: var(--text-muted); box-shadow: 0 0 0 2px var(--bg);
+}
+.ds-dot-label { position: absolute; transform: translateY(50%); font-size: 12px; color: var(--text); white-space: nowrap; }
+.ds-dot-label--above { transform: none; }
+.ds-leader { position: absolute; width: 1px; height: 28px; background: var(--text-muted); }
+.ds-scatter-x { position: relative; height: 34px; font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+.ds-scatter-x span { position: absolute; transform: translateX(-50%); }
+.ds-scatter-x .ds-axis-title { right: 0; left: auto; top: 18px; transform: none; font-family: var(--font); }
+
+/* explore section */
+.ds-explore { margin-top: 88px; border-top: 1px solid var(--border); padding-top: 28px; display: flex; flex-direction: column; gap: 14px; }
 
 /* ── Filters ── */
 .filters {
@@ -2166,6 +2236,9 @@ html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --car
   .nav-drawer:not(.open) { display: none; }
   .main { padding: 16px; }
   .page-header { padding: 8px 0 20px; }
+  .ds-headline { font-size: 26px; }
+  .ds-scatter-y, .ds-scatter-plot { height: 320px; }
+  .ds-hbar-row { grid-template-columns: 120px minmax(0, 1fr); }
   .overview-hero { grid-template-columns: 1fr; gap: 20px; padding: 1rem 0 1.5rem; }
   .overview-hero-title { font-size: 34px; }
   .overview-hero-image { aspect-ratio: 4 / 3; }

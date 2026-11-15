@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { DATA, WATCHLIST_VEHICLES, GOODBYELIST_VEHICLES, VEHICLE_CLASSES, type DetailRow } from '@/lib/data'
 import { toSlug } from '@/lib/slugs'
+import { fmtDate } from '@/lib/utils'
 import {
   ARRIVAL_WINDOWS,
   MODEL_YEAR_NEWS,
@@ -31,13 +32,6 @@ function batteryText(vals: number[]): string {
 }
 
 const money = (n: number) => `$${n.toLocaleString('en-US')}`
-
-function fmtDate(iso: string): string {
-  const d = new Date(`${iso}T12:00:00Z`)
-  return Number.isNaN(d.getTime())
-    ? iso
-    : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
-}
 
 function arrivalCard(vehicle: string) {
   const rows = DATA.details.filter((r) => r.vehicle === vehicle)

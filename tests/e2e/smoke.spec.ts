@@ -25,6 +25,11 @@ test('news radar route renders and is the first tab after the brand', async ({ p
   await expect(tabs.nth(1)).toHaveText('News Radar')
 })
 
+test('old /explore URL redirects to data', async ({ page }) => {
+  await page.goto('/explore')
+  await expect(page).toHaveURL(/\/data/)
+})
+
 test('old /watch-list URL redirects to news radar', async ({ page }) => {
   await page.goto('/watch-list')
   await expect(page).toHaveURL(/\/news-radar/)
@@ -56,8 +61,9 @@ test('compare page renders', async ({ page }) => {
   await expect(page.locator('main')).toContainText(/Kia EV9/i)
 })
 
-test('explore page renders a chart', async ({ page }) => {
-  await page.goto('/explore')
+test('data page renders stories and the explorer chart', async ({ page }) => {
+  await page.goto('/data')
+  await expect(page.locator('main.main')).toContainText('in four charts')
   await expect(page.locator('.explorer')).toBeVisible()
   // Plot renders <svg> today; Chart.js renders <canvas> after the chart port — accept either
   await expect(page.locator('.explorer svg, .explorer canvas').first()).toBeVisible({ timeout: 15_000 })

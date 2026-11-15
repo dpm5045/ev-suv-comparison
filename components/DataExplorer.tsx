@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { DATA, WATCHLIST_VEHICLES } from '@/lib/data'
-import PageHeader from '@/components/PageHeader'
 import type { DetailRow } from '@/lib/data'
 import { chartColor } from '@/lib/vehicle-theme'
 import { useIsLightTheme } from './useIsLightTheme'
@@ -512,10 +511,11 @@ export default function DataExplorer() {
 
   return (
     <div className="explorer">
-      <PageHeader eyebrow={`${allData.length} trims · ${vehicles.length} vehicles`} title="Data Explorer">
+      <h2 className="ds-headline">Plot any two specs against each other.</h2>
+      <p className="ds-dek">
         Interactive scatter plot of {allData.length} trims across {vehicles.length} vehicles.
         Use the filters and axis selectors below to explore the data.
-      </PageHeader>
+      </p>
 
       {/* Filter row */}
       <div className="explorer-controls">
