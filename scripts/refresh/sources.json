@@ -7,5 +7,42 @@
     "Volvo EX90": "https://www.cargurus.com/research/price-trends/Volvo-EX90-d3372",
     "Mercedes-Benz EQS SUV": "https://www.cargurus.com/research/price-trends/Mercedes-Benz-EQS-SUV-d3275",
     "Volkswagen ID. Buzz": "https://www.cargurus.com/research/price-trends/Volkswagen-ID.Buzz-d3233"
+  },
+  "epa": {
+    "download_url": "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip",
+    "models": {
+      "Kia EV9": { "make": "Kia", "model": "^EV9\\b" },
+      "Hyundai IONIQ 9": { "make": "Hyundai", "model": "^Ioniq 9\\b" },
+      "Volvo EX90": { "make": "Volvo", "model": "^EX90\\b" },
+      "Rivian R1S": { "make": "Rivian", "model": "^R1S\\b" },
+      "Tesla Model X": { "make": "Tesla", "model": "^Model X\\b" },
+      "Tesla Model Y (3-Row)": { "make": "Tesla", "model": "^Model Y\\b(?! L\\b)" },
+      "Tesla Model Y L": { "make": "Tesla", "model": "^Model Y L\\b" },
+      "Lucid Gravity": { "make": "Lucid", "model": "^Gravity\\b" },
+      "Volkswagen ID. Buzz": { "make": "Volkswagen", "model": "^ID\\. ?Buzz\\b" },
+      "Toyota Highlander EV": { "make": "Toyota", "model": "Highlander" },
+      "Cadillac Escalade IQ": { "make": "Cadillac", "model": "^Escalade IQ" },
+      "Cadillac VISTIQ": { "make": "Cadillac", "model": "^VISTIQ\\b" },
+      "Mercedes-Benz EQS SUV": { "make": "Mercedes-Benz", "model": "EQS.*SUV" },
+      "Mercedes-Benz GLB Electric": { "make": "Mercedes-Benz", "model": "^GLB" },
+      "Subaru Getaway": { "make": "Subaru", "model": "Getaway" },
+      "VinFast VF9": { "make": "VinFast", "model": "^VF ?9\\b" },
+      "BMW iX7": { "make": "BMW", "model": "^iX7" },
+      "Genesis GV90": { "make": "Genesis", "model": "GV90" },
+      "Faraday Future FX Super One": { "make": "Faraday Future", "model": "Super One" },
+      "Lexus TZ": { "make": "Lexus", "model": "^TZ\\b" }
+    }
+  },
+  "pricing_pages": {
+    "Kia EV9": "https://www.kia.com/us/en/ev9",
+    "Hyundai IONIQ 9": "https://www.hyundaiusa.com/us/en/vehicles/ioniq-9",
+    "Rivian R1S": "https://rivian.com/r1s",
+    "Lucid Gravity": "https://lucidmotors.com/gravity",
+    "Cadillac Escalade IQ": "https://www.cadillac.com/electric/escalade-iq",
+    "Cadillac VISTIQ": "https://www.cadillac.com/electric/vistiq",
+    "Mercedes-Benz EQS SUV": "https://www.mbusa.com/en/vehicles/class/eqs/suv",
+    "Volkswagen ID. Buzz": "https://www.vw.com/en/models/id-buzz.html",
+    "VinFast VF9": "https://vinfastauto.us/vehicles/vf-9",
+    "Lexus TZ": "https://www.lexus.com/models/TZ"
   }
 }

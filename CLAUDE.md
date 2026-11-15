@@ -10,6 +10,7 @@ npm run build    # Production build
 npm run lint     # ESLint via Next.js
 npm run validate # Data checks (also runs before every build)
 npm run refresh:preowned   # Pre-owned repricing from CarGurus; dry run unless --apply
+npm run refresh:watch      # EPA range check + manufacturer price-page watch; report only
 npm run test:refresh       # Unit tests for scripts/refresh (node --test)
 ```
 
@@ -75,7 +76,7 @@ When modifying `lib/ev-data.json`, always verify:
 
 ### Pre-owned pricing and provenance
 
-Pre-owned ranges are repriced by `scripts/refresh/preowned.mjs`, not by hand or by web research. It runs on the 1st and 15th in GitHub Actions (`.github/workflows/preowned-refresh.yml`) and opens a data-only PR. `lib/ev-data.provenance.json` holds the CarGurus baselines the script compares against (`preowned`) and per-row, per-field sources with a last-verified date (`fields`). The site does not import this file. See `.claude/commands/refresh.md` for the rules.
+Pre-owned ranges are repriced by `scripts/refresh/preowned.mjs`, not by hand or by web research. It runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`) and opens a data-only PR. `scripts/refresh/watch.mjs` runs alongside it (`.github/workflows/data-watch.yml`): it checks stored ranges against the EPA vehicle file and watches manufacturer pages for price changes, never edits `ev-data.json`, and keeps what it last saw in `scripts/refresh/state/watch.json`. `lib/ev-data.provenance.json` holds the CarGurus baselines the script compares against (`preowned`) and per-row, per-field sources with a last-verified date (`fields`). The site does not import this file. See `.claude/commands/refresh.md` for the rules.
 
 ### OTD formula (computed at load, never stored)
 

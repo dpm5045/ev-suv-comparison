@@ -1,0 +1,77 @@
+name: Data Watch
+
+# Runs scripts/refresh/watch.mjs: checks stored ranges against the EPA vehicle
+# file and watches manufacturer pages for price changes. It never edits
+# lib/ev-data.json. When what it sees has changed since the last run, it opens
+# a PR that records the new state, with the report as the PR description.
+
+on:
+  schedule:
+    - cron: '30 13 * * 1'   # every Monday, 13:30 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: data-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Unit tests
+        run: npm run test:refresh
+
+      - name: Skip if an earlier watch PR is still open
+        id: open
+        run: |
+          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("data-refresh/watch-"))] | length')
+          echo "count=$open" >> "$GITHUB_OUTPUT"
+          if [ "$open" != "0" ]; then
+            echo "An earlier data watch PR is still open; merge or close it first." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Check EPA and manufacturer pages
+        if: steps.open.outputs.count == '0'
+        run: |
+          node scripts/refresh/watch.mjs --apply --report "$RUNNER_TEMP/report.md"
+          cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate data
+        if: steps.open.outputs.count == '0'
+        run: npm run validate
+
+      - name: Open pull request
+        if: steps.open.outputs.count == '0'
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Nothing changed since the last run; no PR." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -vxE 'scripts/refresh/state/watch\.json|lib/ev-data\.provenance\.json' || true)
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected files changed: $unexpected" >&2
+            exit 1
+          fi
+          branch="data-refresh/watch-$(date -u +%F)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add scripts/refresh/state/watch.json lib/ev-data.provenance.json
+          git commit -m "data watch: record state $(date -u +%F)"
+          git push origin "$branch"
+          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" \
+            --title "Data watch $(date -u +%F): sources changed" \
+            --body-file "$RUNNER_TEMP/report.md"

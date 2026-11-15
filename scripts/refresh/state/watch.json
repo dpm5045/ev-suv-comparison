@@ -1,0 +1,1797 @@
+{
+  "schema_version": 1,
+  "epa": {
+    "Tesla Model X": {
+      "2016": [
+        {
+          "id": 36979,
+          "model": "Model X AWD - 90D",
+          "drive": "All-Wheel Drive",
+          "range": 257
+        },
+        {
+          "id": 36980,
+          "model": "Model X AWD - P90D",
+          "drive": "All-Wheel Drive",
+          "range": 250
+        },
+        {
+          "id": 37423,
+          "model": "Model X AWD - 75D",
+          "drive": "All-Wheel Drive",
+          "range": 238
+        },
+        {
+          "id": 38173,
+          "model": "Model X AWD - 60D",
+          "drive": "All-Wheel Drive",
+          "range": 200
+        },
+        {
+          "id": 38500,
+          "model": "Model X AWD - P100D",
+          "drive": "All-Wheel Drive",
+          "range": 289
+        }
+      ],
+      "2017": [
+        {
+          "id": 38526,
+          "model": "Model X AWD - 60D",
+          "drive": "All-Wheel Drive",
+          "range": 200
+        },
+        {
+          "id": 38527,
+          "model": "Model X AWD - 75D",
+          "drive": "All-Wheel Drive",
+          "range": 238
+        },
+        {
+          "id": 38528,
+          "model": "Model X AWD - 90D",
+          "drive": "All-Wheel Drive",
+          "range": 257
+        },
+        {
+          "id": 38529,
+          "model": "Model X AWD - P90D",
+          "drive": "All-Wheel Drive",
+          "range": 250
+        },
+        {
+          "id": 38530,
+          "model": "Model X AWD - P100D",
+          "drive": "All-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 39831,
+          "model": "Model X AWD - 100D",
+          "drive": "All-Wheel Drive",
+          "range": 295
+        }
+      ],
+      "2018": [
+        {
+          "id": 39841,
+          "model": "Model X 75D",
+          "drive": "All-Wheel Drive",
+          "range": 238
+        },
+        {
+          "id": 39842,
+          "model": "Model X 100D",
+          "drive": "All-Wheel Drive",
+          "range": 295
+        },
+        {
+          "id": 39843,
+          "model": "Model X P100D",
+          "drive": "All-Wheel Drive",
+          "range": 289
+        }
+      ],
+      "2019": [
+        {
+          "id": 41195,
+          "model": "Model X 75D",
+          "drive": "All-Wheel Drive",
+          "range": 238
+        },
+        {
+          "id": 41196,
+          "model": "Model X 100D",
+          "drive": "All-Wheel Drive",
+          "range": 295
+        },
+        {
+          "id": 41197,
+          "model": "Model X P100D",
+          "drive": "All-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 41514,
+          "model": "Model X Long Range",
+          "drive": "All-Wheel Drive",
+          "range": 325
+        },
+        {
+          "id": 41515,
+          "model": "Model X Performance (22in Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 270
+        }
+      ],
+      "2020": [
+        {
+          "id": 42286,
+          "model": "Model X Long Range",
+          "drive": "All-Wheel Drive",
+          "range": 328
+        },
+        {
+          "id": 42287,
+          "model": "Model X Performance (20in Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 305
+        },
+        {
+          "id": 42288,
+          "model": "Model X Performance (22in Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 272
+        },
+        {
+          "id": 42289,
+          "model": "Model X Standard Range",
+          "drive": "All-Wheel Drive",
+          "range": 258
+        },
+        {
+          "id": 43413,
+          "model": "Model X Long Range Plus",
+          "drive": "All-Wheel Drive",
+          "range": 351
+        }
+      ],
+      "2021": [
+        {
+          "id": 43403,
+          "model": "Model X Long Range Plus",
+          "drive": "All-Wheel Drive",
+          "range": 371
+        },
+        {
+          "id": 43404,
+          "model": "Model X Performance (20in Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 341
+        },
+        {
+          "id": 43405,
+          "model": "Model X Performance (22in Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        }
+      ],
+      "2022": [
+        {
+          "id": 45020,
+          "model": "Model X",
+          "drive": "All-Wheel Drive",
+          "range": 348
+        },
+        {
+          "id": 45021,
+          "model": "Model X Plaid (20 inch wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 333
+        },
+        {
+          "id": 45022,
+          "model": "Model X Plaid (22 inch wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 311
+        }
+      ],
+      "2023": [
+        {
+          "id": 46208,
+          "model": "Model X",
+          "drive": "All-Wheel Drive",
+          "range": 348
+        },
+        {
+          "id": 46209,
+          "model": "Model X Plaid (20 inch wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 333
+        },
+        {
+          "id": 46210,
+          "model": "Model X Plaid (22 inch wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 311
+        }
+      ],
+      "2024": [
+        {
+          "id": 47915,
+          "model": "Model X",
+          "drive": "All-Wheel Drive",
+          "range": 335
+        },
+        {
+          "id": 47916,
+          "model": "Model X Plaid (20in wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 326
+        },
+        {
+          "id": 47917,
+          "model": "Model X Plaid (22in wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        }
+      ],
+      "2025": [
+        {
+          "id": 48768,
+          "model": "Model X Plaid (20in wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 314
+        },
+        {
+          "id": 48769,
+          "model": "Model X Plaid (22in wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 294
+        },
+        {
+          "id": 49125,
+          "model": "Model X",
+          "drive": "All-Wheel Drive",
+          "range": 329
+        }
+      ],
+      "2026": [
+        {
+          "id": 49745,
+          "model": "Model X",
+          "drive": "All-Wheel Drive",
+          "range": 352
+        },
+        {
+          "id": 49746,
+          "model": "Model X Plaid",
+          "drive": "All-Wheel Drive",
+          "range": 335
+        }
+      ]
+    },
+    "Tesla Model Y (3-Row)": {
+      "2020": [
+        {
+          "id": 42474,
+          "model": "Model Y Performance AWD",
+          "drive": "All-Wheel Drive",
+          "range": 315
+        },
+        {
+          "id": 42816,
+          "model": "Model Y Performance AWD (21in Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 291
+        },
+        {
+          "id": 42916,
+          "model": "Model Y Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 316
+        }
+      ],
+      "2021": [
+        {
+          "id": 43406,
+          "model": "Model Y Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 326
+        },
+        {
+          "id": 43407,
+          "model": "Model Y Performance AWD",
+          "drive": "All-Wheel Drive",
+          "range": 303
+        },
+        {
+          "id": 43880,
+          "model": "Model Y Standard Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 244
+        }
+      ],
+      "2022": [
+        {
+          "id": 45017,
+          "model": "Model Y RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 244
+        },
+        {
+          "id": 45018,
+          "model": "Model Y Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 45019,
+          "model": "Model Y Performance AWD",
+          "drive": "All-Wheel Drive",
+          "range": 303
+        },
+        {
+          "id": 45196,
+          "model": "Model Y AWD",
+          "drive": "All-Wheel Drive",
+          "range": 279
+        }
+      ],
+      "2023": [
+        {
+          "id": 46211,
+          "model": "Model Y AWD",
+          "drive": "All-Wheel Drive",
+          "range": 279
+        },
+        {
+          "id": 46212,
+          "model": "Model Y Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 46213,
+          "model": "Model Y Performance AWD",
+          "drive": "All-Wheel Drive",
+          "range": 303
+        }
+      ],
+      "2024": [
+        {
+          "id": 47913,
+          "model": "Model Y Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 310
+        },
+        {
+          "id": 47914,
+          "model": "Model Y Performance AWD",
+          "drive": "All-Wheel Drive",
+          "range": 279
+        },
+        {
+          "id": 48474,
+          "model": "Model Y Long Range AWD-I",
+          "drive": "All-Wheel Drive",
+          "range": 308
+        },
+        {
+          "id": 48475,
+          "model": "Model Y Long Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 320
+        },
+        {
+          "id": 48476,
+          "model": "Model Y RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 260
+        }
+      ],
+      "2025": [
+        {
+          "id": 48770,
+          "model": "Model Y Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 311
+        },
+        {
+          "id": 48771,
+          "model": "Model Y Long Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 337
+        },
+        {
+          "id": 48772,
+          "model": "Model Y Performance AWD",
+          "drive": "All-Wheel Drive",
+          "range": 277
+        }
+      ],
+      "2026": [
+        {
+          "id": 49743,
+          "model": "Model Y Long Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 357
+        },
+        {
+          "id": 49744,
+          "model": "Model Y Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 327
+        },
+        {
+          "id": 50040,
+          "model": "Model Y Standard RWD (18in Wheels)",
+          "drive": "Rear-Wheel Drive",
+          "range": 321
+        },
+        {
+          "id": 50041,
+          "model": "Model Y Standard RWD (19in Wheels)",
+          "drive": "Rear-Wheel Drive",
+          "range": 303
+        },
+        {
+          "id": 50253,
+          "model": "Model Y Performance AWD",
+          "drive": "All-Wheel Drive",
+          "range": 306
+        },
+        {
+          "id": 50304,
+          "model": "Model Y Standard AWD",
+          "drive": "All-Wheel Drive",
+          "range": 294
+        }
+      ],
+      "2027": [
+        {
+          "id": 51068,
+          "model": "Model Y AWD",
+          "drive": "All-Wheel Drive",
+          "range": 294
+        },
+        {
+          "id": 51069,
+          "model": "Model Y Performance AWD",
+          "drive": "All-Wheel Drive",
+          "range": 306
+        },
+        {
+          "id": 51070,
+          "model": "Model Y Premium AWD",
+          "drive": "All-Wheel Drive",
+          "range": 327
+        },
+        {
+          "id": 51071,
+          "model": "Model Y Premium RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 355
+        },
+        {
+          "id": 51072,
+          "model": "Model Y RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 321
+        }
+      ]
+    },
+    "Rivian R1S": {
+      "2022": [
+        {
+          "id": 44461,
+          "model": "R1S",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 316
+        }
+      ],
+      "2023": [
+        {
+          "id": 46315,
+          "model": "R1S (20 inch wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 46316,
+          "model": "R1S (21 inch wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 321
+        },
+        {
+          "id": 46317,
+          "model": "R1S (22 inch wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 303
+        },
+        {
+          "id": 46993,
+          "model": "R1S 20 inch All-Terrain",
+          "drive": "All-Wheel Drive",
+          "range": 274
+        },
+        {
+          "id": 46994,
+          "model": "R1S 20 inch All-Terrain Dual Large",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 307
+        },
+        {
+          "id": 46995,
+          "model": "R1S 20 inch All-Terrain Performance Dual Large",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 307
+        },
+        {
+          "id": 46996,
+          "model": "R1S 21 inch Dual Large",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 352
+        },
+        {
+          "id": 46997,
+          "model": "R1S 21 inch Performance Dual Large",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 352
+        },
+        {
+          "id": 46998,
+          "model": "R1S 22 inch Dual Large",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 341
+        },
+        {
+          "id": 46999,
+          "model": "R1S 22 inch Performance Dual Large",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 341
+        }
+      ],
+      "2024": [
+        {
+          "id": 47477,
+          "model": "R1S All-Terrain Quad Large (20 inch)",
+          "drive": "All-Wheel Drive",
+          "range": 274
+        },
+        {
+          "id": 47885,
+          "model": "R1S All-Terrain Dual Large (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 307
+        },
+        {
+          "id": 47886,
+          "model": "R1S All-Terrain Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 355
+        },
+        {
+          "id": 47887,
+          "model": "R1S All-Terrain Dual Standard Plus (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 277
+        },
+        {
+          "id": 47888,
+          "model": "R1S All-Terrain Performance Dual Large (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 307
+        },
+        {
+          "id": 47889,
+          "model": "R1S All-Terrain Performance Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 355
+        },
+        {
+          "id": 47890,
+          "model": "R1S AT Performance Dual Standard Plus (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 277
+        },
+        {
+          "id": 47891,
+          "model": "R1S Dual Large (21in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 352
+        },
+        {
+          "id": 47892,
+          "model": "R1S Dual Large (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 341
+        },
+        {
+          "id": 47893,
+          "model": "R1S Dual Max (21in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 400
+        },
+        {
+          "id": 47894,
+          "model": "R1S Dual Max (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 380
+        },
+        {
+          "id": 47895,
+          "model": "R1S Dual Standard (21in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 270
+        },
+        {
+          "id": 47896,
+          "model": "R1S Dual Standard (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 255
+        },
+        {
+          "id": 47897,
+          "model": "R1S Dual Standard Plus (21in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 315
+        },
+        {
+          "id": 47898,
+          "model": "R1S Dual Standard Plus (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 47899,
+          "model": "R1S Performance Dual Large (21in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 352
+        },
+        {
+          "id": 47900,
+          "model": "R1S Performance Dual Large (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 341
+        },
+        {
+          "id": 47901,
+          "model": "R1S Performance Dual Max (21in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 400
+        },
+        {
+          "id": 47902,
+          "model": "R1S Performance Dual Max (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 380
+        },
+        {
+          "id": 47903,
+          "model": "R1S Performance Dual Standard (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 47904,
+          "model": "R1S Performance Dual Standard Plus (21in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 315
+        },
+        {
+          "id": 47905,
+          "model": "R1S Quad Large (20in)",
+          "drive": "All-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 47906,
+          "model": "R1S Quad Large (21in)",
+          "drive": "All-Wheel Drive",
+          "range": 321
+        },
+        {
+          "id": 47907,
+          "model": "R1S Quad Large (22in)",
+          "drive": "All-Wheel Drive",
+          "range": 303
+        }
+      ],
+      "2025": [
+        {
+          "id": 48428,
+          "model": "R1S All-Terrain Dual Large Plus (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 292
+        },
+        {
+          "id": 48429,
+          "model": "R1S All-Terrain Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 370
+        },
+        {
+          "id": 48430,
+          "model": "R1S All-Terrain Performance Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 370
+        },
+        {
+          "id": 48431,
+          "model": "R1S All-Terrain Performance Dual Large Plus (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 292
+        },
+        {
+          "id": 48432,
+          "model": "R1S Dual Large Plus (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 48433,
+          "model": "R1S Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 380
+        },
+        {
+          "id": 48434,
+          "model": "R1S Dual Max (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 410
+        },
+        {
+          "id": 48435,
+          "model": "R1S Dual Standard (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 258
+        },
+        {
+          "id": 48436,
+          "model": "R1S Dual Standard (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 270
+        },
+        {
+          "id": 48437,
+          "model": "R1S Performance Dual Large Plus (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 48438,
+          "model": "R1S Performance Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 380
+        },
+        {
+          "id": 48439,
+          "model": "R1S Performance Dual Max (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 410
+        },
+        {
+          "id": 48742,
+          "model": "R1S All-Terrain Dual Large (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 48743,
+          "model": "R1S All-Terrain Performance Dual Large (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 48744,
+          "model": "R1S All-Terrain Tri Max (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 329
+        },
+        {
+          "id": 48745,
+          "model": "R1S Dual Large (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 48746,
+          "model": "R1S Dual Large (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 329
+        },
+        {
+          "id": 48747,
+          "model": "R1S Dual Large Plus (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 317
+        },
+        {
+          "id": 48748,
+          "model": "R1S Performance Dual Large (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 48749,
+          "model": "R1S Performance Dual Large (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 329
+        },
+        {
+          "id": 48750,
+          "model": "R1S Performance Dual Large Plus (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 317
+        },
+        {
+          "id": 48751,
+          "model": "R1S Tri Max (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 371
+        }
+      ],
+      "2026": [
+        {
+          "id": 49716,
+          "model": "R1S Dual Standard (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 270
+        },
+        {
+          "id": 49717,
+          "model": "R1S Dual Standard (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 258
+        },
+        {
+          "id": 49718,
+          "model": "R1S Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 380
+        },
+        {
+          "id": 49719,
+          "model": "R1S Dual Max (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 410
+        },
+        {
+          "id": 49720,
+          "model": "R1S All-Terrain Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 370
+        },
+        {
+          "id": 49721,
+          "model": "R1S Performance Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 380
+        },
+        {
+          "id": 49722,
+          "model": "R1S Performance Dual Max (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 410
+        },
+        {
+          "id": 49723,
+          "model": "R1S All-Terrain Performance Dual Max (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 370
+        },
+        {
+          "id": 49724,
+          "model": "R1S Dual Large Plus (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 49725,
+          "model": "R1S All-Terrain Dual Large Plus (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 292
+        },
+        {
+          "id": 49726,
+          "model": "R1S Performance Dual Large Plus (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 49727,
+          "model": "R1S All-Terrain Performance Dual Large Plus (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 292
+        },
+        {
+          "id": 49728,
+          "model": "R1S Dual Large Plus (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 317
+        },
+        {
+          "id": 49729,
+          "model": "R1S Performance Dual Large Plus (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 317
+        },
+        {
+          "id": 49730,
+          "model": "R1S Tri Max (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 371
+        },
+        {
+          "id": 49731,
+          "model": "R1S All-Terrain Tri Max (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 329
+        },
+        {
+          "id": 49732,
+          "model": "R1S Dual Large (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 329
+        },
+        {
+          "id": 49733,
+          "model": "R1S Dual Large (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 49734,
+          "model": "R1S All-Terrain Dual Large (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 49735,
+          "model": "R1S Performance Dual Large (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 329
+        },
+        {
+          "id": 49736,
+          "model": "R1S Performance Dual Large (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 49737,
+          "model": "R1S All-Terrain Performance Dual Large (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 49738,
+          "model": "R1S Quad Max (22in UHP)",
+          "drive": "4-Wheel Drive",
+          "range": 338
+        },
+        {
+          "id": 49739,
+          "model": "R1S Quad Max (20in AT)",
+          "drive": "4-Wheel Drive",
+          "range": 325
+        },
+        {
+          "id": 49740,
+          "model": "R1S Quad Max (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 374
+        }
+      ],
+      "2027": [
+        {
+          "id": 50665,
+          "model": "R1S Performance (20in AT)",
+          "drive": "4-Wheel Drive",
+          "range": 329
+        },
+        {
+          "id": 50666,
+          "model": "R1S Performance (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 348
+        },
+        {
+          "id": 50667,
+          "model": "R1S Performance (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 371
+        },
+        {
+          "id": 50668,
+          "model": "R1S Premium (20in AT)",
+          "drive": "4-Wheel Drive",
+          "range": 289
+        },
+        {
+          "id": 50669,
+          "model": "R1S Premium (20in)",
+          "drive": "4-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 50670,
+          "model": "R1S Premium (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 329
+        },
+        {
+          "id": 50671,
+          "model": "R1S Premium Long Range (20in AT)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 370
+        },
+        {
+          "id": 50672,
+          "model": "R1S Premium Long Range (20in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 380
+        },
+        {
+          "id": 50673,
+          "model": "R1S Premium Long Range (22in)",
+          "drive": "Part-time 4-Wheel Drive",
+          "range": 410
+        },
+        {
+          "id": 50674,
+          "model": "R1S Quad (20in AT)",
+          "drive": "4-Wheel Drive",
+          "range": 325
+        },
+        {
+          "id": 50675,
+          "model": "R1S Quad (22in UHP)",
+          "drive": "4-Wheel Drive",
+          "range": 338
+        },
+        {
+          "id": 50676,
+          "model": "R1S Quad (22in)",
+          "drive": "4-Wheel Drive",
+          "range": 374
+        }
+      ]
+    },
+    "Mercedes-Benz EQS SUV": {
+      "2023": [
+        {
+          "id": 46010,
+          "model": "EQS 450 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 285
+        },
+        {
+          "id": 46011,
+          "model": "EQS 450 Plus (SUV)",
+          "drive": "Rear-Wheel Drive",
+          "range": 305
+        },
+        {
+          "id": 46012,
+          "model": "EQS 580 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 285
+        }
+      ],
+      "2024": [
+        {
+          "id": 47465,
+          "model": "EQS 680 4matic Maybach (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 280
+        },
+        {
+          "id": 47847,
+          "model": "EQS 450 Plus (SUV)",
+          "drive": "Rear-Wheel Drive",
+          "range": 339
+        },
+        {
+          "id": 47850,
+          "model": "EQS 450 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 47851,
+          "model": "EQS 580 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 47852,
+          "model": "EQS 680 4matic Maybach (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 321
+        }
+      ],
+      "2025": [
+        {
+          "id": 48392,
+          "model": "EQS 450 Plus (SUV)",
+          "drive": "Rear-Wheel Drive",
+          "range": 323
+        },
+        {
+          "id": 48395,
+          "model": "EQS 450 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 312
+        },
+        {
+          "id": 48396,
+          "model": "EQS 580 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 317
+        },
+        {
+          "id": 48397,
+          "model": "EQS 680 4matic Maybach (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 302
+        }
+      ],
+      "2026": [
+        {
+          "id": 49688,
+          "model": "EQS 400 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 312
+        },
+        {
+          "id": 49689,
+          "model": "EQS 550 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 317
+        },
+        {
+          "id": 49690,
+          "model": "EQS 680 4matic Maybach (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        }
+      ],
+      "2027": [
+        {
+          "id": 50662,
+          "model": "EQS 400 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 312
+        },
+        {
+          "id": 50663,
+          "model": "EQS 550 4matic (SUV)",
+          "drive": "All-Wheel Drive",
+          "range": 317
+        }
+      ]
+    },
+    "Kia EV9": {
+      "2024": [
+        {
+          "id": 47450,
+          "model": "EV9 Long Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 304
+        },
+        {
+          "id": 47451,
+          "model": "EV9 Standard Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 230
+        },
+        {
+          "id": 47452,
+          "model": "EV9 Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 280
+        },
+        {
+          "id": 47453,
+          "model": "EV9 Long Range AWD GT-Line",
+          "drive": "All-Wheel Drive",
+          "range": 270
+        }
+      ],
+      "2025": [
+        {
+          "id": 48366,
+          "model": "EV9 Long Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 304
+        },
+        {
+          "id": 48367,
+          "model": "EV9 Standard Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 230
+        },
+        {
+          "id": 48368,
+          "model": "EV9 Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 280
+        },
+        {
+          "id": 48369,
+          "model": "EV9 Long Range AWD GT-Line",
+          "drive": "All-Wheel Drive",
+          "range": 270
+        }
+      ],
+      "2026": [
+        {
+          "id": 49665,
+          "model": "EV9 Standard Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 230
+        },
+        {
+          "id": 49666,
+          "model": "EV9 Long Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 305
+        },
+        {
+          "id": 49667,
+          "model": "EV9 Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 283
+        },
+        {
+          "id": 49668,
+          "model": "EV9 Long Range AWD GT-Line",
+          "drive": "All-Wheel Drive",
+          "range": 280
+        },
+        {
+          "id": 49669,
+          "model": "EV9 GT",
+          "drive": "All-Wheel Drive",
+          "range": 260
+        }
+      ],
+      "2027": [
+        {
+          "id": 51033,
+          "model": "EV9 Long Range AWD",
+          "drive": "All-Wheel Drive",
+          "range": 283
+        },
+        {
+          "id": 51034,
+          "model": "EV9 Long Range AWD GT-Line",
+          "drive": "All-Wheel Drive",
+          "range": 280
+        },
+        {
+          "id": 51035,
+          "model": "EV9 Long Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 305
+        },
+        {
+          "id": 51036,
+          "model": "EV9 Standard Range RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 230
+        }
+      ]
+    },
+    "VinFast VF9": {
+      "2024": [
+        {
+          "id": 47487,
+          "model": "VF 9 Eco",
+          "drive": "All-Wheel Drive",
+          "range": 330
+        },
+        {
+          "id": 47488,
+          "model": "VF 9 Plus",
+          "drive": "All-Wheel Drive",
+          "range": 291
+        }
+      ],
+      "2025": [
+        {
+          "id": 49088,
+          "model": "VF 9 Plus",
+          "drive": "All-Wheel Drive",
+          "range": 287
+        }
+      ],
+      "2027": [
+        {
+          "id": 50641,
+          "model": "VF 9 Plus",
+          "drive": "All-Wheel Drive",
+          "range": 287
+        }
+      ]
+    },
+    "Volkswagen ID. Buzz": {
+      "2025": [
+        {
+          "id": 48444,
+          "model": "ID. Buzz",
+          "drive": "Rear-Wheel Drive",
+          "range": 234
+        },
+        {
+          "id": 48445,
+          "model": "ID. Buzz 4motion",
+          "drive": "All-Wheel Drive",
+          "range": 231
+        }
+      ]
+    },
+    "Volvo EX90": {
+      "2025": [
+        {
+          "id": 48777,
+          "model": "EX90 Twin Motor (20 and 22 Inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 48778,
+          "model": "EX90 Twin Motor (21 Inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 310
+        },
+        {
+          "id": 48779,
+          "model": "EX90 Twin Motor Performance (21 Inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 310
+        },
+        {
+          "id": 48780,
+          "model": "EX90 Twin Motor Performance (20 and 22 Inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        }
+      ],
+      "2026": [
+        {
+          "id": 50254,
+          "model": "EX90",
+          "drive": "Rear-Wheel Drive",
+          "range": 276
+        },
+        {
+          "id": 50255,
+          "model": "EX90 (21 Inch Wheels)",
+          "drive": "Rear-Wheel Drive",
+          "range": 291
+        },
+        {
+          "id": 50256,
+          "model": "EX90 Twin Motor",
+          "drive": "All-Wheel Drive",
+          "range": 298
+        },
+        {
+          "id": 50257,
+          "model": "EX90 Twin Motor (21 Inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 305
+        },
+        {
+          "id": 50258,
+          "model": "EX90 Twin Motor Performance",
+          "drive": "All-Wheel Drive",
+          "range": 298
+        },
+        {
+          "id": 50259,
+          "model": "EX90 Twin Motor Performance (21 Inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 305
+        }
+      ],
+      "2027": [
+        {
+          "id": 50698,
+          "model": "EX90",
+          "drive": "Rear-Wheel Drive",
+          "range": 276
+        },
+        {
+          "id": 50699,
+          "model": "EX90 Twin Motor",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 50700,
+          "model": "EX90 Twin Motor (21 Inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 310
+        },
+        {
+          "id": 50701,
+          "model": "EX90 Twin Motor Performance",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        },
+        {
+          "id": 50702,
+          "model": "EX90 Twin Motor Performance (21 Inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 310
+        },
+        {
+          "id": 50875,
+          "model": "EX90 (21 Inch Wheels)",
+          "drive": "Rear-Wheel Drive",
+          "range": 291
+        }
+      ]
+    },
+    "Lucid Gravity": {
+      "2025": [
+        {
+          "id": 49110,
+          "model": "Gravity GT w/20F21R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 450
+        },
+        {
+          "id": 49111,
+          "model": "Gravity GT w/20F21R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 437
+        },
+        {
+          "id": 49112,
+          "model": "Gravity GT w/21F22R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 407
+        },
+        {
+          "id": 49113,
+          "model": "Gravity GT w/21F22R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 386
+        },
+        {
+          "id": 49114,
+          "model": "Gravity GT w/22F23R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 407
+        },
+        {
+          "id": 49115,
+          "model": "Gravity GT w/22F23R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 386
+        }
+      ],
+      "2026": [
+        {
+          "id": 49670,
+          "model": "Gravity GT w/20F21R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 450
+        },
+        {
+          "id": 49671,
+          "model": "Gravity GT w/21F22R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 407
+        },
+        {
+          "id": 49672,
+          "model": "Gravity GT w/22F23R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 407
+        },
+        {
+          "id": 49673,
+          "model": "Gravity GT w/21F22R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 386
+        },
+        {
+          "id": 49674,
+          "model": "Gravity GT w/22F23R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 386
+        },
+        {
+          "id": 49675,
+          "model": "Gravity Dream w/20F21R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 420
+        },
+        {
+          "id": 49676,
+          "model": "Gravity Dream w/21F22R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 378
+        },
+        {
+          "id": 49677,
+          "model": "Gravity Dream w/22F23R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 378
+        },
+        {
+          "id": 50029,
+          "model": "Gravity GT w/20F21R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 437
+        },
+        {
+          "id": 50221,
+          "model": "Gravity Touring w/20F21R wheels",
+          "drive": "All-Wheel Drive",
+          "range": 337
+        }
+      ],
+      "2027": [
+        {
+          "id": 50652,
+          "model": "Gravity GT w/20F21R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 450
+        },
+        {
+          "id": 50653,
+          "model": "Gravity GT w/20F21R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 437
+        },
+        {
+          "id": 50654,
+          "model": "Gravity GT w/21F22R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 407
+        },
+        {
+          "id": 50655,
+          "model": "Gravity GT w/21F22R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 386
+        },
+        {
+          "id": 50656,
+          "model": "Gravity GT w/22F23R wheels (2R)",
+          "drive": "All-Wheel Drive",
+          "range": 407
+        },
+        {
+          "id": 50657,
+          "model": "Gravity GT w/22F23R wheels (3R)",
+          "drive": "All-Wheel Drive",
+          "range": 386
+        },
+        {
+          "id": 50658,
+          "model": "Gravity Touring w/20F21R wheels",
+          "drive": "All-Wheel Drive",
+          "range": 337
+        }
+      ]
+    },
+    "Cadillac VISTIQ": {
+      "2026": [
+        {
+          "id": 49636,
+          "model": "VISTIQ (11 kW Charger)",
+          "drive": "All-Wheel Drive",
+          "range": 305
+        },
+        {
+          "id": 49637,
+          "model": "VISTIQ (19 kW Charger)",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        }
+      ],
+      "2027": [
+        {
+          "id": 50624,
+          "model": "VISTIQ 11kW Charger",
+          "drive": "All-Wheel Drive",
+          "range": 305
+        },
+        {
+          "id": 50625,
+          "model": "VISTIQ 19kW Charger",
+          "drive": "All-Wheel Drive",
+          "range": 300
+        }
+      ]
+    },
+    "Hyundai IONIQ 9": {
+      "2026": [
+        {
+          "id": 49661,
+          "model": "Ioniq 9 RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 335
+        },
+        {
+          "id": 49662,
+          "model": "Ioniq 9 AWD",
+          "drive": "All-Wheel Drive",
+          "range": 320
+        },
+        {
+          "id": 49663,
+          "model": "Ioniq 9 AWD Performance",
+          "drive": "All-Wheel Drive",
+          "range": 311
+        }
+      ],
+      "2027": [
+        {
+          "id": 50375,
+          "model": "Ioniq 9 RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 335
+        },
+        {
+          "id": 50388,
+          "model": "Ioniq 9 AWD",
+          "drive": "All-Wheel Drive",
+          "range": 320
+        },
+        {
+          "id": 50389,
+          "model": "Ioniq 9 AWD Performance",
+          "drive": "All-Wheel Drive",
+          "range": 311
+        }
+      ]
+    },
+    "Tesla Model Y L": {
+      "2027": [
+        {
+          "id": 50862,
+          "model": "Model Y L (20in Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 328
+        }
+      ]
+    },
+    "Lexus TZ": {
+      "2027": [
+        {
+          "id": 51041,
+          "model": "TZ 450e 11kW (20 inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 253
+        },
+        {
+          "id": 51042,
+          "model": "TZ 450e 19kW (20 inch Wheels)",
+          "drive": "All-Wheel Drive",
+          "range": 255
+        }
+      ]
+    }
+  },
+  "pages": {
+    "Kia EV9": {
+      "url": "https://www.kia.com/us/en/ev9",
+      "found": [
+        54900
+      ],
+      "other_in_band": []
+    },
+    "Hyundai IONIQ 9": {
+      "url": "https://www.hyundaiusa.com/us/en/vehicles/ioniq-9",
+      "found": [
+        58955,
+        62765,
+        66320,
+        71250,
+        74990,
+        76490
+      ],
+      "other_in_band": [
+        76990
+      ]
+    },
+    "Rivian R1S": {
+      "url": "https://rivian.com/r1s",
+      "found": [
+        83990,
+        106990,
+        121990
+      ],
+      "other_in_band": [
+        79990,
+        85885
+      ]
+    },
+    "Lucid Gravity": {
+      "url": "https://lucidmotors.com/gravity",
+      "found": [
+        79900,
+        98900,
+        125900
+      ],
+      "other_in_band": [
+        81750,
+        114900
+      ]
+    },
+    "Cadillac Escalade IQ": {
+      "url": "https://www.cadillac.com/electric/escalade-iq",
+      "found": [
+        127405,
+        127700,
+        147700
+      ],
+      "other_in_band": [
+        125925,
+        127905,
+        128905,
+        130405,
+        130730,
+        147705,
+        148205,
+        148430,
+        149530,
+        157130
+      ]
+    },
+    "Cadillac VISTIQ": {
+      "url": "https://www.cadillac.com/electric/vistiq",
+      "found": [],
+      "other_in_band": [
+        77500,
+        78400,
+        78595,
+        79000,
+        79225,
+        79400,
+        79825,
+        91100,
+        92900,
+        94100,
+        97500,
+        98925,
+        99925,
+        103900
+      ]
+    },
+    "Mercedes-Benz EQS SUV": {
+      "url": "https://www.mbusa.com/en/vehicles/class/eqs/suv",
+      "found": [
+        89950,
+        112450
+      ],
+      "other_in_band": []
+    },
+    "Volkswagen ID. Buzz": {
+      "url": "https://www.vw.com/en/models/id-buzz.html",
+      "found": [],
+      "other_in_band": []
+    },
+    "VinFast VF9": {
+      "url": "https://vinfastauto.us/vehicles/vf-9",
+      "found": [],
+      "other_in_band": [
+        62900
+      ]
+    },
+    "Lexus TZ": {
+      "url": "https://www.lexus.com/models/TZ",
+      "found": [],
+      "other_in_band": []
+    }
+  }
+}
