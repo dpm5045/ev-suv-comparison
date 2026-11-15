@@ -609,8 +609,10 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   return (
     <>
       <div className="overview-hero">
-        <h1 className="overview-hero-title">Find Your Perfect 3-Row EV</h1>
-        <p className="overview-hero-sub">Compare specs, pricing, and features</p>
+        <div className="overview-hero-text">
+          <h1 className="overview-hero-title">Find Your Perfect 3-Row EV</h1>
+          <p className="overview-hero-sub">Compare specs, pricing, and features</p>
+        </div>
         <div className="overview-hero-image" onClick={toggleTheme} style={{ cursor: 'pointer' }}>
           <picture>
             <source media="(max-width: 767px)" srcSet={theme === 'light' ? '/hero-sketch-light-mobile.webp' : '/hero-sketch-mobile.webp'} type="image/webp" />
