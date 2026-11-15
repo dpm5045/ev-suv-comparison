@@ -1750,22 +1750,24 @@
     },
     "Cadillac VISTIQ": {
       "url": "https://www.cadillac.com/electric/vistiq",
-      "found": [],
+      "found": [
+        78400,
+        79000,
+        92900,
+        97500
+      ],
       "other_in_band": [
         77500,
-        78400,
         78595,
-        79000,
         79225,
         79400,
         79825,
         91100,
-        92900,
         94100,
-        97500,
         98925,
         99925,
-        103900
+        103900,
+        106900
       ]
     },
     "Mercedes-Benz EQS SUV": {
@@ -1778,9 +1780,11 @@
     },
     "VinFast VF9": {
       "url": "https://vinfastauto.us/vehicles/vf-9",
-      "found": [],
-      "other_in_band": [
+      "found": [
         62900
+      ],
+      "other_in_band": [
+        58690
       ]
     }
   },
