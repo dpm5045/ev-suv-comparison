@@ -162,9 +162,12 @@ export default function WatchListTab() {
                 <span className={`wl-chip wl-chip--${a.meta.status}`}>{WATCH_STATUS_LABEL[a.meta.status]}</span>
               </div>
               <div className="wl-card-title">
-                <h3 className="wl-h3">{a.meta.model || a.vehicle}</h3>
+                <h3 className="wl-h3">
+                  <Link href={`/vehicles/${toSlug(a.vehicle)}`} className="wl-card-link">{a.meta.model || a.vehicle}</Link>
+                </h3>
                 <p className="wl-card-blurb">{a.meta.blurb}</p>
               </div>
+              <p className="wl-card-window">{a.meta.windowLabel}</p>
               <div className="wl-stats">
                 <div className="wl-stat">
                   <span className={`wl-stat-val${a.range === 'TBD' ? ' wl-muted' : ''}`}>{a.range}</span>
@@ -248,7 +251,9 @@ export default function WatchListTab() {
                 <span className={`wl-make ${VEHICLE_CLASSES[g.vehicle] ?? ''}`}>{g.vehicle.split(' ')[0]}</span>
                 <span className="wl-chip wl-chip--gone">Discontinued</span>
               </div>
-              <h3 className="wl-h3">{g.vehicle.split(' ').slice(1).join(' ') || g.vehicle}</h3>
+              <h3 className="wl-h3">
+                <Link href={`/vehicles/${toSlug(g.vehicle)}`} className="wl-card-link">{g.vehicle.split(' ').slice(1).join(' ') || g.vehicle}</Link>
+              </h3>
               <p className="wl-card-blurb">{g.summary}</p>
             </div>
             <div className="wl-departure-side">
