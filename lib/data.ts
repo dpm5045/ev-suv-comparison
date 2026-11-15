@@ -187,6 +187,7 @@ export const WATCHLIST_VEHICLES = [
   'BMW iX7',
   'Genesis GV90',
   'Faraday Future FX Super One',
+  'Mercedes-Benz GLB Electric',
 ] as const satisfies readonly string[]
 
 /** Type-safe check for watchlist membership */

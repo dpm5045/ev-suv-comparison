@@ -81,6 +81,14 @@ export const WATCHLIST_META: Record<string, WatchMeta> = {
     blurb: 'BMW’s first full-size three-row EV, planned for Spartanburg. Nothing here is official yet.',
     priceNote: 'Press estimate ~$100,000',
   },
+  'Mercedes-Benz GLB Electric': {
+    make: 'Mercedes-Benz',
+    model: 'GLB Electric',
+    status: 'revealed',
+    window: [0, 1],
+    windowLabel: 'On sale fall 2026',
+    blurb: 'The compact GLB goes electric. Seven seats are an option, and the third row is for occasional use.',
+  },
   'Faraday Future FX Super One': {
     make: 'Faraday Future',
     model: 'FX Super One',

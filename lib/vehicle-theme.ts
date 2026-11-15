@@ -53,6 +53,7 @@ export const VEHICLE_CLASSES: Record<string, string> = {
   'BMW iX7': 'v-bmw',
   'Genesis GV90': 'v-genesis',
   'Faraday Future FX Super One': 'v-faraday',
+  'Mercedes-Benz GLB Electric': 'v-mercedes',
   'Lexus TZ': 'v-lexus',
 }
 
