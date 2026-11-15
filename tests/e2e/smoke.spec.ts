@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test'
 
-test('home renders overview', async ({ page }) => {
+test('home renders speed dating', async ({ page }) => {
   await page.goto('/')
   await expect(page.locator('.site-header')).toBeVisible()
-  await expect(page.locator('main.main')).toBeVisible()
+  await expect(page.locator('h1')).toHaveText('Find your perfect 3-row EV.')
+  await expect(page.locator('main.main')).toContainText("It's a match")
 })
 
 test('comparison route renders a data table', async ({ page }) => {
