@@ -3110,18 +3110,14 @@ html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --car
 .mi-section {
   margin-top: 56px;
   margin-bottom: 48px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 32px 28px 28px;
 }
 .mi-header {
   margin-bottom: 24px;
 }
 .mi-title {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
 .mi-intro {
@@ -3131,9 +3127,9 @@ html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --car
   line-height: 1.55;
 }
 .mi-chart-card {
-  background: var(--surface2);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 16px;
   padding: 20px 24px;
   margin-bottom: 16px;
 }
@@ -3184,7 +3180,6 @@ html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --car
 .mi-insights {
   background: var(--surface3);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
   border-radius: 10px;
   padding: 1.25rem 1.5rem;
   margin-top: 12px;
