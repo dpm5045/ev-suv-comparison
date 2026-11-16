@@ -17,9 +17,9 @@ Read these first:
 
 ## What counts as a source here
 
-- `msrp` and `destination`: the manufacturer's US site. Car and Driver, MotorTrend and KBB are tips that something changed, never the stored source.
+- `msrp` and `destination`: the manufacturer's US site. Car and Driver, MotorTrend and KBB are tips that something changed, not the stored source — with one exception: when the manufacturer's site is marked **no** in `.data-agent/reachable.md` because it blocks automated requests (tesla.com), follow **Prices when the manufacturer blocks automated requests** in `refresh.md`, which lets Car and Driver's per-trim specs pages be the `msrp` source.
 - `range_mi`: EPA (fueleconomy.gov). The watch report says which rows already match EPA; do not re-research those. A manufacturer estimate for a trim EPA has not rated goes in `scripts/refresh/accepted.json` with the reason, and in the row's `notes`.
-- If the only place a value can be confirmed is a site that is unreachable (for example tesla.com), do not change it. Defer the item and mark it `needs_local`.
+- If the only place a value can be confirmed is a site that is unreachable and that exception does not cover it (for example a Tesla spec other than price), do not change it. Defer the item and mark it `needs_local`.
 
 ## Mode: inbox
 

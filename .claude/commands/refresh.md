@@ -66,7 +66,7 @@ The same script runs every Monday in GitHub Actions (`.github/workflows/preowned
 - **Not in EPA file** — nothing to check against yet; leave it.
 - **EPA added / changed / removed a variant** — check whether a trim's range, or a new trim, follows from it.
 - **Page changed** — a stored MSRP disappeared from the manufacturer page or a new price appeared in its band. Fetch the page and check `msrp` and `destination` for that vehicle.
-- **Car and Driver line changed** — the model's headline "MSRP $X–$Y" on caranddriver.com moved, switched from estimated to actual, or rolled to a new model year. It covers the vehicles whose manufacturer sites block scripts (Tesla, Volvo) or print no prices. Treat it as a tip only: confirm on the manufacturer's site before changing `msrp` or `destination`, and never record Car and Driver as the source of a stored price. A roll to a new model year usually means that year's trims need adding (`/add-vehicle`).
+- **Car and Driver line changed** — the model's headline "MSRP $X–$Y" on caranddriver.com moved, switched from estimated to actual, or rolled to a new model year. It covers the vehicles whose manufacturer sites block scripts (Tesla, Volvo) or print no prices. Treat it as a tip only: confirm on the manufacturer's site before changing `msrp` or `destination`, and do not record Car and Driver as the source of a stored price — except for manufacturers that block automated requests (see **Prices when the manufacturer blocks automated requests** below). A roll to a new model year usually means that year's trims need adding (`/add-vehicle`).
 - **Starting price differs** (Car and Driver table) — the stored lowest MSRP plus destination for that model year is not what Car and Driver shows. Check `msrp` and `destination` for that vehicle.
 - **Stored MSRPs not on page / not watchable / unavailable** — the page does not print those prices or cannot be fetched (Tesla and Volvo block scripts and are not registered). Check `msrp` and `destination` for those vehicles by hand, as before.
 
@@ -157,6 +157,17 @@ Only include vehicles with at least "medium" confidence (officially announced wi
 - **After checking a field against a page you actually fetched, write or update its entry** — whether the value changed or was confirmed. `evidence` is a short exact quote from the page. Keys are the row `name`; rows that share a name (seat variants) share an entry.
 - **No source, no change.** Do not change a value you cannot attach a fetched `source_url` to, and do not record a search-result summary as a source.
 - Do not add entries for fields you did not check. The validator rejects entries for unknown rows or fields.
+
+### Prices when the manufacturer blocks automated requests
+
+Some manufacturer sites refuse every automated request (tesla.com, from cloud runners and from home alike). For those vehicles only, Car and Driver's per-trim specs pages count as the source for `msrp`:
+
+- **Which page:** `https://www.caranddriver.com/<make>/<model>/specs` shows the first trim; each trim has its own page, linked from the `trimsOptions` list in the HTML: `.../specs/<year>/<make>_<model>_<make>-<model>_<year>/<trim id>`. Read them with `fetch-page.mjs --grep '^TRIM|^MSRP|^\$'`.
+- **Only when it fits:** the page's model year must equal the row's `year`, the trim must clearly be the row's trim, and the price must not be marked as an estimate.
+- **Car and Driver's "MSRP" includes destination** (checked: Kia EV9 Light, $54,990 + $1,645 = $56,635). Store `msrp` = that price minus `destination`. The destination fee needs its own quoted source: the manufacturer if reachable, otherwise a press page that states the fee for that model year (Car and Driver, MotorTrend, KBB, InsideEVs, Electrek). With no quoted destination fee, change nothing and defer.
+- **Provenance:** `source_url` is the Car and Driver trim page; `evidence` starts with `Car and Driver (manufacturer site blocks automated requests):` followed by the quote, e.g. `TRIM Model X Plaid AWD, MSRP $131,630, less $1,640 destination`.
+- **A new trim** on Car and Driver (one with no row) goes under "For a person" in the changelog; adding trims stays a person's decision for these vehicles.
+- Everywhere else Car and Driver remains a tip only.
 
 ---
 
