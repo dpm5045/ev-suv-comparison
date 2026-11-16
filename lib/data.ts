@@ -242,7 +242,7 @@ export const GOODBYELIST_VEHICLES: { vehicle: string; summary: string; years?: s
   {
     vehicle: 'Tesla Model X',
     years: '2015–2026',
-    summary: 'Discontinued Q2 2026. Tesla announced the end of Model X production, closing the book on the original 3-row electric SUV.',
+    summary: 'Tesla ended Model X production and custom orders in April 2026, and the last new cars have sold. It closes the book on the original 3-row electric SUV; used prices stay in the comparison.',
   },
 ]
 

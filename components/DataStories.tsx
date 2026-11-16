@@ -1,5 +1,5 @@
 /**
- * The four chart stories on the Data tab. Charts are plain elements sized
+ * The four chart stories on the Market Insights tab. Charts are plain elements sized
  * with percentages — no canvas, SVG or chart library — so they render on the
  * server and follow the site theme through CSS variables.
  *

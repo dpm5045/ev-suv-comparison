@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: 'The 3-Row EV Market in Charts',
   description:
     'What the data says about choice, price and range in three-row electric SUVs, plus an interactive explorer for every trim.',
-  alternates: { canonical: `${SITE_URL}/data` },
+  alternates: { canonical: `${SITE_URL}/market-insights` },
 }
 
 export default function DataPage() {
@@ -21,7 +21,7 @@ export default function DataPage() {
       <Header activeTab="data" />
       <main className="main">
         <div className="ds-column">
-          <PageHeader eyebrow={`Data · Updated ${fmtDate(DATA.last_updated)}`} title="The three-row EV market, in four charts.">
+          <PageHeader eyebrow={`Market Insights · Updated ${fmtDate(DATA.last_updated)}`} title="The three-row EV market, in four charts.">
             We spent a lot of evenings in spreadsheets so you don&rsquo;t have to. Here is what stood out, and then the
             whole dataset to poke at yourself.
           </PageHeader>

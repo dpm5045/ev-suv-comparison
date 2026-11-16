@@ -46,12 +46,12 @@ app/
 ├── side-by-side/       → SideBySideTab
 ├── spec-select/        → SpecSelectClient (SpecSelectTab + DetailPanel)
 ├── glossary/           → GlossaryTab
-├── data/               → DataStories (four chart stories) + DataExplorer (scatter chart)
+├── market-insights/    → DataStories (four chart stories) + DataExplorer (scatter chart); the "Market Insights" tab
 ├── vehicles/[slug]/    → static per-vehicle page
 └── compare/[slug]/     → static pairwise comparison page
 ```
 
-Speed Dating ranking logic lives in `lib/speed-dating.ts` (scores only the trims that fit the chosen budget); chart data and headlines for the Data tab live in `lib/data-stories.ts`. Old `/watch-list` and `/explore` URLs redirect to `/news-radar` and `/data`.
+Speed Dating ranking logic lives in `lib/speed-dating.ts` (scores only the trims that fit the chosen budget); chart data and headlines for the Market Insights tab live in `lib/data-stories.ts`. Old `/watch-list`, `/explore` and `/data` URLs redirect to `/news-radar` and `/market-insights`.
 
 **Filter state is URL-driven.** Each route's client component reads filter values from `useSearchParams()` and applies updates via `router.replace()` (no history entry per filter click). Filters survive refresh and are shareable. Old `/?tab=X` URLs 301-redirect to the routes (see `redirects()` in `next.config.mjs`).
 

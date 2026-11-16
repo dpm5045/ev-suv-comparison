@@ -37,7 +37,8 @@ const config = {
         permanent: true,
       })),
       { source: '/watch-list', destination: '/news-radar', permanent: true },
-      { source: '/explore', destination: '/data', permanent: true },
+      { source: '/explore', destination: '/market-insights', permanent: true },
+      { source: '/data', destination: '/market-insights', permanent: true },
     ]
   },
 }
