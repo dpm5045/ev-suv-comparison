@@ -197,3 +197,12 @@ test('stored price span adds destination and ignores unpriced rows', () => {
   assert.deepEqual(storedPriceSpan(data, 'Kia EV9', 2027), { low: 56635, high: 73635 })
   assert.equal(storedPriceSpan(data, 'Kia EV9', 2028), null)
 })
+
+test('two- and three-row EPA ratings only match rows with those seats', () => {
+  const V = (id, model, range) => ({ id, model, drive: 'All-Wheel Drive', range })
+  const idx = { 'Lucid Gravity': { '2026': [V(1, 'Gravity GT w/20F21R wheels (2R)', 450), V(2, 'Gravity GT w/20F21R wheels (3R)', 437)] } }
+  const r = (seats, range) => ({ ...row('Lucid Gravity', 2026, 'Grand Touring', 'AWD', range), seats })
+  const { rows } = checkRanges({ details: [r(7, 437), r(7, 450), r(5, 450), r(5, 437)] }, idx)
+  assert.deepEqual(rows.map((x) => x.state), ['consistent', 'mismatch', 'consistent', 'mismatch'])
+  assert.match(rows[0].evidence, /\(3R\): 437 mi/)
+})
