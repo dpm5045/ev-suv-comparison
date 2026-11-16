@@ -42,9 +42,11 @@ const money = (n) => `$${n.toLocaleString('en-US')}`
  * @param {object} args.baselines     provenance.preowned (not mutated)
  * @param {object} args.observations  vehicle -> { url, parsed } | { url, error }
  * @param {string} args.today         YYYY-MM-DD
+ * @param {string[]} [args.allowLarge] "Vehicle|Year" groups whose move over MAX_MOVE was
+ *                                    checked by a person or the agent and may be applied
  * @returns {{ decisions: object[], rowChanges: object[], baselines: object }}
  */
-export function planPreowned({ data, baselines, observations, today }) {
+export function planPreowned({ data, baselines, observations, today, allowLarge = [] }) {
   const next = structuredClone(baselines ?? {})
   const decisions = []
   const rowChanges = []
@@ -113,7 +115,7 @@ export function planPreowned({ data, baselines, observations, today }) {
       decisions.push({ ...d, state: 'no_change', reason: `${pct(move)} since ${base.as_of}, under ${THRESHOLD * 100}%` })
       continue
     }
-    if (Math.abs(move) > MAX_MOVE) {
+    if (Math.abs(move) > MAX_MOVE && !allowLarge.includes(`${g.vehicle}|${g.year}`)) {
       decisions.push({ ...d, state: 'needs_review', reason: `${pct(move)} since ${base.as_of} exceeds ${MAX_MOVE * 100}% — not applied` })
       continue
     }

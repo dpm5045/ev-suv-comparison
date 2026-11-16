@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Data watch — deterministic, no LLM. Never edits lib/ev-data.json.
+ * Data watch — deterministic, no LLM.
  *
  *   1. EPA: checks every stored range_mi against the fueleconomy.gov vehicle
  *      file and reports what EPA added or changed since the last run.
@@ -10,17 +10,25 @@
  *   node scripts/refresh/watch.mjs                  # dry run: report only
  *   node scripts/refresh/watch.mjs --apply          # also save state + range sources
  *   node scripts/refresh/watch.mjs --report out.md
+ *   node scripts/refresh/watch.mjs --apply --fix-ranges   # also correct range_mi where EPA settles it
+ *   node scripts/refresh/watch.mjs --attention out.md     # the "Needs a look" items alone, for the inbox
  *   node scripts/refresh/watch.mjs --save-snapshots dir | --from-snapshots dir
  *
  * --apply writes scripts/refresh/state/watch.json (what was seen, for the next
  * run to compare against) and range_mi entries in lib/ev-data.provenance.json.
+ * With --fix-ranges it also writes lib/ev-data.json, changing only range_mi
+ * (and last_updated) on rows planRangeFixes can settle from EPA alone.
+ *
+ * Items listed in scripts/refresh/state/deferred.json are left out of the
+ * "Needs a look" list until their `until` date, so an item someone already
+ * looked at and could not resolve does not come back every week.
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { unzipFirst } from './lib/zip.mjs'
-import { buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance } from './lib/epa.mjs'
+import { buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance, planRangeFixes, applyRangeFixes } from './lib/epa.mjs'
 import { extractAmounts, storedMsrps, checkPage, extractHeadline, storedPriceSpan, checkHeadline, fmt } from './lib/pages.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
@@ -29,6 +37,7 @@ const PROVENANCE_PATH = join(ROOT, 'lib/ev-data.provenance.json')
 const SOURCES_PATH = join(ROOT, 'scripts/refresh/sources.json')
 const STATE_PATH = join(ROOT, 'scripts/refresh/state/watch.json')
 const ACCEPTED_PATH = join(ROOT, 'scripts/refresh/accepted.json')
+const DEFERRED_PATH = join(ROOT, 'scripts/refresh/state/deferred.json')
 
 const USER_AGENT = 'data-refresh-script/1.0'
 const REQUEST_GAP_MS = 1500
@@ -39,6 +48,8 @@ const flag = (name) => args.includes(name)
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : null)
 const apply = flag('--apply')
 const reportPath = option('--report')
+const attentionPath = option('--attention')
+const fixRanges = flag('--fix-ranges') && apply // without --apply the report shows what would change
 const saveDir = option('--save-snapshots')
 const fromDir = option('--from-snapshots')
 const today = option('--today') ?? new Date().toISOString().slice(0, 10)
@@ -49,33 +60,57 @@ const snapshotName = (vehicle, kind = 'page') => kind + '-' + vehicle.replace(/[
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const baseDomain = (host) => host.split('.').slice(-2).join('.')
 
-/** Fetch a registered URL; a redirect may not leave the registered site. */
+/**
+ * Fetch a registered URL; a redirect may not leave the registered site.
+ * A dropped connection, timeout, 429 or 5xx is retried once after a pause;
+ * a 403 or 404 is an answer, not a blip, and is not retried.
+ */
 async function fetchBuffer(url) {
   const start = new URL(url)
   if (start.protocol !== 'https:') throw new Error(`not https: ${url}`)
-  const res = await fetch(url, { headers: { 'user-agent': USER_AGENT }, signal: AbortSignal.timeout(TIMEOUT_MS) })
-  const end = new URL(res.url)
-  if (end.protocol !== 'https:' || baseDomain(end.hostname) !== baseDomain(start.hostname)) {
-    throw new Error(`redirected off-site to ${end.hostname}`)
+  for (let attempt = 1; ; attempt++) {
+    let retryable = true
+    try {
+      const res = await fetch(url, { headers: { 'user-agent': USER_AGENT }, signal: AbortSignal.timeout(TIMEOUT_MS) })
+      const end = new URL(res.url)
+      if (end.protocol !== 'https:' || baseDomain(end.hostname) !== baseDomain(start.hostname)) {
+        retryable = false
+        throw new Error(`redirected off-site to ${end.hostname}`)
+      }
+      if (!res.ok) {
+        retryable = res.status === 429 || res.status >= 500
+        throw new Error(`HTTP ${res.status}`)
+      }
+      return Buffer.from(await res.arrayBuffer())
+    } catch (e) {
+      if (attempt >= 2 || !retryable) throw e
+      await sleep(8000)
+    }
   }
-  if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  return Buffer.from(await res.arrayBuffer())
 }
 
-const data = readJson(DATA_PATH)
+let data = readJson(DATA_PATH)
 const sources = readJson(SOURCES_PATH)
 const provenance = existsSync(PROVENANCE_PATH) ? readJson(PROVENANCE_PATH) : { schema_version: 1, preowned: {}, fields: {} }
 const state = existsSync(STATE_PATH) ? readJson(STATE_PATH) : { schema_version: 1, epa: null, pages: {} }
 const accepted = existsSync(ACCEPTED_PATH) ? readJson(ACCEPTED_PATH).range_mi ?? {} : {}
+const deferred = (existsSync(DEFERRED_PATH) ? readJson(DEFERRED_PATH).items ?? [] : []).filter((d) => d.until >= today)
 if (saveDir) mkdirSync(saveDir, { recursive: true })
 
 // ── EPA ─────────────────────────────────────────────────────────────
 let epa = null
 let epaError = null
+let rangeFixes = { fixes: [], skipped: [] }
+let dataChanged = false
 try {
   const zip = fromDir ? readFileSync(join(fromDir, 'vehicles.csv.zip')) : await fetchBuffer(sources.epa.download_url)
   if (saveDir) writeFileSync(join(saveDir, 'vehicles.csv.zip'), zip)
   const index = buildEpaIndex(unzipFirst(zip, 'vehicles.csv').toString('utf-8'), sources.epa.models)
+  rangeFixes = planRangeFixes(data, index, state.epa, accepted)
+  if (fixRanges && rangeFixes.fixes.length) {
+    data = applyRangeFixes(data, rangeFixes.fixes, today)
+    dataChanged = true
+  }
   epa = { index, ...checkRanges(data, index, accepted), changes: state.epa ? diffEpa(state.epa, index) : null }
 } catch (e) {
   epaError = e.message
@@ -130,15 +165,17 @@ for (const [vehicle, url] of Object.entries(sources.third_party_pages ?? {})) {
 }
 
 // ── Report ──────────────────────────────────────────────────────────
-const L = [`# Data watch — ${today}`, '', `Mode: ${apply ? 'apply' : 'dry run'}. This report never changes vehicle data; it lists what to look at.`, '']
+const L = [`# Data watch — ${today}`, '', `Mode: ${apply ? 'apply' : 'dry run'}${fixRanges ? ', range fixes on' : ''}. Only EPA range corrections are applied automatically; everything else is listed for a look.`, '']
 const attention = []
 
-if (epaError) attention.push(`EPA file could not be read: ${epaError}`)
 if (epa) {
   for (const c of epa.changes ?? []) {
     if (c.kind === 'added') attention.push(`EPA added ${c.year} ${c.model} (${c.range} mi) — ${c.vehicle}`)
     if (c.kind === 'removed') attention.push(`EPA removed ${c.year} ${c.model} (${c.range} mi) — ${c.vehicle}`)
     if (c.kind === 'range_changed') attention.push(`EPA changed ${c.year} ${c.model} from ${c.oldRange} to ${c.range} mi — ${c.vehicle}`)
+  }
+  for (const f of rangeFixes.fixes) {
+    if (fixRanges && f.notesMentionOld) attention.push(`${f.name}: range corrected ${f.old} → ${f.new} mi from EPA, but the row's notes still mention ${f.old} — update the notes`)
   }
   for (const g of epa.groups) {
     if (g.mismatch.length) {
@@ -147,20 +184,52 @@ if (epa) {
     }
   }
 }
+// A page that fails is only raised once it has also failed on an earlier run,
+// so one network blip does not open work for the agent. Wording carries no
+// error detail (that is in the tables) so a deferral keeps matching.
+const unavailableSince = {}
+const noteUnavailable = (key, text) => {
+  const since = state.unavailable?.[key] ?? today
+  unavailableSince[key] = since
+  if (since < today) attention.push(`${text} has failed since ${since}`)
+}
+if (epaError) noteUnavailable('epa', 'The EPA vehicle file')
 for (const p of pages) {
-  if (p.error) attention.push(`${p.vehicle} page unavailable: ${p.error}`)
+  if (p.error) noteUnavailable(`page:${p.vehicle}`, `${p.vehicle} manufacturer page`)
   for (const f of p.flags ?? []) attention.push(`${p.vehicle} page: ${f}`)
 }
 
 for (const t of tripwires) {
-  if (t.error) attention.push(`${t.vehicle} Car and Driver page unavailable: ${t.error}`)
+  if (t.error) noteUnavailable(`third:${t.vehicle}`, `${t.vehicle} Car and Driver page`)
   for (const f of t.flags ?? []) attention.push(`${t.vehicle} on Car and Driver: ${f}`)
 }
 
-L.push('## Needs a look', '')
-if (attention.length) for (const a of attention) L.push(`- ${a}`)
-else L.push('Nothing.')
+const isDeferred = (a) => deferred.some((d) => d.item === a)
+const open = attention.filter((a) => !isDeferred(a))
+const held = attention.filter(isDeferred)
 
+L.push('## Needs a look', '')
+if (open.length) for (const a of open) L.push(`- ${a}`)
+else L.push('Nothing.')
+if (held.length) {
+  L.push('', `Deferred (in scripts/refresh/state/deferred.json, not listed above):`, '')
+  for (const a of held) {
+    const d = deferred.find((x) => x.item === a)
+    L.push(`- ${a} — until ${d.until}: ${d.reason}`)
+  }
+}
+
+if (rangeFixes.fixes.length || rangeFixes.skipped.length) {
+  L.push('', '## EPA range corrections', '', fixRanges ? 'Applied to lib/ev-data.json:' : 'Would apply with --fix-ranges:', '', '| Row | Old | New | Evidence |', '|---|---|---|---|')
+  for (const f of rangeFixes.fixes) L.push(`| ${f.name} | ${f.old} | ${f.new} | [${f.evidence}](${f.sourceUrl}) |`)
+  if (!rangeFixes.fixes.length) L.push('| — | | | |')
+  if (rangeFixes.skipped.length) {
+    L.push('', 'Mismatches not corrected automatically:', '')
+    for (const s of rangeFixes.skipped) L.push(`- ${s.name} (stored ${s.old}): ${s.reason}`)
+  }
+}
+
+if (epaError) L.push('', '## EPA range check', '', `**The EPA vehicle file could not be read:** ${epaError}`)
 if (epa) {
   const n = (s) => epa.rows.filter((r) => r.state === s).length
   L.push('', '## EPA range check', '',
@@ -197,6 +266,7 @@ for (const t of tripwires) {
 const report = L.join('\n') + '\n'
 process.stdout.write(report)
 if (reportPath) writeFileSync(reportPath, report)
+if (attentionPath) writeFileSync(attentionPath, open.map((a) => `- ${a}`).join('\n') + (open.length ? '\n' : ''))
 
 if (!epa && pages.every((p) => p.error) && tripwires.every((t) => t.error)) {
   console.error('\nEvery source failed — nothing written.')
@@ -212,10 +282,12 @@ if (apply) {
     pages: Object.fromEntries(pages.map((p) => [p.vehicle, p.error ? state.pages?.[p.vehicle] : { url: p.url, ...p.state }]).filter(([, v]) => v)),
     tripwires: Object.fromEntries(tripwires.map((t) => [t.vehicle, t.error ? state.tripwires?.[t.vehicle] : { url: t.url, ...t.headline }]).filter(([, v]) => v)),
   }
+  if (Object.keys(unavailableSince).length) nextState.unavailable = unavailableSince
   if (JSON.stringify(nextState) !== JSON.stringify(state)) {
     mkdirSync(dirname(STATE_PATH), { recursive: true })
     writeJson(STATE_PATH, nextState)
   }
+  if (dataChanged) writeJson(DATA_PATH, data)
   if (epa) {
     const nextProvenance = { ...provenance, fields: updateRangeProvenance(provenance.fields, epa.rows, today) }
     if (JSON.stringify(nextProvenance) !== JSON.stringify(provenance)) writeJson(PROVENANCE_PATH, nextProvenance)

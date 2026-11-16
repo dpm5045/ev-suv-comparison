@@ -29,7 +29,7 @@ This phase is a script, not research. **Do not WebSearch or WebFetch pricing her
    - `no_source` — the vehicle has a used price range but no CarGurus page yet (Lucid Gravity as of Nov 2026). Add the URL to `scripts/refresh/sources.json` once CarGurus publishes one.
    - A vehicle that has gained a real used market — set its first `preowned_range` by hand; the script only scales ranges that already exist.
 
-The same script runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`) and opens a pull request when something changed. If such a PR is open or was merged recently, this phase will report no change.
+The same script runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`), which opens a PR when something changed and merges it straight away. Moves over 15% go to the Data inbox issue instead. If that run was recent, this phase will report no change. To apply a move over 15% after checking that it is real: `npm run refresh:preowned -- --apply --allow-large "Vehicle|Year"`.
 
 ### Why CarGurus percentages, not per-trim prices
 
@@ -70,7 +70,9 @@ The same script runs every Monday in GitHub Actions (`.github/workflows/preowned
 - **Starting price differs** (Car and Driver table) — the stored lowest MSRP plus destination for that model year is not what Car and Driver shows. Check `msrp` and `destination` for that vehicle.
 - **Stored MSRPs not on page / not watchable / unavailable** — the page does not print those prices or cannot be fetched (Tesla and Volvo block scripts and are not registered). Check `msrp` and `destination` for those vehicles by hand, as before.
 
-Do not re-research `range_mi` for rows the report shows as matching EPA; the script has already recorded their source. The same script runs every Monday in GitHub Actions (`.github/workflows/data-watch.yml`) and opens a PR when something it watches has changed. If one is open, work on that branch: add the data corrections to it and merge the two together.
+Do not re-research `range_mi` for rows the report shows as matching EPA; the script has already recorded their source. The same script runs every Monday in GitHub Actions (`.github/workflows/data-watch.yml`) with `--fix-ranges`: it corrects a mismatched range by itself when an earlier EPA match shows which variant the trim is (same row in the previous EPA snapshot, or same trim in another model year), and sends the rest to the Data inbox issue. Its report's "EPA range corrections" section lists which mismatches it could not settle and why.
+
+**Data inbox.** If the open `data-inbox` issue has items, treat them as this phase's to-do list, and give each one an outcome as described in `.claude/commands/refresh-ci.md` (fixed, confirmed, accepted, or deferred in `scripts/refresh/state/deferred.json`). Close the issue when done. Items marked `needs_local` there are ones the cloud agent could not reach; a local session is the place to settle them.
 
 1. For each vehicle, cross-check these high-value fields against OEM sites and EPA:
    - `msrp`, `destination`

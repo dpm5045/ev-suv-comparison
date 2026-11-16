@@ -122,5 +122,18 @@
     "VinFast VF9": "https://www.caranddriver.com/vinfast/vf9",
     "Genesis GV90": "https://www.caranddriver.com/genesis/gv90",
     "Lexus TZ": "https://www.caranddriver.com/lexus/tz"
-  }
+  },
+  "probe_extra": [
+    "https://www.tesla.com/modely",
+    "https://www.tesla.com/modelx",
+    "https://www.volvocars.com/us/cars/ex90-electric/",
+    "https://www.vw.com/en/models/id-buzz.html",
+    "https://www.lexus.com/models/TZ",
+    "https://www.genesis.com/us/en/gv90",
+    "https://www.motortrend.com/cars/kia/ev9/",
+    "https://www.edmunds.com/kia/ev9/",
+    "https://www.kbb.com/kia/ev9/",
+    "https://www.cars.com/research/kia-ev9/",
+    "https://www.fueleconomy.gov/feg/PowerSearch.do?action=noform&path=1&year1=2026&year2=2027&make=Kia&baseModel=EV9&srchtyp=ymm&pageno=1&rowLimit=50"
+  ]
 }

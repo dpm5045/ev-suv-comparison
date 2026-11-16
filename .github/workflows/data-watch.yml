@@ -1,9 +1,14 @@
 name: Data Watch
 
 # Runs scripts/refresh/watch.mjs: checks stored ranges against the EPA vehicle
-# file and watches manufacturer pages for price changes. It never edits
-# lib/ev-data.json. When what it sees has changed since the last run, it opens
-# a PR that records the new state, with the report as the PR description.
+# file, watches manufacturer and Car and Driver pages for price changes, and
+# corrects range_mi where EPA alone settles it (planRangeFixes).
+#
+# - Range corrections go through a PR that is merged straight away (an audit
+#   trail of what changed and why; validation has passed).
+# - Bookkeeping only (what the watch last saw, range sources) is committed to
+#   the default branch directly; vercel.json skips the deploy for it.
+# - Everything else it notices goes to the Data inbox issue for the agent.
 
 on:
   schedule:
@@ -13,6 +18,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 concurrency:
   group: data-watch
@@ -34,44 +40,57 @@ jobs:
       - name: Unit tests
         run: npm run test:refresh
 
-      - name: Skip if an earlier watch PR is still open
+      - name: Wait for open data PRs
         id: open
         run: |
-          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("data-refresh/watch-"))] | length')
+          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | test("^data-refresh/(watch|agent)-"))] | length')
           echo "count=$open" >> "$GITHUB_OUTPUT"
           if [ "$open" != "0" ]; then
-            echo "An earlier data watch PR is still open; merge or close it first." >> "$GITHUB_STEP_SUMMARY"
+            echo "A data PR is open (watch or agent); this run waits for it to be merged or closed." >> "$GITHUB_STEP_SUMMARY"
           fi
 
-      - name: Check EPA and manufacturer pages
+      - name: Check EPA and price pages
         if: steps.open.outputs.count == '0'
         run: |
-          node scripts/refresh/watch.mjs --apply --report "$RUNNER_TEMP/report.md"
+          node scripts/refresh/watch.mjs --apply --fix-ranges --report "$RUNNER_TEMP/report.md" --attention "$RUNNER_TEMP/attention.md"
           cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Validate data
         if: steps.open.outputs.count == '0'
         run: npm run validate
 
-      - name: Open pull request
+      - name: Save
         if: steps.open.outputs.count == '0'
         run: |
           if [ -z "$(git status --porcelain)" ]; then
-            echo "Nothing changed since the last run; no PR." >> "$GITHUB_STEP_SUMMARY"
+            echo "Nothing changed since the last run." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          unexpected=$(git status --porcelain | awk '{print $2}' | grep -vxE 'scripts/refresh/state/watch\.json|lib/ev-data\.provenance\.json' || true)
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -vxE 'scripts/refresh/state/watch\.json|lib/ev-data\.provenance\.json|lib/ev-data\.json' || true)
           if [ -n "$unexpected" ]; then
             echo "Unexpected files changed: $unexpected" >&2
             exit 1
           fi
-          branch="data-refresh/watch-$(date -u +%F)"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$branch"
-          git add scripts/refresh/state/watch.json lib/ev-data.provenance.json
-          git commit -m "data watch: record state $(date -u +%F)"
-          git push origin "$branch"
-          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" \
-            --title "Data watch $(date -u +%F): sources changed" \
-            --body-file "$RUNNER_TEMP/report.md"
+          base="${{ github.event.repository.default_branch }}"
+          git add scripts/refresh/state/watch.json lib/ev-data.provenance.json lib/ev-data.json
+          if git diff --cached --quiet -- lib/ev-data.json; then
+            git commit -m "data watch: record state $(date -u +%F)"
+            git push origin "HEAD:$base"
+            echo "Recorded state on $base (no vehicle data changed)." >> "$GITHUB_STEP_SUMMARY"
+          else
+            branch="data-refresh/watch-$(date -u +%F)"
+            git checkout -b "$branch"
+            git commit -m "data: EPA range corrections $(date -u +%F)"
+            git push origin "$branch"
+            url=$(gh pr create --base "$base" --head "$branch" \
+              --title "EPA range corrections $(date -u +%F)" \
+              --body-file "$RUNNER_TEMP/report.md")
+            gh pr merge "$url" --squash --delete-branch
+            echo "Merged $url" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Send open items to the Data inbox
+        if: steps.open.outputs.count == '0'
+        run: bash scripts/refresh/inbox.sh "Data watch $(date -u +%F)" "$RUNNER_TEMP/attention.md"
