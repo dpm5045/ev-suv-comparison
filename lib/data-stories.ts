@@ -1,5 +1,5 @@
 /**
- * Data for the chart stories on the Data tab (and the chart teaser on the
+ * Data for the chart stories on the Market Insights tab (and the chart teaser on the
  * home page). Pure functions over DATA — no React.
  *
  * Every number is derived from lib/ev-data.json. The only hand-written copy is

@@ -448,11 +448,11 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
           <p className="ds-source">{costPerMileSource()}</p>
         </div>
         <div className="sd-teaser-more">
-          <div className="ds-kicker">More in Data</div>
-          <Link href="/data" className="sd-more-link">{choiceHeadline()}</Link>
-          <Link href="/data" className="sd-more-link">{priceHeadline()}</Link>
-          <Link href="/data" className="sd-more-link">{RANGE_STORY_HEADLINE}</Link>
-          <Link href="/data" className="sd-open-data">Open Data</Link>
+          <div className="ds-kicker">More in Market Insights</div>
+          <Link href="/market-insights" className="sd-more-link">{choiceHeadline()}</Link>
+          <Link href="/market-insights" className="sd-more-link">{priceHeadline()}</Link>
+          <Link href="/market-insights" className="sd-more-link">{RANGE_STORY_HEADLINE}</Link>
+          <Link href="/market-insights" className="sd-open-data">Open Market Insights</Link>
         </div>
       </section>
     </>
