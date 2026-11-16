@@ -678,15 +678,17 @@ a.wl-make:hover { filter: brightness(1.15); }
 .sd-score-caption { font-size: 13px; color: var(--text-muted); }
 
 .sd-bars { display: flex; flex-direction: column; gap: 10px; }
-.sd-bar-row { display: grid; grid-template-columns: 76px minmax(0, 1fr) 84px; align-items: center; gap: 12px; font-size: 13px; }
-.sd-bars--md .sd-bar-row { grid-template-columns: 64px minmax(0, 1fr) 76px; gap: 10px; }
+/* The value column grows (up to its text) before the bar does, and its text wraps, so a long tier
+   such as "L2+ Point-to-Point (older hardware)" can never push the card wider than the screen. */
+.sd-bar-row { display: grid; grid-template-columns: 76px minmax(48px, 1fr) minmax(84px, max-content); align-items: center; gap: 12px; font-size: 13px; }
+.sd-bars--md .sd-bar-row { grid-template-columns: 64px minmax(40px, 1fr) minmax(76px, max-content); gap: 10px; }
 .sd-bar-label { color: var(--text-muted); }
 .sd-bar-track { height: 8px; border-radius: 4px; background: var(--surface2); overflow: hidden; }
 .sd-bars--md .sd-bar-track, .sd-bar-row--cell .sd-bar-track { height: 6px; border-radius: 3px; }
 .sd-bar-fill { height: 100%; border-radius: inherit; }
 .sd-bar-fill--first { background: var(--accent); }
 .sd-bar-fill--second { background: var(--orange); }
-.sd-bar-value { font-family: var(--mono); text-align: right; white-space: nowrap; }
+.sd-bar-value { font-family: var(--mono); text-align: right; min-width: 0; overflow-wrap: anywhere; text-wrap: balance; }
 
 .sd-subhead { font-size: 20px; letter-spacing: -0.01em; font-weight: 600; margin-top: 12px; }
 .sd-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
@@ -707,7 +709,7 @@ a.wl-make:hover { filter: brightness(1.15); }
   padding: 0 0 12px; border-bottom: 1px solid var(--border);
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
 }
-.sd-bar-row--cell { grid-template-columns: minmax(0, 1fr) 72px; gap: 10px; }
+.sd-bar-row--cell { grid-template-columns: minmax(40px, 1fr) minmax(72px, max-content); gap: 10px; }
 .sd-rest-note { margin-top: 14px; font-size: 13px; line-height: 1.5; color: var(--text-muted); }
 
 .sd-teaser {
