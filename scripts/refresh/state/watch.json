@@ -1716,6 +1716,17 @@
         85885
       ]
     },
+    "Volvo EX90": {
+      "url": "https://www.volvocars.com/us/cars/ex90-electric/",
+      "found": [
+        78090,
+        85740
+      ],
+      "other_in_band": [
+        73445,
+        77595
+      ]
+    },
     "Lucid Gravity": {
       "url": "https://lucidmotors.com/gravity",
       "found": [
