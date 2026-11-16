@@ -5,7 +5,7 @@
  * budget: each metric is min-max normalized across the vehicles in budget,
  * then the first pick counts 60% and the second 40%.
  */
-import type { DetailRow } from './data'
+import { TIER_RANK, type DetailRow } from './data'
 
 type Row = DetailRow
 
@@ -42,12 +42,8 @@ export const PREFERENCE_OPTIONS = [
 /** What the home page opens on: most shoppers buy used and under $60k. */
 export const SPEED_DATING_DEFAULTS = { condition: 'preowned', budget: 'under60', pref1: 'range', pref2: 'storage' } as const
 
-export const SELF_DRIVING_TIER_ORDER: Record<string, number> = {
-  'Basic L2': 1,
-  'Advanced L2': 2,
-  'L2+ Hands-Free': 3,
-  'L2+ Point-to-Point': 4,
-}
+/** Tier ranks live in lib/data.ts (TIER_RANK) so every view ranks the same way. */
+export const SELF_DRIVING_TIER_ORDER: Record<string, number> = TIER_RANK
 
 export function selfDrivingOrdinal(tier: string | null): number {
   return tier ? (SELF_DRIVING_TIER_ORDER[tier] ?? 0) : 0
@@ -214,7 +210,7 @@ export function summarizeInBudget(rows: Row[], isPreowned: boolean): SpeedDating
       cargo3High: maxOrNull(nums(rs.map((r) => r.cargo_behind_3rd_cu_ft))),
       cargo2High: maxOrNull(nums(rs.map((r) => r.cargo_behind_2nd_cu_ft))),
       dcChargeMin: minOrNull(nums(rs.map((r) => r.dc_fast_charge_10_80_min))),
-      selfDrivingMax: Math.max(0, ...rs.map((r) => selfDrivingOrdinal(r.self_driving_tier))),
+      selfDrivingMax: Math.max(0, ...rs.map((r) => r.self_driving_rank ?? 0)),
       trimCount: rs.length,
       priceLow: minOrNull(lows),
       priceHigh: maxOrNull(highs),

@@ -39,12 +39,6 @@ function cargoStr(v: number | string | null | undefined, unit: string): string {
   return String(v)
 }
 
-export const TIER_RANK: Record<string, number> = {
-  'Basic L2': 1,
-  'Advanced L2': 2,
-  'L2+ Hands-Free': 3,
-  'L2+ Point-to-Point': 4,
-}
 
 /* ── Sections ──────────────────────────────────────────────────────── */
 
@@ -112,10 +106,12 @@ export const SPEC_SECTIONS: SpecSection[] = [
     fields: [
       {
         label: 'Self Driving Tier',
-        render: r => r.self_driving_tier || '—',
-        rawNum: r => r.self_driving_tier ? (TIER_RANK[r.self_driving_tier] ?? null) : null,
+        render: r => r.self_driving_tier ? r.self_driving_tier + (r.adas_downgraded ? ' (older hardware)' : '') : '—',
+        rawNum: r => r.self_driving_rank,
         higherIsBetter: true,
       },
+      { label: 'Driver-Assist Hardware', render: r => r.adas_hardware || '—' },
+      { label: 'Hardware Note', render: r => r.adas_hardware_note || '—' },
       { label: 'SAE Level', render: r => r.sae_level != null ? String(r.sae_level) : '—' },
       { label: 'Self Driving System', render: r => r.self_driving || '—' },
     ],

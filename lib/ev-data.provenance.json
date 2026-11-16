@@ -456,6 +456,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=44461",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2022 R1S: 316 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2022, Adventure (Quad Motor, Large)": {
@@ -463,6 +468,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=44461",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2022 R1S: 316 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2023, Explore (Dual Motor, Large)": {
@@ -470,6 +480,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46996",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2023 R1S 21 inch Dual Large: 352 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2023, Adventure (Dual Motor, Large)": {
@@ -477,6 +492,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46996",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2023 R1S 21 inch Dual Large: 352 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2023, Adventure (Quad Motor, Large)": {
@@ -484,6 +504,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46315",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2023 R1S (20 inch wheels): 289 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2024, Adventure Dual-Motor Standard": {
@@ -491,6 +516,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47895",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 R1S Dual Standard (21in): 270 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2024, Adventure Dual-Motor Large": {
@@ -498,6 +528,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47891",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 R1S Dual Large (21in): 352 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2024, Adventure Dual-Motor Max": {
@@ -505,6 +540,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47893",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 R1S Dual Max (21in): 400 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2024, Performance Dual-Motor Large": {
@@ -512,6 +552,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47906",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 R1S Quad Large (21in): 321 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2024, Quad-Motor Large": {
@@ -519,6 +564,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47906",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 R1S Quad Large (21in): 321 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2026, Dual Large": {
@@ -526,6 +576,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49731",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 R1S All-Terrain Tri Max (20in): 329 mi (and 2 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2026, Dual Max (\"Max Battery\")": {
@@ -533,6 +588,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49719",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2026, Dual Standard": {
@@ -540,6 +600,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49716",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 R1S Dual Standard (22in): 270 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2026, Tri Max": {
@@ -547,6 +612,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49730",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 R1S Tri Max (22in): 371 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2025, Adventure Dual Large (\"Dual Long\")": {
@@ -554,6 +624,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48432",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 R1S Dual Large Plus (22in): 330 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2025, Adventure Dual Max": {
@@ -561,6 +636,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48434",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2025, Adventure Dual Standard": {
@@ -568,6 +648,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48436",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 R1S Dual Standard (22in): 270 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2025, Ascend Tri Max": {
@@ -575,6 +660,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48751",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 R1S Tri Max (22in): 371 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2025, Performance Dual Large": {
@@ -582,6 +672,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48432",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 R1S Dual Large Plus (22in): 330 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2025, Performance Dual Max": {
@@ -589,6 +684,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48434",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Tesla Model X, 2021, Long Range Plus": {
@@ -596,6 +696,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=43403",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2021 Model X Long Range Plus: 371 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
       }
     },
     "Tesla Model X, 2022, Base": {
@@ -603,6 +708,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=45020",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2022 Model X: 348 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2022 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
       }
     },
     "Tesla Model X, 2022, Plaid": {
@@ -610,6 +720,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=45021",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2022 Model X Plaid (20 inch wheels): 333 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2022 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
       }
     },
     "Tesla Model X, 2026, Base": {
@@ -617,6 +732,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49745",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 Model X: 352 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
       }
     },
     "Tesla Model X, 2026, Plaid": {
@@ -624,6 +744,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49746",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 Model X Plaid: 335 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
       }
     },
     "Tesla Model X, 2025, Base": {
@@ -631,6 +756,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49125",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 Model X: 329 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
       }
     },
     "Tesla Model X, 2025, Plaid": {
@@ -638,6 +768,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48768",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 Model X Plaid (20in wheels): 314 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
       }
     },
     "Tesla Model X, 2023, Base": {
@@ -645,6 +780,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46208",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2023 Model X: 348 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
       }
     },
     "Tesla Model X, 2023, Plaid": {
@@ -652,6 +792,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46209",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2023 Model X Plaid (20 inch wheels): 333 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
       }
     },
     "Lucid Gravity, 2026, Grand Touring": {
@@ -861,6 +1006,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47897",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 R1S Dual Standard Plus (21in): 315 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2024, Performance Dual-Motor Standard+": {
@@ -868,6 +1018,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47897",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 R1S Dual Standard Plus (21in): 315 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2024, Performance Dual-Motor Max": {
@@ -875,6 +1030,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47893",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 R1S Dual Max (21in): 400 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
       }
     },
     "Rivian R1S, 2027, Premium (7-seat)": {
@@ -882,6 +1042,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50665",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 R1S Performance (20in AT): 329 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2027, Premium (6-seat)": {
@@ -889,6 +1054,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50665",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 R1S Performance (20in AT): 329 mi (and 1 other EPA variant(s) with the same range)"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2027, Premium Long Range (7-seat)": {
@@ -896,6 +1066,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50673",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 R1S Premium Long Range (22in): 410 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2027, Premium Long Range (6-seat)": {
@@ -903,6 +1078,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50673",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 R1S Premium Long Range (22in): 410 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2027, Performance (7-seat)": {
@@ -910,6 +1090,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50667",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 R1S Performance (22in): 371 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2027, Performance (6-seat)": {
@@ -917,6 +1102,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50667",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 R1S Performance (22in): 371 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2027, Quad (7-seat)": {
@@ -924,6 +1114,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50676",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 R1S Quad (22in): 374 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Rivian R1S, 2027, Quad (6-seat)": {
@@ -931,6 +1126,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50676",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 R1S Quad (22in): 374 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
+        "verified_on": "2026-11-16",
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
       }
     },
     "Volvo EX90, 2026, Single Motor Plus": {
@@ -973,6 +1173,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49744",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 Model Y Long Range AWD: 327 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/01/26/tesla-quietly-starts-shipping-model-y-with-new-ai4-5-computer/",
+        "verified_on": "2026-11-16",
+        "evidence": "new Model Y owners discovering their vehicles are equipped with \"Hardware 4.5\", or AI4.5 ... Fremont-built Model Y vehicles in late December and January"
       }
     },
     "Lexus TZ, 2027, Premium AWD": {
@@ -987,6 +1192,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47915",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 Model X: 335 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
       }
     },
     "Tesla Model X, 2024, Plaid": {
@@ -994,6 +1204,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47916",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 Model X Plaid (20in wheels): 326 mi"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
       }
     },
     "Lucid Gravity, 2026, Dream Edition": {
@@ -1176,6 +1391,27 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50641",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 VF 9 Plus: 287 mi"
+      }
+    },
+    "Tesla Model X, 2021, Plaid (5-seat)": {
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
+      }
+    },
+    "Tesla Model X, 2021, Plaid (6-seat)": {
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
+      }
+    },
+    "Tesla Model X, 2021, Plaid (7-seat)": {
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
       }
     }
   }

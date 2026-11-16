@@ -22,6 +22,7 @@ Add a new 3-row electric vehicle to the dataset.
    - **Dimensions**: length_in, width_in, height_in, ground_clearance_in, third_row_legroom_in, third_row_headroom_in
    - **Cargo**: frunk_cu_ft, cargo_behind_3rd_cu_ft, cargo_behind_2nd_cu_ft, cargo_behind_1st_cu_ft, fold_flat, cargo_floor_width_in
    - **Tech**: self_driving, sae_level, self_driving_tier, car_software, center_display, gauge_cluster, hud, other_displays, audio, driver_profiles
+   - **Driver-assist hardware**: adas_hardware, adas_hardware_gen, adas_hardware_note — set only where the hardware generation changes capability (see refresh.md Phase 5); otherwise null. Copied rows of a new model year usually keep the previous year's values; a new generation means the older rows become `previous`.
    - **Pricing**: preowned_range (research used market; use "No meaningful used market yet" for unreleased/new vehicles)
    - **Notes**: anything distinctive about the trim
 
