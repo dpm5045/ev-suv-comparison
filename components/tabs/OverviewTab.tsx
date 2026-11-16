@@ -146,7 +146,8 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
           const b = best.get(p)
           const has = v !== null && v !== 0 && b !== undefined
           const fraction = has ? (LOWER_IS_BETTER.has(p) ? b! / v! : v! / b!) : 0
-          return { pref: p, label: prefLabel(p), value: formatRawMetric(p, v), fraction, tone: i === 0 ? 'first' : 'second' } as Bar
+          const value = p === 'selfdriving' && m.selfDrivingLabel ? m.selfDrivingLabel : formatRawMetric(p, v)
+          return { pref: p, label: prefLabel(p), value, fraction, tone: i === 0 ? 'first' : 'second' } as Bar
         }),
       }))
       .sort((a, b) => a.rank - b.rank || a.match.vehicle.localeCompare(b.match.vehicle))
@@ -329,7 +330,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
             <details className="sd-math">
               <summary>How is the math mathing?</summary>
               <p>
-                Each metric is normalized 0&ndash;1 across the vehicles in your budget.{' '}
+                Each metric is scored against the best vehicle in your budget: the best gets full marks, and the rest get their share of it (for 0&ndash;60 and charging time, quicker is better). Self-driving is ranked by tier, one tier lower on older hardware.{' '}
                 {effectivePrefs.length === 2
                   ? `Your first pick (${prefLabel(effectivePrefs[0])}) counts 60%, your second (${prefLabel(effectivePrefs[1])}) counts 40%.`
                   : effectivePrefs.length === 1

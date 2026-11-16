@@ -59,6 +59,8 @@ export interface VehicleScorable {
   cargo2High: number | null
   dcChargeMin: number | null
   selfDrivingMax: number
+  /** Tier of the best-ranked trim, e.g. "L2+ Point-to-Point (older hardware)"; shown instead of a rank number */
+  selfDrivingLabel?: string | null
 }
 
 export function extractMetric(s: VehicleScorable, pref: string): number | null {
@@ -72,6 +74,14 @@ export function extractMetric(s: VehicleScorable, pref: string): number | null {
   }
 }
 
+/**
+ * Score each vehicle as a share of the best vehicle in the room (0–1): the
+ * best gets 1, and one 10% behind gets 0.9. For 0–60 and charging time, where
+ * lower is better, the share is best ÷ value. Only missing data scores 0.
+ *
+ * (This replaced min–max scaling, which gave the worst car in the room 0 no
+ * matter how close it was: with two cars left, the runner-up always scored 0.)
+ */
 export function normalizeScores(
   summaries: VehicleScorable[],
   pref: string
@@ -82,25 +92,15 @@ export function normalizeScores(
 
   for (const s of summaries) {
     const v = extractMetric(s, pref)
-    if (v !== null && v !== 0) values.push(v)
+    if (v !== null && v > 0) values.push(v)
   }
 
   if (!values.length) return scores
-
-  const min = Math.min(...values)
-  const max = Math.max(...values)
-  const spread = max - min
+  const best = lowerIsBetter ? Math.min(...values) : Math.max(...values)
 
   for (const s of summaries) {
     const v = extractMetric(s, pref)
-    if (v === null || v === 0) {
-      scores.set(s.vehicle, 0)
-    } else if (spread === 0) {
-      scores.set(s.vehicle, 1)
-    } else {
-      const norm = (v - min) / spread
-      scores.set(s.vehicle, lowerIsBetter ? 1 - norm : norm)
-    }
+    scores.set(s.vehicle, v === null || v <= 0 ? 0 : lowerIsBetter ? best / v : v / best)
   }
 
   return scores
@@ -202,6 +202,8 @@ export function summarizeInBudget(rows: Row[], isPreowned: boolean): SpeedDating
 
   return [...byVehicle.entries()].map(([vehicle, rs]) => {
     const lows = isPreowned ? nums(rs.map((r) => r.preowned_low)) : nums(rs.map((r) => r.msrp))
+    // The tier shown is that of the best-ranked trim in budget, as the car actually has it
+    const topSd = rs.reduce<Row | null>((a, r) => ((r.self_driving_rank ?? 0) > (a?.self_driving_rank ?? 0) ? r : a), null)
     const highs = isPreowned ? nums(rs.map((r) => r.preowned_high)) : nums(rs.map((r) => r.msrp))
     return {
       vehicle,
@@ -211,6 +213,7 @@ export function summarizeInBudget(rows: Row[], isPreowned: boolean): SpeedDating
       cargo2High: maxOrNull(nums(rs.map((r) => r.cargo_behind_2nd_cu_ft))),
       dcChargeMin: minOrNull(nums(rs.map((r) => r.dc_fast_charge_10_80_min))),
       selfDrivingMax: Math.max(0, ...rs.map((r) => r.self_driving_rank ?? 0)),
+      selfDrivingLabel: topSd?.self_driving_tier ? topSd.self_driving_tier + (topSd.adas_downgraded ? ' (older hardware)' : '') : null,
       trimCount: rs.length,
       priceLow: minOrNull(lows),
       priceHigh: maxOrNull(highs),
