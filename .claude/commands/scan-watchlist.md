@@ -89,7 +89,7 @@ Only include vehicles with at least "Medium" confidence.
 
 3. **Run validation** via `/validate`.
 
-4. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets. If sync fails, warn the user but do not roll back data changes.
+4. Run `/sync-sheet` to refresh the backup Claude Sheet. It needs the Claude Docs connector; if that isn't available, skip it (the data in git is the source of truth).
 
 5. **Present a changelog summary:**
    - N watchlist specs updated
