@@ -71,6 +71,26 @@ export function buildEpaIndex(csvText, models) {
   return index
 }
 
+/**
+ * Where EPA rates two- and three-row versions separately (Lucid labels them
+ * "(2R)" and "(3R)"), a row only matches the version with its seat count.
+ */
+function seatsMatch(seats, model) {
+  if (typeof seats !== 'number') return true
+  if (/\(2R\)/i.test(model)) return seats <= 5
+  if (/\(3R\)/i.test(model)) return seats >= 6
+  return true
+}
+
+/** The EPA variants a row can be: same drive type, then same seating, each only if any are left. */
+function candidatesFor(row, variants) {
+  const all = variants ?? []
+  const sameDrive = all.filter((v) => driveMatches(row.drivetrain, v.drive))
+  const byDrive = sameDrive.length ? sameDrive : all
+  const sameSeats = byDrive.filter((v) => seatsMatch(row.seats, v.model))
+  return sameSeats.length ? sameSeats : byDrive
+}
+
 function driveMatches(rowDrive, epaDrive) {
   if (/RWD/i.test(rowDrive ?? '')) return /Rear/i.test(epaDrive)
   if (/AWD|4WD/i.test(rowDrive ?? '')) return /All-Wheel|4-Wheel/i.test(epaDrive)
@@ -92,9 +112,7 @@ export function checkRanges(data, index, accepted = {}) {
     } else if (typeof row.range_mi !== 'number') {
       r.state = 'no_stored_range'
     } else {
-      const sameDrive = variants.filter((v) => driveMatches(row.drivetrain, v.drive))
-      const pool = sameDrive.length ? sameDrive : variants
-      const hits = pool.filter((v) => v.range === row.range_mi)
+      const hits = hitsFor(row, variants)
       if (hits.length) {
         r.state = 'consistent'
         r.sourceUrl = VEHICLE_URL(hits[0].id)
@@ -128,11 +146,9 @@ export function checkRanges(data, index, accepted = {}) {
 
 export const MAX_RANGE_FIX = 0.15 // larger corrections are left for review
 
-/** EPA variants of the row's drive type whose range equals the stored range. */
+/** EPA variants of the row's drive type and seating whose range equals the stored range. */
 function hitsFor(row, variants) {
-  const sameDrive = (variants ?? []).filter((v) => driveMatches(row.drivetrain, v.drive))
-  const pool = sameDrive.length ? sameDrive : variants ?? []
-  return pool.filter((v) => v.range === row.range_mi)
+  return candidatesFor(row, variants).filter((v) => v.range === row.range_mi)
 }
 
 /**
@@ -175,7 +191,7 @@ export function planRangeFixes(data, index, previousIndex, accepted = {}) {
 
     let result = null
     for (const a of anchors) {
-      const candidates = current.filter((v) => a.models.includes(v.model) && driveMatches(row.drivetrain, v.drive))
+      const candidates = candidatesFor(row, current).filter((v) => a.models.includes(v.model))
       if (!candidates.length) continue
       const ranges = [...new Set(candidates.map((v) => v.range))]
       result = ranges.length === 1 ? { anchor: a, variant: candidates[0], range: ranges[0] } : { reason: `${a.desc}, but those EPA variants now differ (${ranges.join(', ')} mi)` }
