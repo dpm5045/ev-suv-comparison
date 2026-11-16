@@ -4,12 +4,20 @@ name: Data Agent
 #   inbox   — work through the open "Data inbox" issue (Mondays, after the watch)
 #   monthly — a full /refresh pass: new model years, gaps, Watch List (the 1st)
 #
-# Claude edits files only. This workflow checks which files changed, validates
-# and builds, then opens a PR for a person to review. Nothing it writes is
-# merged automatically. Instructions: .claude/commands/refresh-ci.md.
+# Instructions: .claude/commands/refresh-ci.md. A person reviews the PR; nothing
+# the agent writes is merged automatically.
 #
 # Needs one repository secret: CLAUDE_CODE_OAUTH_TOKEN (from `claude setup-token`)
 # or ANTHROPIC_API_KEY. Without one, the run only leaves a note in the inbox.
+#
+# Security layout — the credential is confined to one job:
+#   plan     no secret; decides whether to run
+#   agent    the ONLY job with the credential. Installs no npm packages, can
+#            only read the repo, and scans its own output for the credential
+#            before handing over a patch.
+#   verify   no secret, read-only: applies the patch, npm ci, tests, build
+#   publish  no secret, never runs npm: pushes the branch, opens the PR
+# Every action is pinned to a commit SHA (tag in the trailing comment).
 
 on:
   schedule:
@@ -24,26 +32,29 @@ on:
         type: choice
         options: [inbox, monthly]
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
-  id-token: write
+permissions: {}
 
 concurrency:
   group: data-agent
   cancel-in-progress: false
 
 jobs:
-  agent:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write          # leaves a note in the inbox when no credential is set
+      pull-requests: read
     env:
       GH_TOKEN: ${{ github.token }}
       HAS_CLAUDE: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' || secrets.ANTHROPIC_API_KEY != '' }}
+    outputs:
+      mode: ${{ steps.plan.outputs.mode }}
+      issue: ${{ steps.plan.outputs.issue }}
+      run: ${{ steps.plan.outputs.run }}
     steps:
-      - uses: actions/checkout@v4
-
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Decide whether to run
         id: plan
         run: |
@@ -68,24 +79,37 @@ jobs:
           echo "issue=$issue" >> "$GITHUB_OUTPUT"
           echo "run=$run" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v4
-        if: steps.plan.outputs.run == 'yes'
+  agent:
+    needs: plan
+    if: needs.plan.outputs.run == 'yes'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      issues: read
+      id-token: write        # requested by claude-code-action; mints no repo access
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-          cache: npm
-
-      - name: Install
-        if: steps.plan.outputs.run == 'yes'
-        run: npm ci
+      # No `npm ci` here on purpose: the scripts the agent runs use Node's
+      # standard library only, so no third-party package code shares this job
+      # with the credential.
 
       - name: Prepare the agent's inputs
-        if: steps.plan.outputs.run == 'yes'
         run: |
           mkdir -p .data-agent
-          echo "${{ steps.plan.outputs.mode }}" > .data-agent/mode
-          if [ -n "${{ steps.plan.outputs.issue }}" ]; then
-            gh issue view "${{ steps.plan.outputs.issue }}" --json body,comments \
-              --jq '.body + "\n\n" + ([.comments[] | select(.author.login == "github-actions") | .body] | join("\n\n"))' > .data-agent/inbox.md
+          echo "${{ needs.plan.outputs.mode }}" > .data-agent/mode
+          if [ -n "${{ needs.plan.outputs.issue }}" ]; then
+            # Only text the workflows wrote: anyone can comment on a public issue.
+            gh issue view "${{ needs.plan.outputs.issue }}" --json body,author,comments \
+              --jq '(if .author.login == "github-actions" then .body else "" end) + "\n\n" + ([.comments[] | select(.author.login == "github-actions") | .body] | join("\n\n"))' > .data-agent/inbox.md
           else
             echo "(empty)" > .data-agent/inbox.md
           fi
@@ -94,15 +118,14 @@ jobs:
           cat .data-agent/reachable.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Run Claude
-        if: steps.plan.outputs.run == 'yes'
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc # v1.0.276
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ github.token }}
           prompt: |
             You are the data agent for this repository, running unattended in GitHub Actions with no person to ask.
-            Mode: ${{ steps.plan.outputs.mode }}.
+            Mode: ${{ needs.plan.outputs.mode }}.
             Read .claude/commands/refresh-ci.md and follow it exactly. It tells you which other files to read.
             Your inputs are in .data-agent/. Finish by writing .data-agent/changelog.md.
           claude_args: >-
@@ -110,9 +133,27 @@ jobs:
             --max-turns 200
             --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,TodoWrite,Bash(node scripts/refresh/fetch-page.mjs:*),Bash(node scripts/refresh/preowned.mjs:*),Bash(npm run refresh:preowned:*),Bash(npm run refresh:watch),Bash(npm run validate),Bash(npm run test:refresh)"
 
-      - name: Check, validate and build
-        id: check
-        if: steps.plan.outputs.run == 'yes'
+      - name: Scan the agent's output for credentials
+        env:
+          SECRET_1: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          SECRET_2: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          git add -A
+          { git diff --cached; cat .data-agent/changelog.md 2>/dev/null; } > "$RUNNER_TEMP/out.txt"
+          git reset -q
+          found=no
+          for s in "$SECRET_1" "$SECRET_2"; do
+            if [ -n "$s" ] && grep -qF -- "$s" "$RUNNER_TEMP/out.txt"; then found=yes; fi
+          done
+          # Any Anthropic-style key, not only ours.
+          if grep -qE 'sk-ant-[A-Za-z0-9_-]{16,}' "$RUNNER_TEMP/out.txt"; then found=yes; fi
+          rm -f "$RUNNER_TEMP/out.txt"
+          if [ "$found" = yes ]; then
+            echo "::error::The agent's output contains a credential. Nothing is published. Revoke and regenerate the token, and inspect the run." >&2
+            exit 1
+          fi
+
+      - name: Check which files changed and hand over a patch
         run: |
           test -s .data-agent/changelog.md || { echo "The agent did not write .data-agent/changelog.md" >&2; exit 1; }
           changed=$(git status --porcelain --untracked-files=all | awk '{print $2}' | grep -v '^\.data-agent/' || true)
@@ -121,43 +162,94 @@ jobs:
           if [ -n "$unexpected" ]; then
             echo "The agent changed files it may not touch:" >&2; echo "$unexpected" >&2; exit 1
           fi
-          site=$(echo "$changed" | grep -vxE 'scripts/refresh/state/deferred\.json' | grep . || true)
-          echo "any=$([ -n "$changed" ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
-          echo "site=$([ -n "$site" ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
-          npm run test:refresh
-          npm run build
+          mkdir -p "$RUNNER_TEMP/handover"
+          if [ -n "$changed" ]; then
+            echo "$changed" | xargs git add --
+            git diff --cached --binary > "$RUNNER_TEMP/handover/agent.patch"
+          else
+            : > "$RUNNER_TEMP/handover/agent.patch"
+          fi
+          cp .data-agent/changelog.md "$RUNNER_TEMP/handover/changelog.md"
           cat .data-agent/changelog.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Open PR and close the inbox
-        if: steps.plan.outputs.run == 'yes'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: agent-handover
+          path: ${{ runner.temp }}/handover/
+          retention-days: 7
+
+  verify:
+    needs: agent
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: agent-handover
+          path: ${{ runner.temp }}/handover
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply, install, test and build
         run: |
+          if [ -s "$RUNNER_TEMP/handover/agent.patch" ]; then git apply --index "$RUNNER_TEMP/handover/agent.patch"; fi
+          npm ci
+          npm run test:refresh
+          npm run build
+
+  publish:
+    needs: [plan, verify]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: agent-handover
+          path: ${{ runner.temp }}/handover
+      # No npm here: this job can write to the repo, so no package code runs in it.
+      - name: Open PR and close the inbox
+        run: |
+          H="$RUNNER_TEMP/handover"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           base="${{ github.event.repository.default_branch }}"
-          issue="${{ steps.plan.outputs.issue }}"
-          note=""
-          if [ "${{ steps.check.outputs.site }}" = yes ]; then
-            branch="data-refresh/agent-$(date -u +%F)"
-            git checkout -b "$branch"
-            git add lib scripts/refresh
-            git commit -m "data: agent ${{ steps.plan.outputs.mode }} pass $(date -u +%F)"
-            git push origin "$branch"
-            { cat .data-agent/changelog.md; echo; [ -n "$issue" ] && echo "Works through #$issue."; echo; echo '🤖 Generated with [Claude Code](https://claude.com/claude-code)'; } > "$RUNNER_TEMP/body.md"
-            url=$(gh pr create --base "$base" --head "$branch" \
-              --title "Data agent: ${{ steps.plan.outputs.mode }} pass $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md")
-            note="Opened $url for review."
-          elif [ "${{ steps.check.outputs.any }}" = yes ]; then
-            # Only deferrals: bookkeeping, no site change, no review needed.
-            git add scripts/refresh/state/deferred.json
-            git commit -m "data agent: defer items $(date -u +%F)"
-            git push origin "HEAD:$base"
-            note="No site data changed; deferrals recorded on $base."
-          else
-            note="No changes."
+          issue="${{ needs.plan.outputs.issue }}"
+          mode="${{ needs.plan.outputs.mode }}"
+          note="No changes."
+          if [ -s "$H/agent.patch" ]; then
+            git apply --index "$H/agent.patch"
+            site=$(git diff --cached --name-only | grep -vxE 'scripts/refresh/state/deferred\.json' || true)
+            if [ -n "$site" ]; then
+              branch="data-refresh/agent-$(date -u +%F)"
+              git checkout -b "$branch"
+              git commit -m "data: agent $mode pass $(date -u +%F)"
+              git push origin "$branch"
+              { cat "$H/changelog.md"; echo; [ -n "$issue" ] && echo "Works through #$issue."; echo; echo '🤖 Generated with [Claude Code](https://claude.com/claude-code)'; } > "$RUNNER_TEMP/body.md"
+              url=$(gh pr create --base "$base" --head "$branch" --title "Data agent: $mode pass $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md")
+              note="Opened $url for review."
+            else
+              # Only deferrals: bookkeeping, no site change, no review needed.
+              git commit -m "data agent: defer items $(date -u +%F)"
+              git push origin "HEAD:$base"
+              note="No site data changed; deferrals recorded on $base."
+            fi
           fi
           echo "$note" >> "$GITHUB_STEP_SUMMARY"
           if [ -n "$issue" ]; then
-            { echo "$note"; echo; cat .data-agent/changelog.md; } > "$RUNNER_TEMP/comment.md"
+            { echo "$note"; echo; cat "$H/changelog.md"; } > "$RUNNER_TEMP/comment.md"
             gh issue comment "$issue" --body-file "$RUNNER_TEMP/comment.md"
             gh issue close "$issue" --reason completed
           fi
