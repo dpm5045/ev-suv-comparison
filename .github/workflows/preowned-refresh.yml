@@ -60,12 +60,12 @@ jobs:
       - name: Open and merge pull request
         if: steps.open.outputs.count == '0'
         run: |
-          if git diff --quiet; then
+          if [ -z "$(git status --porcelain)" ]; then
             echo "No changes; no PR." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          # Data-only guard: this job may touch these two files and nothing else.
-          unexpected=$(git status --porcelain | awk '{print $2}' | grep -vxE 'lib/ev-data\.json|lib/ev-data\.provenance\.json' || true)
+          # Data-only guard: this job may touch these files and nothing else.
+          unexpected=$(git status --porcelain --untracked-files=all | awk '{print $2}' | grep -vxE 'lib/ev-data\.json|lib/ev-data\.provenance\.json|scripts/refresh/state/preowned\.json' || true)
           if [ -n "$unexpected" ]; then
             echo "Unexpected files changed: $unexpected" >&2
             exit 1
@@ -75,6 +75,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
           git add lib/ev-data.json lib/ev-data.provenance.json
+          git add -A scripts/refresh/state/
           git commit -m "data: pre-owned pricing refresh $(date -u +%F)"
           git push origin "$branch"
           url=$(gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" \
