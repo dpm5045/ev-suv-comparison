@@ -269,6 +269,13 @@ body {
   object-position: center;
   display: block;
 }
+/* Phones get the portrait sketch (hero-sketch-*-mobile, 1024x1536; same breakpoint as the
+   <picture> source). The drawing (hand, strings, car) runs from about 5% to 72% of its height,
+   so frame that band instead of the middle of the image, which cut the hand off. */
+@media (max-width: 767px) {
+  .overview-hero-image { aspect-ratio: 20 / 21; }
+  .overview-hero-image img { object-position: center 10%; }
+}
 .overview-hero-image::after {
   content: '';
   position: absolute;
@@ -2361,7 +2368,6 @@ html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --car
   .sd-score-big { font-size: 64px; }
   .sd-teaser { margin-top: 64px; }
   .overview-hero-title { font-size: 34px; }
-  .overview-hero-image { aspect-ratio: 4 / 3; }
   .filters { flex-direction: column; }
   .detail-grid { grid-template-columns: 1fr; }
   .assumption-row { flex-direction: column; gap: 4px; }
