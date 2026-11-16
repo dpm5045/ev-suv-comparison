@@ -1413,6 +1413,13 @@
         "verified_on": "2026-11-16",
         "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
       }
+    },
+    "Tesla Model Y L, 2026, Launch Series": {
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/05/26/tesla-model-y-hardware-4-features/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: \"Tesla has started producing Model Y vehicles with Hardware 4.0\" (Electrek, May 26 2023); the Model Y L launched in the US in July 2026 (https://electrek.co/2026/07/02/tesla-model-y-l-us-launch-61990/), so it has HW4 or later. Confirmed by the site owner."
+      }
     }
   }
 }
