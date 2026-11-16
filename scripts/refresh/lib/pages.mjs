@@ -20,12 +20,20 @@ export function extractAmounts(html) {
   return [...out].sort((a, b) => a - b)
 }
 
-/** MSRPs stored for the two newest model years of a vehicle that have a numeric MSRP. */
-export function storedMsrps(data, vehicle) {
-  const priced = data.details.filter((r) => r.vehicle === vehicle && typeof r.msrp === 'number')
+/**
+ * MSRPs stored for the two newest model years of a vehicle that have a numeric
+ * MSRP. With includeDestination, MSRP + destination: for manufacturers whose
+ * pages print destination-inclusive prices (Volvo).
+ */
+export function storedMsrps(data, vehicle, { includeDestination = false } = {}) {
+  const priced = data.details.filter((r) => r.vehicle === vehicle && typeof r.msrp === 'number' && (!includeDestination || typeof r.destination === 'number'))
   const years = [...new Set(priced.map((r) => r.year))].sort((a, b) => b - a).slice(0, 2)
-  return [...new Set(priced.filter((r) => years.includes(r.year)).map((r) => r.msrp))].sort((a, b) => a - b)
+  const price = (r) => (includeDestination ? r.msrp + r.destination : r.msrp)
+  return [...new Set(priced.filter((r) => years.includes(r.year)).map(price))].sort((a, b) => a - b)
 }
+
+/** A pricing_pages entry is a URL, or {url, prices_include_destination}. */
+export const pageEntry = (v) => (typeof v === 'string' ? { url: v, prices_include_destination: false } : v)
 
 /**
  * @param {number[]} amounts  dollar amounts on the page

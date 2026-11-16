@@ -1203,6 +1203,16 @@
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
         "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "EX90 Plus Starting at $78,090 MSRP† † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $78,090 - $1,395."
+      },
+      "destination": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
       }
     },
     "Volvo EX90, 2026, Twin Motor Plus": {
@@ -1215,6 +1225,16 @@
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
         "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: stored price $81,390 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $81,390 - $1,395."
+      },
+      "destination": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
       }
     },
     "Volvo EX90, 2026, Twin Motor Ultra": {
@@ -1227,6 +1247,16 @@
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
         "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "EX90 Ultra Starting at $85,740 MSRP† † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $85,740 - $1,395."
+      },
+      "destination": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
       }
     },
     "Volvo EX90, 2026, Twin Motor Performance Plus": {
@@ -1239,6 +1269,16 @@
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
         "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: stored price $86,390 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $86,390 - $1,395."
+      },
+      "destination": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
       }
     },
     "Volvo EX90, 2026, Twin Motor Performance Ultra": {
@@ -1251,6 +1291,16 @@
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
         "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: stored price $90,740 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $90,740 - $1,395."
+      },
+      "destination": {
+        "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
+        "verified_on": "2026-11-16",
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
       }
     },
     "Tesla Model Y (3-Row), 2026, Long Range AWD": {
