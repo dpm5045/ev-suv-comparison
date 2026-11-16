@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { deflateRawSync } from 'node:zlib'
 import { unzipFirst } from '../lib/zip.mjs'
 import { parseCsv, buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance, planRangeFixes, applyRangeFixes } from '../lib/epa.mjs'
-import { extractAmounts, storedMsrps, checkPage, extractHeadline, storedPriceSpan, checkHeadline } from '../lib/pages.mjs'
+import { extractAmounts, storedMsrps, pageEntry, checkPage, extractHeadline, storedPriceSpan, checkHeadline } from '../lib/pages.mjs'
 
 const csv = readFileSync(new URL('./fixtures/epa-sample.txt' /* .txt: the repo ignores *.csv */, import.meta.url), 'utf-8')
 // The real file has tens of thousands of rows; pad so the truncation guard passes.
@@ -196,4 +196,15 @@ test('stored price span adds destination and ignores unpriced rows', () => {
   ] }
   assert.deepEqual(storedPriceSpan(data, 'Kia EV9', 2027), { low: 56635, high: 73635 })
   assert.equal(storedPriceSpan(data, 'Kia EV9', 2028), null)
+})
+
+test('stored prices can include destination for pages that print them that way', () => {
+  const data = { details: [
+    { vehicle: 'Volvo EX90', year: 2026, msrp: 76695, destination: 1395 },
+    { vehicle: 'Volvo EX90', year: 2026, msrp: 84345, destination: 1395 },
+    { vehicle: 'Volvo EX90', year: 2026, msrp: 80000, destination: null }, // no destination: left out
+  ] }
+  assert.deepEqual(storedMsrps(data, 'Volvo EX90'), [76695, 80000, 84345])
+  assert.deepEqual(storedMsrps(data, 'Volvo EX90', { includeDestination: true }), [78090, 85740])
+  assert.deepEqual(pageEntry('https://x.example'), { url: 'https://x.example', prices_include_destination: false })
 })

@@ -29,7 +29,7 @@ import { dirname, resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { unzipFirst } from './lib/zip.mjs'
 import { buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance, planRangeFixes, applyRangeFixes } from './lib/epa.mjs'
-import { extractAmounts, storedMsrps, checkPage, extractHeadline, storedPriceSpan, checkHeadline, fmt } from './lib/pages.mjs'
+import { extractAmounts, storedMsrps, pageEntry, checkPage, extractHeadline, storedPriceSpan, checkHeadline, fmt } from './lib/pages.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const DATA_PATH = join(ROOT, 'lib/ev-data.json')
@@ -119,8 +119,9 @@ try {
 // ── Manufacturer pages ──────────────────────────────────────────────
 const pages = []
 let first = true
-for (const [vehicle, url] of Object.entries(sources.pricing_pages)) {
-  const p = { vehicle, url }
+for (const [vehicle, entry] of Object.entries(sources.pricing_pages)) {
+  const { url, prices_include_destination: withDest } = pageEntry(entry)
+  const p = { vehicle, url, withDest }
   try {
     let html
     if (fromDir) html = readFileSync(join(fromDir, snapshotName(vehicle)), 'utf-8')
@@ -130,7 +131,7 @@ for (const [vehicle, url] of Object.entries(sources.pricing_pages)) {
       html = (await fetchBuffer(url)).toString('utf-8')
       if (saveDir) writeFileSync(join(saveDir, snapshotName(vehicle)), html)
     }
-    const stored = storedMsrps(data, vehicle)
+    const stored = storedMsrps(data, vehicle, { includeDestination: withDest })
     Object.assign(p, { stored }, checkPage(extractAmounts(html), stored, state.pages?.[vehicle]))
   } catch (e) {
     p.error = e.message
@@ -248,10 +249,11 @@ if (epa) {
 
 L.push('', '## Manufacturer price pages', '', '| Vehicle | Stored MSRPs on page | Stored MSRPs not on page | Other amounts in the price band | Outcome |', '|---|---|---|---|---|')
 for (const p of pages) {
-  if (p.error) { L.push(`| [${p.vehicle}](${p.url}) | — | — | — | **unavailable** — ${p.error} |`); continue }
+  const label = `[${p.vehicle}](${p.url})${p.withDest ? ' (prices incl. destination)' : ''}`
+  if (p.error) { L.push(`| ${label} | — | — | — | **unavailable** — ${p.error} |`); continue }
   const list = (a) => (a.length ? a.map(fmt).join(', ') : '—')
   const outcome = !p.watchable ? 'not watchable — no stored MSRP is printed on this page' : p.flags.length ? `**changed** — ${p.flags.join('; ')}` : p.firstRun ? 'first run — recorded' : 'no change'
-  L.push(`| [${p.vehicle}](${p.url}) | ${list(p.found)} | ${list(p.missing)} | ${list(p.other)} | ${outcome} |`)
+  L.push(`| ${label} | ${list(p.found)} | ${list(p.missing)} | ${list(p.other)} | ${outcome} |`)
 }
 L.push('', '## Car and Driver price lines', '', 'These include destination and follow the newest model year. "Stored" is the lowest to highest MSRP plus destination for that model year.', '', '| Vehicle | Model year | Car and Driver MSRP | Stored for that year | Outcome |', '|---|---|---|---|---|')
 for (const t of tripwires) {
