@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { deflateRawSync } from 'node:zlib'
 import { unzipFirst } from '../lib/zip.mjs'
-import { parseCsv, buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance } from '../lib/epa.mjs'
+import { parseCsv, buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance, planRangeFixes, applyRangeFixes } from '../lib/epa.mjs'
 import { extractAmounts, storedMsrps, checkPage, extractHeadline, storedPriceSpan, checkHeadline } from '../lib/pages.mjs'
 
 const csv = readFileSync(new URL('./fixtures/epa-sample.txt' /* .txt: the repo ignores *.csv */, import.meta.url), 'utf-8')
@@ -80,6 +80,48 @@ test('EPA diff reports added, removed and changed variants', () => {
   after['Kia EV9']['2027'] = [{ id: 60000, model: 'EV9 GT', drive: 'All-Wheel Drive', range: 270 }]
   assert.deepEqual(diffEpa(before, before), [])
   assert.deepEqual(diffEpa(before, after).map((c) => `${c.kind}:${c.id}`).sort(), ['added:60000', 'range_changed:49669', 'removed:49672'])
+})
+
+test('range fixes carry a known EPA variant forward and leave guesses alone', () => {
+  const V = (id, model, range, drive = 'All-Wheel Drive') => ({ id, model, drive, range })
+  const idx = {
+    'Tesla Model X': {
+      '2024': [V(1, 'Model X', 335), V(2, 'Model X Plaid (20in wheels)', 326), V(3, 'Model X Plaid (22in wheels)', 300)],
+      '2025': [V(4, 'Model X', 329), V(5, 'Model X Plaid (20in wheels)', 314), V(6, 'Model X Plaid (22in wheels)', 294)],
+    },
+    'VinFast VF9': { '2024': [V(7, 'VF 9 Eco', 330), V(8, 'VF 9 Plus', 291)], '2025': [V(9, 'VF 9 Plus', 287)] },
+    'Kia EV9': { '2026': [V(10, 'EV9 GT', 260)], '2027': [V(11, 'EV9 GT', 200)] },
+    'Lucid Gravity': { '2026': [V(12, 'Gravity Dream', 420)] },
+  }
+  const data = { last_updated: '2026-11-01', details: [
+    row('Tesla Model X', 2024, 'Base', 'AWD', 348),
+    { ...row('Tesla Model X', 2024, 'Base', 'AWD', 348), seats: 7 }, // seat variant sharing the name
+    { ...row('Tesla Model X', 2024, 'Plaid', 'AWD', 333), notes: 'Plaid: up to 333 mi.' },
+    row('Tesla Model X', 2025, 'Base', 'AWD', 329),
+    row('Tesla Model X', 2025, 'Plaid', 'AWD', 314),
+    row('VinFast VF9', 2024, 'Eco', 'AWD', 330),
+    row('VinFast VF9', 2025, 'Eco', 'AWD', 330),     // EPA has no 2025 Eco
+    row('Kia EV9', 2026, 'GT', 'AWD', 260),
+    row('Kia EV9', 2027, 'GT', 'AWD', 260),          // 260 → 200 is too big a jump
+    row('Lucid Gravity', 2026, 'Dream Edition', 'AWD', 440), // no earlier match at all
+  ] }
+  const { fixes, skipped } = planRangeFixes(data, idx, idx)
+  assert.deepEqual(fixes.map((f) => `${f.name}:${f.old}->${f.new}`), ['Tesla Model X, 2024, Base:348->335', 'Tesla Model X, 2024, Plaid:333->326'])
+  assert.equal(fixes[1].notesMentionOld, true)
+  assert.match(fixes[0].evidence, /^EPA 2024 Model X: 335 mi \(same EPA variant as the 2025 Base\)$/)
+  assert.deepEqual(skipped.map((s) => s.name), ['VinFast VF9, 2025, Eco', 'Kia EV9, 2027, GT', 'Lucid Gravity, 2026, Dream Edition'])
+  assert.match(skipped[0].reason, /no 2025 rating .*VF 9 Eco/)
+  assert.match(skipped[1].reason, /over 15%/)
+
+  // EPA revising a figure: the previous snapshot names the variant.
+  const before = { 'Lucid Gravity': { '2026': [V(12, 'Gravity Dream', 440)] } }
+  assert.deepEqual(planRangeFixes(data, idx, before).fixes.map((f) => f.new), [335, 326, 420])
+
+  const out = applyRangeFixes(data, fixes, '2026-11-20')
+  assert.deepEqual(out.details.slice(0, 3).map((r) => r.range_mi), [335, 335, 326])
+  assert.equal(out.last_updated, '2026-11-20')
+  assert.equal(data.details[0].range_mi, 348) // input untouched
+  assert.equal(applyRangeFixes(data, [], '2026-11-20'), data)
 })
 
 test('range sources are written once and left alone on a repeat run', () => {

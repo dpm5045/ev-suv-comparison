@@ -2,9 +2,10 @@
  * EPA range check against the fueleconomy.gov bulk vehicle file.
  *
  * EPA lists variants ("EV9 Long Range AWD GT-Line", "R1S Dual Large (22in)"),
- * not the site's trims, so this never rewrites range_mi. It answers a narrower
- * question per row: is the stored range one that EPA publishes for this
- * vehicle, model year and drive type? Rows that fail are flagged for review.
+ * not the site's trims. checkRanges answers a narrow question per row: is the
+ * stored range one that EPA publishes for this vehicle, model year and drive
+ * type? planRangeFixes corrects a failing row only when an earlier EPA match
+ * says which variant it is; the rest are flagged for review.
  */
 
 const VEHICLE_URL = (id) => `https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=${id}`
@@ -123,6 +124,98 @@ export function checkRanges(data, index, accepted = {}) {
   }
   const sorted = [...groups.values()].sort((a, b) => a.vehicle.localeCompare(b.vehicle) || a.year - b.year)
   return { rows, groups: sorted }
+}
+
+export const MAX_RANGE_FIX = 0.15 // larger corrections are left for review
+
+/** EPA variants of the row's drive type whose range equals the stored range. */
+function hitsFor(row, variants) {
+  const sameDrive = (variants ?? []).filter((v) => driveMatches(row.drivetrain, v.drive))
+  const pool = sameDrive.length ? sameDrive : variants ?? []
+  return pool.filter((v) => v.range === row.range_mi)
+}
+
+/**
+ * Corrections that follow from EPA alone, without interpreting trim names.
+ *
+ * A mismatched row is fixed only when we already know which EPA variant it
+ * is: the same row matched variant(s) M in the previous EPA snapshot (EPA
+ * revised M), or the same trim matched M in another model year (EPA rated a
+ * carried-over trim). The new range is M's current figure for this model year,
+ * and every variant in M must agree on it. Anything else stays flagged.
+ *
+ * @returns {{ fixes: object[], skipped: object[] }}
+ */
+export function planRangeFixes(data, index, previousIndex, accepted = {}) {
+  const { rows } = checkRanges(data, index, accepted)
+  const mismatched = new Map()
+  for (const r of rows) if (r.state === 'mismatch') mismatched.set(`${r.name}|${r.stored}`, r)
+
+  const fixes = []
+  const skipped = []
+  const seen = new Set()
+  for (const row of data.details) {
+    const key = `${row.name}|${row.range_mi}`
+    if (!mismatched.has(key) || seen.has(key)) continue
+    seen.add(key)
+    const current = index[row.vehicle]?.[String(row.year)] ?? []
+
+    // Anchors, most direct first: previous snapshot of the same year, then
+    // the same trim in the nearest other model years.
+    const anchors = []
+    const prevHits = hitsFor(row, previousIndex?.[row.vehicle]?.[String(row.year)])
+    if (prevHits.length) anchors.push({ desc: `matched EPA ${row.year} ${prevHits[0].model} before EPA revised it`, models: prevHits.map((v) => v.model) })
+    const siblings = data.details
+      .filter((o) => o.vehicle === row.vehicle && o.trim === row.trim && o.drivetrain === row.drivetrain && o.year !== row.year && typeof o.range_mi === 'number')
+      .sort((a, b) => Math.abs(a.year - row.year) - Math.abs(b.year - row.year) || b.year - a.year)
+    for (const o of siblings) {
+      const hits = hitsFor(o, index[o.vehicle]?.[String(o.year)])
+      if (hits.length) anchors.push({ desc: `same EPA variant as the ${o.year} ${o.trim}`, models: hits.map((v) => v.model) })
+    }
+
+    let result = null
+    for (const a of anchors) {
+      const candidates = current.filter((v) => a.models.includes(v.model) && driveMatches(row.drivetrain, v.drive))
+      if (!candidates.length) continue
+      const ranges = [...new Set(candidates.map((v) => v.range))]
+      result = ranges.length === 1 ? { anchor: a, variant: candidates[0], range: ranges[0] } : { reason: `${a.desc}, but those EPA variants now differ (${ranges.join(', ')} mi)` }
+      break
+    }
+
+    const base = { name: row.name, vehicle: row.vehicle, year: row.year, trim: row.trim, old: row.range_mi }
+    if (!result) {
+      const known = [...new Set(anchors.flatMap((a) => a.models))]
+      skipped.push({ ...base, reason: known.length ? `EPA has no ${row.year} rating for the variant this trim matched before (${known.join(', ')})` : 'no earlier EPA match to carry forward' })
+      continue
+    }
+    if (result.reason) { skipped.push({ ...base, reason: result.reason }); continue }
+    const move = Math.abs(result.range / row.range_mi - 1)
+    if (move > MAX_RANGE_FIX) {
+      skipped.push({ ...base, reason: `EPA ${result.variant.model} is ${result.range} mi, a ${(move * 100).toFixed(0)}% change; over ${MAX_RANGE_FIX * 100}%, left for review` })
+      continue
+    }
+    fixes.push({
+      ...base,
+      new: result.range,
+      sourceUrl: VEHICLE_URL(result.variant.id),
+      evidence: `EPA ${row.year} ${result.variant.model}: ${result.range} mi (${result.anchor.desc})`,
+      notesMentionOld: typeof row.notes === 'string' && new RegExp(`\\b${row.range_mi}\\b`).test(row.notes),
+    })
+  }
+  return { fixes, skipped }
+}
+
+/** Apply range fixes to a copy of the data. Rows sharing a name (seat variants) move together. */
+export function applyRangeFixes(data, fixes, today) {
+  if (!fixes.length) return data
+  const out = structuredClone(data)
+  const byKey = new Map(fixes.map((f) => [`${f.name}|${f.old}`, f.new]))
+  for (const row of out.details) {
+    const next = byKey.get(`${row.name}|${row.range_mi}`)
+    if (next !== undefined) row.range_mi = next
+  }
+  out.last_updated = today
+  return out
 }
 
 /** What EPA added, removed or changed since the stored snapshot. */

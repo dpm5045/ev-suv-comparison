@@ -96,6 +96,12 @@ test('a move over 15% is held for review, not applied', () => {
   assert.equal(state(plan, 2024), 'needs_review')
   assert.equal(plan.rowChanges.length, 0)
   assert.deepEqual(plan.baselines, baselines)
+
+  // Once someone has checked it, the same move can be let through for that group only.
+  const allowed = planPreowned({ data: makeData(), baselines, observations: obs({ 2024: { label: '2024 EV9', avgPrice: 41280, pct30: 0 } }), today: '2026-11-15', allowLarge: ['Kia EV9|2024'] })
+  assert.equal(state(allowed, 2024), 'repriced')
+  assert.ok(allowed.rowChanges.length > 0)
+  assert.equal(allowed.baselines['Kia EV9'].years['2024'].avg_price, 41280)
 })
 
 test('a failed source changes nothing', () => {

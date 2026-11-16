@@ -30,3 +30,6 @@ playwright-report/
 
 # Superpowers session scratch
 .superpowers/
+
+# Data agent working files (CI)
+.data-agent/

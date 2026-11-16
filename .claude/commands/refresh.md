@@ -29,7 +29,7 @@ This phase is a script, not research. **Do not WebSearch or WebFetch pricing her
    - `no_source` — the vehicle has a used price range but no CarGurus page yet (Lucid Gravity as of Nov 2026). Add the URL to `scripts/refresh/sources.json` once CarGurus publishes one.
    - A vehicle that has gained a real used market — set its first `preowned_range` by hand; the script only scales ranges that already exist.
 
-The same script runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`) and opens a pull request when something changed. If such a PR is open or was merged recently, this phase will report no change.
+The same script runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`), which opens a PR when something changed and merges it straight away. Moves over 15% go to the Data inbox issue instead. If that run was recent, this phase will report no change. To apply a move over 15% after checking that it is real: `npm run refresh:preowned -- --apply --allow-large "Vehicle|Year"`.
 
 ### Why CarGurus percentages, not per-trim prices
 
@@ -66,11 +66,13 @@ The same script runs every Monday in GitHub Actions (`.github/workflows/preowned
 - **Not in EPA file** — nothing to check against yet; leave it.
 - **EPA added / changed / removed a variant** — check whether a trim's range, or a new trim, follows from it.
 - **Page changed** — a stored MSRP disappeared from the manufacturer page or a new price appeared in its band. Fetch the page and check `msrp` and `destination` for that vehicle.
-- **Car and Driver line changed** — the model's headline "MSRP $X–$Y" on caranddriver.com moved, switched from estimated to actual, or rolled to a new model year. It covers the vehicles whose manufacturer sites block scripts (Tesla, Volvo) or print no prices. Treat it as a tip only: confirm on the manufacturer's site before changing `msrp` or `destination`, and never record Car and Driver as the source of a stored price. A roll to a new model year usually means that year's trims need adding (`/add-vehicle`).
+- **Car and Driver line changed** — the model's headline "MSRP $X–$Y" on caranddriver.com moved, switched from estimated to actual, or rolled to a new model year. It covers the vehicles whose manufacturer sites block scripts (Tesla, Volvo) or print no prices. Treat it as a tip only: confirm on the manufacturer's site before changing `msrp` or `destination`, and do not record Car and Driver as the source of a stored price — except for manufacturers that block automated requests (see **Prices when the manufacturer blocks automated requests** below). A roll to a new model year usually means that year's trims need adding (`/add-vehicle`).
 - **Starting price differs** (Car and Driver table) — the stored lowest MSRP plus destination for that model year is not what Car and Driver shows. Check `msrp` and `destination` for that vehicle.
 - **Stored MSRPs not on page / not watchable / unavailable** — the page does not print those prices or cannot be fetched (Tesla and Volvo block scripts and are not registered). Check `msrp` and `destination` for those vehicles by hand, as before.
 
-Do not re-research `range_mi` for rows the report shows as matching EPA; the script has already recorded their source. The same script runs every Monday in GitHub Actions (`.github/workflows/data-watch.yml`) and opens a PR when something it watches has changed. If one is open, work on that branch: add the data corrections to it and merge the two together.
+Do not re-research `range_mi` for rows the report shows as matching EPA; the script has already recorded their source. The same script runs every Monday in GitHub Actions (`.github/workflows/data-watch.yml`) with `--fix-ranges`: it corrects a mismatched range by itself when an earlier EPA match shows which variant the trim is (same row in the previous EPA snapshot, or same trim in another model year), and sends the rest to the Data inbox issue. Its report's "EPA range corrections" section lists which mismatches it could not settle and why.
+
+**Data inbox.** If the open `data-inbox` issue has items, treat them as this phase's to-do list, and give each one an outcome as described in `.claude/commands/refresh-ci.md` (fixed, confirmed, accepted, or deferred in `scripts/refresh/state/deferred.json`). Close the issue when done. Items marked `needs_local` there are ones the cloud agent could not reach; a local session is the place to settle them.
 
 1. For each vehicle, cross-check these high-value fields against OEM sites and EPA:
    - `msrp`, `destination`
@@ -155,6 +157,17 @@ Only include vehicles with at least "medium" confidence (officially announced wi
 - **After checking a field against a page you actually fetched, write or update its entry** — whether the value changed or was confirmed. `evidence` is a short exact quote from the page. Keys are the row `name`; rows that share a name (seat variants) share an entry.
 - **No source, no change.** Do not change a value you cannot attach a fetched `source_url` to, and do not record a search-result summary as a source.
 - Do not add entries for fields you did not check. The validator rejects entries for unknown rows or fields.
+
+### Prices when the manufacturer blocks automated requests
+
+Some manufacturer sites refuse every automated request (tesla.com, from cloud runners and from home alike). For those vehicles only, Car and Driver's per-trim specs pages count as the source for `msrp`:
+
+- **Which page:** `https://www.caranddriver.com/<make>/<model>/specs` shows the first trim; each trim has its own page, linked from the `trimsOptions` list in the HTML: `.../specs/<year>/<make>_<model>_<make>-<model>_<year>/<trim id>`. Read them with `fetch-page.mjs --grep '^TRIM|^MSRP|^\$'`.
+- **Only when it fits:** the page's model year must equal the row's `year`, the trim must clearly be the row's trim, and the price must not be marked as an estimate.
+- **Car and Driver's "MSRP" includes destination** (checked: Kia EV9 Light, $54,990 + $1,645 = $56,635). Store `msrp` = that price minus `destination`. The destination fee needs its own quoted source: the manufacturer if reachable, otherwise a press page that states the fee for that model year (Car and Driver, MotorTrend, KBB, InsideEVs, Electrek). With no quoted destination fee, change nothing and defer.
+- **Provenance:** `source_url` is the Car and Driver trim page; `evidence` starts with `Car and Driver (manufacturer site blocks automated requests):` followed by the quote, e.g. `TRIM Model X Plaid AWD, MSRP $131,630, less $1,640 destination`.
+- **A new trim** on Car and Driver (one with no row) goes under "For a person" in the changelog; adding trims stays a person's decision for these vehicles.
+- Everywhere else Car and Driver remains a tip only.
 
 ---
 

@@ -1,0 +1,163 @@
+name: Data Agent
+
+# Runs Claude Code unattended to do the research the scripts cannot:
+#   inbox   — work through the open "Data inbox" issue (Mondays, after the watch)
+#   monthly — a full /refresh pass: new model years, gaps, Watch List (the 1st)
+#
+# Claude edits files only. This workflow checks which files changed, validates
+# and builds, then opens a PR for a person to review. Nothing it writes is
+# merged automatically. Instructions: .claude/commands/refresh-ci.md.
+#
+# Needs one repository secret: CLAUDE_CODE_OAUTH_TOKEN (from `claude setup-token`)
+# or ANTHROPIC_API_KEY. Without one, the run only leaves a note in the inbox.
+
+on:
+  schedule:
+    - cron: '30 14 * * 1'   # Mondays 14:30 UTC, after the watch: inbox
+    - cron: '0 15 1 * *'    # 1st of the month 15:00 UTC: monthly
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'inbox or monthly'
+        required: true
+        default: inbox
+        type: choice
+        options: [inbox, monthly]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
+concurrency:
+  group: data-agent
+  cancel-in-progress: false
+
+jobs:
+  agent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      GH_TOKEN: ${{ github.token }}
+      HAS_CLAUDE: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' || secrets.ANTHROPIC_API_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decide whether to run
+        id: plan
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then mode="${{ inputs.mode }}"
+          elif [ "${{ github.event.schedule }}" = "0 15 1 * *" ]; then mode=monthly
+          else mode=inbox; fi
+          issue=$(gh issue list --label data-inbox --state open --json number --jq '.[0].number // empty')
+          agent_pr=$(gh pr list --state open --json headRefName,url --jq '[.[] | select(.headRefName | startswith("data-refresh/agent-"))][0].url // empty')
+          run=yes
+          if [ -n "$agent_pr" ]; then
+            run=no; echo "An agent PR is waiting for review: $agent_pr. Merge or close it first." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "$mode" = inbox ] && [ -z "$issue" ]; then
+            run=no; echo "Data inbox is empty; nothing to do." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "$HAS_CLAUDE" != "true" ]; then
+            run=no; echo "No CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY secret; skipping." >> "$GITHUB_STEP_SUMMARY"
+            if [ "$mode" = monthly ]; then
+              printf -- '- Monthly /refresh pass is due. The data agent has no token configured, so run `/refresh` locally.\n' > "$RUNNER_TEMP/note.md"
+              bash scripts/refresh/inbox.sh "Monthly pass $(date -u +%F)" "$RUNNER_TEMP/note.md"
+            fi
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "issue=$issue" >> "$GITHUB_OUTPUT"
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        if: steps.plan.outputs.run == 'yes'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        if: steps.plan.outputs.run == 'yes'
+        run: npm ci
+
+      - name: Prepare the agent's inputs
+        if: steps.plan.outputs.run == 'yes'
+        run: |
+          mkdir -p .data-agent
+          echo "${{ steps.plan.outputs.mode }}" > .data-agent/mode
+          if [ -n "${{ steps.plan.outputs.issue }}" ]; then
+            gh issue view "${{ steps.plan.outputs.issue }}" --json body,comments \
+              --jq '.body + "\n\n" + ([.comments[] | select(.author.login == "github-actions") | .body] | join("\n\n"))' > .data-agent/inbox.md
+          else
+            echo "(empty)" > .data-agent/inbox.md
+          fi
+          node scripts/refresh/probe-sources.mjs > .data-agent/reachable.md
+          node scripts/refresh/watch.mjs --report .data-agent/watch-report.md > /dev/null
+          cat .data-agent/reachable.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run Claude
+        if: steps.plan.outputs.run == 'yes'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}
+          prompt: |
+            You are the data agent for this repository, running unattended in GitHub Actions with no person to ask.
+            Mode: ${{ steps.plan.outputs.mode }}.
+            Read .claude/commands/refresh-ci.md and follow it exactly. It tells you which other files to read.
+            Your inputs are in .data-agent/. Finish by writing .data-agent/changelog.md.
+          claude_args: >-
+            --model claude-opus-5-5
+            --max-turns 200
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,TodoWrite,Bash(node scripts/refresh/fetch-page.mjs:*),Bash(node scripts/refresh/preowned.mjs:*),Bash(npm run refresh:preowned:*),Bash(npm run refresh:watch),Bash(npm run validate),Bash(npm run test:refresh)"
+
+      - name: Check, validate and build
+        id: check
+        if: steps.plan.outputs.run == 'yes'
+        run: |
+          test -s .data-agent/changelog.md || { echo "The agent did not write .data-agent/changelog.md" >&2; exit 1; }
+          changed=$(git status --porcelain --untracked-files=all | awk '{print $2}' | grep -v '^\.data-agent/' || true)
+          allowed='lib/ev-data\.json|lib/ev-data\.provenance\.json|lib/watchlist\.ts|lib/data-stories\.ts|scripts/refresh/accepted\.json|scripts/refresh/sources\.json|scripts/refresh/state/deferred\.json'
+          unexpected=$(echo "$changed" | grep -vxE "$allowed" | grep . || true)
+          if [ -n "$unexpected" ]; then
+            echo "The agent changed files it may not touch:" >&2; echo "$unexpected" >&2; exit 1
+          fi
+          site=$(echo "$changed" | grep -vxE 'scripts/refresh/state/deferred\.json' | grep . || true)
+          echo "any=$([ -n "$changed" ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+          echo "site=$([ -n "$site" ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+          npm run test:refresh
+          npm run build
+          cat .data-agent/changelog.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open PR and close the inbox
+        if: steps.plan.outputs.run == 'yes'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          base="${{ github.event.repository.default_branch }}"
+          issue="${{ steps.plan.outputs.issue }}"
+          note=""
+          if [ "${{ steps.check.outputs.site }}" = yes ]; then
+            branch="data-refresh/agent-$(date -u +%F)"
+            git checkout -b "$branch"
+            git add lib scripts/refresh
+            git commit -m "data: agent ${{ steps.plan.outputs.mode }} pass $(date -u +%F)"
+            git push origin "$branch"
+            { cat .data-agent/changelog.md; echo; [ -n "$issue" ] && echo "Works through #$issue."; echo; echo '🤖 Generated with [Claude Code](https://claude.com/claude-code)'; } > "$RUNNER_TEMP/body.md"
+            url=$(gh pr create --base "$base" --head "$branch" \
+              --title "Data agent: ${{ steps.plan.outputs.mode }} pass $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md")
+            note="Opened $url for review."
+          elif [ "${{ steps.check.outputs.any }}" = yes ]; then
+            # Only deferrals: bookkeeping, no site change, no review needed.
+            git add scripts/refresh/state/deferred.json
+            git commit -m "data agent: defer items $(date -u +%F)"
+            git push origin "HEAD:$base"
+            note="No site data changed; deferrals recorded on $base."
+          else
+            note="No changes."
+          fi
+          echo "$note" >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$issue" ]; then
+            { echo "$note"; echo; cat .data-agent/changelog.md; } > "$RUNNER_TEMP/comment.md"
+            gh issue comment "$issue" --body-file "$RUNNER_TEMP/comment.md"
+            gh issue close "$issue" --reason completed
+          fi
