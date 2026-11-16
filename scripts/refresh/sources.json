@@ -138,5 +138,9 @@
     "https://www.kbb.com/kia/ev9/",
     "https://www.cars.com/research/kia-ev9/",
     "https://www.fueleconomy.gov/feg/PowerSearch.do?action=noform&path=1&year1=2026&year2=2027&make=Kia&baseModel=EV9&srchtyp=ymm&pageno=1&rowLimit=50"
-  ]
+  ],
+  "third_party_no_price_compare": {
+    "Tesla Model Y (3-Row)": "Car and Driver's Model Y page prices the five-seat Model Y",
+    "Tesla Model Y L": "Car and Driver's Model Y page prices the five-seat Model Y"
+  }
 }

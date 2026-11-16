@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { deflateRawSync } from 'node:zlib'
 import { unzipFirst } from '../lib/zip.mjs'
 import { parseCsv, buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance, planRangeFixes, applyRangeFixes } from '../lib/epa.mjs'
-import { extractAmounts, storedMsrps, pageEntry, checkPage, extractHeadline, storedPriceSpan, checkHeadline } from '../lib/pages.mjs'
+import { extractAmounts, storedMsrps, pageEntry, checkPage, extractHeadline, storedPriceSpan, checkHeadline, priceGaps } from '../lib/pages.mjs'
 
 const csv = readFileSync(new URL('./fixtures/epa-sample.txt' /* .txt: the repo ignores *.csv */, import.meta.url), 'utf-8')
 // The real file has tens of thousands of rows; pad so the truncation guard passes.
@@ -207,4 +207,19 @@ test('stored prices can include destination for pages that print them that way',
   assert.deepEqual(storedMsrps(data, 'Volvo EX90'), [76695, 80000, 84345])
   assert.deepEqual(storedMsrps(data, 'Volvo EX90', { includeDestination: true }), [78090, 85740])
   assert.deepEqual(pageEntry('https://x.example'), { url: 'https://x.example', prices_include_destination: false })
+})
+
+test('price gaps: missing priced rows and a different starting price, not estimates or skipped pages', () => {
+  const line = (vehicle, model_year, low, high, estimated, stored) => ({ vehicle, headline: { model_year, low, high, estimated }, stored })
+  const gaps = priceGaps([
+    line('Tesla Model X', 2026, 116630, 161060, false, { low: 99990, high: 114990 }),
+    line('Kia EV9', 2027, 56635, 73635, false, { low: 56635, high: 73635 }), // agrees
+    line('Mercedes-Benz GLB Electric', 2027, 51350, 69000, false, null),
+    line('Genesis GV90', 2028, 110000, 160000, true, null), // estimate
+    line('Tesla Model Y L', 2027, 41630, 63630, false, null), // skipped
+  ], { 'Tesla Model Y L': 'five-seat page' })
+  assert.deepEqual(gaps, [
+    "Tesla Model X 2026: stored starting price $99,990 (MSRP + destination) differs from Car and Driver's $116,630",
+    'Mercedes-Benz GLB Electric: Car and Driver lists 2027 prices ($51,350–$69,000, including destination) but no 2027 rows have prices',
+  ])
 })

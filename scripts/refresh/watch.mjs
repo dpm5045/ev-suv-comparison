@@ -29,7 +29,7 @@ import { dirname, resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { unzipFirst } from './lib/zip.mjs'
 import { buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance, planRangeFixes, applyRangeFixes } from './lib/epa.mjs'
-import { extractAmounts, storedMsrps, pageEntry, checkPage, extractHeadline, storedPriceSpan, checkHeadline, fmt } from './lib/pages.mjs'
+import { extractAmounts, storedMsrps, pageEntry, checkPage, extractHeadline, storedPriceSpan, checkHeadline, priceGaps, fmt } from './lib/pages.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const DATA_PATH = join(ROOT, 'lib/ev-data.json')
@@ -204,6 +204,7 @@ for (const t of tripwires) {
   if (t.error) noteUnavailable(`third:${t.vehicle}`, `${t.vehicle} Car and Driver page`)
   for (const f of t.flags ?? []) attention.push(`${t.vehicle} on Car and Driver: ${f}`)
 }
+attention.push(...priceGaps(tripwires.filter((t) => !t.error), sources.third_party_no_price_compare))
 
 const isDeferred = (a) => deferred.some((d) => d.item === a)
 const open = attention.filter((a) => !isDeferred(a))
