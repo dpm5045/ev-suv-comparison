@@ -912,6 +912,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48445",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 ID. Buzz 4motion: 231 mi"
+      },
+      "msrp": {
+        "source_url": "https://www.vw.com/en/models/id-buzz.html",
+        "verified_on": "2026-11-16",
+        "evidence": "\"offers\":{\"lowPrice\":\"59995.00\",\"highPrice\":\"69995.00\"} (2025 ID. Buzz; Starting MSRP $59,995)"
       }
     },
     "Volkswagen ID. Buzz, 2025, Pro S Plus with 4MOTION": {

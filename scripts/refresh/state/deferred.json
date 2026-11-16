@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "item": "Volkswagen ID. Buzz 2025: stored starting price $70,540 (MSRP + destination) differs from Car and Driver's $61,545",
+      "until": "2027-02-14",
+      "reason": "Car and Driver's $61,545 is the Pro S RWD ($59,995 Starting MSRP on vw.com + $1,550). We carry the RWD trims with msrp 'N/A - Not New' by design; pricing them is a person's call. vw.com confirms the $69,995 top price (1st Edition 4MOTION).",
+      "needs_local": false
+    },
+    {
+      "item": "Cadillac Escalade IQ: Car and Driver lists 2027 prices ($132,695–$210,190, including destination) but no 2027 rows have prices",
+      "until": "2026-12-14",
+      "reason": "cadillac.com/electric/escalade-iq still shows only the 2026 Escalade IQ (from $127,405); no official 2027 US prices yet.",
+      "needs_local": false
+    },
+    {
+      "item": "Mercedes-Benz EQS SUV: Car and Driver lists 2027 prices ($91,400–$120,900, including destination) but no 2027 rows have prices",
+      "until": "2026-11-30",
+      "reason": "mbusa.com EQS SUV page now carries MY2027 data (EQS 400 4MATIC $89,950, EQS 550 4MATIC $112,450; same as 2026) but publishes no 2027 destination charge, and no 2027 Maybach price, so rows were not added.",
+      "needs_local": false
+    },
+    {
+      "item": "Mercedes-Benz GLB Electric: Car and Driver lists 2027 prices ($51,350–$69,000, including destination) but no 2027 rows have prices",
+      "until": "2026-12-14",
+      "reason": "mbusa.com lists the 2027 Electric GLB under Future Vehicles with no price; the GLB class page shows only the 2026 gas GLB 250. No official US price yet.",
+      "needs_local": false
+    }
+  ]
+}
