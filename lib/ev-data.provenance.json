@@ -737,6 +737,16 @@
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
         "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+      },
+      "msrp": {
+        "source_url": "https://www.caranddriver.com/tesla/model-x/specs",
+        "verified_on": "2026-11-16",
+        "evidence": "Car and Driver (manufacturer site blocks automated requests): TRIM Model X AWD, MSRP $116,630, less $1,640 destination and order fee"
+      },
+      "destination": {
+        "source_url": "https://www.kbb.com/car-news/tesla-drops-cheapest-awd-model-y-bumping-dual-motor-price-to-over-50000/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: KBB \"starting at $41,630\" for the Model Y RWD \"including destination and order fees\" minus Electrek's $39,990 \"before the destination fee\" (https://electrek.co/2026/11/13/tesla-kills-41990-model-y-awd-configurator/) = $1,640 ($1,390 destination + $250 order fee)."
       }
     },
     "Tesla Model X, 2026, Plaid": {
@@ -749,6 +759,16 @@
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
         "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+      },
+      "msrp": {
+        "source_url": "https://www.caranddriver.com/tesla/model-x/specs/2026/tesla_model-x_tesla-model-x_2026/476601",
+        "verified_on": "2026-11-16",
+        "evidence": "Car and Driver (manufacturer site blocks automated requests): TRIM Model X Plaid AWD, MSRP $131,630, less $1,640 destination and order fee"
+      },
+      "destination": {
+        "source_url": "https://www.kbb.com/car-news/tesla-drops-cheapest-awd-model-y-bumping-dual-motor-price-to-over-50000/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: KBB \"starting at $41,630\" for the Model Y RWD \"including destination and order fees\" minus Electrek's $39,990 \"before the destination fee\" (https://electrek.co/2026/11/13/tesla-kills-41990-model-y-awd-configurator/) = $1,640 ($1,390 destination + $250 order fee)."
       }
     },
     "Tesla Model X, 2025, Base": {
@@ -1419,6 +1439,11 @@
         "source_url": "https://electrek.co/2023/05/26/tesla-model-y-hardware-4-features/",
         "verified_on": "2026-11-16",
         "evidence": "Derived: \"Tesla has started producing Model Y vehicles with Hardware 4.0\" (Electrek, May 26 2023); the Model Y L launched in the US in July 2026 (https://electrek.co/2026/07/02/tesla-model-y-l-us-launch-61990/), so it has HW4 or later. Confirmed by the site owner."
+      },
+      "destination": {
+        "source_url": "https://www.kbb.com/car-news/tesla-drops-cheapest-awd-model-y-bumping-dual-motor-price-to-over-50000/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: KBB \"starting at $41,630\" for the Model Y RWD \"including destination and order fees\" minus Electrek's $39,990 \"before the destination fee\" (https://electrek.co/2026/11/13/tesla-kills-41990-model-y-awd-configurator/) = $1,640 ($1,390 destination + $250 order fee)."
       }
     }
   }
