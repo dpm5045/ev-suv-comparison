@@ -109,7 +109,10 @@ jobs:
           if [ -n "${{ needs.plan.outputs.issue }}" ]; then
             # Only text the workflows wrote: anyone can comment on a public issue.
             gh issue view "${{ needs.plan.outputs.issue }}" --json body,author,comments \
-              --jq '(if .author.login == "github-actions" then .body else "" end) + "\n\n" + ([.comments[] | select(.author.login == "github-actions") | .body] | join("\n\n"))' > .data-agent/inbox.md
+              --jq 'def bot: .author.login == "github-actions" or .author.login == "app/github-actions";
+                    (if bot then .body else "" end) + "\n\n" + ([.comments[] | select(bot) | .body] | join("\n\n"))' > .data-agent/inbox.md
+            # gh reports the workflow bot as "app/github-actions" on an issue body and "github-actions" on comments.
+            grep -q '^- ' .data-agent/inbox.md || { echo "The open inbox issue has no items the workflows wrote." >&2; exit 1; }
           else
             echo "(empty)" > .data-agent/inbox.md
           fi
