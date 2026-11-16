@@ -71,3 +71,12 @@ test('market insights page renders stories and the explorer chart', async ({ pag
   // Plot renders <svg> today; Chart.js renders <canvas> after the chart port — accept either
   await expect(page.locator('.explorer svg, .explorer canvas').first()).toBeVisible({ timeout: 15_000 })
 })
+
+test('speed dating fits a phone screen with a long self-driving label', async ({ page }) => {
+  // Pre-owned, under $40k, self-driving first: the Model X card shows "L2+ Point-to-Point (older hardware)"
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/?condition=preowned&budget=under40&pref1=selfdriving&pref2=sixseat')
+  await expect(page.locator('.sd-bar-value', { hasText: 'older hardware' }).first()).toBeVisible()
+  const { scrollWidth, clientWidth } = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }))
+  expect(scrollWidth).toBeLessThanOrEqual(clientWidth)
+})
