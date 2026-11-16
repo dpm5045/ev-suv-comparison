@@ -36,7 +36,7 @@ Apply only where the change is significant:
 
 After pricing changes are applied and committed:
 
-1. Run `npx tsx scripts/sync-sheet.ts` to push updated data to Google Sheets.
+1. Run `/sync-sheet` to refresh the backup Claude Sheet. It needs the Claude Docs connector; if that isn't available, skip it (the data in git is the source of truth).
 2. If sync fails, warn the user but do not roll back data changes.
 
 ## Important

@@ -14,6 +14,7 @@ npm run refresh:watch      # EPA range check + manufacturer price-page watch; re
 npm run test:refresh       # Unit tests for scripts/refresh (node --test)
 node scripts/refresh/fetch-page.mjs <url> [--grep re]   # Page as text, allowlisted sites; used by the data agent
 node scripts/refresh/probe-sources.mjs                  # Which research sites answer from this machine
+node scripts/export-sheet.mjs <dir>                     # CSV per table for the backup Claude Sheet (/sync-sheet)
 ```
 
 The app itself has no unit tests; `tests/e2e` holds a Playwright smoke test.
@@ -81,6 +82,8 @@ When modifying `lib/ev-data.json`, always verify:
 Pre-owned ranges are repriced by `scripts/refresh/preowned.mjs`, not by hand or by web research. It runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`), which opens a data-only PR and merges it straight away. `scripts/refresh/watch.mjs` runs alongside it (`.github/workflows/data-watch.yml`): it checks stored ranges against the EPA vehicle file, corrects `range_mi` where EPA alone settles it (via an auto-merged PR), watches manufacturer pages for price changes, and commits what it last saw (`scripts/refresh/state/watch.json`) straight to the default branch; `vercel.json` skips the deploy for commits that only touch bookkeeping.
 
 Whatever the scripts cannot settle goes to one open GitHub issue labelled `data-inbox`. `.github/workflows/data-agent.yml` runs Claude Code unattended on it every Monday after the watch, and does a full pass on the 1st of the month; its instructions are `.claude/commands/refresh-ci.md`. The agent only edits data files, and its PR is the one thing a person reviews. Items it cannot settle go in `scripts/refresh/state/deferred.json`, which keeps them out of the inbox until their date (`needs_local` ones need a session on a home connection, because the source blocks cloud runners). The watch also tracks each model's headline MSRP on Car and Driver as a tripwire (a prompt to check the manufacturer). Car and Driver is a price source only for manufacturers that block automated requests (Tesla), from its per-trim specs pages; see "Prices when the manufacturer blocks automated requests" in `.claude/commands/refresh.md`. Rows whose range is knowingly a manufacturer estimate are listed in `scripts/refresh/accepted.json`. `lib/ev-data.provenance.json` holds the CarGurus baselines the script compares against (`preowned`) and per-row, per-field sources with a last-verified date (`fields`). The site does not import this file. See `.claude/commands/refresh.md` for the rules.
+
+A browsable backup of every table (sources included) lives in the Claude Sheet "ThreeRowEV Data"; `/sync-sheet` refreshes it. The old Google Sheets sync is retired.
 
 ### Self-driving rank (computed at load)
 

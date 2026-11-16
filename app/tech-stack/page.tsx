@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SITE_URL } from '@/lib/slugs'
+import { DATA } from '@/lib/data'
 import Header from '@/components/Header'
 import Breadcrumb from '@/components/Breadcrumb'
 import styles from './tech-stack.module.css'
@@ -10,6 +11,10 @@ export const metadata: Metadata = {
   description: 'How ThreeRowEV.com is built — Next.js, TypeScript, Claude Code, and an automated data pipeline for 3-row electric vehicle specs.',
   alternates: { canonical: `${SITE_URL}/tech-stack` },
 }
+
+const TRIM_COUNT = DATA.details.length
+const VEHICLE_COUNT = new Set(DATA.details.map((d) => d.vehicle)).size
+const FIELD_COUNT = new Set(DATA.details.flatMap((d) => Object.keys(d))).size
 
 export default function TechStackPage() {
   return (
@@ -50,7 +55,7 @@ export default function TechStackPage() {
             <TechCard label="Styling" value="Custom CSS" detail="CSS variables for dark/light theming. DM Sans + JetBrains Mono fonts. Responsive dual-render pattern." />
             <TechCard label="Visualization" value="Chart.js" detail="Chart.js with react-chartjs-2 for every chart — bar, line, mixed, and the Explore scatter with a custom quadrant plugin." />
             <TechCard label="Deployment" value="Vercel" detail="Zero-config deploys from Git. HSTS, X-Frame-Options: DENY, strict referrer policy, permissions restrictions." />
-            <TechCard label="Integrations" value="Google Sheets API" detail="Service-account sync pushes the full dataset to a Google Sheet as a backup & shareable reference." />
+            <TechCard label="Automation" value="GitHub Actions" detail="Weekly scripts reprice used vehicles and check EPA ranges and price pages; a Claude Code agent researches what they can't settle." />
           </div>
         </section>
 
@@ -65,7 +70,7 @@ export default function TechStackPage() {
 
           <div className={styles.schemaBlock}>
             <div className={styles.schemaBrace}>{'{'}</div>
-            <SchemaLine k="details" type="DetailRow[]" comment="~140 trims across 17 vehicles, ~35 fields each" />
+            <SchemaLine k="details" type="DetailRow[]" comment={`${TRIM_COUNT} trims across ${VEHICLE_COUNT} vehicles, ${FIELD_COUNT} fields each`} />
             <SchemaLine k="preowned" type="PreownedRow[]" comment="pre-owned pricing, synced with details" />
             <SchemaLine k="count_data" type="CountRow[]" comment="sales & availability by model year (2021–2027)" />
             <SchemaLine k="count_totals" type="CountTotals" comment="annual sums" />
@@ -103,9 +108,11 @@ export default function TechStackPage() {
           <div className={styles.sectionNum}>03</div>
           <h2>Data Sources</h2>
           <p>
-            All research is performed <strong>in-session by Claude Code</strong> using web search and fetch
-            against pre-approved sources. Findings are compiled into comparison tables and presented for
-            user approval before any data is written.
+            Facts that come in a fixed, machine-readable form are read by <strong>scripts</strong>: used-car
+            price trends from CarGurus and EPA range ratings from the fueleconomy.gov vehicle file. Everything
+            else is researched by <strong>Claude Code</strong> against the sources below. Every value it changes
+            must come from a page it actually fetched, and that page, the date and a short quote are recorded
+            in a provenance file next to the data. No source, no change.
           </p>
 
           <h3>OEM Sites <span className={`${styles.badge} ${styles.badgeBlue}`}>Official Specs &amp; MSRP</span></h3>
@@ -135,19 +142,19 @@ export default function TechStackPage() {
           <div className={styles.sectionNum}>04</div>
           <h2>Automated Data Pipeline</h2>
           <p>
-            The pipeline is driven by <strong>Claude Code slash commands</strong> (skills).
-            Each skill defines structured phases with validation gates, user approval checkpoints,
-            and automatic OTD recalculation.
+            The pipeline runs on its own in <strong>GitHub Actions</strong>. Rule-based scripts handle what
+            can be decided by fixed rules; a <strong>Claude Code agent</strong> handles what needs reading and
+            judgment; a person reviews everything the agent writes before it goes live.
           </p>
 
           <div className={styles.pipeline}>
-            <PipelineStep label="Web Research" desc="Claude Code searches OEM sites, EPA databases, and automotive reference sites. Findings are compiled into structured comparison tables." />
-            <PipelineStep label="User Approval Gate" desc="All proposed changes are presented as delta tables. Deltas exceeding thresholds (e.g., pre-owned price changes >$2,000) are flagged for explicit review." />
-            <PipelineStep label="Data Mutation" desc="Approved changes are written to ev-data.json. Both details and preowned arrays are updated in sync. Protected fields are never auto-modified." />
-            <PipelineStep label="OTD Recalculation" desc="The recalculateAllOtd() utility recomputes out-the-door prices for every entry based on current MSRP, destination, and pre-owned ranges." />
-            <PipelineStep label="Validation" desc="Required fields, OTD consistency (<$50 tolerance), numeric sanity ranges, count totals reconciliation, details↔preowned sync, and TypeScript build." />
-            <PipelineStep label="Git Commit" desc="Changes are committed with a descriptive changelog. Vercel auto-deploys from the repository on push." />
-            <PipelineStep label="Google Sheets Sync" desc="The full details array is pushed to a Google Sheet via service account — a shareable backup with ~140 rows and ~35 columns." last />
+            <PipelineStep label="Weekly Used-Price Repricing" desc="Every Monday a script reads CarGurus price trends per vehicle and model year. A group is repriced when its average has moved 3% or more since the last reprice; moves over 15% are held for review. The change merges automatically once validation passes." />
+            <PipelineStep label="Weekly Data Watch" desc="A second script checks every stored range against the EPA vehicle file, correcting it where an earlier EPA match shows which variant the trim is, and watches manufacturer and Car and Driver pages for price changes." />
+            <PipelineStep label="Data Inbox" desc="Whatever the scripts can't settle on their own lands in one inbox: a large price move, a range EPA disagrees with, a price page that changed." />
+            <PipelineStep label="Data Agent" desc="Claude Code runs unattended after the watch and once a month for a full pass: it researches each inbox item, adds new model years when manufacturers publish prices, and records a source for every value. Items it can't confirm are set aside, never guessed." />
+            <PipelineStep label="Review" desc="The agent's changes arrive as a pull request that a person reviews. Rule-based script changes merge on their own." />
+            <PipelineStep label="Validation" desc="Required fields, numeric sanity ranges, count totals, details↔preowned sync, provenance entries, unit tests and a full production build run before anything merges." />
+            <PipelineStep label="Deploy & Backup" desc="Vercel deploys on merge. A Claude Sheet keeps a browsable backup of every table, including the sources." last />
           </div>
         </section>
 
@@ -180,7 +187,7 @@ export default function TechStackPage() {
                 <tr>
                   <td className={styles.cellCmd}>/update-pricing</td>
                   <td>MSRP &amp; pre-owned updates</td>
-                  <td>Searches KBB, TrueCar, Cars.com. Flags deltas &gt;$2K. Requires user approval.</td>
+                  <td>New prices from manufacturer pages; used prices from the CarGurus repricing script.</td>
                 </tr>
                 <tr>
                   <td className={styles.cellCmd}>/scan-watchlist</td>
@@ -204,8 +211,8 @@ export default function TechStackPage() {
                 </tr>
                 <tr>
                   <td className={styles.cellCmd}>/sync-sheet</td>
-                  <td>Push to Google Sheets</td>
-                  <td>One-way sync of details array to Google Sheets backup. Graceful no-op if credentials missing.</td>
+                  <td>Refresh the backup Sheet</td>
+                  <td>Exports every table, sources included, and replaces the tabs of the backup Claude Sheet.</td>
                 </tr>
               </tbody>
             </table>
@@ -220,10 +227,11 @@ export default function TechStackPage() {
             <li><strong>Never hardcode counts.</strong> Vehicle and trim counts are always derived from DATA at runtime — no hardcoded numbers anywhere.</li>
             <li><strong>Protected fields.</strong> Seats, cargo dimensions (behind 3rd/2nd/1st row), fold-flat, and cargo floor width are never auto-modified.</li>
             <li><strong>Array sync.</strong> The details and preowned arrays must stay in sync: same vehicle names, matching preowned_range values.</li>
-            <li><strong>OTD consistency.</strong> Out-the-door prices are always recalculated via the standard formula. Validator flags errors at &gt;$50 deviation.</li>
+            <li><strong>OTD is computed, never stored.</strong> Out-the-door prices are worked out from MSRP, destination and used-price ranges when the data loads, so they can&apos;t drift.</li>
+            <li><strong>No source, no change.</strong> Every researched value records the page it came from, the date and a quote. A source that can&apos;t be reached changes nothing.</li>
             <li><strong>Count totals.</strong> Year-column sums in count_data are reconciled against count_totals after every vehicle add or remove.</li>
             <li><strong>TBD vs. null vs. N/A.</strong> null = field doesn&apos;t apply. &quot;TBD&quot; = not yet found. &quot;N/A&quot; = not applicable for this trim.</li>
-            <li><strong>User approval gate.</strong> No data is written to the source of truth without explicit user review and approval of proposed changes.</li>
+            <li><strong>Review gate.</strong> Changes researched by the agent go live only after a person reviews them. Only rule-based script changes merge on their own.</li>
           </ul>
         </section>
 
@@ -233,7 +241,7 @@ export default function TechStackPage() {
           <h2>Deployment &amp; Integrations</h2>
           <div className={styles.techGrid}>
             <TechCard label="Hosting" value="Vercel" detail="Auto-deploys from Git on push. Domain: threerowev.com." />
-            <TechCard label="Data Backup" value="Google Sheets" detail="Service-account sync via googleapis. Free tier (300 req/min). Graceful no-op if credentials absent." />
+            <TechCard label="Data Backup" value="Claude Sheets" detail="Every table, including sources and used-price baselines, in a browsable spreadsheet refreshed with /sync-sheet." />
             <TechCard label="AI Integration" value="Claude API" detail="News endpoint (currently paused) proxies to Claude with web_search tool for live EV news summaries." />
             <TechCard label="Monetization" value="Amazon Associates" detail="Context-aware affiliate links: charging adapters matched to NACS/CCS, portable chargers, accessories." />
             <TechCard label="Email" value="Cloudflare Routing" detail="contact@threerowev.com routes to Gmail via Cloudflare email routing." />
