@@ -97,6 +97,10 @@
     "Kia EV9": "https://www.kia.com/us/en/ev9",
     "Hyundai IONIQ 9": "https://www.hyundaiusa.com/us/en/vehicles/ioniq-9",
     "Rivian R1S": "https://rivian.com/r1s",
+    "Volvo EX90": {
+      "url": "https://www.volvocars.com/us/cars/ex90-electric/",
+      "prices_include_destination": true
+    },
     "Lucid Gravity": "https://lucidmotors.com/gravity",
     "Cadillac Escalade IQ": "https://www.cadillac.com/electric/escalade-iq",
     "Cadillac VISTIQ": "https://www.cadillac.com/electric/vistiq",
@@ -126,7 +130,6 @@
   "probe_extra": [
     "https://www.tesla.com/modely",
     "https://www.tesla.com/modelx",
-    "https://www.volvocars.com/us/cars/ex90-electric/",
     "https://www.vw.com/en/models/id-buzz.html",
     "https://www.lexus.com/models/TZ",
     "https://www.genesis.com/us/en/gv90",
@@ -135,5 +138,9 @@
     "https://www.kbb.com/kia/ev9/",
     "https://www.cars.com/research/kia-ev9/",
     "https://www.fueleconomy.gov/feg/PowerSearch.do?action=noform&path=1&year1=2026&year2=2027&make=Kia&baseModel=EV9&srchtyp=ymm&pageno=1&rowLimit=50"
-  ]
+  ],
+  "third_party_no_price_compare": {
+    "Tesla Model Y (3-Row)": "Car and Driver's Model Y page prices the five-seat Model Y",
+    "Tesla Model Y L": "Car and Driver's Model Y page prices the five-seat Model Y"
+  }
 }

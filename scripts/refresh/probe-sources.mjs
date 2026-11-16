@@ -23,7 +23,7 @@ const add = (url) => {
   const host = new URL(url).hostname.replace(/^www\./, '')
   if (!pages.has(host)) pages.set(host, url)
 }
-for (const url of Object.values(sources.pricing_pages)) add(url)
+for (const v of Object.values(sources.pricing_pages)) add(typeof v === 'string' ? v : v.url)
 add(Object.values(sources.cargurus_price_trends)[0])
 add(Object.values(sources.third_party_pages)[0])
 for (const url of sources.probe_extra ?? []) add(url)

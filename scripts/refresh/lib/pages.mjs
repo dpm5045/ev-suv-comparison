@@ -20,12 +20,20 @@ export function extractAmounts(html) {
   return [...out].sort((a, b) => a - b)
 }
 
-/** MSRPs stored for the two newest model years of a vehicle that have a numeric MSRP. */
-export function storedMsrps(data, vehicle) {
-  const priced = data.details.filter((r) => r.vehicle === vehicle && typeof r.msrp === 'number')
+/**
+ * MSRPs stored for the two newest model years of a vehicle that have a numeric
+ * MSRP. With includeDestination, MSRP + destination: for manufacturers whose
+ * pages print destination-inclusive prices (Volvo).
+ */
+export function storedMsrps(data, vehicle, { includeDestination = false } = {}) {
+  const priced = data.details.filter((r) => r.vehicle === vehicle && typeof r.msrp === 'number' && (!includeDestination || typeof r.destination === 'number'))
   const years = [...new Set(priced.map((r) => r.year))].sort((a, b) => b - a).slice(0, 2)
-  return [...new Set(priced.filter((r) => years.includes(r.year)).map((r) => r.msrp))].sort((a, b) => a - b)
+  const price = (r) => (includeDestination ? r.msrp + r.destination : r.msrp)
+  return [...new Set(priced.filter((r) => years.includes(r.year)).map(price))].sort((a, b) => a - b)
 }
+
+/** A pricing_pages entry is a URL, or {url, prices_include_destination}. */
+export const pageEntry = (v) => (typeof v === 'string' ? { url: v, prices_include_destination: false } : v)
 
 /**
  * @param {number[]} amounts  dollar amounts on the page
@@ -93,4 +101,28 @@ export function checkHeadline(headline, previous) {
     }
   }
   return flags
+}
+
+/**
+ * Standing differences between Car and Driver's headline price and ours, for
+ * the inbox. Unlike checkHeadline (what changed since the last run), these
+ * repeat every week until someone fixes the data or defers them, which is the
+ * point: a gap that existed on the first run is never a "change".
+ *
+ * Only actual prices count, not estimates. Wording carries the numbers, so a
+ * deferral holds until either side moves.
+ *
+ * @param {{vehicle:string, headline:{model_year:number|null, low:number, high:number, estimated:boolean}, stored:{low:number, high:number}|null}[]} lines
+ * @param {Record<string,string>} skip  vehicle -> why its Car and Driver page can't be compared
+ */
+export function priceGaps(lines, skip = {}) {
+  const gaps = []
+  for (const t of lines) {
+    const h = t.headline
+    if (!h || h.estimated || !h.model_year || skip[t.vehicle]) continue
+    const span = h.low === h.high ? fmt(h.low) : `${fmt(h.low)}–${fmt(h.high)}`
+    if (!t.stored) gaps.push(`${t.vehicle}: Car and Driver lists ${h.model_year} prices (${span}, including destination) but no ${h.model_year} rows have prices`)
+    else if (t.stored.low !== h.low) gaps.push(`${t.vehicle} ${h.model_year}: stored starting price ${fmt(t.stored.low)} (MSRP + destination) differs from Car and Driver's ${fmt(h.low)}`)
+  }
+  return gaps
 }
