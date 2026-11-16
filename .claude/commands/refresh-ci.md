@@ -37,6 +37,7 @@ Item types and what to do:
 - **Range corrected, notes still mention the old number** — update the sentence in `notes`.
 - **EPA added / changed / removed a variant** — check whether a stored trim's range or a new trim follows from it.
 - **Manufacturer page changed** / **Car and Driver line changed** — fetch the manufacturer page and check `msrp` and `destination` for that vehicle's two newest model years. A Car and Driver roll to a new model year usually means new rows (see monthly mode, step 2).
+- **CarGurus price trends have failed since a date** — fetch the URL. If it loads now, nothing to do (say so). If it loads but the pre-owned script can't parse it, the page layout changed: say so under "For a person" (fixing `scripts/refresh/lib/cargurus.mjs` is outside what you may edit) and defer 14 days. If it doesn't load, defer 28 days.
 - **Page unavailable** — if `.data-agent/reachable.md` shows the site reachable now, nothing to do (say so). If not, defer for 28 days.
 
 ## Mode: monthly
