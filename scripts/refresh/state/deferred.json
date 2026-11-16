@@ -1,12 +1,6 @@
 {
   "items": [
     {
-      "item": "Volkswagen ID. Buzz 2025: stored starting price $70,540 (MSRP + destination) differs from Car and Driver's $61,545",
-      "until": "2027-02-14",
-      "reason": "Car and Driver's $61,545 is the Pro S RWD ($59,995 Starting MSRP on vw.com + $1,550). We carry the RWD trims with msrp 'N/A - Not New' by design; pricing them is a person's call. vw.com confirms the $69,995 top price (1st Edition 4MOTION).",
-      "needs_local": false
-    },
-    {
       "item": "Cadillac Escalade IQ: Car and Driver lists 2027 prices ($132,695–$210,190, including destination) but no 2027 rows have prices",
       "until": "2026-12-14",
       "reason": "cadillac.com/electric/escalade-iq still shows only the 2026 Escalade IQ (from $127,405); no official 2027 US prices yet.",

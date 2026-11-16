@@ -931,6 +931,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 ID. Buzz: 234 mi"
+      },
+      "msrp": {
+        "source_url": "https://www.vw.com/en/models/id-buzz.html",
+        "verified_on": "2026-11-16",
+        "evidence": "Starting MSRP $59,995 (2025 ID. Buzz; Pro S is the base trim). Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00)."
       }
     },
     "Volkswagen ID. Buzz, 2025, Pro S Plus RWD": {
@@ -938,6 +943,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 ID. Buzz: 234 mi"
+      },
+      "msrp": {
+        "source_url": "https://www.conceptcarz.com/a54862/volkswagen-2025-id-buzz-pricing.aspx",
+        "verified_on": "2026-11-16",
+        "evidence": "Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00)."
       }
     },
     "Volkswagen ID. Buzz, 2025, 1st Edition RWD": {
@@ -945,6 +955,11 @@
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 ID. Buzz: 234 mi"
+      },
+      "msrp": {
+        "source_url": "https://www.conceptcarz.com/a54862/volkswagen-2025-id-buzz-pricing.aspx",
+        "verified_on": "2026-11-16",
+        "evidence": "Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00)."
       }
     },
     "Cadillac VISTIQ, 2026, Luxury": {
@@ -1564,6 +1579,27 @@
         "source_url": "https://www.kbb.com/car-news/tesla-drops-cheapest-awd-model-y-bumping-dual-motor-price-to-over-50000/",
         "verified_on": "2026-11-16",
         "evidence": "Derived: KBB \"starting at $41,630\" for the Model Y RWD \"including destination and order fees\" minus Electrek's $39,990 \"before the destination fee\" (https://electrek.co/2026/11/13/tesla-kills-41990-model-y-awd-configurator/) = $1,640 ($1,390 destination + $250 order fee)."
+      }
+    },
+    "Cadillac Escalade IQ, 2026, Sport": {
+      "msrp": {
+        "source_url": "https://www.cadillac.com/electric/escalade-iq",
+        "verified_on": "2026-11-16",
+        "evidence": "SPORT From: $127,905 (Luxury From: $127,405 matches stored)"
+      }
+    },
+    "Cadillac Escalade IQ, 2026, Premium Luxury": {
+      "msrp": {
+        "source_url": "https://www.cadillac.com/electric/escalade-iq",
+        "verified_on": "2026-11-16",
+        "evidence": "PREMIUM LUXURY From: $147,705"
+      }
+    },
+    "Cadillac Escalade IQ, 2026, Premium Sport": {
+      "msrp": {
+        "source_url": "https://www.cadillac.com/electric/escalade-iq",
+        "verified_on": "2026-11-16",
+        "evidence": "PREMIUM SPORT From: $148,205"
       }
     }
   }
