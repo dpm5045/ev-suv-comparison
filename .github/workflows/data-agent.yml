@@ -19,10 +19,18 @@ name: Data Agent
 #   publish  no secret, never runs npm: pushes the branch, opens the PR
 # Every action is pinned to a commit SHA (tag in the trailing comment).
 
+# The mode is in the run's title so the monthly backup can tell whether the
+# monthly pass already ran.
+run-name: "Data Agent (${{ github.event_name == 'workflow_dispatch' && inputs.mode || (startsWith(github.event.schedule, '23 15') && 'monthly' || 'inbox') }})"
+
 on:
   schedule:
-    - cron: '30 14 * * 1'   # Mondays 14:30 UTC, after the watch: inbox
-    - cron: '0 15 1 * *'    # 1st of the month 15:00 UTC: monthly
+    # Off the hour: GitHub delays or drops the most runs at :00 and :30. Each
+    # schedule has a backup a day later that runs only if the first didn't.
+    - cron: '47 14 * * 1'   # Mondays 14:47 UTC (9:47 AM ET), after the watch: inbox
+    - cron: '47 14 * * 2'   # Tuesdays: inbox backup
+    - cron: '23 15 1 * *'   # 1st of the month 15:23 UTC: monthly
+    - cron: '23 15 2 * *'   # 2nd of the month: monthly backup
   workflow_dispatch:
     inputs:
       mode:
@@ -43,6 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
+      actions: read          # backup schedules check whether the first run succeeded
       contents: read
       issues: write          # leaves a note in the inbox when no credential is set
       pull-requests: read
@@ -59,12 +68,19 @@ jobs:
         id: plan
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then mode="${{ inputs.mode }}"
-          elif [ "${{ github.event.schedule }}" = "0 15 1 * *" ]; then mode=monthly
-          else mode=inbox; fi
+          else case "${{ github.event.schedule }}" in '23 15 '*) mode=monthly ;; *) mode=inbox ;; esac; fi
+          # Backup schedules (Tuesday; the 2nd) run only if the first never succeeded.
+          backup_since=""
+          case "${{ github.event.schedule }}" in
+            '47 14 * * 2') backup_since=$(date -u -d yesterday +%F) ;;
+            '23 15 2 * *') backup_since=$(date -u +%Y-%m-01) ;;
+          esac
           issue=$(gh issue list --label data-inbox --state open --json number --jq '.[0].number // empty')
           agent_pr=$(gh pr list --state open --json headRefName,url --jq '[.[] | select(.headRefName | startswith("data-refresh/agent-"))][0].url // empty')
           run=yes
-          if [ -n "$agent_pr" ]; then
+          if [ -n "$backup_since" ] && [ "$(bash scripts/refresh/ran-since.sh data-agent.yml "$backup_since" "($mode)")" = yes ]; then
+            run=no; echo "The $mode run since $backup_since succeeded; this backup run has nothing to do." >> "$GITHUB_STEP_SUMMARY"
+          elif [ -n "$agent_pr" ]; then
             run=no; echo "An agent PR is waiting for review: $agent_pr. Merge or close it first." >> "$GITHUB_STEP_SUMMARY"
           elif [ "$mode" = inbox ] && [ -z "$issue" ]; then
             run=no; echo "Data inbox is empty; nothing to do." >> "$GITHUB_STEP_SUMMARY"
@@ -242,6 +258,9 @@ jobs:
               git push origin "$branch"
               { cat "$H/changelog.md"; echo; [ -n "$issue" ] && echo "Works through #$issue."; echo; echo '🤖 Generated with [Claude Code](https://claude.com/claude-code)'; } > "$RUNNER_TEMP/body.md"
               url=$(gh pr create --base "$base" --head "$branch" --title "Data agent: $mode pass $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md")
+              # Ask the repo owner to review, so GitHub emails and notifies them.
+              gh pr edit "$url" --add-assignee "${{ github.repository_owner }}" --add-reviewer "${{ github.repository_owner }}" \
+                || echo "Could not request a review on $url; it is still open." >> "$GITHUB_STEP_SUMMARY"
               note="Opened $url for review."
             else
               # Only deferrals: bookkeeping, no site change, no review needed.
