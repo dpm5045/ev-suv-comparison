@@ -210,7 +210,8 @@ function preprocessData(): ProcessedRow[] {
         const v = row[f] == null || row[f] === '' ? NaN : Number(row[f])
         row[f] = Number.isNaN(v) ? null : v
       }
-      row.self_driving_score = SELF_DRIVING_TIERS[d.self_driving_tier ?? ''] ?? null
+      // 2.1–2.4 so the axis reads as tiers within SAE Level 2; older hardware sits one tier lower
+      row.self_driving_score = d.self_driving_rank != null ? Number((2 + d.self_driving_rank / 10).toFixed(1)) : null
       return row as ProcessedRow
     })
 }

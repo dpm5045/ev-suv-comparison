@@ -35,6 +35,23 @@ data.preowned.forEach(p => {
   if ('otd_preowned' in p) errors.push('Stored OTD field found in preowned (must be computed, not stored): ' + p.name);
 });
 
+// === Driver-assist hardware ===
+// adas_hardware_gen feeds the self-driving rank (lib/data.ts rankSelfDriving).
+const ADAS_GENS = new Set(['current', 'previous', 'mixed']);
+data.details.forEach(d => {
+  ['adas_hardware', 'adas_hardware_gen', 'adas_hardware_note'].forEach(f => {
+    if (!(f in d)) errors.push('Missing field [' + f + '] (use null when not applicable): ' + d.name);
+  });
+  const gen = d.adas_hardware_gen;
+  if (gen != null && !ADAS_GENS.has(gen)) errors.push('adas_hardware_gen must be current, previous, mixed or null [' + gen + ']: ' + d.name);
+  if (gen != null && !d.adas_hardware) errors.push('adas_hardware_gen is set but adas_hardware is empty: ' + d.name);
+});
+data.details.filter(d => d.adas_hardware_gen === 'previous' || d.adas_hardware_gen === 'mixed').forEach(d => {
+  if (!data.details.some(o => o.vehicle === d.vehicle && o.adas_hardware_gen === 'current')) {
+    warnings.push('Older driver-assist hardware but no "current" row for the vehicle to rank against: ' + d.name);
+  }
+});
+
 // === Numeric range sanity ===
 data.details.forEach(d => {
   if (typeof d.range_mi === 'number' && (d.range_mi < 150 || d.range_mi > 500)) warnings.push('range_mi out of range ['+d.range_mi+']: ' + d.name);

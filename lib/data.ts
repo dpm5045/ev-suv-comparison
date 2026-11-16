@@ -43,6 +43,15 @@ export interface DetailRow {
   self_driving: string
   sae_level: 2 | 3 | 4 | 5 | null
   self_driving_tier: 'Basic L2' | 'Advanced L2' | 'L2+ Hands-Free' | 'L2+ Point-to-Point' | null
+  /** Driver-assist hardware generation label, e.g. "HW3", "Gen 2"; null where it doesn't change capability or isn't researched */
+  adas_hardware: string | null
+  /** current = newest for this vehicle; previous = older; mixed = the model year was built with either */
+  adas_hardware_gen: 'current' | 'previous' | 'mixed' | null
+  adas_hardware_note: string | null
+  /** Computed at load — tier rank (1–4), one lower on older hardware with the same tier as current hardware; null when no tier */
+  self_driving_rank: number | null
+  /** Computed at load — true when self_driving_rank was lowered for older hardware */
+  adas_downgraded: boolean
   range_mi: number | string | null
   hp: number | string | null
   battery_kwh: number | string | null
@@ -134,7 +143,7 @@ export const OTD_TAX_RATE = 1.06   // PA sales tax 6%
 export const OTD_FIXED_FEES = 905  // doc $422 + title/reg $233 + EV road-use fee $250
 
 /** Raw JSON row: DetailRow minus the fields computed at load. */
-type RawDetailRow = Omit<DetailRow, 'otd_new' | 'otd_preowned' | 'preowned_low' | 'preowned_high'>
+type RawDetailRow = Omit<DetailRow, 'otd_new' | 'otd_preowned' | 'preowned_low' | 'preowned_high' | 'self_driving_rank' | 'adas_downgraded'>
 
 interface RawEVData extends Omit<EVData, 'details'> {
   details: RawDetailRow[]
@@ -153,7 +162,37 @@ function otdPreownedPrice(price: number): number {
   return Math.round(price * OTD_TAX_RATE + OTD_FIXED_FEES)
 }
 
-function enrich(r: RawDetailRow): DetailRow {
+/** Self-driving tiers, lowest to highest. The one place tiers are ranked. */
+export const TIER_RANK: Record<string, number> = {
+  'Basic L2': 1,
+  'Advanced L2': 2,
+  'L2+ Hands-Free': 3,
+  'L2+ Point-to-Point': 4,
+}
+
+/**
+ * Rank each row's self-driving tier. Older hardware ("previous", or "mixed"
+ * where the buyer can't be sure) that offers the same tier as that vehicle's
+ * current hardware ranks one lower: same feature, measurably worse on older
+ * hardware (Tesla HW3 vs HW4). Where older hardware already has a lower tier
+ * (Rivian Gen 1), the tier says so and no further step is taken.
+ */
+export function rankSelfDriving<T extends Pick<DetailRow, 'vehicle' | 'self_driving_tier' | 'adas_hardware_gen'>>(rows: T[]) {
+  const currentTiers = new Map<string, Set<string>>()
+  for (const r of rows) {
+    if (r.adas_hardware_gen !== 'current' || !r.self_driving_tier) continue
+    if (!currentTiers.has(r.vehicle)) currentTiers.set(r.vehicle, new Set())
+    currentTiers.get(r.vehicle)!.add(r.self_driving_tier)
+  }
+  return rows.map((r) => {
+    const base = r.self_driving_tier ? TIER_RANK[r.self_driving_tier] ?? null : null
+    const older = r.adas_hardware_gen === 'previous' || r.adas_hardware_gen === 'mixed'
+    const downgraded = base !== null && older && !!currentTiers.get(r.vehicle)?.has(r.self_driving_tier as string)
+    return { self_driving_rank: base === null ? null : downgraded ? base - 1 : base, adas_downgraded: downgraded }
+  })
+}
+
+function enrich(r: RawDetailRow): Omit<DetailRow, 'self_driving_rank' | 'adas_downgraded'> {
   const range = parsePriceRange(r.preowned_range)
   const otd_new =
     typeof r.msrp === 'number' && typeof r.destination === 'number'
@@ -177,7 +216,10 @@ function enrich(r: RawDetailRow): DetailRow {
 
 const raw = rawData as unknown as RawEVData
 
-export const DATA: EVData = { ...raw, details: raw.details.map(enrich) }
+const enriched = raw.details.map(enrich)
+const ranks = rankSelfDriving(enriched)
+
+export const DATA: EVData = { ...raw, details: enriched.map((r, i) => ({ ...r, ...ranks[i] })) }
 
 /** Vehicles announced but not yet available in the US market */
 export const WATCHLIST_VEHICLES = [
