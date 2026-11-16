@@ -12,10 +12,13 @@ name: Data Watch
 
 on:
   schedule:
-    - cron: '30 13 * * 1'   # every Monday, 13:30 UTC
+    # Off the hour: GitHub delays or drops the most runs at :00 and :30.
+    - cron: '47 13 * * 1'   # Mondays 13:47 UTC (8:47 AM ET)
+    - cron: '47 13 * * 2'   # Tuesdays: backup, runs only if Monday's didn't
   workflow_dispatch: {}
 
 permissions:
+  actions: read        # the Tuesday backup checks Monday's run
   contents: write
   pull-requests: write
   issues: write
@@ -25,7 +28,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Tuesday's schedule is a backup: GitHub's cron is best effort and sometimes
+  # drops a run. It runs only if Monday's never succeeded.
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - id: gate
+        run: |
+          run=yes
+          if [ "${{ github.event_name }}" = schedule ] && [ "$(date -u +%u)" = 2 ]; then
+            if [ "$(bash scripts/refresh/ran-since.sh data-watch.yml "$(date -u -d yesterday +%F)")" = yes ]; then
+              run=no; echo "Monday's run succeeded; this backup run has nothing to do." >> "$GITHUB_STEP_SUMMARY"
+            fi
+          fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
   watch:
+    needs: gate
+    if: needs.gate.outputs.run == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
