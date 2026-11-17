@@ -27,11 +27,18 @@ function page(dir: string, slug: string) {
   return { jsonFaq, visible, description }
 }
 
-/** Range values that are only manufacturer estimates for this vehicle (no EPA row has the same number). */
+/** Range values that are only manufacturer estimates for this vehicle (no other row has the same number). */
 function estimateOnlyValues(vehicle: string): number[] {
   const rows = getTrimsForVehicle(vehicle)
-  const epa = new Set(rows.filter((r) => rangeBasis(r) === 'epa').map((r) => r.range_mi))
-  return [...new Set(rows.filter((r) => rangeBasis(r) !== 'epa' && typeof r.range_mi === 'number').map((r) => r.range_mi as number))].filter((v) => !epa.has(v))
+  const isEst = (r: (typeof rows)[number]) => rangeBasis(r) === 'manufacturer_estimate'
+  const other = new Set(rows.filter((r) => !isEst(r)).map((r) => r.range_mi))
+  return [...new Set(rows.filter((r) => isEst(r) && typeof r.range_mi === 'number').map((r) => r.range_mi as number))].filter((v) => !other.has(v))
+}
+
+/** "EPA" may appear in generated text only for vehicles with at least one verified EPA rating. */
+function expectNoUnverifiedEpaClaim(text: string, vehicles: string[]) {
+  const verified = vehicles.some((v) => getTrimsForVehicle(v).some((r) => rangeBasis(r) === 'epa'))
+  if (!verified) expect(text).not.toMatch(/\bEPA\b/)
 }
 
 /** Every mention of an estimate-only range must be attributed to the manufacturer in its own clause. */
@@ -75,6 +82,7 @@ describe('comparison pages', () => {
     }
 
     for (const v of [nameA, nameB]) expectEstimatesAttributed([description, ...jsonFaq.map((f) => f.a)].join('. '), estimateOnlyValues(v))
+    expectNoUnverifiedEpaClaim([description, ...jsonFaq.map((f) => f.a)].join('. '), [nameA, nameB])
   })
 })
 
@@ -84,6 +92,7 @@ describe('vehicle pages', () => {
     expect(visible).toEqual(jsonFaq)
     expect(jsonFaq).toEqual(vehicleFaq(vehicle, getTrimsForVehicle(vehicle), dataYear))
     expectEstimatesAttributed([description, ...jsonFaq.map((f) => f.a)].join('. '), estimateOnlyValues(vehicle))
+    expectNoUnverifiedEpaClaim([description, ...jsonFaq.map((f) => f.a)].join('. '), [vehicle])
     // "starts at … MSRP" only when the vehicle has a configuration sold new
     const soldNew = DATA.details.some((r) => r.vehicle === vehicle && typeof r.msrp === 'number' && r.year >= dataYear - 1)
     if (!soldNew) expect(jsonFaq.map((f) => f.a).join(' ')).not.toMatch(/starts at/)

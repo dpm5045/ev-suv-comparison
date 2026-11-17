@@ -139,7 +139,7 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
 
                 <div className="detail-grid">
                   {([
-                    ['EPA Range', rangeCell(selectedTrim) ?? fmtNum(selectedTrim.range_mi).text],
+                    ['Range', rangeCell(selectedTrim) ?? fmtNum(selectedTrim.range_mi).text],
                     ['Cargo (3rd Row)', (() => { const f = fmtNum(selectedTrim.cargo_behind_3rd_cu_ft); return f.text + (typeof selectedTrim.cargo_behind_3rd_cu_ft === 'number' ? ' cu ft' : '') })()],
                     ['0–60 mph', (() => { const f = fmtNum(selectedTrim.zero_to_60_sec); return f.text + (typeof selectedTrim.zero_to_60_sec === 'number' ? ' sec' : '') })()],
                     ['DC 10–80%', (() => { const f = fmtNum(selectedTrim.dc_fast_charge_10_80_min); return f.text + (typeof selectedTrim.dc_fast_charge_10_80_min === 'number' ? ' min' : '') })()],

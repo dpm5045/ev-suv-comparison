@@ -2,8 +2,8 @@
  * Generated copy for SEO pages (FAQ, metadata, OG labels), built from
  * structured values so that it never claims more than the data shows:
  *   - no "higher / longer / cheaper" without a strict inequality (ties say so);
- *   - "EPA" only for ranges that are EPA figures (manufacturer estimates are
- *     listed in scripts/refresh/accepted.json and are labelled as estimates);
+ *   - "EPA" only for verified EPA ratings (none until WP-J.3); manufacturer
+ *     estimates (listed in scripts/refresh/accepted.json) are labelled as such;
  *   - "starts at … MSRP" only from configurations sold new today.
  * Pure functions over rows passed in.
  */
@@ -13,16 +13,20 @@ import { isSoldNew } from './selection'
 
 type Row = DetailRow
 
-export type RangeBasis = 'epa' | 'manufacturer_estimate'
+export type RangeBasis = 'epa' | 'manufacturer_estimate' | 'unverified'
 
 const ESTIMATES: Record<string, string> = (accepted as { range_mi?: Record<string, string> }).range_mi ?? {}
 
 /**
  * What a row's range is. Interim (build spec WP-C) until the data stores
- * range_basis (WP-E): rows listed in accepted.json are manufacturer estimates.
+ * range_basis (WP-E):
+ *   - listed in accepted.json → a manufacturer estimate;
+ *   - otherwise → unverified. Not being an exception is not evidence of an EPA
+ *     rating, and today's EPA matches are numeric (plausibility, not identity).
+ *     A range is shown as EPA only once it has a reviewed EPA mapping (WP-J.3).
  */
 export function rangeBasis(r: Pick<Row, 'name'>): RangeBasis {
-  return ESTIMATES[r.name] ? 'manufacturer_estimate' : 'epa'
+  return ESTIMATES[r.name] ? 'manufacturer_estimate' : 'unverified'
 }
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null)
@@ -49,50 +53,61 @@ const spanText = (s: Span) => (s.min === s.max ? `${fmt(s.max)} miles` : `${fmt(
 /** Ranges split by basis. */
 export function rangeSpans(rows: Row[]) {
   const epa: number[] = []
+  const plain: number[] = []
   const est: number[] = []
   for (const r of rows) {
     const v = num(r.range_mi)
-    if (v !== null) (rangeBasis(r) === 'epa' ? epa : est).push(v)
+    if (v === null) continue
+    const b = rangeBasis(r)
+    ;(b === 'epa' ? epa : b === 'manufacturer_estimate' ? est : plain).push(v)
   }
-  return { epa: span(epa), est: span(est), all: span([...epa, ...est]) }
+  return { epa: span(epa), plain: span(plain), est: span(est), all: span([...epa, ...plain, ...est]) }
 }
 
-/** A stat or column label: "EPA Range" only when every range shown is an EPA figure. */
+/** A stat or column label: "EPA Range" only when every range shown is a verified EPA figure. */
 export function rangeLabel(rows: Row[]): string {
   const s = rangeSpans(rows)
-  return s.est ? 'Range' : 'EPA Range'
+  return s.epa && !s.plain && !s.est ? 'EPA Range' : 'Range'
 }
 
-/** The longest range with its basis, e.g. "335 mi" or "315 mi (maker est.)". */
+const estMark = (r: Row) => (rangeBasis(r) === 'manufacturer_estimate' ? ' (maker est.)' : '')
+
+/** The longest range, marked when it is a manufacturer estimate, e.g. "335 mi" or "315 mi (maker est.)". */
 export function maxRangeText(rows: Row[]): string | null {
   let best: Row | null = null
   for (const r of rows) {
     const v = num(r.range_mi)
     if (v === null) continue
     const b = best ? num(best.range_mi)! : -1
-    // On a tie, prefer the EPA figure
-    if (v > b || (v === b && rangeBasis(r) === 'epa')) best = r
+    // On a tie, prefer a figure that is not a manufacturer estimate
+    if (v > b || (v === b && rangeBasis(r) !== 'manufacturer_estimate')) best = r
   }
   if (!best) return null
-  return `${fmt(best.range_mi as number)} mi${rangeBasis(best) === 'epa' ? '' : ' (maker est.)'}`
+  return `${fmt(best.range_mi as number)} mi${estMark(best)}`
 }
 
-/** One range value for tables: EPA figures plain, estimates marked. */
+/** One range value for tables, marked when it is a manufacturer estimate. */
 export function rangeCell(r: Row): string | null {
   const v = num(r.range_mi)
   if (v === null) return null
-  return `${fmt(v)} mi${rangeBasis(r) === 'epa' ? '' : ' (maker est.)'}`
+  return `${fmt(v)} mi${estMark(r)}`
 }
 
-/** "an EPA-estimated range of 253 to 300 miles, and up to 315 miles by the manufacturer's estimate" */
+/**
+ * "a range of 253 to 300 miles, and up to 315 miles by the manufacturer's
+ * estimate for trims not yet rated". "EPA-estimated" only when every
+ * non-estimate figure is a verified EPA rating.
+ */
 function rangeSentence(rows: Row[]): string | null {
   const s = rangeSpans(rows)
-  if (s.epa && s.est) {
-    const estPart = s.est.max > s.epa.max ? `up to ${fmt(s.est.max)} miles` : spanText(s.est)
-    return `an EPA-estimated range of ${spanText(s.epa)}, and ${estPart} by the manufacturer's estimate for trims EPA has not rated`
+  const rated = span([s.epa, s.plain].flatMap((x) => (x ? [x.min, x.max] : [])))
+  const lead = rated ? `${s.epa && !s.plain ? 'an EPA-estimated range' : 'a range'} of ${spanText(rated)}` : null
+  if (lead && s.est) {
+    const estPart = s.est.max > rated!.max ? `up to ${fmt(s.est.max)} miles` : spanText(s.est)
+    return `${lead}, and ${estPart} by the manufacturer's estimate for trims not yet rated`
   }
-  if (s.epa) return `an EPA-estimated range of ${spanText(s.epa)}`
-  if (s.est) return `a manufacturer-estimated range of ${spanText(s.est)} (not yet rated by EPA)`
+  if (lead) return lead
+  if (s.est) return `a manufacturer-estimated range of ${spanText(s.est)} (not yet independently rated)`
   return null
 }
 
@@ -197,7 +212,8 @@ export function comparisonFaq(nameA: string, a: Row, nameB: string, b: Row, data
   const wr = compareMetric(ra, rb)
   if (wr) {
     const bothEpa = rangeBasis(a) === 'epa' && rangeBasis(b) === 'epa'
-    const kind = bothEpa ? 'EPA-estimated range' : 'range (at least one figure is a manufacturer estimate)'
+    const anyEst = rangeBasis(a) === 'manufacturer_estimate' || rangeBasis(b) === 'manufacturer_estimate'
+    const kind = bothEpa ? 'EPA-estimated range' : anyEst ? 'range (at least one figure is a manufacturer estimate)' : 'range'
     out.push({
       q: `Which has more range, the ${nameA} or ${nameB}?`,
       a: wr === 'tie'

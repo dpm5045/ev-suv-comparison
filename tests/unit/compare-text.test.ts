@@ -61,33 +61,40 @@ describe('comparisonFaq', () => {
   })
 })
 
-describe('range basis on real data (Lexus TZ: one EPA-rated trim, two estimates)', () => {
+describe('range basis: unverified by default (not being an exception is not an EPA rating)', () => {
   const tz = trimsOf('Lexus TZ')
 
-  it('labels mixed-basis ranges "Range", never "EPA Range"', () => {
-    expect(tz.some((r) => rangeBasis(r) === 'manufacturer_estimate')).toBe(true)
-    expect(rangeLabel(tz)).toBe('Range')
+  it('treats a range that is not a listed manufacturer estimate as unverified, not EPA', () => {
+    expect(rangeBasis(row({ range_mi: 300 }))).toBe('unverified')
+    // No range has a reviewed EPA mapping yet (WP-J.3), so nothing is EPA
+    expect(DATA.details.filter((r) => rangeBasis(r) === 'epa')).toHaveLength(0)
   })
 
-  it('splits the FAQ range sentence by basis', () => {
+  it('labels every vehicle "Range", never "EPA Range", while no rating is verified', () => {
+    for (const v of new Set(DATA.details.map((r) => r.vehicle))) expect(rangeLabel(trimsOf(v))).toBe('Range')
+  })
+
+  it('splits the FAQ range sentence by basis, with no EPA claim', () => {
     const f = vehicleFaq('Lexus TZ', tz, DATA_YEAR).find((x) => x.q.startsWith('What is the range'))!
-    const epaVals = tz.filter((r) => rangeBasis(r) === 'epa').map((r) => r.range_mi as number)
-    const estMax = Math.max(...tz.filter((r) => rangeBasis(r) !== 'epa').map((r) => r.range_mi as number))
-    expect(f.a).toContain(`an EPA-estimated range of ${Math.max(...epaVals)} miles`)
+    const plain = tz.filter((r) => rangeBasis(r) === 'unverified').map((r) => r.range_mi as number)
+    const estMax = Math.max(...tz.filter((r) => rangeBasis(r) === 'manufacturer_estimate').map((r) => r.range_mi as number))
+    expect(f.a).toContain(`a range of ${Math.max(...plain)} miles`)
     expect(f.a).toContain(`up to ${estMax} miles by the manufacturer's estimate`)
+    expect(f.a).not.toMatch(/\bEPA\b/)
   })
 
   it('marks estimate cells and the max range when it is an estimate', () => {
     const est = tz.find((r) => rangeBasis(r) === 'manufacturer_estimate')!
     expect(rangeCell(est)).toMatch(/\(maker est\.\)$/)
+    expect(rangeCell(row({ range_mi: 300 }))).toBe('300 mi')
     const max = Math.max(...tz.map((r) => r.range_mi as number))
-    const maxIsEstimate = tz.filter((r) => r.range_mi === max).every((r) => rangeBasis(r) !== 'epa')
+    const maxIsEstimate = tz.filter((r) => r.range_mi === max).every((r) => rangeBasis(r) === 'manufacturer_estimate')
     expect(maxRangeText(tz)!.endsWith('(maker est.)')).toBe(maxIsEstimate)
   })
 
-  it('keeps "EPA Range" for a vehicle whose ranges are all EPA figures', () => {
-    const allEpa = [...new Set(DATA.details.map((r) => r.vehicle))].find((v) => trimsOf(v).every((r) => rangeBasis(r) === 'epa') && trimsOf(v).some((r) => typeof r.range_mi === 'number'))!
-    expect(rangeLabel(trimsOf(allEpa))).toBe('EPA Range')
+  it('compares two unverified ranges without calling them EPA', () => {
+    const f = comparisonFaq('A', row({ range_mi: 320 }), 'B', row({ range_mi: 300 }), DATA_YEAR).find((x) => x.q.includes('range'))!
+    expect(f.a).toBe('The A has a longer range at 320 miles compared to 300 miles for representative trims.')
   })
 })
 

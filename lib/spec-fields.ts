@@ -73,7 +73,7 @@ export const SPEC_SECTIONS: SpecSection[] = [
     title: 'Range & Charging',
     fields: [
       {
-        label: 'EPA Range',
+        label: 'Range',
         // Manufacturer estimates (not EPA figures) are marked "(maker est.)"
         render: r => rangeCell(r) ?? fmtNum(r.range_mi).text,
         rawNum: r => nv(r.range_mi), higherIsBetter: true,
