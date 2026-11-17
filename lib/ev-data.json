@@ -109,8 +109,8 @@
       "y2023": 0,
       "y2024": 0,
       "y2025": 8,
-      "y2026": 6,
-      "total": 14,
+      "y2026": 5,
+      "total": 13,
       "y2027": 0
     },
     {
@@ -230,9 +230,9 @@
     "y2023": 10,
     "y2024": 23,
     "y2025": 41,
-    "y2026": 46,
+    "y2026": 45,
     "y2027": 34,
-    "total": 166
+    "total": 165
   },
   "us_ev_sales": {
     "note": "Total US plug-in electric vehicle (BEV + PHEV) sales by year, in thousands. Sources: Cox Automotive, Argonne National Laboratory, CleanTechnica, EIA.",

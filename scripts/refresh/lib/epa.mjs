@@ -82,13 +82,13 @@ function seatsMatch(seats, model) {
   return true
 }
 
-/** The EPA variants a row can be: same drive type, then same seating, each only if any are left. */
-function candidatesFor(row, variants) {
-  const all = variants ?? []
-  const sameDrive = all.filter((v) => driveMatches(row.drivetrain, v.drive))
-  const byDrive = sameDrive.length ? sameDrive : all
-  const sameSeats = byDrive.filter((v) => seatsMatch(row.seats, v.model))
-  return sameSeats.length ? sameSeats : byDrive
+/**
+ * The EPA variants a row can be: same drive type and compatible seating.
+ * Fails closed: when no variant fits the row's drive type or seating, the
+ * answer is none (the row is reported as unmatched), never "any variant".
+ */
+export function candidatesFor(row, variants) {
+  return (variants ?? []).filter((v) => driveMatches(row.drivetrain, v.drive) && seatsMatch(row.seats, v.model))
 }
 
 function driveMatches(rowDrive, epaDrive) {
@@ -111,6 +111,9 @@ export function checkRanges(data, index, accepted = {}) {
       r.otherYears = Object.keys(index[row.vehicle] ?? {}).sort()
     } else if (typeof row.range_mi !== 'number') {
       r.state = 'no_stored_range'
+    } else if (candidatesFor(row, variants).length === 0 && !accepted[row.name]) {
+      // EPA rates this model year, but no variant has this row's drive type and seating
+      r.state = 'unmatched'
     } else {
       const hits = hitsFor(row, variants)
       if (hits.length) {
@@ -135,7 +138,7 @@ export function checkRanges(data, index, accepted = {}) {
     const g = groups.get(key)
     g.total++
     if (r.state === 'consistent') g.consistent++
-    if (r.state === 'mismatch') { g.mismatch.push(r); g.epaRanges = r.epaRanges }
+    if (r.state === 'mismatch' || r.state === 'unmatched') { g.mismatch.push(r); g.epaRanges = r.epaRanges }
     if (r.state === 'accepted') g.accepted.push(r)
     if (r.state === 'no_stored_range') { g.noStored++; g.epaRanges = r.epaRanges }
     if (r.state === 'not_in_epa') g.notInEpa = true

@@ -113,7 +113,7 @@ jobs:
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
       # No `npm ci` here on purpose: the scripts the agent runs use Node's
       # standard library only, so no third-party package code shares this job
       # with the credential.
@@ -213,7 +213,7 @@ jobs:
           path: ${{ runner.temp }}/handover
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
       - name: Apply, install, test and build
         run: |
