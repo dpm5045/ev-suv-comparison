@@ -2,6 +2,23 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# threerowev — build rules
+## Stack
+[framework, hosting, where the EV data lives]
+
+## Workflow (always follow)
+1. Never commit to main. Create a branch: feature/<short-name>.
+2. For anything bigger than a small fix, write docs/plans/<name>.md first
+   and stop for review before building.
+3. Run `npm run validate` before opening a PR.
+4. Open a PR with `gh pr create`. Summarize what changed and why.
+5. After Codex reviews, read comments with `gh pr view --comments`,
+   fix or reply to each, and push.
+
+## Data rules
+- Every spec value needs a source URL in the data file.
+- Units: miles, inches, lbs, kWh. No mixing.
+
 ## Commands
 
 ```bash
