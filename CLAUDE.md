@@ -4,24 +4,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # threerowev — build rules
 ## Stack
-[framework, hosting, where the EV data lives]
+- **Framework:** Next.js 16 App Router, React 19, TypeScript; statically generated pages plus one runtime route (`/og` images).
+- **Hosting:** Vercel. `master` deploys to threerowev.com; every PR gets a preview deploy.
+- **Data:** `lib/ev-data.json` (one row per trim, schema version 2); sources in `lib/ev-data.provenance.json`; loaded and enriched by `lib/data.ts`. Weekly refresh workflows live in `.github/workflows/` (see "Pre-owned pricing and provenance" below).
 
 ## Workflow (always follow)
-1. Never commit to main. Create a branch: feature/<short-name>.
+1. Never commit to `master` (it is protected by the `protect-main` ruleset: PRs only, conversations resolved). Create a branch: `feature/<short-name>`; this repo also uses `fix/`, `docs/`, `ci/`, `chore/` and `build/` prefixes.
 2. For any change bigger than a small fix, plan first:
    1. Write the plan to docs/plans/<name>.md and commit it to the feature branch.
    2. Run: codex exec "Review docs/plans/<name>.md as a senior architect.
       Follow the Plan Review Rules in AGENTS.md. List problems by severity."
    3. Revise the plan based on the findings. Show the owner Codex's critique
       and your changes, then stop for the owner's go-ahead before building.
-3. Run `npm run validate` before opening a PR.
-4. Open a PR with `gh pr create`. Summarize what changed and why.
-5. After Codex reviews, read comments with `gh pr view --comments`,
-   fix or reply to each, and push.
+3. Before opening a PR, run the full check suite (CI runs the same on every PR):
+   `npm run validate && npm run lint && npm run typecheck && npm run test:refresh && npm run test:unit && npm run build && npm run test:output && npx playwright test`
+4. Before opening a PR, run `codex review --base master`, fix the valid findings,
+   and list any you disagree with (see rule 7).
+5. Open a PR with `gh pr create`. Summarize what changed and why.
+6. After Codex reviews the PR, read its comments (`gh pr view --comments`, and the
+   review threads through the API), then fix or reply to each, and push. The
+   owner resolves conversations and merges.
+7. **Never silently dismiss a Codex finding.** Any finding you decline to fix goes
+   to the owner with your reasoning, in the PR and in your summary.
 
 ## Data rules
-- Every spec value needs a source URL in the data file.
+- Every spec value needs a source: a record in `lib/ev-data.provenance.json`, keyed by the row's `id`, with `source_url`, `verified_on` and a quoted `evidence`. No source, no change.
 - Units: miles, inches, lbs, kWh. No mixing.
+- Schema version 2: unique permanent `id` per trim; `availability` (only `new` counts as sold new); `msrp` is a number or null (never text like "N/A" or "TBD"); `msrp_status` says what a price means. Details under "Data editing checklist".
 
 ## Commands
 
@@ -148,4 +157,4 @@ Aim to create a checkpoint commit roughly every 30–60 minutes of active coding
 
 # Codex Reviews
 
-before opening a PR, run codex review and address findings
+Before opening a PR, run `codex review --base master` (or `/codex:review` if the plugin is available), fix valid findings, and list any you disagree with. Codex also reviews every PR automatically on GitHub; its review rules are in `AGENTS.md`.

@@ -9343,13 +9343,6 @@
       "preowned_range": "$56,000 - $62,000"
     },
     {
-      "name": "Hyundai IONIQ 9, 2025, N/A (first model year is 2026 in US)",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2025,
-      "trim": "N/A (first model year is 2026 in US)",
-      "preowned_range": "N/A - no US MY2025 / no used market"
-    },
-    {
       "name": "Volvo EX90, 2025, Twin Motor Plus 7-Seater",
       "vehicle": "Volvo EX90",
       "year": 2025,
@@ -9649,27 +9642,6 @@
       "year": 2027,
       "trim": "Limited (expected)",
       "preowned_range": "No used market yet"
-    },
-    {
-      "name": "Hyundai IONIQ 9, 2024, N/A (IONIQ 9 not offered; first MY 2026 in US)",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2024,
-      "trim": "N/A (IONIQ 9 not offered; first MY 2026 in US)",
-      "preowned_range": "N/A - no US model year / no used market"
-    },
-    {
-      "name": "Hyundai IONIQ 9, 2023, N/A (IONIQ 9 not offered; first MY 2026 in US)",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2023,
-      "trim": "N/A (IONIQ 9 not offered; first MY 2026 in US)",
-      "preowned_range": "N/A - no US model year / no used market"
-    },
-    {
-      "name": "Kia EV9, 2023, N/A (first model year is 2024 in US)",
-      "vehicle": "Kia EV9",
-      "year": 2023,
-      "trim": "N/A (first model year is 2024 in US)",
-      "preowned_range": "N/A - no US MY2023 / no used market"
     },
     {
       "name": "Kia EV9, 2027, Light",
