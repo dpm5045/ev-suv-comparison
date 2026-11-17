@@ -436,6 +436,14 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                   <tr key={origIdx} data-clickable="true" onClick={() => onRowClick(origIdx)}>
                     <td className="col-sticky">
                       <VehicleBadge vehicle={r.vehicle} />
+                      {/* The row is also clickable; this is the keyboard and screen-reader way in */}
+                      <button
+                        type="button"
+                        className="view-details-btn"
+                        onClick={(e) => { e.stopPropagation(); onRowClick(origIdx) }}
+                      >
+                        Details<span className="sr-only">: {r.year} {r.vehicle} {r.trim}{r.seats ? `, ${r.seats}-seat` : ''}</span>
+                      </button>
                       <div className="sticky-subtitle">
                         {r.year ? `'${String(r.year).slice(-2)}` : ''}
                         {r.year && r.trim ? ' · ' : ''}
@@ -503,7 +511,13 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                   >
                     <span aria-hidden="true">↗</span>
                   </Link>
-                  <span className="cmp-card-tap-hint">Tap for full specs →</span>
+                  <button
+                    type="button"
+                    className="cmp-card-tap-hint view-details-link"
+                    onClick={(e) => { e.stopPropagation(); onRowClick(origIdx) }}
+                  >
+                    Tap for full specs<span className="sr-only">: {r.year} {r.vehicle} {r.trim}</span> <span aria-hidden="true">→</span>
+                  </button>
                 </div>
                 <div className="cmp-card-year-trim">
                   {r.year} · {r.trim}{r.drivetrain ? ` · ${r.drivetrain}` : ''}

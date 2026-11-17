@@ -135,29 +135,29 @@ export default function SideBySideTab() {
             </div>
             <div className="sbs-slot-selects">
               <div className="filter-group">
-                <span className="filter-label">Vehicle</span>
-                <select value={slots[i].vehicle} onChange={e => updateSlot(i, 'vehicle', e.target.value)}>
+                <label className="filter-label" htmlFor={`sbs-${i}-vehicle`}><span className="sr-only">Car {i + 1} </span>Vehicle</label>
+                <select id={`sbs-${i}-vehicle`} value={slots[i].vehicle} onChange={e => updateSlot(i, 'vehicle', e.target.value)}>
                   <option value="">Select vehicle…</option>
                   {allVehicles.map(v => <option key={v} value={v}>{v}</option>)}
                 </select>
               </div>
               <div className="filter-group">
-                <span className="filter-label">Year</span>
-                <select value={slots[i].year} disabled={!slots[i].vehicle} onChange={e => updateSlot(i, 'year', e.target.value)}>
+                <label className="filter-label" htmlFor={`sbs-${i}-year`}><span className="sr-only">Car {i + 1} </span>Year</label>
+                <select id={`sbs-${i}-year`} value={slots[i].year} disabled={!slots[i].vehicle} onChange={e => updateSlot(i, 'year', e.target.value)}>
                   <option value="">Select year…</option>
                   {slotData[i].years.map(y => <option key={y} value={String(y)}>{y}</option>)}
                 </select>
               </div>
               <div className="filter-group">
-                <span className="filter-label">Seats</span>
-                <select value={slots[i].seats} disabled={!slots[i].year} onChange={e => updateSlot(i, 'seats', e.target.value)}>
+                <label className="filter-label" htmlFor={`sbs-${i}-seats`}><span className="sr-only">Car {i + 1} </span>Seats</label>
+                <select id={`sbs-${i}-seats`} value={slots[i].seats} disabled={!slots[i].year} onChange={e => updateSlot(i, 'seats', e.target.value)}>
                   <option value="">Select seats…</option>
                   {slotData[i].seatOptions.map(s => <option key={s} value={String(s)}>{s}-seat</option>)}
                 </select>
               </div>
               <div className="filter-group">
-                <span className="filter-label">Trim</span>
-                <select value={slots[i].trim} disabled={!slots[i].seats} onChange={e => updateSlot(i, 'trim', e.target.value)}>
+                <label className="filter-label" htmlFor={`sbs-${i}-trim`}><span className="sr-only">Car {i + 1} </span>Trim</label>
+                <select id={`sbs-${i}-trim`} value={slots[i].trim} disabled={!slots[i].seats} onChange={e => updateSlot(i, 'trim', e.target.value)}>
                   <option value="">Select trim…</option>
                   {slotData[i].trims.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>

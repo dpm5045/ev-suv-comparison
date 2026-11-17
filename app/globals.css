@@ -9,7 +9,7 @@
   --border-light: #354059;
   --text: #e8ecf4;
   --text-muted: #8b96ad;
-  --text-dim: #5c6780;
+  --text-dim: #7b8aac; /* AA: 5.1:1 on surface (was #5c6780, 3.1:1) */
   --accent: #5ba4f5;
   --accent-dim: #2d5a9e;
   --accent-glow: rgba(91, 164, 245, 0.12);
@@ -38,8 +38,8 @@ html[data-theme="light"] {
   --border: #e0dbd3;
   --border-light: #d4cdc4;
   --text: #1c1917;
-  --text-muted: #8c8279;
-  --text-dim: #a39e97;
+  --text-muted: #5f5851; /* AA (was #8c8279, 3.8:1) */
+  --text-dim: #6f6b67; /* AA: 5.3:1 (was #a39e97, 2.7:1) */
   --accent: #2563eb;
   --accent-dim: #93bbfd;
   --accent-glow: rgba(37, 99, 235, 0.08);
@@ -2624,7 +2624,6 @@ html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --car
 }
 .compare-cell-worst {
   color: var(--red) !important;
-  opacity: 0.8;
 }
 
 /* ── Footer ── */
@@ -3516,3 +3515,24 @@ html[data-theme="light"] .accessories-card[data-category="vehicle"]      { --car
 .faq-item { border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; background: var(--surface); }
 .faq-q { font-weight: 600; margin: 0 0 4px; }
 .faq-a { margin: 0; color: var(--text-muted); line-height: 1.5; }
+
+/* ── Accessibility helpers (WP-K.1) ── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+/* Buttons that replaced text hints keep the hint's look */
+.view-details-link, button.spec-section-title {
+  background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left;
+}
+.view-details-link { color: var(--text-dim); }
+button.spec-section-title { width: 100%; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); }
+/* Small "Details" button in the comparison table's first column */
+.view-details-btn {
+  display: inline-block; margin-left: 8px; padding: 2px 8px; font-size: 11px; line-height: 1.4;
+  background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); border-radius: 999px; cursor: pointer;
+}
+.view-details-btn:hover { color: var(--text); }
+.view-details-btn:focus-visible, .view-details-link:focus-visible, button.spec-section-title:focus-visible, .detail-close:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}

@@ -206,7 +206,7 @@ export default async function VehiclePage({ params }: Props) {
 
         {/* Desktop: comparison table */}
         <div className="cmp-table-view">
-          <div className="table-wrap trim-table-wrap">
+          <div className="table-wrap trim-table-wrap" tabIndex={0} role="region" aria-label="All trims table (scrolls sideways)">
             <table className="trim-compare-table">
               <thead>
                 <tr>
