@@ -7,7 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev      # Start dev server (localhost:3000)
 npm run build    # Production build
-npm run lint     # ESLint (explicit; app, components, lib, tests)
+npm run lint     # ESLint 9 flat config (eslint.config.mjs); Next 16 has no `next lint`
+npm run typecheck          # next typegen (route types) + tsc --noEmit
 npm run test:unit          # Vitest unit tests for app/domain code (tests/unit)
 npm run test:output        # After a build: checks generated FAQ, structured data and metadata (tests/output)
 npm run validate # Data checks (also runs before every build)
@@ -23,7 +24,7 @@ node scripts/export-sheet.mjs <dir>                     # CSV per table for the 
 
 ## Architecture
 
-This is a **Next.js 14 App Router** app (TypeScript) focused on comparing 3-row AWD electric SUVs.
+This is a **Next.js 16 App Router** app (React 19, TypeScript) focused on comparing 3-row AWD electric SUVs.
 
 ### Data flow
 

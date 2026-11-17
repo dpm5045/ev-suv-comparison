@@ -6,8 +6,7 @@ import { getVehicleBySlug, getTrimsForVehicle, getUniqueVehicles, toSlug } from 
 import { maxRangeText, priceSpans, rangeLabel } from '@/lib/compare-text'
 import { dataYear } from '@/lib/data-stories'
 
-export const runtime = 'edge'
-
+// Node.js runtime (the default): Next 16 deprecates the Edge runtime
 function getBrandColor(vehicle: string) {
   const t = CLASS_THEMES[VEHICLE_CLASSES[vehicle] ?? '']
   return t ? { bg: t.darkBg, fg: t.darkFg } : { bg: '#1a2a3a', fg: '#5ba4f5' }
@@ -145,7 +144,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const type = searchParams.get('type') ?? 'home'
 
-  let element: JSX.Element
+  let element: React.JSX.Element
 
   if (type === 'vehicle') {
     const name = searchParams.get('name') ?? ''
