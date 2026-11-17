@@ -7,6 +7,7 @@ import Link from 'next/link'
 import VehicleBadge from './VehicleBadge'
 import SpecSection from './SpecSection'
 import { SPEC_SECTIONS } from '@/lib/spec-fields'
+import { rangeCell, rangeLabel } from '@/lib/compare-text'
 
 interface Props {
   vehicle: string | null
@@ -69,6 +70,7 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
     }
 
     return {
+      rangeLabel: rangeLabel(trims),
       range: rangeText(ranges, ' mi'),
       cargo: rangeText(cargos, ' cu ft'),
       accel: rangeText(accel, ' sec'),
@@ -94,7 +96,7 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
             {/* Vehicle Summary */}
             <div className="vsp-summary-grid">
               {([
-                ['EPA Range', summary.range],
+                [summary.rangeLabel, summary.range],
                 ['Cargo (3rd Row)', summary.cargo],
                 ['0–60 mph', summary.accel],
                 ['DC 10–80%', summary.dcCharge],
@@ -139,7 +141,7 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
 
                 <div className="detail-grid">
                   {([
-                    ['EPA Range', (() => { const f = fmtNum(selectedTrim.range_mi); return f.text + (typeof selectedTrim.range_mi === 'number' ? ' mi' : '') })()],
+                    ['EPA Range', rangeCell(selectedTrim) ?? fmtNum(selectedTrim.range_mi).text],
                     ['Cargo (3rd Row)', (() => { const f = fmtNum(selectedTrim.cargo_behind_3rd_cu_ft); return f.text + (typeof selectedTrim.cargo_behind_3rd_cu_ft === 'number' ? ' cu ft' : '') })()],
                     ['0–60 mph', (() => { const f = fmtNum(selectedTrim.zero_to_60_sec); return f.text + (typeof selectedTrim.zero_to_60_sec === 'number' ? ' sec' : '') })()],
                     ['DC 10–80%', (() => { const f = fmtNum(selectedTrim.dc_fast_charge_10_80_min); return f.text + (typeof selectedTrim.dc_fast_charge_10_80_min === 'number' ? ' min' : '') })()],

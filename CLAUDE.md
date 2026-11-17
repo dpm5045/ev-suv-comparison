@@ -9,6 +9,7 @@ npm run dev      # Start dev server (localhost:3000)
 npm run build    # Production build
 npm run lint     # ESLint (explicit; app, components, lib, tests)
 npm run test:unit          # Vitest unit tests for app/domain code (tests/unit)
+npm run test:output        # After a build: checks generated FAQ, structured data and metadata (tests/output)
 npm run validate # Data checks (also runs before every build)
 npm run refresh:preowned   # Pre-owned repricing from CarGurus; dry run unless --apply
 npm run refresh:watch      # EPA range check + manufacturer price-page watch; report only

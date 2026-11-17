@@ -8,6 +8,7 @@
 
 import type { DetailRow } from './data'
 import { fmtMoney, fmtNum } from './utils'
+import { rangeCell } from './compare-text'
 
 /* ── Types ─────────────────────────────────────────────────────────── */
 
@@ -73,7 +74,8 @@ export const SPEC_SECTIONS: SpecSection[] = [
     fields: [
       {
         label: 'EPA Range',
-        render: r => { const f = fmtNum(r.range_mi); return f.text + (typeof r.range_mi === 'number' ? ' mi' : '') },
+        // Manufacturer estimates (not EPA figures) are marked "(maker est.)"
+        render: r => rangeCell(r) ?? fmtNum(r.range_mi).text,
         rawNum: r => nv(r.range_mi), higherIsBetter: true,
       },
       {

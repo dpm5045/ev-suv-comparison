@@ -13,7 +13,8 @@
     "start": "next start",
     "lint": "eslint app components lib tests --ext .ts,.tsx",
     "test:e2e": "playwright test",
-    "test:unit": "vitest run"
+    "test:unit": "vitest run",
+    "test:output": "vitest run --config vitest.output.config.ts"
   },
   "dependencies": {
     "chart.js": "^4.5.1",

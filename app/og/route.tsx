@@ -3,6 +3,8 @@ import { NextRequest } from 'next/server'
 import { DATA } from '@/lib/data'
 import { CLASS_THEMES, VEHICLE_CLASSES } from '@/lib/vehicle-theme'
 import { getVehicleBySlug, getTrimsForVehicle, getUniqueVehicles, toSlug } from '@/lib/slugs'
+import { maxRangeText, priceSpans, rangeLabel } from '@/lib/compare-text'
+import { dataYear } from '@/lib/data-stories'
 
 export const runtime = 'edge'
 
@@ -54,14 +56,16 @@ function VehicleImage({ vehicle }: { vehicle: string }) {
   const trims = getTrimsForVehicle(vehicle)
   const { fg } = getBrandColor(vehicle)
 
-  const prices = trims.map(t => t.msrp).filter((p): p is number => typeof p === 'number')
-  const ranges = trims.map(t => t.range_mi).filter((r): r is number => typeof r === 'number')
   const seatsList = [...new Set(trims.map(t => t.seats).filter((s): s is number => s !== null))]
 
-  const priceRange = prices.length
-    ? `$${Math.min(...prices).toLocaleString()}–$${Math.max(...prices).toLocaleString()}`
-    : 'TBD'
-  const maxRange = ranges.length ? `${Math.max(...ranges)} mi` : '—'
+  // Same rules as the page copy: current MSRPs only, range labelled by basis
+  const { current, past } = priceSpans(trims, dataYear)
+  const priceLabel = 'Price'
+  const priceRange = current
+    ? `$${current.min.toLocaleString()}–$${current.max.toLocaleString()}`
+    : past ? 'Not sold new' : 'TBD'
+  const maxRange = maxRangeText(trims) ?? '—'
+  const rangeStatLabel = rangeLabel(trims)
   const seatsText = seatsList.length ? seatsList.join('/') + ' seats' : '—'
 
   return (
@@ -81,8 +85,8 @@ function VehicleImage({ vehicle }: { vehicle: string }) {
         borderRadius: '2px', marginBottom: '40px',
       }} />
       <div style={{ display: 'flex', gap: '40px' }}>
-        <Stat label="Price" value={priceRange} color={fg} />
-        <Stat label="EPA Range" value={maxRange} color={fg} />
+        <Stat label={priceLabel} value={priceRange} color={fg} />
+        <Stat label={rangeStatLabel} value={maxRange} color={fg} />
         <Stat label="Seating" value={seatsText} color={fg} />
       </div>
     </div>
