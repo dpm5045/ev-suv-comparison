@@ -38,7 +38,7 @@ There are no user accounts, no database, and no server-side state. The site is a
 
 | Layer | Choice |
 |---|---|
-| Framework | **Next.js 14.2 (App Router)**, React 18, TypeScript (strict type check passes; `next lint` is clean) |
+| Framework | **Next.js 16.4 (App Router)**, React 19, TypeScript (strict). ESLint 9 flat config (`npm run lint`); `npm run typecheck` generates route types then runs tsc |
 | Charts | Chart.js 4 via react-chartjs-2 |
 | Styling | One global stylesheet, `app/globals.css` (~3,500 lines), with CSS custom properties for light and dark themes. One CSS module (`tech-stack`). |
 | Data | `lib/ev-data.json` (~340 KB), imported at build time |
@@ -299,7 +299,7 @@ These are written instructions for running Claude Code by hand, not code:
 | `validate-data.js` | `prebuild` (every Vercel build), the pipeline workflows, and the agent's `verify` job | Data integrity (section 4.3) |
 | `npm run test:refresh` | Every pipeline workflow before it runs; the agent's `verify` job | 30 unit tests: CarGurus parsing, repricing thresholds, EPA matching (seat variants, range-fix anchors), price extraction, destination handling, gap detection. Uses HTML and EPA fixtures. |
 | `next build` | Vercel; the agent's `verify` job | Type check and static generation of all 227 pages |
-| `tsc --noEmit`, `next lint` | Local only | Both clean today |
+| `npm run lint`, `npm run typecheck` | CI (`ci.yml`) on every PR and push to master | Both clean |
 | Playwright `tests/e2e/smoke.spec.ts` | **Local only** | 13 smoke tests: every route renders, the redirects work, the Market Insights charts mount, and Speed Dating doesn't overflow at phone width |
 
 There are **no unit tests for the app's own logic**: `lib/speed-dating.ts`, `rankSelfDriving`, `data-stories`, OTD math and formatters.
@@ -362,7 +362,7 @@ The review found these while preparing this document. They are ordered roughly b
    - `scripts/archived/` and the one-off migration scripts at the root of `scripts/` are history.
 7. **Report HTML at the repo root:** `explore.html`, `market-insights.html` and `update-*.html` are tracked in git and belong in `docs/reports/` or nowhere.
 8. **Documentation drift:** `CLAUDE.md` still describes `/api/news` as a live Anthropic proxy, but it is a 404 stub. Either delete the route or fix the doc.
-9. **Next 15-style `params: Promise<…>` on Next 14** in the dynamic routes. It works, because awaiting a plain object is harmless, but it is wrong for the installed version. It does make a Next 15 upgrade easier.
+9. ~~Next 15-style `params: Promise<…>` on Next 14~~ Resolved: the app is on Next 16 (WP-D), where `params` is a Promise.
 10. **Large components and one large stylesheet.** `SpecSelectTab`, `DataExplorer` and `ComparisonV2Tab` are each 600–700 lines, and `globals.css` is about 3,500 lines. They work, but are the likeliest places for regressions.
 11. **Manual sync points** between `VEHICLE_CLASSES` / `CLASS_THEMES` and the CSS brand classes. The validator doesn't check that the CSS classes exist. Adding a vehicle means touching all three (documented in `CLAUDE.md`).
 12. **Mixed-type numeric fields.** Sentinels such as `"TBD"` and `"N/A - Not New"` in `number | string | null` fields push type checks into every consumer. A discriminated shape such as `{ value: number } | { status: 'tbd' | 'not_new' }`, or separate status fields, would be cleaner. It is a sizeable migration for modest gain.

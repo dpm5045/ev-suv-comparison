@@ -11,25 +11,26 @@
     "prebuild": "node scripts/validate-data.js",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint app components lib tests --ext .ts,.tsx",
+    "lint": "eslint app components lib tests",
     "test:e2e": "playwright test",
     "test:unit": "vitest run",
-    "test:output": "vitest run --config vitest.output.config.ts"
+    "test:output": "vitest run --config vitest.output.config.ts",
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "chart.js": "^4.5.1",
-    "next": "14.2.35",
-    "react": "^18",
+    "next": "16.4.6",
+    "react": "19.3.1",
     "react-chartjs-2": "^5.3.1",
-    "react-dom": "^18"
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.35",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.6",
     "sharp": "^0.34.5",
     "typescript": "^5",
     "vitest": "^3.2.7"

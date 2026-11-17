@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { DATA, isWatchlistVehicle } from '@/lib/data'
 import type { InsightFilters } from '../filter-types'
@@ -62,10 +62,11 @@ interface OverviewTabProps {
 }
 
 export default function OverviewTab({ condition, budget, pref1, pref2, onFiltersChange, onVehicleClick }: OverviewTabProps) {
-  const [initialized, setInitialized] = useState(false)
+  // Fill in the default picks once, on first load (a ref, not state: nothing re-renders)
+  const initialized = useRef(false)
   useEffect(() => {
-    if (initialized) return
-    setInitialized(true)
+    if (initialized.current) return
+    initialized.current = true
     const defaults: Partial<InsightFilters> = {}
     if (!condition) defaults.condition = SPEED_DATING_DEFAULTS.condition
     if (!budget) defaults.budget = SPEED_DATING_DEFAULTS.budget
@@ -94,37 +95,34 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   const activeBudget: string = settings.budget
   const sixSeatPicked = activePref1 === 'sixseat' || activePref2 === 'sixseat'
 
+  // Computed each render: ~165 rows, well under a millisecond, so no manual
+  // memoization (which React 19's compiler rules can't verify here).
+
   /* --- eligible configurations: condition and budget apply independently --- */
-  const filteredDetails = useMemo(
-    () => eligibleRows(DATA.details as Row[], {
-      condition: activeCondition,
-      budget: activeBudget,
-      sixSeat: sixSeatPicked,
-      dataYear,
-      exclude: isWatchlistVehicle,
-      minSeats: MIN_SPEED_DATING_SEATS,
-    }),
-    [activeCondition, activeBudget, sixSeatPicked],
-  )
+  const filteredDetails = eligibleRows(DATA.details as Row[], {
+    condition: activeCondition,
+    budget: activeBudget,
+    sixSeat: sixSeatPicked,
+    dataYear,
+    exclude: isWatchlistVehicle,
+    minSeats: MIN_SPEED_DATING_SEATS,
+  })
 
   /* --- ranked: each vehicle by its best real configuration --- */
-  const { ranked, effectivePrefs } = useMemo(() => {
-    const matches = rankConfigurations(filteredDetails, activePref1, activePref2, activeCondition)
-    const prefs = matches[0]?.metrics.map((m) => m.pref) ?? []
-    const list: Ranked[] = matches.map((m) => ({
-      match: m,
-      rank: m.rank,
-      score: Math.round(m.composite * 100),
-      bars: m.metrics.map((x, i) => ({
-        pref: x.pref,
-        label: prefLabel(x.pref),
-        value: formatMetric(x.pref, x.value, m.row),
-        fraction: x.share,
-        tone: i === 0 ? 'first' : 'second',
-      })),
-    }))
-    return { ranked: list, effectivePrefs: prefs as string[] }
-  }, [filteredDetails, activePref1, activePref2, activeCondition])
+  const matches = rankConfigurations(filteredDetails, activePref1, activePref2, activeCondition)
+  const effectivePrefs: string[] = matches[0]?.metrics.map((m) => m.pref) ?? []
+  const ranked: Ranked[] = matches.map((m) => ({
+    match: m,
+    rank: m.rank,
+    score: Math.round(m.composite * 100),
+    bars: m.metrics.map((x, i) => ({
+      pref: x.pref,
+      label: prefLabel(x.pref),
+      value: formatMetric(x.pref, x.value, m.row),
+      fraction: x.share,
+      tone: i === 0 ? 'first' : 'second',
+    })),
+  }))
 
   const isLight = useIsLightTheme()
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')

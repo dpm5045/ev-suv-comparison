@@ -36,16 +36,14 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
   )
 
   // Trim selector state — auto-select if only one trim
-  const [selectedTrimIdx, setSelectedTrimIdx] = useState<number | null>(null)
-
-  // Reset selection when vehicle changes; auto-select single-trim vehicles
-  useEffect(() => {
-    if (trims.length === 1) {
-      setSelectedTrimIdx(DATA.details.indexOf(trims[0]))
-    } else {
-      setSelectedTrimIdx(null)
-    }
-  }, [vehicle, trims])
+  // The pick belongs to the vehicle it was made for, so it resets when the
+  // vehicle changes (derived during render, no effect); single-trim vehicles
+  // are auto-selected.
+  const [pick, setPick] = useState<{ vehicle: string | null; idx: number | null }>({ vehicle: null, idx: null })
+  const selectedTrimIdx = pick.vehicle === vehicle
+    ? pick.idx
+    : trims.length === 1 ? DATA.details.indexOf(trims[0]) : null
+  const setSelectedTrimIdx = (idx: number | null) => setPick({ vehicle, idx })
 
   const selectedTrim = selectedTrimIdx !== null ? DATA.details[selectedTrimIdx] : null
 
