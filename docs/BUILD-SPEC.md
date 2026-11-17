@@ -1,7 +1,7 @@
-# ThreeRowEV: Remediation Build Spec (v2)
+# ThreeRowEV: Remediation Build Spec (v3)
 
-**Responds to:** "ThreeRowEV architecture and codebase audit" (2026-11-16, revision `0704645`) and "Review of ThreeRowEV remediation build spec" (2026-11-16).
-**Status:** v2, with the review's required revisions applied. **WP-A, WP-B and WP-C are approved to build.** The other work packages need sign-off on their revised designs, but the review's corrections are folded in.
+**Responds to:** "ThreeRowEV architecture and codebase audit" (2026-11-16, revision `0704645`), "Review of ThreeRowEV remediation build spec" (2026-11-16), and the reviewer's notes on v2 (2026-11-17).
+**Status:** v3. **WP-A, WP-B, WP-C and WP-D are built and live**, and WP-K is in progress. v3 makes the five targeted amendments the v2 review asked for before F, I and J are implemented, and fixes the J.1/J.2 inconsistency. See "What changed in v3".
 
 **Decisions taken:**
 - **D1: no 5-seat configurations in Speed Dating.** The reviewer recommended this and it was the original proposal. It is easy to reverse: one constant.
@@ -27,6 +27,17 @@ Open items are marked **[OPEN]**.
 | CSP | Defines collection, inline styles and the exact final header (WP-K). |
 | Pause and rollback | Publication is gated by a **compatibility version**, `workflow_dispatch` included. Rollback is tested end to end (WP-E). |
 
+## What changed in v3
+
+| v2 review item | Change in v3 |
+|---|---|
+| 1. Two required checks would block valid PRs (WP-I) | **One required check, `CI / build`, on every path.** Human PRs run it on `pull_request`. Automated writers open a PR and run the same `ci.yml` on its exact head SHA via `workflow_dispatch`, then auto-merge through the gate. `data-gate` is dropped. Positive and negative merge tests are added for both paths (I.1). |
+| 2. Approvals need a commit that doesn't exist yet; status names aren't proof (F.3) | Approvals bind to the **immutable base SHA plus a proposal hash** (the data diff), not a commit. The trusted origin is verified through the Actions API: a successful `workflow_dispatch` run of the approval workflow, on the default branch, by an actor with admin or maintain permission, with a matching approval artifact. A stored proposal can be re-verified and published after approval without regenerating it (F.3, I.1). |
+| 3. A "human PR" mode switched off the contract (F.2) | **One validation mode for every path.** Provenance, value consistency, identity and source rules are mandatory for human PRs too. Approval authorizes one specific exception; it never disables rules. **Every `availability` change** needs approval, which covers `needs_review → new` (F.2). |
+| 4. WP-C assumed unlisted ranges are EPA | **Fixed in code (PR #50).** The default is `unverified`, shown as "range". "EPA" appears only with a reviewed EPA mapping (WP-J.3), and today there are none (C, E.2). |
+| 5. F and G versus publication; E.3 detects but doesn't pause | **I depends on F, G and H**, and the affected publishers stay paused until all four have landed. E.3 adds an **explicit publication pause**: a repository variable checked at write time, workflows disabled and in-flight runs drained before the migration merges, and every writer checks that the current base equals its validated base before writing (E.3, I.3). |
+| J.1 vs J.2: deferrals resolve on `master` but live on `data-state` | Each outcome resolves when its backing record is **durably written to its actual destination**: `master` for data, provenance and `accepted.json`; `data-state` for `deferred.json` and `inbox.json` (J.1). |
+
 ## Work packages and dependencies
 
 ```mermaid
@@ -39,6 +50,7 @@ flowchart LR
   E --> G[WP-G Pre-owned provenance + derived tables]
   F --> H[WP-H Agent containment]
   F --> I[WP-I Publication flow + required check]
+  G --> I
   H --> I
   I --> J[WP-J Inbox lifecycle + data-state + EPA re-enable]
   A --> K[WP-K Accessibility + CSP + perf + cleanup]
@@ -46,17 +58,19 @@ flowchart LR
 
 | WP | Contents | Audit findings | Status | Size |
 |---|---|---|---|---|
-| **A** | Baseline CI, Vitest, Next 14.2.35, EPA auto-fix pause (fail-closed), JSON-LD escaping, EX90 count, PDF removal, doc corrections | F1 (bridge), F4 (pause), F8 (baseline), F10 (part) | **Build now** | 1–2 days |
-| **B** | Speed Dating scores real configurations; condition is independent of budget | F5, F6 | **Build now** | 1–2 days |
-| **C** | Tie-aware text; honest range basis (interim); visible FAQ | F7 | **Build now** | 1 day |
-| **D** | Upgrade to Next 16.x (supported) with React 19 | F1 | After A | 2–3 days |
+| **A** | Baseline CI, Vitest, Next 14.2.35, EPA auto-fix pause (fail-closed), JSON-LD escaping, EX90 count, PDF removal, doc corrections | F1 (bridge), F4 (pause), F8 (baseline), F10 (part) | **Done** (#44) | 1–2 days |
+| **B** | Speed Dating scores real configurations; condition is independent of budget | F5, F6 | **Done** (#45) | 1–2 days |
+| **C** | Tie-aware text; honest range basis (interim); visible FAQ | F7 | **Done** (#46); unverified-default correction in #50 | 1 day |
+| **D** | Upgrade to Next 16.x (supported) with React 19 | F1 | **Done** (#47) | 2–3 days |
 | **E** | Stable IDs; availability, price status and range basis; migration with review table; compatibility gate | F3, F4, F6, F7 | Revised design | 3–4 days |
 | **F** | Schema; diff validator; trusted approvals | F3 | Revised design | 3 days |
 | **G** | Pre-owned producer provenance; derived counts and pre-owned table | F3, F9 | Revised design | 2 days |
 | **H** | Agent containment, verified with canaries | F2 | Revised design | 3–5 days |
-| **I** | Proposal → verify → writer flow; required check; serialized writers | F8, F9 | Revised design | 3–4 days |
-| **J** | Inbox item lifecycle; `data-state`; EPA auto-fix on reviewed mappings | F4, F9 | Revised design | 3 days |
-| **K** | Accessible drawer; CSP; performance baseline; cleanup | F10 | After A | 3–5 days |
+| **I** | Proposal → verify → writer flow; one required check; serialized writers. **Needs F, G and H.** | F8, F9 | Revised design (v3) | 3–4 days |
+| **J** | Inbox item lifecycle; `data-state`; EPA auto-fix on reviewed mappings | F4, F9 | Revised design (v3) | 3 days |
+| **K** | Accessible drawer; CSP; performance baseline; cleanup | F10 | **In progress**: K.4 (#48), K.1 (#49) | 3–5 days |
+
+**Publication pause window.** From the moment WP-E's migration is about to merge until WP-F, WP-G and WP-I have all landed, the data publishers do not write (E.3). Data Watch may keep running in **report-only** mode: it reads sources and posts to the inbox, with no repository writes. The agent stays off.
 
 ---
 
@@ -148,17 +162,21 @@ flowchart LR
 - `lib/compare-text.ts`:
   - `compareMetric(a, b, { lowerIsBetter }) → { winner: 'a' | 'b' | 'tie' | null, a, b }`;
   - text builders that return tie wording for equal values.
-- **Range basis, interim.** `rangeBasis(row)` returns `'manufacturer_estimate'` when the row is in `scripts/refresh/accepted.json`, otherwise `'epa'`. Range text built over a span reports the basis per part. Example: "EPA range 253–300 mi; Lexus estimates up to 315 mi for the Premium". WP-E replaces this lookup with the stored field.
+- **Range basis, interim (corrected in v3, PR #50).** `rangeBasis(row)` returns:
+  - `'manufacturer_estimate'` when the row is in `scripts/refresh/accepted.json`;
+  - **otherwise `'unverified'`.** Absence from the exception list is not verification.
+
+  `'epa'` is reserved for ranges with a reviewed EPA mapping (WP-J.3). There are none today, so generated text says "range" and labels read "Range". Text built over a span reports the basis per part. Example: "a range of 253 miles, and up to 315 miles by the manufacturer's estimate for trims not yet rated". WP-E replaces the lookup with the stored field, using the same precedence.
 - Used by:
   - `app/compare/[slug]` (FAQ, metadata, visible copy);
-  - `app/vehicles/[slug]` (metadata description, FAQ, the "EPA Range" stat label);
+  - `app/vehicles/[slug]` (metadata description, FAQ, the range stat label);
   - `app/og` labels.
 - **Visible FAQ.** Every JSON-LD FAQ entry is rendered visibly, from the same array.
 - **Tests:**
   - Unit tests on the builders: equal values give tie text; a mixed-basis span names both bases.
   - Post-build tests load the generated HTML for every `/compare/*` and `/vehicles/*` page, parse the JSON-LD and the visible FAQ, and check them against expected values computed from the data with the same helpers:
     - every winner claim is a strict inequality on the structured values;
-    - no range from an accepted-estimate row is described as EPA;
+    - no range from an accepted-estimate row is described as EPA, and no page says "EPA" while none of its trims has a verified rating;
     - visible and JSON-LD FAQ text match.
   - Page-count equality (227) is a baseline smoke check only.
 
@@ -216,8 +234,24 @@ flowchart LR
   Generated text says "range" for `unverified` and "EPA range" only for `epa`.
 - **Provenance re-key.** Records are copied from a name key to every sibling ID, marked `"legacy": "name_keyed"`. A legacy record **cannot** set `range_basis: epa` and **cannot** act as an anchor or mapping for automatic EPA updates.
 
-### E.3 Compatibility gate (pause and rollback)
-- `ev-data.json` gains `schema_version` (2 after this package). Every publisher, scheduled or `workflow_dispatch`, reads `scripts/refresh/compat.json` (`{ "accepts_schema": [2] }`) **from the checked-out code** and refuses to publish if the data's version isn't accepted. This is what makes the pause real while code and data change.
+### E.3 Publication pause, compatibility gate and rollback
+The compatibility check **detects** a mismatch. It cannot stop an older job that already holds a matching old code and data pair. So the pause is explicit and has three layers.
+
+1. **Pause flag, checked at write time.** The repository variable `DATA_PUBLISH_PAUSED`, read through the API immediately before any repository write, as the writer's first step. If it is `true`, the writer stops without writing and records `paused` (not success) for the backup-schedule logic. This covers scheduled and `workflow_dispatch` runs alike, because the value is read live, not from the checked-out code.
+2. **Drain before merging a migration.** The runbook (`docs/runbooks/migration.md`) has five steps:
+   1. set `DATA_PUBLISH_PAUSED=true`;
+   2. `gh workflow disable` the three data workflows;
+   3. cancel queued runs, and wait until `gh run list --status in_progress` shows none for them;
+   4. merge the migration;
+   5. re-enable only the workflows whose code accepts the new schema, and clear the flag when WP-F, WP-G and WP-I have landed.
+
+   Steps 2 and 3 matter because the jobs running today predate the flag and cannot check it.
+3. **Base check before every write.** The writer compares the current `master` with the `base_sha` the proposal was validated against, and refuses to write if they differ (I.3). A stale job whose base predates the migration can never write after it.
+
+- **Compatibility gate (defense in depth).** `ev-data.json` gains `schema_version` (2 after this package). Every publisher reads `scripts/refresh/compat.json` (`{ "accepts_schema": [2] }`) from its checked-out code and refuses to publish if the data's version isn't accepted.
+- **Test:**
+  - with the flag set, a dispatched publisher reaches the writer and exits `paused` with no commit;
+  - a writer whose `base_sha` is behind `master` exits `base_moved` with no commit.
 - **Rollback test,** before merge, on a branch:
   1. migrate;
   2. run each publisher in dry-run mode;
@@ -240,16 +274,15 @@ This is a new directory, so nothing collides with the WP-K deletions. Those are 
 - `lib/data.ts` drops the double assertion in favour of `satisfies`, for compile-time typing.
 
 ### F.2 Diff validator (`scripts/validate-diff.mjs --base <sha> --head <sha>`)
-It takes **immutable SHAs** and fetches the history it needs. It never uses `origin/master`. It has two modes:
+It takes **immutable SHAs** and fetches the history it needs. It never uses `origin/master`.
 
-- `--mode data-proposal` (automated publishers and the agent): every rule below is enforced.
-- `--mode code-pr` (human PRs): the schema plus a report of data changes; protected-field changes are allowed, because a human authored the PR and reviews it.
+**One mode, every path.** The same rules apply to human PRs, automated publishers and the agent. There is no "human PR" relaxation: a person can't make an unsourced change or delete evidence through an ordinary PR either. A human-authored exception goes through the same trusted approval (F.3). Approval authorizes **one specific change**; it never switches rules off. PRs that don't touch data files pass trivially.
 
-| Rule (data-proposal mode) | Result |
+| Rule | Result |
 |---|---|
-| Protected field changed (`seats`, `cargo_behind_*`, `fold_flat`, `cargo_floor_width_in`) | **Error.** No in-band override. |
+| Protected field changed (`seats`, `cargo_behind_*`, `fold_flat`, `cargo_floor_width_in`) | **Error**, unless a trusted approval matches that exact change (F.3). Never authorized by any text in the proposal. |
 | Row removed or `id` changed | **Error**, unless a trusted approval exists (F.3). |
-| `availability` → `used_only`, or `announced` → `new` | **Error**, unless a trusted approval exists. |
+| **Any change to `availability`** (this covers `needs_review → new`, `announced → new` and `→ used_only`) | **Error**, unless a trusted approval matches it. A migration that introduces the field for every row (a `schema_version` bump) needs one approval for the migration as a whole (F.3, `field: "*"`). |
 | Sourced field changed or new row added without a provenance record whose `value` equals the stored value | **Error** |
 | Wrong source category for the field (see the source policy) | **Error** |
 | Evidence deleted, value mismatch, `legacy` record relabelled as verified, or `range_basis` upgraded without a reviewed mapping | **Error** |
@@ -264,13 +297,36 @@ It takes **immutable SHAs** and fetches the history it needs. It never uses `ori
   It is **trusted configuration**: the CODEOWNERS file assigns it to the owner, and a data proposal that edits it fails.
 
 ### F.3 Trusted approvals
-- Approvals are **not in any proposal-controlled text**. A maintainer runs the `approve-data-exception` workflow (`workflow_dispatch`; only users with write access can run it) with inputs `head_sha`, `id`, `field`, `old`, `new` and `reason`.
-- The workflow records the approval as a **commit status** on that exact SHA (`context: data-exception/<id>.<field>`), with the old and new values in the description.
-- `validate-diff` accepts an exception only if a matching status exists on the exact head SHA, with the same ID, field, old value and new value. Any new commit invalidates it, because the SHA changes.
-- **Acceptance:**
-  - an agent PR body containing `Allow-Protected` still fails;
-  - a protected change passes only with a matching approval status on the exact SHA;
-  - pushing another commit invalidates the approval.
+**What an approval binds to.** Not a commit SHA: for automated proposals that commit doesn't exist until after verification, which needs the approval. Instead, an approval binds to:
+- the immutable **`base_sha`**;
+- the **`proposal_sha256`**: the SHA-256 of the canonical data diff between `base_sha` and the proposal, covering `lib/ev-data.json` and `lib/ev-data.provenance.json` (`git diff --no-color --no-ext-diff -U0`, normalized line endings). Producers compute it in their artifact metadata. For a human PR, `ci.yml` computes it from the PR's base and head;
+- `id`, `field`, `old`, `new` and a `reason`.
+
+Any change to the proposal or its base changes the hash and voids the approval.
+
+**How a maintainer approves.**
+1. Verification fails with an "approval needed" report that lists each exception and the exact `base_sha` and `proposal_sha256`.
+2. The maintainer runs `.github/workflows/approve-data-exception.yml` (`workflow_dispatch`) with those values.
+3. The run uploads `approval.json` as an artifact. Its retention matches the proposal artifact.
+
+**Verifying the trusted origin.** A status name is not evidence. `validate-diff` accepts an approval only if all of these hold, checked through the GitHub API:
+- the artifact belongs to a run whose **workflow path** is exactly `.github/workflows/approve-data-exception.yml`;
+- the run's event is `workflow_dispatch`;
+- the run's `head_branch` is the default branch, so it ran the default branch's version of the workflow;
+- the run's conclusion is `success`;
+- the run's **`triggering_actor`** has `admin` or `maintain` permission on the repository **at validation time** (`GET /repos/{owner}/{repo}/collaborators/{user}/permission`);
+- the artifact's fields equal the exception exactly: same `base_sha`, `proposal_sha256`, `id`, `field`, `old` and `new`.
+
+CODEOWNERS assigns the approval workflow to the owner.
+
+**Publishing after approval.** The producer's proposal artifact is kept, so it doesn't have to be regenerated, which matters for agent proposals that aren't deterministic. `publish-proposal.yml` (`workflow_dispatch`, input `run_id`) re-runs verification on that stored proposal with the approvals in place, then continues to the writer (I.1). For a human PR, re-running CI picks up the approval.
+
+**Acceptance:**
+- an agent PR body containing `Allow-Protected` still fails;
+- an approval created by a run of any other workflow, from a branch, or by a user without admin or maintain permission is rejected;
+- a protected change passes only with an approval matching base, hash and values;
+- any change to the proposal (a new hash) voids the approval;
+- a human PR with an unapproved protected change fails CI, and passes after approval without any other bypass.
 
 ### F.4 Evidence retention (D4)
 - **Permanent, in provenance:** `value`, `evidence` (the quote), `source_url`, `method` (`observed` or `derived`), `method_version` and `verified_on`.
@@ -343,7 +399,7 @@ Run with a **synthetic canary secret** in the same position as the real credenti
   - only regular files (no symlinks, no mode changes, no executables);
   - sizes are bounded.
 
-  Then it runs the schema, `validate-diff --mode data-proposal`, the tests and the build from the base code.
+  Then it runs the schema, `validate-diff` (the one contract, F.2), the tests and the build from the base code.
 - **Token exposure (D5)** is unresolved until the canary suite runs against the pinned action and CLI.
 
 ---
@@ -355,36 +411,40 @@ This applies to all three publishers.
 
 ```
 produce (read-only, no write token)
-  → artifact: proposal.patch + meta.json { base_sha, patch_sha256, producer, run_id, work_performed }
-verify (no write token; base-SHA code; WP-F checks; build; tests)
-  → artifact: verified.json { base_sha, patch_sha256, result }
-write (contents/pull-requests write; runs no repo code, no npm)
-  → re-checks patch_sha256 and that master == base_sha (else stop: "base moved", see I.3)
-  → creates the commit (exact verified patch) on data-refresh/<producer>-<date>
-  → posts status `data-gate` = success on that commit SHA (description = verify run URL)
-  → pre-owned/watch: merges (fast-forward or merge commit) only if master is still base_sha
-  → agent: opens the PR (review requested); merge is human
+  → artifact: proposal.patch + meta.json { base_sha, proposal_sha256, producer, run_id, work_performed }
+verify (no write token; base-SHA code; WP-F contract incl. approvals; tests; build)
+  → artifact: verified.json { base_sha, proposal_sha256, result }   (fail-fast; not the merge gate)
+write (contents/pull-requests/actions write; runs no repo code, no npm)
+  → checks DATA_PUBLISH_PAUSED (E.3), proposal_sha256, and master == base_sha (else "base_moved", I.3)
+  → creates the commit (exact verified patch) on data-refresh/<producer>-<date>; opens a PR
+  → dispatches ci.yml on that branch: `gh workflow run ci.yml --ref <branch> -f base_sha=<base_sha>`
+  → pre-owned/watch: `gh pr merge --auto --merge` (GitHub merges only when the required check passes)
+  → agent: requests the owner's review; merge is human, through the same gate
 ```
 
-- **Required checks on `master`** (branch protection):
-  - `ci / build` (from `ci.yml`, for human PRs);
-  - `data-gate` (posted only by the writer job, for automated commits).
+**One required check: `CI / build`.** Branch protection on `master` requires exactly one check: the `build` job of `ci.yml`, with the expected source pinned to the GitHub Actions app. Every path satisfies that same check on the PR's exact head SHA:
+- **Human PRs** run `ci.yml` on `pull_request`.
+- **Automated PRs** run `ci.yml` through `workflow_dispatch` on the PR branch. A dispatch made with `GITHUB_TOKEN` does start a run; GitHub's no-recursion rule exempts `workflow_dispatch`. The resulting check run is attached to the branch head SHA, which is the PR head.
 
-  Human PRs that touch data also run `validate-diff --mode code-pr` inside `ci.yml`.
-- **Status source.** `data-gate` is posted with `GITHUB_TOKEN` (`statuses: write`) only in the `write` job of the three data workflows. CODEOWNERS covers `.github/workflows/**`, so changes to who can post it need owner review.
-- **Tests:**
-  - a human PR with failing CI is blocked;
-  - an automated proposal that fails verification never gets a commit;
-  - a stale status on an old SHA doesn't satisfy a new SHA;
-  - an all-skipped run posts nothing.
-- **Note on bot-created PRs.** GitHub can create approval-required runs for some bot-triggered events. The design doesn't rely on `pull_request` runs for automated commits in either direction.
+`ci.yml` runs the full data contract (`validate-diff`, F.2) for every PR that touches data files. It uses `github.event.pull_request.base.sha`, or the `base_sha` input for dispatched runs; the writer verifies that input equals the PR's base before dispatching. `data-gate` is removed: there is one gate, and it can't be satisfied by a status that only some paths post.
+
+**Tests**, run against a scratch branch-protection setup before enabling on `master`. All positive cases must succeed **without admin bypass**:
+- **positive:** a clean human PR merges once `CI / build` passes;
+- **positive:** a clean automated pre-owned PR auto-merges once its dispatched `CI / build` passes;
+- **positive:** a clean agent PR merges by the owner once the check passes;
+- **negative:** a human PR and an automated PR with a contract violation are both blocked;
+- **negative:** a check that passed on an earlier SHA doesn't satisfy a new SHA;
+- **negative:** an all-skipped run produces no successful `CI / build` check;
+- **negative:** a status posted under any other name doesn't count.
+
+**Bot-created PRs.** The design doesn't depend on `pull_request` events firing for bot-opened PRs (they may not, or may need approval). The writer dispatches the check explicitly.
 
 ### I.2 Work performed
 `meta.json.work_performed` is `true` only if the producer actually fetched and evaluated its sources. `ran-since.sh` (the backup schedule) counts a run as done only if that run's artifact says `work_performed: true` **and** the `write` job succeeded or had nothing to write.
 
 ### I.3 Serialized writers
 - Every `write` job uses `concurrency: { group: data-writers, cancel-in-progress: false, queue: max }`.
-- **Base moved.** If `master` ≠ `base_sha`, the writer doesn't rebase blindly. It fails with `base_moved`, and a reconcile step re-dispatches the producer, at most twice. After that it goes to the inbox.
+- **Base moved.** Immediately before writing (after the pause check, E.3), the writer reads the current `master` SHA. If it is not `base_sha`, the writer doesn't rebase blindly. It fails with `base_moved`, and a reconcile step re-dispatches the producer, at most twice. After that it goes to the inbox. The same check applies to `data-state` writes, against the `data-state` SHA the job read.
 - **Test:** three writers dispatched together (pre-owned, watch, the agent's deferral-only commit). All three changes land or are reported, and none is silently dropped.
 
 ---
@@ -395,10 +455,15 @@ write (contents/pull-requests write; runs no repo code, no npm)
 - Item ID = the first 10 hex characters of SHA-1 over the stable wording. Lines are `- [id] text`. The capture watermark is the issue's item IDs plus the last comment ID.
 - The agent writes `outcomes.json`. **An outcome is not resolution.**
 
-  | Outcome | Resolved when |
-  |---|---|
-  | Fixed, accepted, deferred, or confirmed with a provenance refresh | The backing state (data, `accepted.json`, `deferred.json`, provenance) is merged to `master` |
-  | Confirmed with no state change | At publish |
+  | Outcome | Backing record | Resolved when the record is durably written to |
+  |---|---|---|
+  | Fixed | data and provenance | `master` (the agent PR merges) |
+  | Accepted | `accepted.json` | `master` (the agent PR merges) |
+  | Confirmed with a provenance refresh | provenance | `master` (the agent PR merges) |
+  | Deferred | `deferred.json` | **`data-state`** (J.2): the writer's push to `data-state` succeeds (lease checked) |
+  | Confirmed with no state change | none | the outcome is recorded in `inbox.json` on `data-state` |
+
+  An outcome whose record is on `master` stays `pending #<pr>` until the merge; a deferral resolves on its `data-state` write, independently of any PR.
 
   Items arriving after the watermark stay open.
 - **PR disposition.** A `pull_request: closed` workflow (head `data-refresh/agent-*`, triggered by the human's merge or close):
@@ -484,7 +549,7 @@ object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; 
 | D5 | Token exposure | **[OPEN]** until the H.5 canary suite runs on the pinned action and CLI |
 | D6 | Egress | **Decided:** enforced egress is required before full automation; mechanism chosen after a spike |
 | D7 | Test runner | **Decided:** Vitest for app and domain code; `node --test` for the pipeline |
-| D8 | Bot gates | **Decided:** `data-gate` commit status from the writer job; no GitHub App for now |
+| D8 | Bot gates | **Decided (v3):** one required check, `CI / build`, on every path. Automated writers dispatch `ci.yml` on their PR branch; no `data-gate` status, no GitHub App for now |
 | D9 | Bookkeeping | **Decided:** `data-state` branch with versioning, serialized writes, deployment exclusion and a runbook |
 | D10 | CSP | **Decided:** report-only with collection, then enforce the header above; residual gap documented |
 | D11 | Pair indexing | **Decided:** review at about 30 models on evidence, not a fixed limit |
