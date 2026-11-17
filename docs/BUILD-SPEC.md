@@ -1,7 +1,7 @@
-# ThreeRowEV: Remediation Build Spec (v3)
+# ThreeRowEV: Remediation Build Spec (v3.1)
 
 **Responds to:** "ThreeRowEV architecture and codebase audit" (2026-11-16, revision `0704645`), "Review of ThreeRowEV remediation build spec" (2026-11-16), and the reviewer's notes on v2 (2026-11-17).
-**Status:** v3. **WP-A, WP-B, WP-C and WP-D are built and live**, and WP-K is in progress. v3 makes the five targeted amendments the v2 review asked for before F, I and J are implemented, and fixes the J.1/J.2 inconsistency. See "What changed in v3".
+**Status:** v3.1. **Design approved to proceed** (reviewer, 2026-11-17), with the two safeguards in "What changed in v3.1". **WP-A, WP-B, WP-C and WP-D are built and live**. The reviewer's approval covers the design only, not those implementations, which still need review of their changes and test results (PRs #44–#47, #50). WP-K is in progress.
 
 **Decisions taken:**
 - **D1: no 5-seat configurations in Speed Dating.** The reviewer recommended this and it was the original proposal. It is easy to reverse: one constant.
@@ -37,6 +37,13 @@ Open items are marked **[OPEN]**.
 | 4. WP-C assumed unlisted ranges are EPA | **Fixed in code (PR #50).** The default is `unverified`, shown as "range". "EPA" appears only with a reviewed EPA mapping (WP-J.3), and today there are none (C, E.2). |
 | 5. F and G versus publication; E.3 detects but doesn't pause | **I depends on F, G and H**, and the affected publishers stay paused until all four have landed. E.3 adds an **explicit publication pause**: a repository variable checked at write time, workflows disabled and in-flight runs drained before the migration merges, and every writer checks that the current base equals its validated base before writing (E.3, I.3). |
 | J.1 vs J.2: deferrals resolve on `master` but live on `data-state` | Each outcome resolves when its backing record is **durably written to its actual destination**: `master` for data, provenance and `accepted.json`; `data-state` for `deferred.json` and `inbox.json` (J.1). |
+
+## What changed in v3.1
+
+| v3 review item | Change in v3.1 |
+|---|---|
+| 1. `proposal_sha256` covers only the two data files, but proposals can change other files | New **`patch_sha256`** over **every changed file**: path, change type, file mode and content hash. Checked at verification, by the writer against the commit it creates, and by `ci.yml` on the PR head. `proposal_sha256` stays as the binding for data-exception approvals (F.3, I.1). |
+| 2. The pause and stale-base checks stop at PR creation, but auto-merge can fire later | **Up-to-date validation is required at merge:** branch protection "require branches to be up to date", so any change to `master` leaves a pending data PR unmergeable until it is revalidated. `ci.yml` **fails for data PRs while `DATA_PUBLISH_PAUSED` is set**. The migration runbook **disables pending auto-merges and closes open data PRs**. Two new acceptance cases cover this (E.3, I.1, I.4). |
 
 ## Work packages and dependencies
 
@@ -238,15 +245,19 @@ flowchart LR
 The compatibility check **detects** a mismatch. It cannot stop an older job that already holds a matching old code and data pair. So the pause is explicit and has three layers.
 
 1. **Pause flag, checked at write time.** The repository variable `DATA_PUBLISH_PAUSED`, read through the API immediately before any repository write, as the writer's first step. If it is `true`, the writer stops without writing and records `paused` (not success) for the backup-schedule logic. This covers scheduled and `workflow_dispatch` runs alike, because the value is read live, not from the checked-out code.
-2. **Drain before merging a migration.** The runbook (`docs/runbooks/migration.md`) has five steps:
+2. **Drain before merging a migration.** The runbook (`docs/runbooks/migration.md`) has six steps:
    1. set `DATA_PUBLISH_PAUSED=true`;
    2. `gh workflow disable` the three data workflows;
    3. cancel queued runs, and wait until `gh run list --status in_progress` shows none for them;
-   4. merge the migration;
-   5. re-enable only the workflows whose code accepts the new schema, and clear the flag when WP-F, WP-G and WP-I have landed.
+   4. **for every open `data-refresh/*` PR:** `gh pr merge --disable-auto`, then close it (agent PRs are closed with a comment; their inbox items return to pending under J.1);
+   5. merge the migration;
+   6. re-enable only the workflows whose code accepts the new schema, and clear the flag when WP-F, WP-G and WP-I have landed.
 
-   Steps 2 and 3 matter because the jobs running today predate the flag and cannot check it.
+   Steps 2 and 3 matter because the jobs running today predate the flag and cannot check it. Step 4 matters because GitHub's auto-merge fires on its own once its requirements pass, after any workflow check has run.
 3. **Base check before every write.** The writer compares the current `master` with the `base_sha` the proposal was validated against, and refuses to write if they differ (I.3). A stale job whose base predates the migration can never write after it.
+4. **Pause and base enforced at merge (v3.1).** A PR's write-time checks happen before auto-merge, and auto-merge can fire later. So:
+   - branch protection requires branches to be **up to date** before merging. Any commit to `master`, a migration included, leaves every pending data PR behind and unmergeable until it is updated and `CI / build` passes again on the new head;
+   - for `data-refresh/*` branches, `ci.yml` reads `DATA_PUBLISH_PAUSED` live and **fails** while it is set, so revalidation can't succeed during a pause (I.4).
 
 - **Compatibility gate (defense in depth).** `ev-data.json` gains `schema_version` (2 after this package). Every publisher reads `scripts/refresh/compat.json` (`{ "accepts_schema": [2] }`) from its checked-out code and refuses to publish if the data's version isn't accepted.
 - **Test:**
@@ -411,16 +422,28 @@ This applies to all three publishers.
 
 ```
 produce (read-only, no write token)
-  → artifact: proposal.patch + meta.json { base_sha, proposal_sha256, producer, run_id, work_performed }
+  → artifact: proposal.patch + meta.json { base_sha, patch_sha256, proposal_sha256, producer, run_id, work_performed }
 verify (no write token; base-SHA code; WP-F contract incl. approvals; tests; build)
-  → artifact: verified.json { base_sha, proposal_sha256, result }   (fail-fast; not the merge gate)
+  → recomputes patch_sha256 from the patch it applied; must equal meta.patch_sha256
+  → artifact: verified.json { base_sha, patch_sha256, proposal_sha256, result }   (fail-fast; not the merge gate)
 write (contents/pull-requests/actions write; runs no repo code, no npm)
-  → checks DATA_PUBLISH_PAUSED (E.3), proposal_sha256, and master == base_sha (else "base_moved", I.3)
-  → creates the commit (exact verified patch) on data-refresh/<producer>-<date>; opens a PR
-  → dispatches ci.yml on that branch: `gh workflow run ci.yml --ref <branch> -f base_sha=<base_sha>`
-  → pre-owned/watch: `gh pr merge --auto --merge` (GitHub merges only when the required check passes)
+  → checks DATA_PUBLISH_PAUSED (E.3), master == base_sha (else "base_moved", I.3)
+  → creates the commit on data-refresh/<producer>-<date>, then recomputes patch_sha256 from
+    `base_sha..commit` and requires it to equal verified.patch_sha256 (else stop, nothing pushed)
+  → opens a PR; dispatches ci.yml: `gh workflow run ci.yml --ref <branch> -f base_sha=<base_sha> -f patch_sha256=<…>`
+  → pre-owned/watch: `gh pr merge --auto --merge` (merges only when CI / build passes on an up-to-date head)
   → agent: requests the owner's review; merge is human, through the same gate
 ```
+
+**`patch_sha256` (v3.1): what was verified is what is published.** It is the SHA-256 of a canonical manifest of **every** changed file between `base_sha` and the proposal, sorted by path. Each line records:
+- the change type (`A`, `M`, `D`; renames are recorded as `D` plus `A`);
+- the path;
+- the file mode (`100644`; anything else, symlinks included, fails H.6);
+- the SHA-256 of the new content, or `-` for a deletion.
+
+It covers data, provenance, editorial JSON, `accepted.json`, `deferred.json` and anything else the patch touches. Paths outside the data allowlist still fail H.6 on their own.
+
+Three places compute and compare it: verification (against the producer's metadata), the writer (against the commit it actually created, before pushing), and `ci.yml` on the PR head (against the `patch_sha256` input, for dispatched runs on `data-refresh/*`). `proposal_sha256` remains the narrower binding for data-exception approvals (F.3).
 
 **One required check: `CI / build`.** Branch protection on `master` requires exactly one check: the `build` job of `ci.yml`, with the expected source pinned to the GitHub Actions app. Every path satisfies that same check on the PR's exact head SHA:
 - **Human PRs** run `ci.yml` on `pull_request`.
@@ -435,9 +458,19 @@ write (contents/pull-requests/actions write; runs no repo code, no npm)
 - **negative:** a human PR and an automated PR with a contract violation are both blocked;
 - **negative:** a check that passed on an earlier SHA doesn't satisfy a new SHA;
 - **negative:** an all-skipped run produces no successful `CI / build` check;
-- **negative:** a status posted under any other name doesn't count.
+- **negative:** a status posted under any other name doesn't count;
+- **negative (v3.1):** a commit whose full-patch hash differs from the verified `patch_sha256` (for example an extra editorial or `deferred.json` change) is never pushed, and dispatched CI on a head with a different hash fails.
 
 **Bot-created PRs.** The design doesn't depend on `pull_request` events firing for bot-opened PRs (they may not, or may need approval). The writer dispatches the check explicitly.
+
+### I.4 Merge-time safeguards (v3.1)
+- **Up to date at merge.** Branch protection's "Require branches to be up to date before merging" is on. A data PR whose base falls behind `master` can't merge, even with auto-merge enabled and an earlier green check.
+- **Writers never update data branches.** A behind PR is never brought up to date automatically. A reconcile step runs on each publisher run and daily. It disables auto-merge on behind `data-refresh/*` PRs, closes them, and re-dispatches the producer against the new `master`. Agent PRs are closed with a comment, and their items return to pending (J.1).
+- **Pause-aware CI.** For `data-refresh/*` heads, `ci.yml` fails while `DATA_PUBLISH_PAUSED` is set, so a PR can't become mergeable during a pause.
+- **Human PRs** are also required to be up to date. GitHub's "Update branch" re-runs CI. This is a small cost accepted for one consistent rule.
+- **Acceptance cases:**
+  - **Base changes while a PR awaits checks.** An automated PR is open with auto-merge enabled and CI pending; another commit lands on `master`. The PR does not merge, even when its CI passes on the old head. Reconcile closes it and re-dispatches the producer, and the new proposal is validated against the new base.
+  - **Publication pauses while auto-merge is pending.** An automated PR is open with auto-merge enabled and CI pending; `DATA_PUBLISH_PAUSED` is set. (a) Following the runbook disables auto-merge and closes the PR. (b) Even without the runbook, CI on that head fails while the flag is set, and any later update to the branch also fails, so nothing merges until the flag is cleared and the proposal is revalidated.
 
 ### I.2 Work performed
 `meta.json.work_performed` is `true` only if the producer actually fetched and evaluated its sources. `ran-since.sh` (the backup schedule) counts a run as done only if that run's artifact says `work_performed: true` **and** the `write` job succeeded or had nothing to write.
