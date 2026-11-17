@@ -1,0 +1,4 @@
+{
+  "_about": "Data schema versions this code can read and write. Publishers refuse data whose schema_version is not listed (build spec E.3). Bump together with the migration that changes the schema.",
+  "accepts_schema": [2]
+}

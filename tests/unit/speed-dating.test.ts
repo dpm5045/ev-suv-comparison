@@ -12,7 +12,8 @@ function cfg(p: Partial<DetailRow> & { vehicle: string; trim: string }): DetailR
     year: 2024, seats: 7, msrp: null, preowned_range: '', preowned_low: null, preowned_high: null,
     range_mi: null, zero_to_60_sec: null, cargo_behind_3rd_cu_ft: null, cargo_behind_2nd_cu_ft: null,
     dc_fast_charge_10_80_min: null, self_driving_rank: null, self_driving_tier: null, adas_downgraded: false,
-    name: `${p.vehicle}, ${p.year ?? 2024}, ${p.trim} #${n}`,
+    id: `cfg-${n}`, name: `${p.vehicle}, ${p.year ?? 2024}, ${p.trim} #${n}`,
+    availability: 'new', msrp_status: 'current', range_basis: null,
     ...p,
   } as unknown as DetailRow
 }
@@ -132,8 +133,8 @@ describe('eligibility', () => {
   const rows = [
     cfg({ vehicle: 'New', trim: 'a', year: 2026, msrp: 60000 }),
     cfg({ vehicle: 'New', trim: 'b', year: 2026, msrp: 59999 }),
-    cfg({ vehicle: 'Gone', trim: 'c', year: 2025, msrp: 'N/A - Not New' as never, ...used(50000) }),
-    cfg({ vehicle: 'Old', trim: 'd', year: 2022, msrp: 80000, ...used(40000) }),
+    cfg({ vehicle: 'Gone', trim: 'c', year: 2025, msrp: null, availability: 'used_only', msrp_status: 'unknown', ...used(50000) }),
+    cfg({ vehicle: 'Old', trim: 'd', year: 2022, msrp: 80000, availability: 'used_only', msrp_status: 'historical', ...used(40000) }),
     cfg({ vehicle: 'Five', trim: 'e', year: 2026, msrp: 50000, seats: 5 }),
     cfg({ vehicle: 'Unknown', trim: 'f', year: 2026, msrp: 50000, seats: null }),
     cfg({ vehicle: 'Six', trim: 'g', year: 2026, msrp: 55000, seats: 6 }),

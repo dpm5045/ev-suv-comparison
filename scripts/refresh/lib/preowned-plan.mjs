@@ -124,7 +124,7 @@ export function planPreowned({ data, baselines, observations, today, allowLarge 
     for (const row of g.rows) {
       const proposed = scaleRange(row.preowned_range, 1 + move)
       if (proposed === row.preowned_range) continue
-      rowChanges.push({ name: row.name, vehicle: g.vehicle, year: g.year, old: row.preowned_range, new: proposed })
+      rowChanges.push({ id: row.id, name: row.name, vehicle: g.vehicle, year: g.year, old: row.preowned_range, new: proposed })
       changed++
     }
     vehicleBase.years[String(g.year)] = {
@@ -144,14 +144,19 @@ export function planPreowned({ data, baselines, observations, today, allowLarge 
 export function applyRowChanges(data, rowChanges, today) {
   if (rowChanges.length === 0) return data
   const out = structuredClone(data)
-  // Keyed by name + old value: several rows can share a name (seat variants).
-  const key = (name, range) => `${name}\u0000${range}`
-  const byKey = new Map(rowChanges.map((c) => [key(c.name, c.old), c.new]))
-  for (const list of [out.details, out.preowned]) {
-    for (const row of list) {
-      const next = byKey.get(key(row.name, row.preowned_range))
-      if (next) row.preowned_range = next
-    }
+  // Details: keyed by configuration id + old value. The parallel `preowned`
+  // table has no ids (WP-G derives it from details), so it still matches by
+  // display name + old value.
+  const key = (k, range) => `${k}\u0000${range}`
+  const byId = new Map(rowChanges.map((c) => [key(c.id, c.old), c.new]))
+  const byName = new Map(rowChanges.map((c) => [key(c.name, c.old), c.new]))
+  for (const row of out.details) {
+    const next = byId.get(key(row.id, row.preowned_range))
+    if (next) row.preowned_range = next
+  }
+  for (const row of out.preowned ?? []) {
+    const next = byName.get(key(row.name, row.preowned_range))
+    if (next) row.preowned_range = next
   }
   out.last_updated = today
   return out

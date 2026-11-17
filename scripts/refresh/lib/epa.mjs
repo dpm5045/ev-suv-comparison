@@ -104,14 +104,14 @@ function driveMatches(rowDrive, epaDrive) {
 export function checkRanges(data, index, accepted = {}) {
   const rows = []
   for (const row of data.details) {
-    const r = { name: row.name, vehicle: row.vehicle, year: row.year, stored: row.range_mi }
+    const r = { id: row.id, name: row.name, vehicle: row.vehicle, year: row.year, stored: row.range_mi }
     const variants = index[row.vehicle]?.[String(row.year)] ?? []
     if (variants.length === 0) {
       r.state = 'not_in_epa'
       r.otherYears = Object.keys(index[row.vehicle] ?? {}).sort()
     } else if (typeof row.range_mi !== 'number') {
       r.state = 'no_stored_range'
-    } else if (candidatesFor(row, variants).length === 0 && !accepted[row.name]) {
+    } else if (candidatesFor(row, variants).length === 0 && !accepted[row.id]) {
       // EPA rates this model year, but no variant has this row's drive type and seating
       r.state = 'unmatched'
     } else {
@@ -120,9 +120,9 @@ export function checkRanges(data, index, accepted = {}) {
         r.state = 'consistent'
         r.sourceUrl = VEHICLE_URL(hits[0].id)
         r.evidence = `EPA ${row.year} ${hits[0].model}: ${hits[0].range} mi` + (hits.length > 1 ? ` (and ${hits.length - 1} other EPA variant(s) with the same range)` : '')
-      } else if (accepted[row.name]) {
+      } else if (accepted[row.id]) {
         r.state = 'accepted'
-        r.reason = accepted[row.name]
+        r.reason = accepted[row.id]
       } else {
         r.state = 'mismatch'
       }
@@ -168,13 +168,13 @@ function hitsFor(row, variants) {
 export function planRangeFixes(data, index, previousIndex, accepted = {}) {
   const { rows } = checkRanges(data, index, accepted)
   const mismatched = new Map()
-  for (const r of rows) if (r.state === 'mismatch') mismatched.set(`${r.name}|${r.stored}`, r)
+  for (const r of rows) if (r.state === 'mismatch') mismatched.set(`${r.id}|${r.stored}`, r)
 
   const fixes = []
   const skipped = []
   const seen = new Set()
   for (const row of data.details) {
-    const key = `${row.name}|${row.range_mi}`
+    const key = `${row.id}|${row.range_mi}`
     if (!mismatched.has(key) || seen.has(key)) continue
     seen.add(key)
     const current = index[row.vehicle]?.[String(row.year)] ?? []
@@ -201,7 +201,7 @@ export function planRangeFixes(data, index, previousIndex, accepted = {}) {
       break
     }
 
-    const base = { name: row.name, vehicle: row.vehicle, year: row.year, trim: row.trim, old: row.range_mi }
+    const base = { id: row.id, name: row.name, vehicle: row.vehicle, year: row.year, trim: row.trim, old: row.range_mi }
     if (!result) {
       const known = [...new Set(anchors.flatMap((a) => a.models))]
       skipped.push({ ...base, reason: known.length ? `EPA has no ${row.year} rating for the variant this trim matched before (${known.join(', ')})` : 'no earlier EPA match to carry forward' })
@@ -224,13 +224,13 @@ export function planRangeFixes(data, index, previousIndex, accepted = {}) {
   return { fixes, skipped }
 }
 
-/** Apply range fixes to a copy of the data. Rows sharing a name (seat variants) move together. */
+/** Apply range fixes to a copy of the data, by configuration id (seat variants that share a name are separate). */
 export function applyRangeFixes(data, fixes, today) {
   if (!fixes.length) return data
   const out = structuredClone(data)
-  const byKey = new Map(fixes.map((f) => [`${f.name}|${f.old}`, f.new]))
+  const byKey = new Map(fixes.map((f) => [`${f.id}|${f.old}`, f.new]))
   for (const row of out.details) {
-    const next = byKey.get(`${row.name}|${row.range_mi}`)
+    const next = byKey.get(`${row.id}|${row.range_mi}`)
     if (next !== undefined) row.range_mi = next
   }
   out.last_updated = today
@@ -268,9 +268,9 @@ export function updateRangeProvenance(fields, rows, today) {
   const age = (d) => (Date.parse(today) - Date.parse(d)) / 86400000
   for (const r of rows) {
     if (r.state !== 'consistent') continue
-    const cur = next[r.name]?.range_mi
+    const cur = next[r.id]?.range_mi
     if (cur && cur.evidence === r.evidence && cur.source_url === r.sourceUrl && age(cur.verified_on) <= 90) continue
-    ;(next[r.name] ??= {}).range_mi = { source_url: r.sourceUrl, verified_on: today, evidence: r.evidence }
+    ;(next[r.id] ??= {}).range_mi = { source_url: r.sourceUrl, verified_on: today, evidence: r.evidence }
   }
   return next
 }

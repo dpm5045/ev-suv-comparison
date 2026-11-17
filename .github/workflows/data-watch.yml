@@ -91,6 +91,9 @@ jobs:
       - name: Save
         if: steps.open.outputs.count == '0'
         run: |
+          # Publication pause and schema check, read live just before writing (build spec E.3)
+          gate=$(bash scripts/refresh/can-publish.sh)
+          if [ "$gate" != yes ]; then echo "Not publishing: ${gate#no: }" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
           if [ -z "$(git status --porcelain)" ]; then
             echo "Nothing changed since the last run." >> "$GITHUB_STEP_SUMMARY"
             exit 0

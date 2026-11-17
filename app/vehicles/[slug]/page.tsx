@@ -8,7 +8,7 @@ import {
 } from '@/lib/slugs'
 import { VEHICLE_CLASSES } from '@/lib/data'
 import { WATCHLIST_META, WATCH_STATUS_LABEL } from '@/lib/watchlist'
-import { fmtMoney, fmtNum } from '@/lib/utils'
+import { fmtMoney, fmtMsrp, fmtNum } from '@/lib/utils'
 import { SPEC_SECTIONS } from '@/lib/spec-fields'
 import Header from '@/components/Header'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -72,7 +72,9 @@ export default async function VehiclePage({ params }: Props) {
   const yearRange = years.length === 1 ? String(years[0]) : `${years[0]}–${years[years.length - 1]}`
 
   // Current MSRPs (configurations sold new today); older MSRPs are only "when new" prices
-  const { current: currentPrices, past: pastPrices } = priceSpans(trims, dataYear)
+  const { current: currentPrices, announced: announcedPrices, past: pastPrices } = priceSpans(trims, dataYear)
+  const shownPrices = currentPrices ?? announcedPrices ?? pastPrices
+  const priceStatLabel = currentPrices ? 'MSRP Range' : announcedPrices ? 'Announced MSRP' : 'MSRP When New'
   const ranges = trims.map(t => t.range_mi).filter((r): r is number => typeof r === 'number')
   const rangeStatLabel = rangeLabel(trims)
   const hps = trims.map(t => t.hp).filter((h): h is number => typeof h === 'number')
@@ -99,7 +101,7 @@ export default async function VehiclePage({ params }: Props) {
     id: `trim-${i}`,
     year: r.year,
     trim: r.trim,
-    msrp: fmtMoney(r.msrp).text,
+    msrp: fmtMsrp(r).text,
     range: rangeCell(r) ?? fmtNum(r.range_mi).text,
     hp: fmtNum(r.hp).text + (typeof r.hp === 'number' ? ' hp' : ''),
     seats: r.seats != null ? `${r.seats}-seat` : '—',
@@ -172,10 +174,10 @@ export default async function VehiclePage({ params }: Props) {
 
         {/* Quick stats */}
         <div className="detail-grid vehicle-stats-grid">
-          {(currentPrices ?? pastPrices) && (
+          {shownPrices && (
             <div className="detail-stat">
-              <div className="detail-stat-label">{currentPrices ? 'MSRP Range' : 'MSRP When New'}</div>
-              <div className="detail-stat-value">${(currentPrices ?? pastPrices)!.min.toLocaleString()} – ${(currentPrices ?? pastPrices)!.max.toLocaleString()}</div>
+              <div className="detail-stat-label">{priceStatLabel}</div>
+              <div className="detail-stat-value">${shownPrices.min.toLocaleString()} – ${shownPrices.max.toLocaleString()}</div>
             </div>
           )}
           {ranges.length > 0 && (

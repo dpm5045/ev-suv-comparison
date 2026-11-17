@@ -241,6 +241,9 @@ jobs:
       # No npm here: this job can write to the repo, so no package code runs in it.
       - name: Open PR and close the inbox
         run: |
+          # Publication pause and schema check, read live just before writing (build spec E.3)
+          gate=$(bash scripts/refresh/can-publish.sh)
+          if [ "$gate" != yes ]; then echo "Not publishing: ${gate#no: }" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
           H="$RUNNER_TEMP/handover"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

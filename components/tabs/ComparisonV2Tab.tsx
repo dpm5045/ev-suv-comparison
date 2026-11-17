@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { DATA } from '@/lib/data'
-import { fmtMoney, fmtNum } from '@/lib/utils'
+import { fmtMoney, fmtMsrp, fmtNum } from '@/lib/utils'
 import Link from 'next/link'
 import VehicleBadge from '../VehicleBadge'
 import PageHeader, { dataCountEyebrow } from '../PageHeader'
@@ -427,7 +427,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
             <tbody>
               {filtered.map((r) => {
                 const origIdx = DATA.details.indexOf(r)
-                const msrp = fmtMoney(r.msrp)
+                const msrp = fmtMsrp(r)
                 const range = fmtNum(r.range_mi)
                 const hp = fmtNum(r.hp)
                 const bat = fmtNum(r.battery_kwh)
@@ -496,7 +496,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
         <div className="cmp-cards">
           {filtered.map((r) => {
             const origIdx = DATA.details.indexOf(r)
-            const msrp = fmtMoney(r.msrp)
+            const msrp = fmtMsrp(r)
             const range = fmtNum(r.range_mi)
             const bat = fmtNum(r.battery_kwh)
             return (
@@ -526,7 +526,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">MSRP</span>
                     <span className={`cmp-stat-value ${msrp.className}`} style={{ fontFamily: 'var(--mono)' }}>
-                      {typeof r.msrp === 'number' ? `$${Math.round(r.msrp / 1000)}k` : msrp.text}
+                      {typeof r.msrp === 'number' && r.msrp_status !== 'historical' ? `$${Math.round(r.msrp / 1000)}k` : msrp.text}
                     </span>
                   </div>
                   <div className="cmp-stat">

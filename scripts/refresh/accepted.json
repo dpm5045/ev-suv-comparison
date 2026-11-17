@@ -1,12 +1,12 @@
 {
-  "_about": "Rows whose stored range_mi is knowingly not an EPA figure. The watch script lists them as accepted instead of flagging them. Remove an entry once EPA rates the trim.",
+  "_about": "Rows (by id) whose stored range_mi is knowingly not an EPA figure. The watch script lists them as accepted instead of flagging them. Remove an entry once EPA rates the trim.",
   "range_mi": {
-    "Lucid Gravity, 2027, GT-S": "Lucid projection; EPA has not rated the GT-S.",
-    "Lexus TZ, 2027, Premium Touring AWD": "Lexus estimate; EPA has rated only the Premium so far.",
-    "Lexus TZ, 2027, Luxury AWD": "Lexus estimate; EPA has rated only the Premium so far.",
-    "Tesla Model X, 2021, Plaid (5-seat)": "Tesla's figure for the refreshed 2021 Plaid; EPA's 2021 file has no Plaid entry.",
-    "Tesla Model X, 2021, Plaid (6-seat)": "Tesla's figure for the refreshed 2021 Plaid; EPA's 2021 file has no Plaid entry.",
-    "Tesla Model X, 2021, Plaid (7-seat)": "Tesla's figure for the refreshed 2021 Plaid; EPA's 2021 file has no Plaid entry.",
-    "VinFast VF9, 2025, Eco": "EPA's 2024 VF 9 Eco rating (330 mi); EPA's 2025 file lists only the Plus."
+    "lucid-gravity-2027-gt-s": "Lucid projection; EPA has not rated the GT-S.",
+    "lexus-tz-2027-premium-touring-awd": "Lexus estimate; EPA has rated only the Premium so far.",
+    "lexus-tz-2027-luxury-awd": "Lexus estimate; EPA has rated only the Premium so far.",
+    "tesla-model-x-2021-plaid-5s": "Tesla's figure for the refreshed 2021 Plaid; EPA's 2021 file has no Plaid entry.",
+    "tesla-model-x-2021-plaid-6s": "Tesla's figure for the refreshed 2021 Plaid; EPA's 2021 file has no Plaid entry.",
+    "tesla-model-x-2021-plaid-7s": "Tesla's figure for the refreshed 2021 Plaid; EPA's 2021 file has no Plaid entry.",
+    "vinfast-vf9-2025-eco": "EPA's 2024 VF 9 Eco rating (330 mi); EPA's 2025 file lists only the Plus."
   }
 }

@@ -36,13 +36,12 @@ export function hasPreowned(r: Pick<DetailRow, 'preowned_range'>): boolean {
 }
 
 /**
- * Sold new today. Interim rule until the data carries an explicit
- * availability field (build spec WP-E): a numeric MSRP and a model year no
- * older than the data year minus one. Older numeric MSRPs are historical
- * prices, not proof the configuration is still sold new.
+ * Sold new today: the configuration's availability is "new" (schema_version 2).
+ * Rows still marked needs_review are not eligible until resolved; a numeric
+ * MSRP alone is never proof (it may be historical or announced).
  */
-export function isSoldNew(r: Pick<DetailRow, 'msrp' | 'year'>, dataYear: number): boolean {
-  return typeof r.msrp === 'number' && Number.isFinite(r.msrp) && r.year >= dataYear - 1
+export function isSoldNew(r: Pick<DetailRow, 'availability'>, _dataYear?: number): boolean {
+  return r.availability === 'new'
 }
 
 /** The price the budget applies to: lowest pre-owned price, or MSRP when new. */

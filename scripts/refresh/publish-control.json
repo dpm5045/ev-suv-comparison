@@ -1,0 +1,5 @@
+{
+  "_about": "Publication pause (build spec E.3). Every data workflow reads this file LIVE from the default branch immediately before any repository write, and writes nothing while paused is true. Change it only through a reviewed commit to master; see docs/runbooks/migration.md.",
+  "paused": false,
+  "reason": null
+}

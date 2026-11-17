@@ -3,30 +3,25 @@
  * structured values so that it never claims more than the data shows:
  *   - no "higher / longer / cheaper" without a strict inequality (ties say so);
  *   - "EPA" only for verified EPA ratings (none until WP-J.3); manufacturer
- *     estimates (listed in scripts/refresh/accepted.json) are labelled as such;
+ *     estimates (range_basis) are labelled as such;
  *   - "starts at … MSRP" only from configurations sold new today.
  * Pure functions over rows passed in.
  */
-import accepted from '../scripts/refresh/accepted.json'
-import type { DetailRow } from './data'
+import type { DetailRow, RangeBasis } from './data'
 import { isSoldNew } from './selection'
 
 type Row = DetailRow
 
-export type RangeBasis = 'epa' | 'manufacturer_estimate' | 'unverified'
-
-const ESTIMATES: Record<string, string> = (accepted as { range_mi?: Record<string, string> }).range_mi ?? {}
+export type { RangeBasis }
 
 /**
- * What a row's range is. Interim (build spec WP-C) until the data stores
- * range_basis (WP-E):
- *   - listed in accepted.json → a manufacturer estimate;
- *   - otherwise → unverified. Not being an exception is not evidence of an EPA
- *     rating, and today's EPA matches are numeric (plausibility, not identity).
- *     A range is shown as EPA only once it has a reviewed EPA mapping (WP-J.3).
+ * What a row's range is, from the stored range_basis (schema_version 2):
+ * 'manufacturer_estimate', 'unverified' (the default: not being an exception
+ * is not evidence of an EPA rating), or 'epa' (only with a reviewed EPA
+ * mapping, WP-J.3; none yet).
  */
-export function rangeBasis(r: Pick<Row, 'name'>): RangeBasis {
-  return ESTIMATES[r.name] ? 'manufacturer_estimate' : 'unverified'
+export function rangeBasis(r: Pick<Row, 'range_basis'>): RangeBasis {
+  return r.range_basis ?? 'unverified'
 }
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null)
@@ -113,22 +108,31 @@ function rangeSentence(rows: Row[]): string | null {
 
 /* ── prices ── */
 
-/** MSRPs of configurations sold new today, and older (historical) MSRPs. */
-export function priceSpans(rows: Row[], dataYear: number) {
+/**
+ * MSRPs by what they mean: current (configurations sold new today), announced
+ * (published for a model not yet on sale), and past (the last new price of a
+ * configuration no longer sold new).
+ */
+export function priceSpans(rows: Row[], _dataYear?: number) {
   const current: number[] = []
+  const announced: number[] = []
   const past: number[] = []
   for (const r of rows) {
     const v = num(r.msrp)
-    if (v !== null) (isSoldNew(r, dataYear) ? current : past).push(v)
+    if (v === null) continue
+    if (isSoldNew(r) && r.msrp_status === 'current') current.push(v)
+    else if (r.msrp_status === 'announced') announced.push(v)
+    else if (r.msrp_status === 'historical') past.push(v)
   }
-  return { current: span(current), past: span(past) }
+  return { current: span(current), announced: span(announced), past: span(past) }
 }
 
 const priceRangeText = (s: Span) => (s.min === s.max ? money(s.min) : `${money(s.min)}–${money(s.max)}`)
 
-/** OG/stat price text: current MSRPs, or null when the vehicle has none. */
-export function currentPriceText(rows: Row[], dataYear: number): string | null {
-  const s = priceSpans(rows, dataYear).current
+/** OG/stat price text: current MSRPs, else announced ones; null when the vehicle has neither. */
+export function currentPriceText(rows: Row[], dataYear?: number): string | null {
+  const p = priceSpans(rows, dataYear)
+  const s = p.current ?? p.announced
   return s ? priceRangeText(s) : null
 }
 
@@ -142,7 +146,8 @@ export function vehicleFaq(vehicle: string, rows: Row[], dataYear: number): Faq[
     return ys.length === 1 ? String(ys[0]) : `${ys[0]}–${ys[ys.length - 1]}`
   }
 
-  const current = rows.filter((r) => num(r.msrp) !== null && isSoldNew(r, dataYear))
+  const current = rows.filter((r) => num(r.msrp) !== null && isSoldNew(r) && r.msrp_status === 'current')
+  const announcedRows = rows.filter((r) => num(r.msrp) !== null && r.msrp_status === 'announced')
   const prices = priceSpans(rows, dataYear)
   if (prices.current) {
     const s = prices.current
@@ -151,6 +156,14 @@ export function vehicleFaq(vehicle: string, rows: Row[], dataYear: number): Faq[
       a: s.min === s.max
         ? `The ${years(current)} ${vehicle} is priced at ${money(s.min)} MSRP.`
         : `The ${years(current)} ${vehicle} starts at ${money(s.min)} MSRP and goes up to ${money(s.max)} depending on trim and configuration.`,
+    })
+  } else if (prices.announced) {
+    const s = prices.announced
+    out.push({
+      q: `How much does the ${vehicle} cost?`,
+      a: s.min === s.max
+        ? `The ${years(announcedRows)} ${vehicle} is not on sale yet; its announced price is ${money(s.min)} MSRP.`
+        : `The ${years(announcedRows)} ${vehicle} is not on sale yet; announced prices start at ${money(s.min)} MSRP and go up to ${money(s.max)}.`,
     })
   } else if (prices.past) {
     out.push({
@@ -197,8 +210,8 @@ export function comparisonFaq(nameA: string, a: Row, nameB: string, b: Row, data
   const pick = (w: Winner) => (w === 'a' ? nameA : nameB)
 
   // Price: only when both representative trims are sold new
-  const pa = isSoldNew(a, dataYear) ? num(a.msrp) : null
-  const pb = isSoldNew(b, dataYear) ? num(b.msrp) : null
+  const pa = isSoldNew(a) && a.msrp_status === 'current' ? num(a.msrp) : null
+  const pb = isSoldNew(b) && b.msrp_status === 'current' ? num(b.msrp) : null
   const wp = compareMetric(pa, pb, { lowerIsBetter: true })
   if (wp === 'tie') {
     out.push({ q: `Which is cheaper, the ${nameA} or ${nameB}?`, a: `Neither: both representative trims start at ${money(pa!)} MSRP.` })

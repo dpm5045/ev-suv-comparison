@@ -58,11 +58,12 @@ function VehicleImage({ vehicle }: { vehicle: string }) {
   const seatsList = [...new Set(trims.map(t => t.seats).filter((s): s is number => s !== null))]
 
   // Same rules as the page copy: current MSRPs only, range labelled by basis
-  const { current, past } = priceSpans(trims, dataYear)
-  const priceLabel = 'Price'
-  const priceRange = current
-    ? `$${current.min.toLocaleString()}–$${current.max.toLocaleString()}`
-    : past ? 'Not sold new' : 'TBD'
+  const { current, announced, past } = priceSpans(trims, dataYear)
+  const shown = current ?? announced
+  const priceLabel = current ? 'Price' : announced ? 'Announced price' : 'Price'
+  const priceRange = shown
+    ? `$${shown.min.toLocaleString()}–$${shown.max.toLocaleString()}`
+    : past || trims.some(t => t.availability === 'used_only') ? 'Not sold new' : 'TBD'
   const maxRange = maxRangeText(trims) ?? '—'
   const rangeStatLabel = rangeLabel(trims)
   const seatsText = seatsList.length ? seatsList.join('/') + ' seats' : '—'

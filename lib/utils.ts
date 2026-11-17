@@ -7,6 +7,20 @@ export function fmtMoney(v: number | string | null | undefined): { text: string;
   return { text: String(v), className: '' }
 }
 
+/**
+ * MSRP for display, from the row's price and availability: a current or
+ * announced price; "Not sold new" for used-only configurations (an older price
+ * is shown as "was $X"); "TBD" when unknown.
+ */
+export function fmtMsrp(r: { msrp: number | null; availability: string; msrp_status: string }): { text: string; className: string } {
+  if (typeof r.msrp === 'number') {
+    if (r.msrp_status === 'historical') return { text: `Not sold new (was $${Math.round(r.msrp).toLocaleString()})`, className: 'cell-na' }
+    return { text: '$' + Math.round(r.msrp).toLocaleString(), className: 'cell-price' }
+  }
+  if (r.availability === 'used_only') return { text: 'Not sold new', className: 'cell-na' }
+  return { text: 'TBD', className: 'cell-na' }
+}
+
 export function fmtNum(v: number | string | null | undefined): { text: string; className: string } {
   if (v == null || v === '' || v === '-' || v === 'None') return { text: '—', className: 'cell-na' }
   if (typeof v === 'number') return { text: v.toLocaleString(), className: '' }

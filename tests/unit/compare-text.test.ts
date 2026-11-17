@@ -10,7 +10,8 @@ let n = 0
 function row(p: Partial<DetailRow>): DetailRow {
   n++
   return {
-    name: `Test ${n}`, vehicle: 'Test', year: 2026, trim: `T${n}`, seats: 7, msrp: null, range_mi: null,
+    id: `test-${n}`, name: `Test ${n}`, vehicle: 'Test', year: 2026, trim: `T${n}`, seats: 7, msrp: null, range_mi: null,
+    availability: 'new', msrp_status: p.msrp == null ? 'unknown' : 'current', range_basis: typeof p.range_mi === 'number' ? 'unverified' : null,
     cargo_behind_3rd_cu_ft: null, towing_lbs: null, charging_type: '', ...p,
   } as unknown as DetailRow
 }
@@ -48,7 +49,7 @@ describe('comparisonFaq', () => {
 
   it('compares prices only when both representative trims are sold new', () => {
     const current = row({ msrp: 60000, year: 2026 })
-    const historical = row({ msrp: 50000, year: 2022 })
+    const historical = row({ msrp: 50000, year: 2022, availability: 'used_only', msrp_status: 'historical' })
     expect(comparisonFaq('A', current, 'B', historical, DATA_YEAR).some((f) => f.q.includes('cheaper'))).toBe(false)
   })
 
@@ -109,7 +110,8 @@ describe('prices on real data', () => {
   })
 
   it('quotes old MSRPs only as "when new" prices', () => {
-    const rows = [row({ vehicle: 'Old', msrp: 80000, year: 2022 }), row({ vehicle: 'Old', msrp: 90000, year: 2023 })]
+    const old = { availability: 'used_only', msrp_status: 'historical' } as const
+    const rows = [row({ vehicle: 'Old', msrp: 80000, year: 2022, ...old }), row({ vehicle: 'Old', msrp: 90000, year: 2023, ...old })]
     const cost = vehicleFaq('Old', rows, DATA_YEAR).find((x) => x.q.startsWith('How much does'))!
     expect(cost.a).toBe('The Old is no longer sold new. When new, it was priced from $80,000–$90,000 MSRP; see the pre-owned prices for what it costs today.')
   })
