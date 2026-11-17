@@ -14,6 +14,10 @@ import Header from '@/components/Header'
 import Breadcrumb from '@/components/Breadcrumb'
 import VehicleTrimSection from '@/components/VehicleTrimSection'
 import JsonLd from '@/components/JsonLd'
+import FaqSection from '@/components/FaqSection'
+import { currentPriceText, faqJsonLd, maxRangeText, priceSpans, rangeCell, rangeLabel, vehicleFaq } from '@/lib/compare-text'
+import { dataYear } from '@/lib/data-stories'
+import { isSoldNew } from '@/lib/selection'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -29,18 +33,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!vehicle) return {}
 
   const trims = getTrimsForVehicle(vehicle)
-  const prices = trims.map(t => t.msrp).filter((p): p is number => typeof p === 'number')
-  const ranges = trims.map(t => t.range_mi).filter((r): r is number => typeof r === 'number')
   const years = [...new Set(trims.map(t => t.year))].sort()
-
-  const priceRange = prices.length
-    ? `$${Math.min(...prices).toLocaleString()}–$${Math.max(...prices).toLocaleString()}`
-    : ''
-  const maxRange = ranges.length ? Math.max(...ranges) : 0
+  // Current MSRPs only (configurations sold new today), and the longest range with its basis
+  const priceRange = currentPriceText(trims, dataYear) ?? ''
+  const maxRange = maxRangeText(trims)
   const yearRange = years.length === 1 ? String(years[0]) : `${years[0]}–${years[years.length - 1]}`
 
   const title = `${yearRange} ${vehicle} Specs, Range & Pricing`
-  const description = `Compare all ${vehicle} trims${priceRange ? `: pricing from ${priceRange}` : ''}${maxRange ? `, EPA range up to ${maxRange} miles` : ''}. Detailed specs, charging times, and cargo measurements.`
+  const rangeWord = rangeLabel(trims) === 'EPA Range' ? 'EPA range' : 'range'
+  const description = `Compare all ${vehicle} trims${priceRange ? `: pricing from ${priceRange}` : ''}${maxRange ? `, ${rangeWord} up to ${maxRange}` : ''}. Detailed specs, charging times, and cargo measurements.`
 
   const ogImage = `/og?type=vehicle&name=${encodeURIComponent(vehicle)}`
   return {
@@ -70,8 +71,10 @@ export default async function VehiclePage({ params }: Props) {
   const years = [...new Set(trims.map(t => t.year))].sort()
   const yearRange = years.length === 1 ? String(years[0]) : `${years[0]}–${years[years.length - 1]}`
 
-  const prices = trims.map(t => t.msrp).filter((p): p is number => typeof p === 'number')
+  // Current MSRPs (configurations sold new today); older MSRPs are only "when new" prices
+  const { current: currentPrices, past: pastPrices } = priceSpans(trims, dataYear)
   const ranges = trims.map(t => t.range_mi).filter((r): r is number => typeof r === 'number')
+  const rangeStatLabel = rangeLabel(trims)
   const hps = trims.map(t => t.hp).filter((h): h is number => typeof h === 'number')
   const batteries = trims.map(t => t.battery_kwh).filter((b): b is number => typeof b === 'number')
   const seats = [...new Set(trims.map(t => t.seats).filter((s): s is number => s !== null))].sort()
@@ -80,11 +83,6 @@ export default async function VehiclePage({ params }: Props) {
   const allPairs = getAllComparisonPairs()
   const vehicleSlug = toSlug(vehicle)
   const related = allPairs.filter(p => p.slugA === vehicleSlug || p.slugB === vehicleSlug)
-
-  // Charging types
-  const chargingTypes = [...new Set(trims.map(t => t.charging_type).filter(Boolean))]
-  const cargo3s = trims.map(t => t.cargo_behind_3rd_cu_ft).filter((c): c is number => typeof c === 'number')
-  const towing = trims.map(t => t.towing_lbs).filter((t): t is number => typeof t === 'number')
 
   // Build spec sections from centralized registry
   const specSections = SPEC_SECTIONS.map(sec => ({
@@ -102,7 +100,7 @@ export default async function VehiclePage({ params }: Props) {
     year: r.year,
     trim: r.trim,
     msrp: fmtMoney(r.msrp).text,
-    range: fmtNum(r.range_mi).text + (typeof r.range_mi === 'number' ? ' mi' : ''),
+    range: rangeCell(r) ?? fmtNum(r.range_mi).text,
     hp: fmtNum(r.hp).text + (typeof r.hp === 'number' ? ' hp' : ''),
     seats: r.seats != null ? `${r.seats}-seat` : '—',
     notes: r.notes || '',
@@ -124,57 +122,26 @@ export default async function VehiclePage({ params }: Props) {
     category: 'Electric Vehicle',
     brand: { '@type': 'Brand', name: brand },
   }
-  if (prices.length) {
+  // Offers only for configurations sold new today
+  if (currentPrices) {
     jsonLd.offers = {
       '@type': 'AggregateOffer',
-      lowPrice: Math.min(...prices),
-      highPrice: Math.max(...prices),
+      lowPrice: currentPrices.min,
+      highPrice: currentPrices.max,
       priceCurrency: 'USD',
-      offerCount: trims.length,
+      offerCount: trims.filter(t => isSoldNew(t, dataYear)).length,
     }
   }
 
-  // JSON-LD FAQ
-  const faqEntries: { q: string; a: string }[] = []
-  if (prices.length) {
-    const lo = `$${Math.min(...prices).toLocaleString()}`
-    const hi = `$${Math.max(...prices).toLocaleString()}`
-    faqEntries.push({ q: `How much does the ${vehicle} cost?`, a: `The ${yearRange} ${vehicle} starts at ${lo} MSRP and goes up to ${hi} depending on trim and configuration.` })
-  }
-  if (ranges.length) {
-    const maxR = Math.max(...ranges)
-    const minR = Math.min(...ranges)
-    faqEntries.push({ q: `What is the range of the ${vehicle}?`, a: `The ${yearRange} ${vehicle} has an EPA-estimated range of ${minR === maxR ? `${maxR} miles` : `${minR} to ${maxR} miles`} depending on trim and battery configuration.` })
-  }
-  if (seats.length) {
-    faqEntries.push({ q: `How many seats does the ${vehicle} have?`, a: `The ${vehicle} is available in ${seats.join(' and ')}-seat configurations across its trim lineup.` })
-  }
-  if (chargingTypes.length) {
-    faqEntries.push({ q: `What charging connector does the ${vehicle} use?`, a: `The ${vehicle} uses ${chargingTypes.join(' or ')}. ${chargingTypes.some(t => t.toLowerCase().includes('nacs')) ? 'NACS provides access to the Tesla Supercharger network.' : ''}`.trim() })
-  }
-  if (cargo3s.length) {
-    const maxCargo = Math.max(...cargo3s)
-    faqEntries.push({ q: `How much cargo space does the ${vehicle} have?`, a: `The ${vehicle} offers up to ${maxCargo} cubic feet of cargo space behind the third row with all seats upright.` })
-  }
-  if (towing.length) {
-    const maxTow = Math.max(...towing)
-    faqEntries.push({ q: `Can the ${vehicle} tow?`, a: `Yes, the ${vehicle} has a maximum towing capacity of ${maxTow.toLocaleString()} lbs.` })
-  }
-
-  const faqJsonLd = faqEntries.length ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqEntries.map(f => ({
-      '@type': 'Question',
-      name: f.q,
-      acceptedAnswer: { '@type': 'Answer', text: f.a },
-    })),
-  } : null
+  // FAQ: built from structured values (current prices, range basis), shown on
+  // the page and emitted as FAQPage structured data from the same list
+  const faqEntries = vehicleFaq(vehicle, trims, dataYear)
+  const faqData = faqJsonLd(faqEntries)
 
   return (
     <>
       <JsonLd data={jsonLd} />
-      {faqJsonLd && <JsonLd data={faqJsonLd} />}
+      {faqData && <JsonLd data={faqData} />}
       <Header activeTab="none" />
       <main className="vehicle-page">
         <Breadcrumb items={[
@@ -205,16 +172,19 @@ export default async function VehiclePage({ params }: Props) {
 
         {/* Quick stats */}
         <div className="detail-grid vehicle-stats-grid">
-          {prices.length > 0 && (
+          {(currentPrices ?? pastPrices) && (
             <div className="detail-stat">
-              <div className="detail-stat-label">MSRP Range</div>
-              <div className="detail-stat-value">${Math.min(...prices).toLocaleString()} – ${Math.max(...prices).toLocaleString()}</div>
+              <div className="detail-stat-label">{currentPrices ? 'MSRP Range' : 'MSRP When New'}</div>
+              <div className="detail-stat-value">${(currentPrices ?? pastPrices)!.min.toLocaleString()} – ${(currentPrices ?? pastPrices)!.max.toLocaleString()}</div>
             </div>
           )}
           {ranges.length > 0 && (
             <div className="detail-stat">
-              <div className="detail-stat-label">EPA Range</div>
-              <div className="detail-stat-value">{Math.min(...ranges)} – {Math.max(...ranges)} mi</div>
+              <div className="detail-stat-label">{rangeStatLabel}</div>
+              <div className="detail-stat-value">
+                {Math.min(...ranges)} – {Math.max(...ranges)} mi
+                {rangeStatLabel !== 'EPA Range' && <span className="detail-stat-note">EPA and maker estimates</span>}
+              </div>
             </div>
           )}
           {hps.length > 0 && (
@@ -286,6 +256,8 @@ export default async function VehiclePage({ params }: Props) {
         <div className="cmp-card-view">
           <VehicleTrimSection trims={trimDataForMobile} />
         </div>
+
+        <FaqSection entries={faqEntries} />
 
         {/* Related comparisons */}
         {related.length > 0 && (
