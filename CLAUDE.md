@@ -88,6 +88,9 @@ Pages are statically generated, but the deployment is not purely static: `app/og
 ## Data editing checklist
 
 When modifying `lib/ev-data.json`, always verify:
+- **Schema version 2** (`schema_version` at the top; `scripts/refresh/compat.json` lists what the code accepts). Every row has a unique stable **`id`**: the key for `lib/ev-data.provenance.json`, `scripts/refresh/accepted.json` and range fixes. `name` is a display label shared by seat variants: never a key
+- **`availability`** (`new`/`used_only`/`announced`/`needs_review`) says whether a configuration is sold new today; only `new` rows appear in new-car results. **`msrp`** is a number or null (no text), and **`msrp_status`** (`current`/`historical`/`announced`/`unknown`) says what it means. Changing availability is the owner's decision
+- **`range_basis`**: `manufacturer_estimate` (listed in accepted.json), `unverified` (default), or `epa` (only with a reviewed EPA mapping; none yet); generated text says "EPA" only for `epa`
 - `details` and `preowned` arrays are in sync (matching `name`, matching `preowned_range`). Note `name` is **not unique**: seat variants of a trim (e.g. Model X 5/6/7-seat) share one name, so never use it alone as a key
 - `count_data` row totals match actual detail entries per vehicle/year (the validator only checks `count_totals` against `count_data`, not against the rows; check this by hand)
 - `count_totals` sums match `count_data` column sums

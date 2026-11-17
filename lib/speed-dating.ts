@@ -99,7 +99,7 @@ const EPS = 1e-9
  * Each pick is scored as a share of the best value among all eligible
  * configurations (best ÷ value where lower is better); unknown scores 0.
  * Ties within a vehicle go to the lower price, then the newer model year,
- * then input order. Vehicles get dense ranks by score.
+ * then the configuration id (stable). Vehicles get dense ranks by score.
  */
 export function rankConfigurations(rows: Row[], pref1: string, pref2: string, condition: Condition): ScoredConfig[] {
   const prefs = effectivePrefs(pref1, pref2)
@@ -129,7 +129,7 @@ export function rankConfigurations(rows: Row[], pref1: string, pref2: string, co
   const picks = [...byVehicle.entries()].map(([vehicle, list]) => {
     const chosen = [...list].sort((a, b) =>
       b.composite - a.composite > EPS ? 1 : a.composite - b.composite > EPS ? -1
-        : (a.price ?? Infinity) - (b.price ?? Infinity) || b.row.year - a.row.year || a.index - b.index)[0]
+        : (a.price ?? Infinity) - (b.price ?? Infinity) || b.row.year - a.row.year || String(a.row.id).localeCompare(String(b.row.id)))[0]
     // Span of the prices the budget applies to (pre-owned: each trim's lowest price)
     const prices = list.map((s) => s.price).filter((v): v is number => v !== null)
     return {

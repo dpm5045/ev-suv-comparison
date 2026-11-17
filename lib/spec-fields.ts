@@ -7,7 +7,7 @@
  */
 
 import type { DetailRow } from './data'
-import { fmtMoney, fmtNum } from './utils'
+import { fmtMoney, fmtMsrp, fmtNum } from './utils'
 import { rangeCell } from './compare-text'
 
 /* ── Types ─────────────────────────────────────────────────────────── */
@@ -47,7 +47,7 @@ export const SPEC_SECTIONS: SpecSection[] = [
   {
     title: 'Pricing',
     fields: [
-      { label: 'MSRP', render: r => fmtMoney(r.msrp).text, rawNum: r => nv(r.msrp), higherIsBetter: false },
+      { label: 'MSRP', render: r => fmtMsrp(r).text, rawNum: r => (r.msrp_status === 'historical' ? null : nv(r.msrp)), higherIsBetter: false },
       { label: 'Pre-Owned Price', render: r => r.preowned_range || '—' },
       { label: 'Destination', render: r => typeof r.destination === 'number' ? `$${r.destination.toLocaleString()}` : '—' },
       { label: 'OTD (New)', render: r => fmtMoney(r.otd_new).text, rawNum: r => nv(r.otd_new), higherIsBetter: false },

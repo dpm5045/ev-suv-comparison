@@ -90,6 +90,13 @@ async function fetchBuffer(url) {
 }
 
 let data = readJson(DATA_PATH)
+
+// Refuse data whose schema this code doesn't accept (build spec E.3)
+const COMPAT = readJson(join(ROOT, 'scripts/refresh/compat.json'))
+if (!COMPAT.accepts_schema.includes(data.schema_version)) {
+  console.error(`lib/ev-data.json has schema_version ${data.schema_version}; this code accepts ${JSON.stringify(COMPAT.accepts_schema)}. Not running.`)
+  process.exit(1)
+}
 const sources = readJson(SOURCES_PATH)
 const provenance = existsSync(PROVENANCE_PATH) ? readJson(PROVENANCE_PATH) : { schema_version: 1, preowned: {}, fields: {} }
 const state = existsSync(STATE_PATH) ? readJson(STATE_PATH) : { schema_version: 1, epa: null, pages: {} }

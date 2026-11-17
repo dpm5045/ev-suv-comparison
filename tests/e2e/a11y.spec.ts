@@ -8,6 +8,7 @@ const focusInside = (page: Page, selector: string) =>
 test.describe('detail drawer (keyboard)', () => {
   test('opens from the Details button, traps focus, closes on Escape and returns focus', async ({ page }) => {
     await page.goto('/comparison')
+    await page.waitForLoadState('networkidle') // wait for hydration before using the keyboard
     const trigger = page.locator('.view-details-btn').first()
     await expect(trigger).toHaveAccessibleName(/^Details ?: \d{4} /)
     await trigger.focus()
@@ -40,6 +41,7 @@ test.describe('detail drawer (keyboard)', () => {
 
   test('a closed drawer has nothing focusable', async ({ page }) => {
     await page.goto('/comparison')
+    await page.waitForLoadState('networkidle') // wait for hydration before using the keyboard
     // The closed drawer is inert: Tab through the start of the page and never land inside it
     for (let i = 0; i < 40; i++) {
       await page.keyboard.press('Tab')
@@ -50,6 +52,7 @@ test.describe('detail drawer (keyboard)', () => {
 
   test('the home page summary drawer opens from a vehicle badge and closes with Escape', async ({ page }) => {
     await page.goto('/')
+    await page.waitForLoadState('networkidle') // wait for hydration before using the keyboard
     const badge = page.locator('.sd-badge-btn').first()
     await badge.focus()
     await page.keyboard.press('Enter')
@@ -62,12 +65,14 @@ test.describe('detail drawer (keyboard)', () => {
 
 test('side-by-side selects have labels', async ({ page }) => {
   await page.goto('/side-by-side')
+  await page.waitForLoadState('networkidle') // wait for hydration before using the keyboard
   await expect(page.getByLabel('Car 1 Vehicle')).toBeVisible()
   await expect(page.getByLabel('Car 2 Vehicle')).toBeVisible()
 })
 
 test('spec select sections toggle from the keyboard', async ({ page }) => {
   await page.goto('/spec-select')
+  await page.waitForLoadState('networkidle') // wait for hydration before using the keyboard
   const toggle = page.locator('button.spec-section-title').first()
   await expect(toggle).toHaveAttribute('aria-expanded', 'false')
   await toggle.focus()

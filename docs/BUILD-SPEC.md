@@ -244,9 +244,9 @@ flowchart LR
 ### E.3 Publication pause, compatibility gate and rollback
 The compatibility check **detects** a mismatch. It cannot stop an older job that already holds a matching old code and data pair. So the pause is explicit and has three layers.
 
-1. **Pause flag, checked at write time.** The repository variable `DATA_PUBLISH_PAUSED`, read through the API immediately before any repository write, as the writer's first step. If it is `true`, the writer stops without writing and records `paused` (not success) for the backup-schedule logic. This covers scheduled and `workflow_dispatch` runs alike, because the value is read live, not from the checked-out code.
+1. **Pause flag, checked at write time.** The pause flag (called `DATA_PUBLISH_PAUSED` in this spec), read through the API immediately before any repository write, as the writer's first step. *As built (WP-E):* the flag is `scripts/refresh/publish-control.json` (`"paused": true|false`) **on the default branch**, read live with the contents API by `scripts/refresh/can-publish.sh`. A repository variable was the first design, but the workflows' `GITHUB_TOKEN` cannot read repository variables through the API, and reading `vars.*` would only capture the value at job start. Changing the file is a reviewed commit to `master`, which CODEOWNERS assigns to the owner. If it is `true`, the writer stops without writing and records `paused` (not success) for the backup-schedule logic. This covers scheduled and `workflow_dispatch` runs alike, because the value is read live, not from the checked-out code.
 2. **Drain before merging a migration.** The runbook (`docs/runbooks/migration.md`) has six steps:
-   1. set `DATA_PUBLISH_PAUSED=true`;
+   1. set the pause flag (`"paused": true` in `scripts/refresh/publish-control.json` on `master`);
    2. `gh workflow disable` the three data workflows;
    3. cancel queued runs, and wait until `gh run list --status in_progress` shows none for them;
    4. **for every open `data-refresh/*` PR:** `gh pr merge --disable-auto`, then close it (agent PRs are closed with a comment; their inbox items return to pending under J.1);

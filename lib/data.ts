@@ -23,14 +23,26 @@ export interface CountTotals {
   total: number
 }
 
+export type Availability = 'new' | 'used_only' | 'announced' | 'needs_review'
+export type MsrpStatus = 'current' | 'historical' | 'announced' | 'unknown'
+export type RangeBasis = 'epa' | 'manufacturer_estimate' | 'unverified'
+
 export interface DetailRow {
+  /** Display label "Vehicle, Year, Trim". NOT unique (seat variants share it): never use it as a key. */
   name: string
+  /** Stable configuration id, assigned once (schema_version 2); the key for provenance, accepted.json and fixes */
+  id: string
   vehicle: string
   year: number
   trim: string
   seats: number | null
   drivetrain: string
-  msrp: number | string | null
+  /** MSRP when known, including published prices of announced models; null when unknown or not sold new */
+  msrp: number | null
+  /** Whether this configuration can be bought new today. Only 'new' is eligible for new-car results. */
+  availability: Availability
+  /** What msrp means: current price, last new price (historical), announced price, or unknown */
+  msrp_status: MsrpStatus
   destination: number | null
   /** Computed at load — (msrp + destination) * 1.06 + 905; 'TBD' passthrough; null when N/A */
   otd_new: number | string | null
@@ -53,6 +65,8 @@ export interface DetailRow {
   /** Computed at load — true when self_driving_rank was lowered for older hardware */
   adas_downgraded: boolean
   range_mi: number | string | null
+  /** What range_mi is: a verified EPA rating (reviewed mapping only), a manufacturer estimate, or unverified; null with no range */
+  range_basis: RangeBasis | null
   hp: number | string | null
   battery_kwh: number | string | null
   onboard_ac_kw: number | string | null
@@ -123,6 +137,8 @@ export interface USEVSalesNotes {
 }
 
 export interface EVData {
+  /** Data schema version; publishers refuse data versions their code doesn't accept (scripts/refresh/compat.json) */
+  schema_version: 2
   /** ISO date (YYYY-MM-DD) of the last data refresh — drives sitemap lastModified */
   last_updated: string
   scope: string
@@ -194,10 +210,12 @@ export function rankSelfDriving<T extends Pick<DetailRow, 'vehicle' | 'self_driv
 
 function enrich(r: RawDetailRow): Omit<DetailRow, 'self_driving_rank' | 'adas_downgraded'> {
   const range = parsePriceRange(r.preowned_range)
+  // New-car OTD only for a price you can pay new (current or announced), never a historical one
+  const newPrice = r.msrp_status === 'current' || r.msrp_status === 'announced'
   const otd_new =
-    typeof r.msrp === 'number' && typeof r.destination === 'number'
+    typeof r.msrp === 'number' && typeof r.destination === 'number' && newPrice
       ? (r.msrp + r.destination) * OTD_TAX_RATE + OTD_FIXED_FEES
-      : typeof r.msrp === 'string' && r.msrp.toUpperCase().includes('TBD')
+      : r.msrp === null && (r.availability === 'announced' || r.availability === 'needs_review')
         ? 'TBD'
         : null
   const otd_preowned = range

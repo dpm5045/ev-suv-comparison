@@ -7,7 +7,8 @@ const info = [];
 
 // === Required fields ===
 // otd_new / otd_preowned are computed at load in lib/data.ts — not stored, not required.
-const required = ['name','vehicle','year','trim','seats','drivetrain','msrp','preowned_range','range_mi','hp','battery_kwh','charging_type'];
+// msrp may be null (not sold new / unknown): availability says why, so it is not in this list.
+const required = ['name','id','vehicle','year','trim','seats','drivetrain','availability','msrp_status','preowned_range','range_mi','hp','battery_kwh','charging_type'];
 // Pre-release rows (2027+, "(expected)" trims) and non-US rows (Asia-market)
 // may legitimately lack US pricing/specs.
 const isPreRelease = d => d.year >= 2027 || /\(expected\)/i.test(d.trim || '') || /\bAsia\b/i.test(d.trim || '');
@@ -20,12 +21,58 @@ data.details.forEach(d => {
   });
 });
 
-// === Duplicate names ===
+// === Schema version and identity (schema_version 2) ===
+// `id` is the key for provenance, accepted.json and range fixes. `name` is a
+// display label and is not unique (seat variants share it).
+if (data.schema_version !== 2) errors.push('schema_version must be 2 (see scripts/refresh/compat.json), found: ' + data.schema_version);
+const idCount = {};
+data.details.forEach(d => {
+  if (typeof d.id !== 'string' || !/^[a-z0-9-]+$/.test(d.id)) errors.push('id must match ^[a-z0-9-]+$: ' + d.name + ' [' + d.id + ']');
+  idCount[d.id] = (idCount[d.id] || 0) + 1;
+});
+Object.entries(idCount).filter(([, n]) => n > 1).forEach(([id, n]) => errors.push('Duplicate id (x' + n + '): ' + id));
 const nameCount = {};
 data.details.forEach(d => { nameCount[d.name] = (nameCount[d.name]||0)+1; });
-Object.entries(nameCount).filter(([k,v])=>v>1).forEach(([k,v]) => {
-  warnings.push('Duplicate name (x'+v+'): ' + k);
+const sharedNames = Object.values(nameCount).filter(n => n > 1).length;
+if (sharedNames) info.push(sharedNames + ' display name(s) shared by seat variants (expected; ids are unique)');
+
+// === Availability, price meaning, range basis ===
+const AVAIL = new Set(['new', 'used_only', 'announced', 'needs_review']);
+const STATUS = new Set(['current', 'historical', 'announced', 'unknown']);
+const BASIS = new Set(['epa', 'manufacturer_estimate', 'unverified']);
+// Which msrp_status values each availability allows
+const STATUS_FOR = {
+  new: ['current', 'unknown'],
+  used_only: ['historical', 'unknown'],
+  announced: ['announced', 'unknown'],
+  needs_review: ['current', 'historical', 'announced', 'unknown'],
+};
+let needsReview = 0;
+data.details.forEach(d => {
+  if (!AVAIL.has(d.availability)) errors.push('availability must be new, used_only, announced or needs_review [' + d.availability + ']: ' + d.id);
+  if (!STATUS.has(d.msrp_status)) errors.push('msrp_status must be current, historical, announced or unknown [' + d.msrp_status + ']: ' + d.id);
+  if (d.msrp !== null && !(typeof d.msrp === 'number' && Number.isFinite(d.msrp))) errors.push('msrp must be a number or null (no text sentinels) [' + d.msrp + ']: ' + d.id);
+  if ((d.msrp === null) !== (d.msrp_status === 'unknown')) errors.push('msrp is null exactly when msrp_status is unknown: ' + d.id);
+  if (AVAIL.has(d.availability) && !STATUS_FOR[d.availability].includes(d.msrp_status)) errors.push('msrp_status ' + d.msrp_status + ' does not fit availability ' + d.availability + ': ' + d.id);
+  if (d.availability === 'needs_review') needsReview++;
+  if (!('range_basis' in d)) errors.push('Missing field [range_basis] (null when there is no range): ' + d.id);
+  else if (typeof d.range_mi === 'number' ? !BASIS.has(d.range_basis) : d.range_basis !== null) errors.push('range_basis must be epa, manufacturer_estimate or unverified when range_mi is a number, else null [' + d.range_basis + ']: ' + d.id);
+  // EPA identity needs a reviewed EPA mapping (build spec WP-J.3); none exist yet
+  if (d.range_basis === 'epa') errors.push('range_basis epa requires a reviewed EPA mapping (scripts/refresh/epa-map.json, WP-J.3): ' + d.id);
 });
+if (needsReview) warnings.push(needsReview + ' configuration(s) have availability needs_review: they are excluded from new-car results until resolved');
+
+// accepted.json (manufacturer range estimates) is keyed by id and must agree with range_basis
+if (fs.existsSync('scripts/refresh/accepted.json')) {
+  const acc = JSON.parse(fs.readFileSync('scripts/refresh/accepted.json', 'utf-8')).range_mi || {};
+  const byId = new Map(data.details.map(d => [d.id, d]));
+  Object.keys(acc).forEach(id => {
+    const d = byId.get(id);
+    if (!d) errors.push('accepted.json entry for unknown id: ' + id);
+    else if (d.range_basis !== 'manufacturer_estimate') errors.push('accepted.json lists ' + id + ' but its range_basis is ' + d.range_basis);
+  });
+  data.details.filter(d => d.range_basis === 'manufacturer_estimate' && !(d.id in acc)).forEach(d => errors.push('range_basis manufacturer_estimate without an accepted.json reason: ' + d.id));
+}
 
 // === Stored OTD guard (OTD must NOT be stored — computed at load in lib/data.ts) ===
 data.details.forEach(d => {
@@ -70,6 +117,7 @@ const totalSum = data.count_data.reduce((s,r) => s+(r.total||0), 0);
 if (totalSum !== data.count_totals.total) errors.push('count_totals.total mismatch: sum='+totalSum+' stored='+data.count_totals.total);
 
 // === Preowned <-> details sync ===
+// The parallel preowned table has no ids yet (WP-G derives it); it matches by display name.
 const detailNames = new Set(data.details.map(d => d.name));
 data.preowned.forEach(p => {
   if (!detailNames.has(p.name)) warnings.push('Preowned entry has no details match: ' + p.name);
@@ -93,8 +141,10 @@ if (fs.existsSync('lib/ev-data.provenance.json')) {
       }
     });
   });
+  const detailIds = new Set(data.details.map(d => d.id));
+  if (prov.schema_version !== 2) errors.push('Provenance schema_version must be 2 (fields keyed by id)');
   Object.entries(prov.fields || {}).forEach(([name, fields]) => {
-    if (!detailNames.has(name)) errors.push('Provenance entry for unknown row: ' + name);
+    if (!detailIds.has(name)) errors.push('Provenance entry for unknown id: ' + name);
     Object.entries(fields).forEach(([field, p]) => {
       if (!fieldNames.has(field)) errors.push('Provenance entry for unknown field [' + field + ']: ' + name);
       if (!isUrl(p.source_url) || !isDate(p.verified_on)) errors.push('Provenance entry needs https source_url and YYYY-MM-DD verified_on [' + field + ']: ' + name);

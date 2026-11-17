@@ -7,7 +7,7 @@ import { planPreowned, applyRowChanges, scaleRange, parseRange } from '../lib/pr
 const fixture = readFileSync(new URL('./fixtures/cargurus-ev9-table.html', import.meta.url), 'utf-8')
 const URL_EV9 = 'https://www.cargurus.com/research/price-trends/Kia-EV9-d3322'
 
-const row = (year, trim, range) => ({ name: `Kia EV9, ${year}, ${trim}`, vehicle: 'Kia EV9', year, trim, preowned_range: range })
+const row = (year, trim, range) => ({ id: `kia-ev9-${year}-${trim.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, name: `Kia EV9, ${year}, ${trim}`, vehicle: 'Kia EV9', year, trim, preowned_range: range })
 const makeData = () => ({
   last_updated: '2026-01-01',
   details: [

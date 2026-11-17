@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "preowned": {
     "Kia EV9": {
       "source_url": "https://www.cargurus.com/research/price-trends/Kia-EV9-d3322",
@@ -178,1428 +178,1932 @@
     }
   },
   "fields": {
-    "Kia EV9, 2026, GT-Line": {
+    "kia-ev9-2026-gt-line": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49668",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EV9 Long Range AWD GT-Line: 280 mi"
+        "evidence": "EPA 2026 EV9 Long Range AWD GT-Line: 280 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2026, GT-Line + 2nd Row Relaxation Package": {
+    "kia-ev9-2026-gt-line-plus-2nd-row-relaxation-package": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49668",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EV9 Long Range AWD GT-Line: 280 mi"
+        "evidence": "EPA 2026 EV9 Long Range AWD GT-Line: 280 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2026, Land": {
+    "kia-ev9-2026-land": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49667",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi"
+        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2026, Land Nightfall Edition (6-pass)": {
+    "kia-ev9-2026-land-nightfall-edition-6-pass": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49667",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi"
+        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2026, Land Nightfall Edition (7-pass)": {
+    "kia-ev9-2026-land-nightfall-edition-7-pass": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49667",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi"
+        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2026, Wind": {
+    "kia-ev9-2026-wind": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49667",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi"
+        "evidence": "EPA 2026 EV9 Long Range AWD: 283 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2025, GT-Line": {
+    "kia-ev9-2025-gt-line": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48369",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EV9 Long Range AWD GT-Line: 270 mi"
+        "evidence": "EPA 2025 EV9 Long Range AWD GT-Line: 270 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2025, Land": {
+    "kia-ev9-2025-land": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48368",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EV9 Long Range AWD: 280 mi"
+        "evidence": "EPA 2025 EV9 Long Range AWD: 280 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2025, Wind": {
+    "kia-ev9-2025-wind": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48368",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EV9 Long Range AWD: 280 mi"
+        "evidence": "EPA 2025 EV9 Long Range AWD: 280 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2024, GT-Line": {
+    "kia-ev9-2024-gt-line": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47453",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EV9 Long Range AWD GT-Line: 270 mi"
+        "evidence": "EPA 2024 EV9 Long Range AWD GT-Line: 270 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2024, GT-Line + 2nd Row VIP Relaxation Package": {
+    "kia-ev9-2024-gt-line-plus-2nd-row-vip-relaxation-package": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47453",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EV9 Long Range AWD GT-Line: 270 mi"
+        "evidence": "EPA 2024 EV9 Long Range AWD GT-Line: 270 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2024, Land": {
+    "kia-ev9-2024-land": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47452",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi"
+        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2024, Land + 2nd Row VIP Relaxation Package": {
+    "kia-ev9-2024-land-plus-2nd-row-vip-relaxation-package": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47452",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi"
+        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2024, Wind": {
+    "kia-ev9-2024-wind": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47452",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi"
+        "evidence": "EPA 2024 EV9 Long Range AWD: 280 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2024, Light RWD": {
+    "kia-ev9-2024-light-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47451",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EV9 Standard Range RWD: 230 mi"
+        "evidence": "EPA 2024 EV9 Standard Range RWD: 230 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2024, Light Long Range RWD": {
+    "kia-ev9-2024-light-long-range-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47450",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EV9 Long Range RWD: 304 mi"
+        "evidence": "EPA 2024 EV9 Long Range RWD: 304 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2025, Light RWD": {
+    "kia-ev9-2025-light-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48367",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EV9 Standard Range RWD: 230 mi"
+        "evidence": "EPA 2025 EV9 Standard Range RWD: 230 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2025, Light Long Range RWD": {
+    "kia-ev9-2025-light-long-range-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48366",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EV9 Long Range RWD: 304 mi"
+        "evidence": "EPA 2025 EV9 Long Range RWD: 304 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2026, Light RWD": {
+    "kia-ev9-2026-light-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49665",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EV9 Standard Range RWD: 230 mi"
+        "evidence": "EPA 2026 EV9 Standard Range RWD: 230 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2026, Light Long Range RWD": {
+    "kia-ev9-2026-light-long-range-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49666",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EV9 Long Range RWD: 305 mi"
+        "evidence": "EPA 2026 EV9 Long Range RWD: 305 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2027, Light": {
+    "kia-ev9-2027-light": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51036",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 EV9 Standard Range RWD: 230 mi"
+        "evidence": "EPA 2027 EV9 Standard Range RWD: 230 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2027, Light Long Range RWD": {
+    "kia-ev9-2027-light-long-range-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51035",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 EV9 Long Range RWD: 305 mi"
+        "evidence": "EPA 2027 EV9 Long Range RWD: 305 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2027, Wind": {
+    "kia-ev9-2027-wind": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51033",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 EV9 Long Range AWD: 283 mi"
+        "evidence": "EPA 2027 EV9 Long Range AWD: 283 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2027, Land": {
+    "kia-ev9-2027-land": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51033",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 EV9 Long Range AWD: 283 mi"
+        "evidence": "EPA 2027 EV9 Long Range AWD: 283 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Kia EV9, 2027, GT-Line": {
+    "kia-ev9-2027-gt-line": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51034",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 EV9 Long Range AWD GT-Line: 280 mi"
+        "evidence": "EPA 2027 EV9 Long Range AWD GT-Line: 280 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Hyundai IONIQ 9, 2026, Performance Calligraphy": {
+    "hyundai-ioniq-9-2026-performance-calligraphy": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49663",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi"
+        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Hyundai IONIQ 9, 2026, Performance Calligraphy Design": {
+    "hyundai-ioniq-9-2026-performance-calligraphy-design": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49663",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi"
+        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Hyundai IONIQ 9, 2026, Performance Limited": {
+    "hyundai-ioniq-9-2026-performance-limited": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49663",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi"
+        "evidence": "EPA 2026 Ioniq 9 AWD Performance: 311 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Hyundai IONIQ 9, 2026, SE": {
+    "hyundai-ioniq-9-2026-se": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49662",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Ioniq 9 AWD: 320 mi"
+        "evidence": "EPA 2026 Ioniq 9 AWD: 320 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Hyundai IONIQ 9, 2026, SEL": {
+    "hyundai-ioniq-9-2026-sel": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49662",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Ioniq 9 AWD: 320 mi"
+        "evidence": "EPA 2026 Ioniq 9 AWD: 320 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Hyundai IONIQ 9, 2026, S RWD": {
+    "hyundai-ioniq-9-2026-s-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49661",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Ioniq 9 RWD: 335 mi"
+        "evidence": "EPA 2026 Ioniq 9 RWD: 335 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2025, Twin Motor Performance Plus 6-Seater": {
+    "volvo-ex90-2025-twin-motor-performance-plus-6s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48777",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/us/support/car/ex90/2025/software-release-notes/",
         "verified_on": "2026-11-16",
-        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops."
+        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2025, Twin Motor Performance Plus 7-Seater": {
+    "volvo-ex90-2025-twin-motor-performance-plus-7s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48777",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/us/support/car/ex90/2025/software-release-notes/",
         "verified_on": "2026-11-16",
-        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops."
+        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2025, Twin Motor Performance Ultra 6-Seater": {
+    "volvo-ex90-2025-twin-motor-performance-ultra-6s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48778",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/us/support/car/ex90/2025/software-release-notes/",
         "verified_on": "2026-11-16",
-        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops."
+        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2025, Twin Motor Performance Ultra 7-Seater": {
+    "volvo-ex90-2025-twin-motor-performance-ultra-7s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48778",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/us/support/car/ex90/2025/software-release-notes/",
         "verified_on": "2026-11-16",
-        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops."
+        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2025, Twin Motor Plus 6-Seater": {
+    "volvo-ex90-2025-twin-motor-plus-6s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48777",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/us/support/car/ex90/2025/software-release-notes/",
         "verified_on": "2026-11-16",
-        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops."
+        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2025, Twin Motor Plus 7-Seater": {
+    "volvo-ex90-2025-twin-motor-plus-7s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48777",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 EX90 Twin Motor (20 and 22 Inch Wheels): 300 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/us/support/car/ex90/2025/software-release-notes/",
         "verified_on": "2026-11-16",
-        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops."
+        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2025, Twin Motor Ultra 6-Seater": {
+    "volvo-ex90-2025-twin-motor-ultra-6s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48778",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/us/support/car/ex90/2025/software-release-notes/",
         "verified_on": "2026-11-16",
-        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops."
+        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2025, Twin Motor Ultra 7-Seater": {
+    "volvo-ex90-2025-twin-motor-ultra-7s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48778",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 EX90 Twin Motor (21 Inch Wheels): 310 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/us/support/car/ex90/2025/software-release-notes/",
         "verified_on": "2026-11-16",
-        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops."
+        "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2022, Launch Edition (Quad Motor, Large)": {
+    "rivian-r1s-2022-launch-edition-quad-motor-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=44461",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2022 R1S: 316 mi"
+        "evidence": "EPA 2022 R1S: 316 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2022, Adventure (Quad Motor, Large)": {
+    "rivian-r1s-2022-adventure-quad-motor-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=44461",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2022 R1S: 316 mi"
+        "evidence": "EPA 2022 R1S: 316 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2023, Explore (Dual Motor, Large)": {
+    "rivian-r1s-2023-explore-dual-motor-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46996",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2023 R1S 21 inch Dual Large: 352 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2023 R1S 21 inch Dual Large: 352 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2023, Adventure (Dual Motor, Large)": {
+    "rivian-r1s-2023-adventure-dual-motor-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46996",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2023 R1S 21 inch Dual Large: 352 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2023 R1S 21 inch Dual Large: 352 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2023, Adventure (Quad Motor, Large)": {
+    "rivian-r1s-2023-adventure-quad-motor-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46315",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2023 R1S (20 inch wheels): 289 mi"
+        "evidence": "EPA 2023 R1S (20 inch wheels): 289 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2024, Adventure Dual-Motor Standard": {
+    "rivian-r1s-2024-adventure-dual-motor-standard": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47895",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 R1S Dual Standard (21in): 270 mi"
+        "evidence": "EPA 2024 R1S Dual Standard (21in): 270 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2024, Adventure Dual-Motor Large": {
+    "rivian-r1s-2024-adventure-dual-motor-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47891",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 R1S Dual Large (21in): 352 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2024 R1S Dual Large (21in): 352 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2024, Adventure Dual-Motor Max": {
+    "rivian-r1s-2024-adventure-dual-motor-max": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47893",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 R1S Dual Max (21in): 400 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2024 R1S Dual Max (21in): 400 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2024, Performance Dual-Motor Large": {
+    "rivian-r1s-2024-performance-dual-motor-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47906",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 R1S Quad Large (21in): 321 mi"
+        "evidence": "EPA 2024 R1S Quad Large (21in): 321 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2024, Quad-Motor Large": {
+    "rivian-r1s-2024-quad-motor-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47906",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 R1S Quad Large (21in): 321 mi"
+        "evidence": "EPA 2024 R1S Quad Large (21in): 321 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2026, Dual Large": {
+    "rivian-r1s-2026-dual-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49731",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 R1S All-Terrain Tri Max (20in): 329 mi (and 2 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2026 R1S All-Terrain Tri Max (20in): 329 mi (and 2 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2026, Dual Max (\"Max Battery\")": {
+    "rivian-r1s-2026-dual-max-max-battery": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49719",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2026 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2026, Dual Standard": {
+    "rivian-r1s-2026-dual-standard": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49716",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 R1S Dual Standard (22in): 270 mi"
+        "evidence": "EPA 2026 R1S Dual Standard (22in): 270 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2026, Tri Max": {
+    "rivian-r1s-2026-tri-max": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49730",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 R1S Tri Max (22in): 371 mi"
+        "evidence": "EPA 2026 R1S Tri Max (22in): 371 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2025, Adventure Dual Large (\"Dual Long\")": {
+    "rivian-r1s-2025-adventure-dual-large-dual-long": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48432",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 R1S Dual Large Plus (22in): 330 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 R1S Dual Large Plus (22in): 330 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2025, Adventure Dual Max": {
+    "rivian-r1s-2025-adventure-dual-max": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48434",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2025, Adventure Dual Standard": {
+    "rivian-r1s-2025-adventure-dual-standard": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48436",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 R1S Dual Standard (22in): 270 mi"
+        "evidence": "EPA 2025 R1S Dual Standard (22in): 270 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2025, Ascend Tri Max": {
+    "rivian-r1s-2025-ascend-tri-max": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48751",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 R1S Tri Max (22in): 371 mi"
+        "evidence": "EPA 2025 R1S Tri Max (22in): 371 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2025, Performance Dual Large": {
+    "rivian-r1s-2025-performance-dual-large": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48432",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 R1S Dual Large Plus (22in): 330 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 R1S Dual Large Plus (22in): 330 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2025, Performance Dual Max": {
+    "rivian-r1s-2025-performance-dual-max": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48434",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2025 R1S Dual Max (22in): 410 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2021, Long Range Plus": {
+    "tesla-model-x-2021-long-range-plus-5s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=43403",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2021 Model X Long Range Plus: 371 mi"
+        "evidence": "EPA 2021 Model X Long Range Plus: 371 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2022, Base": {
+    "tesla-model-x-2021-long-range-plus-6s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=43403",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2021 Model X Long Range Plus: 371 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2021-long-range-plus-7s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=43403",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2021 Model X Long Range Plus: 371 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2022-base-5s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=45020",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2022 Model X: 348 mi"
+        "evidence": "EPA 2022 Model X: 348 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2022 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2022 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2022, Plaid": {
+    "tesla-model-x-2022-base-6s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=45020",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2022 Model X: 348 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2022 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2022-base-7s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=45020",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2022 Model X: 348 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2022 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2022-plaid": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=45021",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2022 Model X Plaid (20 inch wheels): 333 mi"
+        "evidence": "EPA 2022 Model X Plaid (20 inch wheels): 333 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2022 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2022 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2026, Base": {
+    "tesla-model-x-2026-base-5s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49745",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Model X: 352 mi"
+        "evidence": "EPA 2026 Model X: 352 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
         "verified_on": "2026-11-16",
-        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026."
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2026, Plaid": {
+    "tesla-model-x-2026-base-6s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49745",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Model X: 352 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
+        "verified_on": "2026-11-16",
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2026-base-7s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49745",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Model X: 352 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
+        "verified_on": "2026-11-16",
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2026-plaid-5s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49746",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Model X Plaid: 335 mi"
+        "evidence": "EPA 2026 Model X Plaid: 335 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
         "verified_on": "2026-11-16",
-        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026."
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2025, Base": {
+    "tesla-model-x-2026-plaid-6s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49746",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Model X Plaid: 335 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
+        "verified_on": "2026-11-16",
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2026-plaid-7s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49746",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2026 Model X Plaid: 335 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2026 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
+        "verified_on": "2026-11-16",
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2025-base-5s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49125",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 Model X: 329 mi"
+        "evidence": "EPA 2025 Model X: 329 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
         "verified_on": "2026-11-16",
-        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026."
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2025, Plaid": {
+    "tesla-model-x-2025-base-6s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49125",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 Model X: 329 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
+        "verified_on": "2026-11-16",
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2025-base-7s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49125",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 Model X: 329 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
+        "verified_on": "2026-11-16",
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2025-plaid-5s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48768",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 Model X Plaid (20in wheels): 314 mi"
+        "evidence": "EPA 2025 Model X Plaid (20in wheels): 314 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
         "verified_on": "2026-11-16",
-        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026."
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2023, Base": {
+    "tesla-model-x-2025-plaid-6s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48768",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 Model X Plaid (20in wheels): 314 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
+        "verified_on": "2026-11-16",
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2025-plaid-7s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48768",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2025 Model X Plaid (20in wheels): 314 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2025 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://electrek.co/2026/04/01/tesla-model-s-x-production-over-only-inventory-left/",
+        "verified_on": "2026-11-16",
+        "evidence": "Musk (Apr 1, 2026): \"Custom orders of the Tesla Model S & X have come to an end. All that's left are some in inventory.\" Remaining new inventory reported sold out by the site owner, Nov 2026.",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2023-base-5s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46208",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2023 Model X: 348 mi"
+        "evidence": "EPA 2023 Model X: 348 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
-        "evidence": "Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+        "evidence": "Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2023, Plaid": {
+    "tesla-model-x-2023-base-6s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46208",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 Model X: 348 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2023-base-7s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46208",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2023 Model X: 348 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2023-plaid": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46209",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2023 Model X Plaid (20 inch wheels): 333 mi"
+        "evidence": "EPA 2023 Model X Plaid (20 inch wheels): 333 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
-        "evidence": "Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+        "evidence": "Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
       }
     },
-    "Lucid Gravity, 2026, Grand Touring": {
+    "lucid-gravity-2026-grand-touring": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50029",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Gravity GT w/20F21R wheels (3R): 437 mi"
+        "evidence": "EPA 2026 Gravity GT w/20F21R wheels (3R): 437 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Lucid Gravity, 2026, Touring": {
+    "lucid-gravity-2026-touring": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50221",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Gravity Touring w/20F21R wheels: 337 mi"
+        "evidence": "EPA 2026 Gravity Touring w/20F21R wheels: 337 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Lucid Gravity, 2027, Touring": {
+    "lucid-gravity-2027-touring": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50658",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 Gravity Touring w/20F21R wheels: 337 mi"
+        "evidence": "EPA 2027 Gravity Touring w/20F21R wheels: 337 mi",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://lucidmotors.com/gravity",
         "verified_on": "2026-11-15",
-        "evidence": "Buy from $79,900"
+        "evidence": "Buy from $79,900",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.cars.com/articles/2027-lucid-gravity-news-523376/",
         "verified_on": "2026-11-15",
-        "evidence": "Derived: Cars.com price including destination ($81,750) minus Lucid price excluding destination ($79,900)"
+        "evidence": "Derived: Cars.com price including destination ($81,750) minus Lucid price excluding destination ($79,900)",
+        "legacy": "name_keyed"
       }
     },
-    "Lucid Gravity, 2027, Grand Touring": {
+    "lucid-gravity-2027-grand-touring": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50653",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 Gravity GT w/20F21R wheels (3R): 437 mi"
+        "evidence": "EPA 2027 Gravity GT w/20F21R wheels (3R): 437 mi",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://lucidmotors.com/gravity",
         "verified_on": "2026-11-15",
-        "evidence": "Buy from $98,900"
+        "evidence": "Buy from $98,900",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.cars.com/articles/2027-lucid-gravity-news-523376/",
         "verified_on": "2026-11-15",
-        "evidence": "Derived: Cars.com price including destination ($100,750) minus Lucid price excluding destination ($98,900)"
+        "evidence": "Derived: Cars.com price including destination ($100,750) minus Lucid price excluding destination ($98,900)",
+        "legacy": "name_keyed"
       }
     },
-    "Volkswagen ID. Buzz, 2025, 1st Edition with 4MOTION": {
+    "volkswagen-id-buzz-2025-1st-edition-with-4motion": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48445",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 ID. Buzz 4motion: 231 mi"
+        "evidence": "EPA 2025 ID. Buzz 4motion: 231 mi",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.vw.com/en/models/id-buzz.html",
         "verified_on": "2026-11-16",
-        "evidence": "\"offers\":{\"lowPrice\":\"59995.00\",\"highPrice\":\"69995.00\"} (2025 ID. Buzz; Starting MSRP $59,995)"
+        "evidence": "\"offers\":{\"lowPrice\":\"59995.00\",\"highPrice\":\"69995.00\"} (2025 ID. Buzz; Starting MSRP $59,995)",
+        "legacy": "name_keyed"
       }
     },
-    "Volkswagen ID. Buzz, 2025, Pro S Plus with 4MOTION": {
+    "volkswagen-id-buzz-2025-pro-s-plus-with-4motion": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48445",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 ID. Buzz 4motion: 231 mi"
+        "evidence": "EPA 2025 ID. Buzz 4motion: 231 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Volkswagen ID. Buzz, 2025, Pro S RWD": {
+    "volkswagen-id-buzz-2025-pro-s-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 ID. Buzz: 234 mi"
+        "evidence": "EPA 2025 ID. Buzz: 234 mi",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.vw.com/en/models/id-buzz.html",
         "verified_on": "2026-11-16",
-        "evidence": "Starting MSRP $59,995 (2025 ID. Buzz; Pro S is the base trim). Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00)."
+        "evidence": "Starting MSRP $59,995 (2025 ID. Buzz; Pro S is the base trim). Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00).",
+        "legacy": "name_keyed"
       }
     },
-    "Volkswagen ID. Buzz, 2025, Pro S Plus RWD": {
+    "volkswagen-id-buzz-2025-pro-s-plus-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 ID. Buzz: 234 mi"
+        "evidence": "EPA 2025 ID. Buzz: 234 mi",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.conceptcarz.com/a54862/volkswagen-2025-id-buzz-pricing.aspx",
         "verified_on": "2026-11-16",
-        "evidence": "Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00)."
+        "evidence": "Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00).",
+        "legacy": "name_keyed"
       }
     },
-    "Volkswagen ID. Buzz, 2025, 1st Edition RWD": {
+    "volkswagen-id-buzz-2025-1st-edition-rwd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48444",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 ID. Buzz: 234 mi"
+        "evidence": "EPA 2025 ID. Buzz: 234 mi",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.conceptcarz.com/a54862/volkswagen-2025-id-buzz-pricing.aspx",
         "verified_on": "2026-11-16",
-        "evidence": "Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00)."
+        "evidence": "Volkswagen of America release (Aug 2024), reprinted: Pro S $59,995; Pro S Plus $63,495 RWD; 1st Edition $65,495 RWD; destination $1,550 extra. vw.com still lists the 2025 ID. Buzz new from $59,995 (offers lowPrice 59995.00, highPrice 69995.00).",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac VISTIQ, 2026, Luxury": {
+    "cadillac-vistiq-2026-luxury": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49636",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 VISTIQ (11 kW Charger): 305 mi"
+        "evidence": "EPA 2026 VISTIQ (11 kW Charger): 305 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2025, EQS 450+": {
+    "mercedes-benz-eqs-suv-2025-eqs-450-plus": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48392",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EQS 450 Plus (SUV): 323 mi"
+        "evidence": "EPA 2025 EQS 450 Plus (SUV): 323 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2025, EQS 450 4MATIC": {
+    "mercedes-benz-eqs-suv-2025-eqs-450-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48395",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EQS 450 4matic (SUV): 312 mi"
+        "evidence": "EPA 2025 EQS 450 4matic (SUV): 312 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2025, EQS 580 4MATIC": {
+    "mercedes-benz-eqs-suv-2025-eqs-580-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48396",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EQS 580 4matic (SUV): 317 mi"
+        "evidence": "EPA 2025 EQS 580 4matic (SUV): 317 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2023, EQS 450+": {
+    "mercedes-benz-eqs-suv-2023-eqs-450-plus": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46011",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2023 EQS 450 Plus (SUV): 305 mi"
+        "evidence": "EPA 2023 EQS 450 Plus (SUV): 305 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2023, EQS 450 4MATIC": {
+    "mercedes-benz-eqs-suv-2023-eqs-450-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46010",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2023 EQS 450 4matic (SUV): 285 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2023 EQS 450 4matic (SUV): 285 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2023, EQS 580 4MATIC": {
+    "mercedes-benz-eqs-suv-2023-eqs-580-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=46010",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2023 EQS 450 4matic (SUV): 285 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2023 EQS 450 4matic (SUV): 285 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2024, EQS 450+": {
+    "mercedes-benz-eqs-suv-2024-eqs-450-plus": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47847",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EQS 450 Plus (SUV): 339 mi"
+        "evidence": "EPA 2024 EQS 450 Plus (SUV): 339 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2024, EQS 450 4MATIC": {
+    "mercedes-benz-eqs-suv-2024-eqs-450-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47850",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EQS 450 4matic (SUV): 330 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2024 EQS 450 4matic (SUV): 330 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2024, EQS 580 4MATIC": {
+    "mercedes-benz-eqs-suv-2024-eqs-580-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47850",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EQS 450 4matic (SUV): 330 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2024 EQS 450 4matic (SUV): 330 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2024, Maybach EQS 680 4MATIC": {
+    "mercedes-benz-eqs-suv-2024-maybach-eqs-680-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47852",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 EQS 680 4matic Maybach (SUV): 321 mi"
+        "evidence": "EPA 2024 EQS 680 4matic Maybach (SUV): 321 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2025, Maybach EQS 680 4MATIC": {
+    "mercedes-benz-eqs-suv-2025-maybach-eqs-680-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=48397",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 EQS 680 4matic Maybach (SUV): 302 mi"
+        "evidence": "EPA 2025 EQS 680 4matic Maybach (SUV): 302 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2026, EQS 400 4MATIC": {
+    "mercedes-benz-eqs-suv-2026-eqs-400-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49688",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EQS 400 4matic (SUV): 312 mi"
+        "evidence": "EPA 2026 EQS 400 4matic (SUV): 312 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2026, EQS 550 4MATIC": {
+    "mercedes-benz-eqs-suv-2026-eqs-550-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49689",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EQS 550 4matic (SUV): 317 mi"
+        "evidence": "EPA 2026 EQS 550 4matic (SUV): 317 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac VISTIQ, 2026, Sport": {
+    "cadillac-vistiq-2026-sport": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49636",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 VISTIQ (11 kW Charger): 305 mi"
+        "evidence": "EPA 2026 VISTIQ (11 kW Charger): 305 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac VISTIQ, 2026, Premium Luxury": {
+    "cadillac-vistiq-2026-premium-luxury": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49637",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 VISTIQ (19 kW Charger): 300 mi"
+        "evidence": "EPA 2026 VISTIQ (19 kW Charger): 300 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac VISTIQ, 2026, Platinum": {
+    "cadillac-vistiq-2026-platinum": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49637",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 VISTIQ (19 kW Charger): 300 mi"
+        "evidence": "EPA 2026 VISTIQ (19 kW Charger): 300 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2024, Adventure Dual-Motor Standard+": {
+    "rivian-r1s-2024-adventure-dual-motor-standard-plus": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47897",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 R1S Dual Standard Plus (21in): 315 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2024 R1S Dual Standard Plus (21in): 315 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2024, Performance Dual-Motor Standard+": {
+    "rivian-r1s-2024-performance-dual-motor-standard-plus": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47897",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 R1S Dual Standard Plus (21in): 315 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2024 R1S Dual Standard Plus (21in): 315 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2024, Performance Dual-Motor Max": {
+    "rivian-r1s-2024-performance-dual-motor-max": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47893",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 R1S Dual Max (21in): 400 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2024 R1S Dual Max (21in): 400 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles."
+        "evidence": "Driver+ is the suite of assisted driving features that comes standard with our Gen 1 (model year 2022–2024) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2027, Premium (7-seat)": {
+    "rivian-r1s-2027-premium-7-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50665",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 R1S Performance (20in AT): 329 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2027 R1S Performance (20in AT): 329 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2027, Premium (6-seat)": {
+    "rivian-r1s-2027-premium-6-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50665",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 R1S Performance (20in AT): 329 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2027 R1S Performance (20in AT): 329 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2027, Premium Long Range (7-seat)": {
+    "rivian-r1s-2027-premium-long-range-7-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50673",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 R1S Premium Long Range (22in): 410 mi"
+        "evidence": "EPA 2027 R1S Premium Long Range (22in): 410 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2027, Premium Long Range (6-seat)": {
+    "rivian-r1s-2027-premium-long-range-6-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50673",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 R1S Premium Long Range (22in): 410 mi"
+        "evidence": "EPA 2027 R1S Premium Long Range (22in): 410 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2027, Performance (7-seat)": {
+    "rivian-r1s-2027-performance-7-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50667",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 R1S Performance (22in): 371 mi"
+        "evidence": "EPA 2027 R1S Performance (22in): 371 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2027, Performance (6-seat)": {
+    "rivian-r1s-2027-performance-6-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50667",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 R1S Performance (22in): 371 mi"
+        "evidence": "EPA 2027 R1S Performance (22in): 371 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2027, Quad (7-seat)": {
+    "rivian-r1s-2027-quad-7-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50676",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 R1S Quad (22in): 374 mi"
+        "evidence": "EPA 2027 R1S Quad (22in): 374 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Rivian R1S, 2027, Quad (6-seat)": {
+    "rivian-r1s-2027-quad-6-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50676",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 R1S Quad (22in): 374 mi"
+        "evidence": "EPA 2027 R1S Quad (22in): 374 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://rivian.com/support/article/what-is-the-rivian-autonomy-platform",
         "verified_on": "2026-11-16",
-        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles."
+        "evidence": "Rivian Autonomy Platform is the suite of hardware, cameras, sensors and assisted driving features on our Gen 2 (model year 2025 and onward) vehicles.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2026, Single Motor Plus": {
+    "volvo-ex90-2026-single-motor-plus": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50255",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EX90 (21 Inch Wheels): 291 mi"
+        "evidence": "EPA 2026 EX90 (21 Inch Wheels): 291 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
-        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "EX90 Plus Starting at $78,090 MSRP† † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $78,090 - $1,395."
+        "evidence": "EX90 Plus Starting at $78,090 MSRP† † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $78,090 - $1,395.",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2026, Twin Motor Plus": {
+    "volvo-ex90-2026-twin-motor-plus": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50257",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EX90 Twin Motor (21 Inch Wheels): 305 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2026 EX90 Twin Motor (21 Inch Wheels): 305 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
-        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: stored price $81,390 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $81,390 - $1,395."
+        "evidence": "Derived: stored price $81,390 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $81,390 - $1,395.",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2026, Twin Motor Ultra": {
+    "volvo-ex90-2026-twin-motor-ultra": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50257",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EX90 Twin Motor (21 Inch Wheels): 305 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2026 EX90 Twin Motor (21 Inch Wheels): 305 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
-        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "EX90 Ultra Starting at $85,740 MSRP† † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $85,740 - $1,395."
+        "evidence": "EX90 Ultra Starting at $85,740 MSRP† † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $85,740 - $1,395.",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2026, Twin Motor Performance Plus": {
+    "volvo-ex90-2026-twin-motor-performance-plus": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50256",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EX90 Twin Motor: 298 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2026 EX90 Twin Motor: 298 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
-        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: stored price $86,390 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $86,390 - $1,395."
+        "evidence": "Derived: stored price $86,390 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $86,390 - $1,395.",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395.",
+        "legacy": "name_keyed"
       }
     },
-    "Volvo EX90, 2026, Twin Motor Performance Ultra": {
+    "volvo-ex90-2026-twin-motor-performance-ultra": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50256",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EX90 Twin Motor: 298 mi (and 1 other EPA variant(s) with the same range)"
+        "evidence": "EPA 2026 EX90 Twin Motor: 298 mi (and 1 other EPA variant(s) with the same range)",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://www.volvocars.com/intl/news/articles/the-award-winning-ex90-just-levelled-up-with-faster-charging-and-new-advanced-features/",
         "verified_on": "2026-11-16",
-        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer"
+        "evidence": "the 2026 version of the Volvo EX90 ... includes ... a dual NVIDIA DRIVE AGX Orin-based core computer",
+        "legacy": "name_keyed"
       },
       "msrp": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: stored price $90,740 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $90,740 - $1,395."
+        "evidence": "Derived: stored price $90,740 was Volvo's destination-inclusive figure, like the Plus ($78,090) and Ultra ($85,740) prices shown on this page. † Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395. So MSRP = $90,740 - $1,395.",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.volvocars.com/us/cars/ex90-electric/",
         "verified_on": "2026-11-16",
-        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395."
+        "evidence": "† Starting Manufacturer’s Suggested Retail Price (MSRP) includes destination fee of $1,395.",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model Y (3-Row), 2026, Long Range AWD": {
+    "tesla-model-y-3-row-2026-long-range-awd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49744",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Model Y Long Range AWD: 327 mi"
+        "evidence": "EPA 2026 Model Y Long Range AWD: 327 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2026/01/26/tesla-quietly-starts-shipping-model-y-with-new-ai4-5-computer/",
         "verified_on": "2026-11-16",
-        "evidence": "new Model Y owners discovering their vehicles are equipped with \"Hardware 4.5\", or AI4.5 ... Fremont-built Model Y vehicles in late December and January"
+        "evidence": "new Model Y owners discovering their vehicles are equipped with \"Hardware 4.5\", or AI4.5 ... Fremont-built Model Y vehicles in late December and January",
+        "legacy": "name_keyed"
       }
     },
-    "Lexus TZ, 2027, Premium AWD": {
+    "lexus-tz-2027-premium-awd": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51041",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 TZ 450e 11kW (20 inch Wheels): 253 mi"
+        "evidence": "EPA 2027 TZ 450e 11kW (20 inch Wheels): 253 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2024, Base": {
+    "tesla-model-x-2024-base-5s": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47915",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 Model X: 335 mi"
+        "evidence": "EPA 2024 Model X: 335 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2024, Plaid": {
+    "tesla-model-x-2024-base-6s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47915",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 Model X: 335 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2024-base-7s": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47915",
+        "verified_on": "2026-11-15",
+        "evidence": "EPA 2024 Model X: 335 mi",
+        "legacy": "name_keyed"
+      },
+      "adas_hardware": {
+        "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
+        "verified_on": "2026-11-16",
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
+      }
+    },
+    "tesla-model-x-2024-plaid": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=47916",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2024 Model X Plaid (20in wheels): 326 mi"
+        "evidence": "EPA 2024 Model X Plaid (20in wheels): 326 mi",
+        "legacy": "name_keyed"
       },
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\""
+        "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
+        "legacy": "name_keyed"
       }
     },
-    "Lucid Gravity, 2026, Dream Edition": {
+    "lucid-gravity-2026-dream-edition": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49675",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 Gravity Dream w/20F21R wheels (3R): 420 mi"
+        "evidence": "EPA 2026 Gravity Dream w/20F21R wheels (3R): 420 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Mercedes-Benz EQS SUV, 2026, Maybach EQS 680 4MATIC": {
+    "mercedes-benz-eqs-suv-2026-maybach-eqs-680-4matic": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49690",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2026 EQS 680 4matic Maybach (SUV): 300 mi"
+        "evidence": "EPA 2026 EQS 680 4matic Maybach (SUV): 300 mi",
+        "legacy": "name_keyed"
       }
     },
-    "VinFast VF9, 2025, Plus (7-seat)": {
+    "vinfast-vf9-2025-plus-7-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49088",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 VF 9 Plus: 287 mi"
+        "evidence": "EPA 2025 VF 9 Plus: 287 mi",
+        "legacy": "name_keyed"
       }
     },
-    "VinFast VF9, 2025, Plus (6-seat)": {
+    "vinfast-vf9-2025-plus-6-seat": {
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=49088",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2025 VF 9 Plus: 287 mi"
+        "evidence": "EPA 2025 VF 9 Plus: 287 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Lucid Gravity, 2027, GT-S": {
+    "lucid-gravity-2027-gt-s": {
       "msrp": {
         "source_url": "https://lucidmotors.com/gravity",
         "verified_on": "2026-11-15",
-        "evidence": "Buy from $125,900"
+        "evidence": "Buy from $125,900",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.cars.com/articles/what-is-the-2027-lucid-gravity-gt-s-527959/",
         "verified_on": "2026-11-15",
-        "evidence": "Derived: Cars.com price including destination ($127,750) minus Lucid price excluding destination ($125,900)"
+        "evidence": "Derived: Cars.com price including destination ($127,750) minus Lucid price excluding destination ($125,900)",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac VISTIQ, 2027, Luxury": {
+    "cadillac-vistiq-2027-luxury": {
       "msrp": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "LUXURY From: $78,400"
+        "evidence": "LUXURY From: $78,400",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.caranddriver.com/cadillac/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com"
+        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com",
+        "legacy": "name_keyed"
       },
       "charging_type": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "with standard NACS charging port"
+        "evidence": "with standard NACS charging port",
+        "legacy": "name_keyed"
       },
       "seats": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "AVAILABLE FEATURES Second-row captain’s chairs (six-passenger seating)"
+        "evidence": "AVAILABLE FEATURES Second-row captain’s chairs (six-passenger seating)",
+        "legacy": "name_keyed"
       },
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50624",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 VISTIQ 11kW Charger: 305 mi"
+        "evidence": "EPA 2027 VISTIQ 11kW Charger: 305 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac VISTIQ, 2027, Sport": {
+    "cadillac-vistiq-2027-sport": {
       "msrp": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "SPORT From: $79,000"
+        "evidence": "SPORT From: $79,000",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.caranddriver.com/cadillac/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com"
+        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com",
+        "legacy": "name_keyed"
       },
       "charging_type": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "with standard NACS charging port"
+        "evidence": "with standard NACS charging port",
+        "legacy": "name_keyed"
       },
       "seats": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "AVAILABLE FEATURES Second-row captain’s chairs (six-passenger seating)"
+        "evidence": "AVAILABLE FEATURES Second-row captain’s chairs (six-passenger seating)",
+        "legacy": "name_keyed"
       },
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50624",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 VISTIQ 11kW Charger: 305 mi"
+        "evidence": "EPA 2027 VISTIQ 11kW Charger: 305 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac VISTIQ, 2027, Premium Luxury": {
+    "cadillac-vistiq-2027-premium-luxury": {
       "msrp": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "PREMIUM LUXURY From: $92,900"
+        "evidence": "PREMIUM LUXURY From: $92,900",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.caranddriver.com/cadillac/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com"
+        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com",
+        "legacy": "name_keyed"
       },
       "charging_type": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "with standard NACS charging port"
+        "evidence": "with standard NACS charging port",
+        "legacy": "name_keyed"
       },
       "seats": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "Second-row captain’s chairs (six-passenger seating)"
+        "evidence": "Second-row captain’s chairs (six-passenger seating)",
+        "legacy": "name_keyed"
       },
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50625",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 VISTIQ 19kW Charger: 300 mi"
+        "evidence": "EPA 2027 VISTIQ 19kW Charger: 300 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac VISTIQ, 2027, Platinum": {
+    "cadillac-vistiq-2027-platinum": {
       "msrp": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "PLATINUM From: $97,500"
+        "evidence": "PLATINUM From: $97,500",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.caranddriver.com/cadillac/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com"
+        "evidence": "Derived: Car and Driver MSRP $80,395 including destination minus Cadillac Luxury price $78,400; the fee is not stated on cadillac.com",
+        "legacy": "name_keyed"
       },
       "charging_type": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "with standard NACS charging port"
+        "evidence": "with standard NACS charging port",
+        "legacy": "name_keyed"
       },
       "seats": {
         "source_url": "https://www.cadillac.com/electric/vistiq",
         "verified_on": "2026-11-15",
-        "evidence": "Second-row captain’s chairs (six-passenger seating)"
+        "evidence": "Second-row captain’s chairs (six-passenger seating)",
+        "legacy": "name_keyed"
       },
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50625",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 VISTIQ 19kW Charger: 300 mi"
+        "evidence": "EPA 2027 VISTIQ 19kW Charger: 300 mi",
+        "legacy": "name_keyed"
       }
     },
-    "VinFast VF9, 2027, Plus (7-seat)": {
+    "vinfast-vf9-2027-plus-7-seat": {
       "msrp": {
         "source_url": "https://vinfastauto.us/vehicles/vf-9",
         "verified_on": "2026-11-15",
-        "evidence": "From $62,900 Starting MSRP"
+        "evidence": "From $62,900 Starting MSRP",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://vinfastauto.us/vehicles/vf-9",
         "verified_on": "2026-11-15",
-        "evidence": "MSRP of $64,290, including destination and handling fee of $1,390"
+        "evidence": "MSRP of $64,290, including destination and handling fee of $1,390",
+        "legacy": "name_keyed"
       },
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50641",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 VF 9 Plus: 287 mi"
+        "evidence": "EPA 2027 VF 9 Plus: 287 mi",
+        "legacy": "name_keyed"
       }
     },
-    "VinFast VF9, 2027, Plus (6-seat)": {
+    "vinfast-vf9-2027-plus-6-seat": {
       "msrp": {
         "source_url": "https://vinfastauto.us/vehicles/vf-9",
         "verified_on": "2026-11-15",
-        "evidence": "From $62,900 Starting MSRP"
+        "evidence": "From $62,900 Starting MSRP",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://vinfastauto.us/vehicles/vf-9",
         "verified_on": "2026-11-15",
-        "evidence": "MSRP of $64,290, including destination and handling fee of $1,390"
+        "evidence": "MSRP of $64,290, including destination and handling fee of $1,390",
+        "legacy": "name_keyed"
       },
       "range_mi": {
         "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=50641",
         "verified_on": "2026-11-15",
-        "evidence": "EPA 2027 VF 9 Plus: 287 mi"
+        "evidence": "EPA 2027 VF 9 Plus: 287 mi",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2021, Plaid (5-seat)": {
+    "tesla-model-x-2021-plaid-5s": {
       "adas_hardware": {
         "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2021, Plaid (6-seat)": {
+    "tesla-model-x-2021-plaid-6s": {
       "adas_hardware": {
         "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model X, 2021, Plaid (7-seat)": {
+    "tesla-model-x-2021-plaid-7s": {
       "adas_hardware": {
         "source_url": "https://electrek.co/2026/04/22/tesla-elon-musk-unsupervised-fsd-consumer-cars-q4-delay-again/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\""
+        "evidence": "Derived: HW4 first appeared on Model S/X in Feb 2023 (https://electrek.co/2023/02/22/tesla-model-s-x-spotted-new-hardware-4-0-suite-cameras/), so MY2021 was built with HW3. Musk: HW3 vehicles \"simply do not have the capability to achieve unsupervised FSD\" ... \"a hardware upgrade path that requires replacing both the computer and all cameras\"",
+        "legacy": "name_keyed"
       }
     },
-    "Tesla Model Y L, 2026, Launch Series": {
+    "tesla-model-y-l-2026-launch-series": {
       "adas_hardware": {
         "source_url": "https://electrek.co/2023/05/26/tesla-model-y-hardware-4-features/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: \"Tesla has started producing Model Y vehicles with Hardware 4.0\" (Electrek, May 26 2023); the Model Y L launched in the US in July 2026 (https://electrek.co/2026/07/02/tesla-model-y-l-us-launch-61990/), so it has HW4 or later. Confirmed by the site owner."
+        "evidence": "Derived: \"Tesla has started producing Model Y vehicles with Hardware 4.0\" (Electrek, May 26 2023); the Model Y L launched in the US in July 2026 (https://electrek.co/2026/07/02/tesla-model-y-l-us-launch-61990/), so it has HW4 or later. Confirmed by the site owner.",
+        "legacy": "name_keyed"
       },
       "destination": {
         "source_url": "https://www.kbb.com/car-news/tesla-drops-cheapest-awd-model-y-bumping-dual-motor-price-to-over-50000/",
         "verified_on": "2026-11-16",
-        "evidence": "Derived: KBB \"starting at $41,630\" for the Model Y RWD \"including destination and order fees\" minus Electrek's $39,990 \"before the destination fee\" (https://electrek.co/2026/11/13/tesla-kills-41990-model-y-awd-configurator/) = $1,640 ($1,390 destination + $250 order fee)."
+        "evidence": "Derived: KBB \"starting at $41,630\" for the Model Y RWD \"including destination and order fees\" minus Electrek's $39,990 \"before the destination fee\" (https://electrek.co/2026/11/13/tesla-kills-41990-model-y-awd-configurator/) = $1,640 ($1,390 destination + $250 order fee).",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac Escalade IQ, 2026, Sport": {
+    "cadillac-escalade-iq-2026-sport": {
       "msrp": {
         "source_url": "https://www.cadillac.com/electric/escalade-iq",
         "verified_on": "2026-11-16",
-        "evidence": "SPORT From: $127,905 (Luxury From: $127,405 matches stored)"
+        "evidence": "SPORT From: $127,905 (Luxury From: $127,405 matches stored)",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac Escalade IQ, 2026, Premium Luxury": {
+    "cadillac-escalade-iq-2026-premium-luxury": {
       "msrp": {
         "source_url": "https://www.cadillac.com/electric/escalade-iq",
         "verified_on": "2026-11-16",
-        "evidence": "PREMIUM LUXURY From: $147,705"
+        "evidence": "PREMIUM LUXURY From: $147,705",
+        "legacy": "name_keyed"
       }
     },
-    "Cadillac Escalade IQ, 2026, Premium Sport": {
+    "cadillac-escalade-iq-2026-premium-sport": {
       "msrp": {
         "source_url": "https://www.cadillac.com/electric/escalade-iq",
         "verified_on": "2026-11-16",
-        "evidence": "PREMIUM SPORT From: $148,205"
+        "evidence": "PREMIUM SPORT From: $148,205",
+        "legacy": "name_keyed"
       }
     }
   }

@@ -13,9 +13,9 @@ export const dataYear = new Date(DATA.last_updated).getUTCFullYear()
 /** Rows for vehicles on sale (watch-list vehicles excluded). */
 const baseRows = (): DetailRow[] => DATA.details.filter((r) => !isWatchlistVehicle(r.vehicle))
 
-/** Base rows with a numeric MSRP from the last two model years onward. */
+/** Base rows sold new today, with a current MSRP. */
 const recentRows = (): (DetailRow & { msrp: number })[] =>
-  baseRows().filter((r): r is DetailRow & { msrp: number } => typeof r.msrp === 'number' && r.year >= dataYear - 1)
+  baseRows().filter((r): r is DetailRow & { msrp: number } => r.availability === 'new' && typeof r.msrp === 'number')
 
 /** "2025–2027": the model years the recent-row charts actually cover. */
 export function recentYearsLabel(): string {

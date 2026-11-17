@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { DATA } from '@/lib/data'
-import { fmtMoney, fmtNum } from '@/lib/utils'
+import { fmtMoney, fmtMsrp, fmtNum } from '@/lib/utils'
 import VehicleBadge from '../VehicleBadge'
 import PageHeader, { dataCountEyebrow } from '../PageHeader'
 import { hasPreowned, isSoldNew } from '@/lib/selection'
@@ -643,7 +643,7 @@ export default function SpecSelectTab({ onRowClick }: Props) {
         <div className="spec-results">
           {filtered.map(r => {
             const origIdx = DATA.details.indexOf(r)
-            const msrp = fmtMoney(r.msrp)
+            const msrp = fmtMsrp(r)
             const range = fmtNum(r.range_mi)
             return (
               <div key={origIdx} className="spec-card" onClick={() => onRowClick(origIdx)}>
@@ -664,7 +664,7 @@ export default function SpecSelectTab({ onRowClick }: Props) {
                     <span className="spec-card-stat-value">
                       {isPreowned
                         ? (hasPreowned(r) ? r.preowned_range.replace(/\$[\d,]+/g, (m: string) => `$${Math.round(parseInt(m.replace(/[$,]/g, '')) / 1000)}k`) : '\u2014')
-                        : (typeof r.msrp === 'number' ? `$${Math.round(r.msrp / 1000)}k` : msrp.text)
+                        : fmtMsrp(r, { compact: true }).text
                       }
                     </span>
                   </div>
