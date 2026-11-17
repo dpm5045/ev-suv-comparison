@@ -141,3 +141,7 @@ When refreshing or auditing vehicle data, Claude is pre-approved to fetch from t
 
 IMPORTANT: Maintain clean git hygiene throughout the session.
 Aim to create a checkpoint commit roughly every 30–60 minutes of active coding, or sooner when a meaningful milestone is completed.
+
+# Codex Reviews
+
+before opening a PR, run codex review and address findings

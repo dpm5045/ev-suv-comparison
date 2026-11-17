@@ -89,11 +89,18 @@ jobs:
         run: npm run validate
 
       - name: Save
+        id: publish
         if: steps.open.outputs.count == '0'
         run: |
           # Publication pause and schema check, read live just before writing (build spec E.3)
           gate=$(bash scripts/refresh/can-publish.sh)
-          if [ "$gate" != yes ]; then echo "Not publishing: ${gate#no: }" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          if [ "$gate" != yes ]; then
+            # Not a completed refresh: mark the run so the next-day backup still runs (ran-since.sh)
+            echo "Not publishing: ${gate#no: }" >> "$GITHUB_STEP_SUMMARY"
+            mkdir -p "$RUNNER_TEMP/paused" && echo "$gate" > "$RUNNER_TEMP/paused/reason.txt"
+            echo "paused=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if [ -z "$(git status --porcelain)" ]; then
             echo "Nothing changed since the last run." >> "$GITHUB_STEP_SUMMARY"
             exit 0
@@ -123,6 +130,14 @@ jobs:
             echo "Merged $url" >> "$GITHUB_STEP_SUMMARY"
           fi
 
+
+      - name: Mark the run as paused (the backup schedule retries it)
+        if: steps.publish.outputs.paused == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: publication-paused
+          path: ${{ runner.temp }}/paused/reason.txt
+          retention-days: 14
       - name: Send open items to the Data inbox
         if: steps.open.outputs.count == '0'
         run: bash scripts/refresh/inbox.sh "Data watch $(date -u +%F)" "$RUNNER_TEMP/attention.md"
