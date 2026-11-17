@@ -15,7 +15,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import VehicleTrimSection from '@/components/VehicleTrimSection'
 import JsonLd from '@/components/JsonLd'
 import FaqSection from '@/components/FaqSection'
-import { currentPriceText, faqJsonLd, maxRangeText, priceSpans, rangeCell, rangeLabel, vehicleFaq } from '@/lib/compare-text'
+import { currentPriceText, faqJsonLd, maxRangeText, priceSpans, rangeBasis, rangeCell, rangeLabel, vehicleFaq } from '@/lib/compare-text'
 import { dataYear } from '@/lib/data-stories'
 import { isSoldNew } from '@/lib/selection'
 
@@ -183,7 +183,7 @@ export default async function VehiclePage({ params }: Props) {
               <div className="detail-stat-label">{rangeStatLabel}</div>
               <div className="detail-stat-value">
                 {Math.min(...ranges)} – {Math.max(...ranges)} mi
-                {rangeStatLabel !== 'EPA Range' && <span className="detail-stat-note">EPA and maker estimates</span>}
+                {trims.some(t => rangeBasis(t) === 'manufacturer_estimate' && typeof t.range_mi === 'number') && <span className="detail-stat-note">includes maker estimates</span>}
               </div>
             </div>
           )}

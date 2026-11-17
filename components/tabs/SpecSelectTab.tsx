@@ -97,7 +97,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
     filters: [
       {
         key: 'range',
-        label: 'EPA Range',
+        label: 'Range',
         options: [
           { id: 'under275', label: 'Under 275 mi' },
           { id: '275to325', label: '275\u2013325 mi' },
