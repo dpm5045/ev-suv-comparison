@@ -11,10 +11,12 @@ export default defineConfig({
     baseURL: `http://localhost:${port}`,
     viewport: { width: 1280, height: 900 },
   },
+  // CI tests the production build on a fresh server; locally, a dev server
+  // (or one already running) is fine.
   webServer: {
-    command: `npm run dev -- -p ${port}`,
+    command: process.env.CI ? `npm run start -- -p ${port}` : `npm run dev -- -p ${port}`,
     url: `http://localhost:${port}`,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 })

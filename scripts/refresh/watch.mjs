@@ -181,7 +181,9 @@ if (epa) {
   for (const g of epa.groups) {
     if (g.mismatch.length) {
       const ours = [...new Set(g.mismatch.map((r) => r.stored))].join(', ')
-      attention.push(`${g.vehicle} ${g.year}: stored range ${ours} mi is not an EPA figure for this model year (EPA has ${g.epaRanges.join(', ')}) — ${g.mismatch.length} row(s)`)
+      const unmatched = g.mismatch.filter((r) => r.state === 'unmatched').length
+      const why = unmatched ? `; ${unmatched} row(s) match no EPA variant of their drive type and seating` : ''
+      attention.push(`${g.vehicle} ${g.year}: stored range ${ours} mi is not an EPA figure for this model year (EPA has ${g.epaRanges.join(', ')}) — ${g.mismatch.length} row(s)${why}`)
     }
   }
 }
@@ -235,7 +237,7 @@ if (epaError) L.push('', '## EPA range check', '', `**The EPA vehicle file could
 if (epa) {
   const n = (s) => epa.rows.filter((r) => r.state === s).length
   L.push('', '## EPA range check', '',
-    `${epa.rows.length} rows: ${n('consistent')} match an EPA figure, ${n('mismatch')} do not, ${n('accepted')} are accepted manufacturer figures, ${n('not_in_epa')} are for a model year EPA has not listed, ${n('no_stored_range')} have no stored number.`,
+    `${epa.rows.length} rows: ${n('consistent')} match an EPA figure, ${n('mismatch')} do not, ${n('unmatched')} match no EPA variant of their drive type and seating, ${n('accepted')} are accepted manufacturer figures, ${n('not_in_epa')} are for a model year EPA has not listed, ${n('no_stored_range')} have no stored number.`,
     epa.changes === null ? 'First run: EPA snapshot recorded, nothing to compare against yet.' : `EPA changes since the last run: ${epa.changes.length}.`,
     '', '| Vehicle | Year | Rows | Match EPA | Outcome |', '|---|---|---|---|---|')
   for (const g of epa.groups) {

@@ -232,3 +232,19 @@ test('price gaps: missing priced rows and a different starting price, not estima
     'Mercedes-Benz GLB Electric: Car and Driver lists 2027 prices ($51,350–$69,000, including destination) but no 2027 rows have prices',
   ])
 })
+
+test('a row no EPA variant fits (drive type or seating) is unmatched and never fixed', () => {
+  const V = (id, model, range, drive) => ({ id, model, drive, range })
+  // Only a two-row, rear-drive rating exists for this model year
+  const idx = { 'Lucid Gravity': {
+    '2025': [V(1, 'Gravity Touring (2R)', 300, 'Rear-Wheel Drive')],
+    '2026': [V(1, 'Gravity Touring (2R)', 310, 'Rear-Wheel Drive')],
+  } }
+  const seven = (year, range, drivetrain = 'AWD') => ({ ...row('Lucid Gravity', year, 'Touring', drivetrain, range), seats: 7 })
+  const data = { details: [seven(2025, 300), seven(2026, 300), { ...seven(2026, 300, 'RWD') }] }
+  const { rows } = checkRanges(data, idx)
+  // Wrong drive and wrong seats; right drive but wrong seats: neither may pass as EPA-verified
+  assert.deepEqual(rows.map((r) => r.state), ['unmatched', 'unmatched', 'unmatched'])
+  // EPA revising the two-row figure 300 → 310 must not move a seven-seat AWD row
+  assert.deepEqual(planRangeFixes(data, idx, idx).fixes, [])
+})

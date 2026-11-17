@@ -2,7 +2,10 @@ name: Data Watch
 
 # Runs scripts/refresh/watch.mjs: checks stored ranges against the EPA vehicle
 # file, watches manufacturer and Car and Driver pages for price changes, and
-# corrects range_mi where EPA alone settles it (planRangeFixes).
+# can correct range_mi where EPA alone settles it (planRangeFixes, --fix-ranges).
+# Automatic range fixes are PAUSED (build spec WP-A.3) until fixes are keyed by
+# configuration ID and limited to reviewed EPA mappings (WP-J.3); mismatches
+# still go to the Data inbox.
 #
 # - Range corrections go through a PR that is merged straight away (an audit
 #   trail of what changed and why; validation has passed).
@@ -61,7 +64,7 @@ jobs:
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
 
       - name: Unit tests
         run: npm run test:refresh
@@ -78,7 +81,7 @@ jobs:
       - name: Check EPA and price pages
         if: steps.open.outputs.count == '0'
         run: |
-          node scripts/refresh/watch.mjs --apply --fix-ranges --report "$RUNNER_TEMP/report.md" --attention "$RUNNER_TEMP/attention.md"
+          node scripts/refresh/watch.mjs --apply --report "$RUNNER_TEMP/report.md" --attention "$RUNNER_TEMP/attention.md"
           cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Validate data

@@ -7,7 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev      # Start dev server (localhost:3000)
 npm run build    # Production build
-npm run lint     # ESLint via Next.js
+npm run lint     # ESLint (explicit; app, components, lib, tests)
+npm run test:unit          # Vitest unit tests for app/domain code (tests/unit)
 npm run validate # Data checks (also runs before every build)
 npm run refresh:preowned   # Pre-owned repricing from CarGurus; dry run unless --apply
 npm run refresh:watch      # EPA range check + manufacturer price-page watch; report only
@@ -17,11 +18,11 @@ node scripts/refresh/probe-sources.mjs                  # Which research sites a
 node scripts/export-sheet.mjs <dir>                     # CSV per table for the backup Claude Sheet (/sync-sheet)
 ```
 
-The app itself has no unit tests; `tests/e2e` holds a Playwright smoke test.
+`tests/unit` holds Vitest unit tests for app and domain code; `tests/e2e` holds the Playwright smoke suite. `.github/workflows/ci.yml` runs lint, type check, both test suites, the build and Playwright (against `next start`) on every PR and push to master. Use Node 22 (`.nvmrc`).
 
 ## Architecture
 
-This is a **Next.js 14 App Router** app (TypeScript, no testing framework) focused on comparing 3-row AWD electric SUVs.
+This is a **Next.js 14 App Router** app (TypeScript) focused on comparing 3-row AWD electric SUVs.
 
 ### Data flow
 
@@ -53,7 +54,7 @@ app/
 
 Speed Dating ranking logic lives in `lib/speed-dating.ts` (scores only the trims that fit the chosen budget); chart data and headlines for the Market Insights tab live in `lib/data-stories.ts`. Old `/watch-list`, `/explore` and `/data` URLs redirect to `/news-radar` and `/market-insights`.
 
-**Filter state is URL-driven.** Each route's client component reads filter values from `useSearchParams()` and applies updates via `router.replace()` (no history entry per filter click). Filters survive refresh and are shareable. Old `/?tab=X` URLs 301-redirect to the routes (see `redirects()` in `next.config.mjs`).
+**Filter state is mostly URL-driven.** Most route clients read filter values from `useSearchParams()` and apply updates via `router.replace()` (no history entry per filter click); Side-by-Side uses `router.push()`, and the Market Insights Data Explorer keeps its filters in local state. Filters survive refresh and are shareable. Old `/?tab=X` URLs 301-redirect to the routes (see `redirects()` in `next.config.mjs`).
 
 `DetailPanel` is controlled by local `detailIdx` state (index into `DATA.details`) since it doesn't need to be shareable.
 
@@ -61,15 +62,15 @@ Speed Dating ranking logic lives in `lib/speed-dating.ts` (scores only the trims
 
 `ComparisonV2Tab` uses a dual-render pattern: a desktop `<table>` (`.cmp-table-view`) and a mobile card grid (`.cmp-card-view`). On mobile, a Cards/Table toggle button controls which is visible via CSS classes (`.cmp-table-forced` / `.cmp-card-hidden`). All styles are in `app/globals.css`.
 
-### API route
+### Runtime endpoints
 
-`app/api/news/route.ts` — POST endpoint that proxies to the Anthropic API (`claude-sonnet-4-6` with `web_search` tool) to fetch live EV news summaries. Requires `ANTHROPIC_API_KEY` in `.env.local`. News results are cached in `localStorage` for 7 days.
+Pages are statically generated, but the deployment is not purely static: `app/og/route.tsx` renders Open Graph images on the edge at request time. There is no API route (the old news proxy was removed).
 
 ## Data editing checklist
 
 When modifying `lib/ev-data.json`, always verify:
-- `details` and `preowned` arrays are in sync (matching `name`, matching `preowned_range`)
-- `count_data` row totals match actual detail entries per vehicle/year
+- `details` and `preowned` arrays are in sync (matching `name`, matching `preowned_range`). Note `name` is **not unique**: seat variants of a trim (e.g. Model X 5/6/7-seat) share one name, so never use it alone as a key
+- `count_data` row totals match actual detail entries per vehicle/year (the validator only checks `count_totals` against `count_data`, not against the rows; check this by hand)
 - `count_totals` sums match `count_data` column sums
 - Never store `otd_new` / `otd_preowned` in the JSON — they are computed at load in `lib/data.ts` (the validator errors if a stored OTD field appears)
 - `VEHICLE_CLASSES` + `CLASS_THEMES` in `lib/vehicle-theme.ts` have entries for any new vehicle
