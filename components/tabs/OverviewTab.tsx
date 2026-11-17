@@ -9,17 +9,15 @@ import { toSlug } from '@/lib/slugs'
 import { chartColor } from '@/lib/vehicle-theme'
 import { useIsLightTheme } from '../useIsLightTheme'
 import {
-  NEW_BUDGET_BUCKETS,
-  PREOWNED_BUDGET_BUCKETS,
   PREFERENCE_OPTIONS,
   SPEED_DATING_DEFAULTS,
-  computeRanks,
-  extractMetric,
-  formatRawMetric,
-  hasPreowned,
-  summarizeInBudget,
-  type SpeedDatingMatch,
+  formatMetric,
+  parseSpeedDatingParams,
+  rankConfigurations,
+  type ScoredConfig,
 } from '@/lib/speed-dating'
+import { MIN_SPEED_DATING_SEATS, budgetBuckets as bucketsFor, eligibleRows } from '@/lib/selection'
+import { dataYear } from '@/lib/data-stories'
 import { COST_PER_MILE_DEK, RANGE_STORY_HEADLINE, choiceHeadline, priceHeadline } from '@/lib/data-stories'
 import { CostPerMileChart, costPerMileHeadline, costPerMileSource } from '../DataStories'
 
@@ -34,9 +32,6 @@ const PICK_NOUN: Record<string, string> = {
   selfdriving: 'self-driving',
 }
 
-/** Picks where a smaller number is better. */
-const LOWER_IS_BETTER = new Set(['power', 'charging'])
-
 const prefLabel = (id: string) => PREFERENCE_OPTIONS.find((p) => p.id === id)?.label ?? id
 const dollarsK = (n: number) => `$${Math.round(n / 1000)}k`
 
@@ -49,7 +44,7 @@ interface Bar {
 }
 
 interface Ranked {
-  match: SpeedDatingMatch
+  match: ScoredConfig
   rank: number
   score: number
   bars: Bar[]
@@ -89,71 +84,47 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const activeCondition = condition || SPEED_DATING_DEFAULTS.condition
+  // Unknown URL values fall back to the documented defaults
+  const settings = parseSpeedDatingParams({ condition, budget, pref1, pref2 }, bucketsFor)
+  const activeCondition = settings.condition
   const isPreowned = activeCondition === 'preowned'
-  const activePref1 = pref1
-  const activePref2 = pref2
+  const activePref1 = settings.pref1
+  const activePref2 = settings.pref2
+  const budgetBuckets = bucketsFor(activeCondition)
+  const activeBudget: string = settings.budget
+  const sixSeatPicked = activePref1 === 'sixseat' || activePref2 === 'sixseat'
 
-  const budgetBuckets = isPreowned ? PREOWNED_BUDGET_BUCKETS : NEW_BUDGET_BUCKETS
-  const requestedBudget = budget || SPEED_DATING_DEFAULTS.budget
-  const activeBudget: string = budgetBuckets.some((b) => b.id === requestedBudget) ? requestedBudget : 'all'
+  /* --- eligible configurations: condition and budget apply independently --- */
+  const filteredDetails = useMemo(
+    () => eligibleRows(DATA.details as Row[], {
+      condition: activeCondition,
+      budget: activeBudget,
+      sixSeat: sixSeatPicked,
+      dataYear,
+      exclude: isWatchlistVehicle,
+      minSeats: MIN_SPEED_DATING_SEATS,
+    }),
+    [activeCondition, activeBudget, sixSeatPicked],
+  )
 
-  /* --- filtered details --- */
-  const filteredDetails = useMemo(() => {
-    const bucketFilter = budgetBuckets.find((b) => b.id === activeBudget)?.filter ?? (() => true)
-    let rows = (DATA.details as Row[]).filter((r) => !isWatchlistVehicle(r.vehicle))
-    if (isPreowned) {
-      // Only trims with valid pre-owned data
-      rows = rows.filter(hasPreowned)
-      if (activeBudget !== 'all') {
-        rows = rows.filter((r) => {
-          const price = r.preowned_low
-          return price !== null && bucketFilter(price)
-        })
-      }
-    } else {
-      if (activeBudget !== 'all') {
-        rows = rows.filter((r) => typeof r.msrp === 'number' && bucketFilter(r.msrp as number))
-      }
-    }
-    if (activePref1 === 'sixseat' || activePref2 === 'sixseat') {
-      rows = rows.filter((r) => r.seats === 6)
-    }
-    return rows
-  }, [activeBudget, budgetBuckets, isPreowned, activePref1, activePref2])
-
-  /* --- ranked matches (scored only on in-budget trims) --- */
+  /* --- ranked: each vehicle by its best real configuration --- */
   const { ranked, effectivePrefs } = useMemo(() => {
-    const matches = summarizeInBudget(filteredDetails, isPreowned)
-    const result = computeRanks(matches, activePref1, activePref2)
-    const prefs = result.effectivePrefs
-
-    // Best value among the matches for each pick (bars are drawn relative to it)
-    const best = new Map<string, number>()
-    for (const p of prefs) {
-      const vals = matches.map((m) => extractMetric(m, p)).filter((v): v is number => v !== null && v !== 0)
-      if (vals.length) best.set(p, LOWER_IS_BETTER.has(p) ? Math.min(...vals) : Math.max(...vals))
-    }
-
-    const list: Ranked[] = matches
-      .filter((m) => result.ranks.has(m.vehicle))
-      .map((m) => ({
-        match: m,
-        rank: result.ranks.get(m.vehicle)!,
-        score: Math.round((result.composites.get(m.vehicle) ?? 0) * 100),
-        bars: prefs.map((p, i) => {
-          const v = extractMetric(m, p)
-          const b = best.get(p)
-          const has = v !== null && v !== 0 && b !== undefined
-          const fraction = has ? (LOWER_IS_BETTER.has(p) ? b! / v! : v! / b!) : 0
-          const value = p === 'selfdriving' && m.selfDrivingLabel ? m.selfDrivingLabel : formatRawMetric(p, v)
-          return { pref: p, label: prefLabel(p), value, fraction, tone: i === 0 ? 'first' : 'second' } as Bar
-        }),
-      }))
-      .sort((a, b) => a.rank - b.rank || a.match.vehicle.localeCompare(b.match.vehicle))
-
-    return { ranked: list, effectivePrefs: prefs }
-  }, [filteredDetails, isPreowned, activePref1, activePref2])
+    const matches = rankConfigurations(filteredDetails, activePref1, activePref2, activeCondition)
+    const prefs = matches[0]?.metrics.map((m) => m.pref) ?? []
+    const list: Ranked[] = matches.map((m) => ({
+      match: m,
+      rank: m.rank,
+      score: Math.round(m.composite * 100),
+      bars: m.metrics.map((x, i) => ({
+        pref: x.pref,
+        label: prefLabel(x.pref),
+        value: formatMetric(x.pref, x.value, m.row),
+        fraction: x.share,
+        tone: i === 0 ? 'first' : 'second',
+      })),
+    }))
+    return { ranked: list, effectivePrefs: prefs as string[] }
+  }, [filteredDetails, activePref1, activePref2, activeCondition])
 
   const isLight = useIsLightTheme()
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
@@ -206,11 +177,38 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
 
   /* --- display helpers --- */
 
-  function priceText(m: SpeedDatingMatch, top: boolean): string {
-    if (m.priceLow === null) return '—'
-    if (isPreowned) return `From ${dollarsK(m.priceLow)}${top ? ' pre-owned' : ''}`
-    if (m.priceHigh === null || m.priceLow === m.priceHigh) return dollarsK(m.priceLow)
-    return `${dollarsK(m.priceLow)}–${dollarsK(m.priceHigh)}`
+  /** Price of the configuration shown (the one every bar describes). */
+  function priceText(m: ScoredConfig, top: boolean): string {
+    const r = m.row
+    if (isPreowned) {
+      if (r.preowned_low === null) return '—'
+      const span = r.preowned_high !== null && r.preowned_high !== r.preowned_low ? `${dollarsK(r.preowned_low)}–${dollarsK(r.preowned_high)}` : dollarsK(r.preowned_low)
+      return `${span}${top ? ' pre-owned' : ''}`
+    }
+    return typeof r.msrp === 'number' ? `${dollarsK(r.msrp)} MSRP` : '—'
+  }
+
+  /** Which configuration this is, e.g. "2024 Pro S RWD · 7 seats". */
+  function configText(m: ScoredConfig): string {
+    const r = m.row
+    return `${r.year} ${r.trim}${typeof r.seats === 'number' ? ` · ${r.seats} seats` : ''}`
+  }
+
+  /** Model-level context, labelled as such. */
+  function fitText(m: ScoredConfig): string {
+    const n = m.trimCount
+    const lo = m.priceLow
+    const hi = m.priceHigh
+    const span = lo === null ? '' : hi !== null && hi !== lo ? `${dollarsK(lo)}–${dollarsK(hi)}` : dollarsK(lo)
+    const what = isPreowned ? 'starting at' : 'MSRP'
+    return `${n} ${n === 1 ? 'trim fits' : 'trims fit'} your budget${span ? ` · ${what} ${span}` : ''}`
+  }
+
+  function compareHref(m: ScoredConfig): string {
+    const r = m.row
+    const q = new URLSearchParams({ v1: r.vehicle, y1: String(r.year), t1: r.trim })
+    if (typeof r.seats === 'number') q.set('s1', String(r.seats))
+    return `/side-by-side?${q.toString()}`
   }
 
   function verdict(top: Ranked): string {
@@ -254,7 +252,6 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   const top = ranked[0]
   const runnersUp = ranked.slice(1, 3)
   const rest = ranked.slice(3)
-  const sixSeatPicked = activePref1 === 'sixseat' || activePref2 === 'sixseat'
   const topColor = top ? chartColor(top.match.vehicle, isLight) : ''
 
   return (
@@ -330,7 +327,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
             <details className="sd-math">
               <summary>How is the math mathing?</summary>
               <p>
-                Each metric is scored against the best vehicle in your budget: the best gets full marks, and the rest get their share of it (for 0&ndash;60 and charging time, quicker is better). Self-driving is ranked by tier, one tier lower on older hardware.{' '}
+                Every trim that fits your budget is scored on its own specs: the best value in the room gets full marks, and the rest get their share of it (for 0&ndash;60 and charging time, quicker is better). Storage is the space behind the third row. Self-driving is ranked by tier, one tier lower on older hardware. Each model is then shown by its best-scoring trim, so the numbers on a card all belong to one car you can buy.{' '}
                 {effectivePrefs.length === 2
                   ? `Your first pick (${prefLabel(effectivePrefs[0])}) counts 60%, your second (${prefLabel(effectivePrefs[1])}) counts 40%.`
                   : effectivePrefs.length === 1
@@ -368,13 +365,15 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                     {badge(top.match.vehicle)}
                     <span className="sd-match-chip">It&apos;s a match</span>
                   </div>
+                  <p className="sd-config">{configText(top.match)}</p>
                   <p className="sd-verdict">{verdict(top)}</p>
                   {bars(top, 'lg')}
                   <div className="sd-top-foot">
                     <span className="sd-price">{priceText(top.match, true)}</span>
                     <Link href={`/vehicles/${toSlug(top.match.vehicle)}`} className="sd-link">See trims</Link>
-                    <Link href={`/side-by-side?v1=${encodeURIComponent(top.match.vehicle)}`} className="sd-link">Compare</Link>
+                    <Link href={compareHref(top.match)} className="sd-link">Compare</Link>
                   </div>
+                  <p className="sd-fit">{fitText(top.match)}</p>
                 </div>
                 <div className="sd-top-score">
                   <span className="sd-score-big">{top.score}</span>
@@ -392,6 +391,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                           <div className="sd-card-id"><span className="sd-rank">#{r.rank}</span>{badge(r.match.vehicle)}</div>
                           <span className="sd-score-md">{r.score}</span>
                         </div>
+                        <p className="sd-config">{configText(r.match)}</p>
                         {bars(r, 'md')}
                         <div className="sd-card-foot">
                           <span className="sd-price">{priceText(r.match, false)}</span>
@@ -415,7 +415,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                     {rest.map((r) => (
                       <div key={r.match.vehicle} className="sd-rest-row" style={{ gridTemplateColumns: `36px 210px 120px repeat(${effectivePrefs.length}, minmax(0, 1fr))` }}>
                         <span className="sd-rank">#{r.rank}</span>
-                        <span>{badge(r.match.vehicle)}</span>
+                        <span>{badge(r.match.vehicle)}<span className="sd-config sd-config--sm">{configText(r.match)}</span></span>
                         <span className="sd-price">{priceText(r.match, false)}</span>
                         {r.bars.map((b) => (
                           <div key={b.pref} className="sd-bar-row sd-bar-row--cell">
@@ -427,7 +427,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
                         ))}
                       </div>
                     ))}
-                    <p className="sd-rest-note">Bars show each model against the best in your budget, counting only the trims that fit it.</p>
+                    <p className="sd-rest-note">Each model is shown by its best trim that fits your budget; bars compare that trim with the best in the room.</p>
                   </div>
                 </div>
               )}

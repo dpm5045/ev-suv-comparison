@@ -5,13 +5,10 @@ import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import VehicleBadge from '../VehicleBadge'
 import PageHeader, { dataCountEyebrow } from '../PageHeader'
+import { hasPreowned, isSoldNew } from '@/lib/selection'
+import { dataYear } from '@/lib/data-stories'
 
 /* ── helpers ── */
-
-function hasPreowned(r: Row): boolean {
-  const p = r.preowned_range || ''
-  return p.length > 0 && p.indexOf('N/A') < 0 && p.indexOf('No ') < 0
-}
 
 type Row = (typeof DATA.details)[number]
 
@@ -39,7 +36,7 @@ const SECTIONS: { title: string; filters: FilterDef[] }[] = [
         ],
         test: (r, sel) => {
           if (!sel.length) return true
-          if (sel.includes('new')) return typeof r.msrp === 'number'
+          if (sel.includes('new')) return isSoldNew(r, dataYear)
           if (sel.includes('preowned')) return hasPreowned(r)
           return true
         },
