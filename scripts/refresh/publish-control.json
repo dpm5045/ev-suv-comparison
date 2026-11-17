@@ -1,5 +1,5 @@
 {
   "_about": "Publication pause (build spec E.3). Every data workflow reads this file LIVE from the default branch immediately before any repository write, and writes nothing while paused is true. Change it only through a reviewed commit to master; see docs/runbooks/migration.md.",
-  "paused": false,
-  "reason": null
+  "paused": true,
+  "reason": "WP-E schema migration (2026-11-17): automated publication resumes after WP-F, WP-G and WP-I land (build spec E.3)"
 }

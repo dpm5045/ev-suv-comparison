@@ -168,7 +168,7 @@ function writeReview(review, dataYear) {
 
 function resolveAvailability() {
   if (!existsSync(P(RESOLUTIONS))) throw new Error(`${RESOLUTIONS} not found: write it from the approved review table first`)
-  const res = readJson(RESOLUTIONS)
+  const { _about, ...res } = readJson(RESOLUTIONS)
   const data = readJson(DATA)
   const ids = new Set(data.details.map((r) => r.id))
   for (const id of Object.keys(res)) if (!ids.has(id)) throw new Error(`resolution for unknown id ${id}`)

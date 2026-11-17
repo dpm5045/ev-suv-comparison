@@ -16,7 +16,10 @@ Add a new 3-row electric vehicle to the dataset.
    - **Specs**: evkx.net, evspecifications.com, fueleconomy.gov for detailed technical specs
 
 4. For each trim, gather ALL fields from the `DetailRow` interface in `lib/data.ts`:
-   - **Required**: name, vehicle, year, trim, seats, drivetrain, msrp, destination, range_mi, hp, battery_kwh, charging_type
+   - **Required**: name, id, vehicle, year, trim, seats, drivetrain, availability, msrp_status, msrp (number or null), destination, range_mi, range_basis, hp, battery_kwh, charging_type
+   - **`id`**: `<vehicle>-<year>-<trim>` lowercased, every run of non-alphanumerics replaced by `-` (`+` reads "plus", `&` "and"); append `-<seats>s` only when another row would get the same id. Assigned once, never changed (`scripts/migrations/2026-11-ids-availability.mjs` has the `slug`/`assignIds` helpers).
+   - **`availability`**: `needs_review` for a new row (the owner resolves it to `new`, `used_only` or `announced`); `announced` for a Watch List vehicle. `msrp_status` follows: `current` (or `announced`) with a price, `unknown` without one.
+   - **`range_basis`**: `unverified` for a range, `manufacturer_estimate` if the row is added to `scripts/refresh/accepted.json` (keyed by `id`), `null` with no range
    - **Performance**: torque_lb_ft, zero_to_60_sec, curb_weight_lbs, towing_lbs
    - **Charging**: onboard_ac_kw, l2_10_100, l2_10_80, dc_fast_charge_kw, dc_fast_charge_10_80_min
    - **Dimensions**: length_in, width_in, height_in, ground_clearance_in, third_row_legroom_in, third_row_headroom_in

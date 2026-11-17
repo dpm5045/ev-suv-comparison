@@ -148,16 +148,23 @@ Only include vehicles with at least "medium" confidence (officially announced wi
 
 ```json
 "fields": {
-  "Kia EV9, 2026, GT-Line": {
+  "kia-ev9-2026-gt-line": {
     "msrp": { "source_url": "https://www.kia.com/...", "verified_on": "2026-11-15", "evidence": "GT-Line starting MSRP $71,900" }
   }
 }
 ```
 
 - **Before researching a field, look it up.** Skip it if `verified_on` is within the last 180 days. Exception: `msrp` and `destination` on the two newest model years of each vehicle are checked on every refresh unless the watch report shows the stored price on the manufacturer page with no change. `range_mi` sources are written by the watch script.
-- **After checking a field against a page you actually fetched, write or update its entry** — whether the value changed or was confirmed. `evidence` is a short exact quote from the page. Keys are the row `name`; rows that share a name (seat variants) share an entry.
+- **After checking a field against a page you actually fetched, write or update its entry** — whether the value changed or was confirmed. `evidence` is a short exact quote from the page. Keys are the row's **`id`** (stable, unique; seat variants each have their own). Never key by `name`, which seat variants share. Entries marked `"legacy": "name_keyed"` were copied from the old name keys during the schema 2 migration: refresh them (and drop the marker) when you re-verify the field.
 - **No source, no change.** Do not change a value you cannot attach a fetched `source_url` to, and do not record a search-result summary as a source.
-- Do not add entries for fields you did not check. The validator rejects entries for unknown rows or fields.
+- Do not add entries for fields you did not check. The validator rejects entries for unknown ids or fields.
+
+### Availability and price meaning (schema_version 2)
+
+Each row has `availability` (`new`, `used_only`, `announced`, `needs_review`) and `msrp_status` (`current`, `historical`, `announced`, `unknown`). `msrp` is a number or `null`, never text.
+- **Never change `availability` on your own**, in either direction. Only `new` rows count as sold new; a numeric `msrp` alone proves nothing (it may be historical or announced). A change of availability needs the owner's approval: list it under "For a person".
+- A **new row** you add gets `availability: "needs_review"` (or `announced` for a Watch List vehicle), the matching `msrp_status`, and an `id` per the rule in `.claude/commands/add-vehicle.md`.
+- `range_basis` is `manufacturer_estimate` for rows in `scripts/refresh/accepted.json` (keyed by `id`), `unverified` otherwise. Never set `epa`: that needs a reviewed EPA mapping (build spec WP-J.3).
 
 ### Prices when the manufacturer blocks automated requests
 

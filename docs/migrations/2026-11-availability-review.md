@@ -268,3 +268,7 @@ To approve: confirm or change the suggestions, and the resolutions are written t
 | id | Year | Trim | Seats | Old msrp | Availability | msrp_status | Suggested | MSRP evidence |
 |---|---|---|---|---|---|---|---|---|
 | `tesla-model-y-l-2026-launch-series` | 2026 | Launch Series | 6 | $61,990 | needs_review | current | new | — |
+
+## Decision (owner, 2026-11-17)
+
+**Newest model year only.** Each vehicle's newest model year is sold new (47 configurations). Earlier model years are used-only, and their price is kept as the last new price (`msrp_status: historical`, 66 configurations). The 2025 Volkswagen ID. Buzz is the newest year carried, so it stays new, consistent with the earlier D-14 decision. Resolutions are in `docs/migrations/2026-11-availability-resolutions.json`, applied with `--resolve`. 0 configurations remain `needs_review`.

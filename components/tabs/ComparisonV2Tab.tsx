@@ -526,7 +526,7 @@ export default function ComparisonV2Tab({ filters, onFiltersChange, onRowClick }
                   <div className="cmp-stat">
                     <span className="cmp-stat-label">MSRP</span>
                     <span className={`cmp-stat-value ${msrp.className}`} style={{ fontFamily: 'var(--mono)' }}>
-                      {typeof r.msrp === 'number' && r.msrp_status !== 'historical' ? `$${Math.round(r.msrp / 1000)}k` : msrp.text}
+                      {typeof r.msrp === 'number' && r.msrp_status !== 'historical' ? `$${Math.round(r.msrp / 1000)}k` : r.availability === 'used_only' ? 'Used only' : msrp.text}
                     </span>
                   </div>
                   <div className="cmp-stat">

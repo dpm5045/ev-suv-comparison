@@ -1,0 +1,8 @@
+# Trusted configuration: changes need the owner's review once branch protection
+# requires code-owner reviews (build spec WP-F/WP-I).
+/.github/workflows/                       @dpm5045
+/.github/CODEOWNERS                       @dpm5045
+/scripts/refresh/publish-control.json     @dpm5045
+/scripts/refresh/compat.json              @dpm5045
+/scripts/refresh/can-publish.sh           @dpm5045
+/docs/migrations/                         @dpm5045

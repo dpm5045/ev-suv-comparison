@@ -664,7 +664,7 @@ export default function SpecSelectTab({ onRowClick }: Props) {
                     <span className="spec-card-stat-value">
                       {isPreowned
                         ? (hasPreowned(r) ? r.preowned_range.replace(/\$[\d,]+/g, (m: string) => `$${Math.round(parseInt(m.replace(/[$,]/g, '')) / 1000)}k`) : '\u2014')
-                        : (typeof r.msrp === 'number' && r.msrp_status !== 'historical' ? `$${Math.round(r.msrp / 1000)}k` : msrp.text)
+                        : (typeof r.msrp === 'number' && r.msrp_status !== 'historical' ? `$${Math.round(r.msrp / 1000)}k` : r.availability === 'used_only' ? 'Used only' : msrp.text)
                       }
                     </span>
                   </div>
