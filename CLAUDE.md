@@ -8,8 +8,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Workflow (always follow)
 1. Never commit to main. Create a branch: feature/<short-name>.
-2. For anything bigger than a small fix, write docs/plans/<name>.md first
-   and stop for review before building.
+2. For any change bigger than a small fix, plan first:
+   1. Write the plan to docs/plans/<name>.md and commit it to the feature branch.
+   2. Run: codex exec "Review docs/plans/<name>.md as a senior architect.
+      Follow the Plan Review Rules in AGENTS.md. List problems by severity."
+   3. Revise the plan based on the findings. Show the owner Codex's critique
+      and your changes, then stop for the owner's go-ahead before building.
 3. Run `npm run validate` before opening a PR.
 4. Open a PR with `gh pr create`. Summarize what changed and why.
 5. After Codex reviews, read comments with `gh pr view --comments`,
@@ -141,3 +145,7 @@ When refreshing or auditing vehicle data, Claude is pre-approved to fetch from t
 
 IMPORTANT: Maintain clean git hygiene throughout the session.
 Aim to create a checkpoint commit roughly every 30–60 minutes of active coding, or sooner when a meaningful milestone is completed.
+
+# Codex Reviews
+
+before opening a PR, run codex review and address findings
