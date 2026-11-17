@@ -548,6 +548,7 @@ export default function DataExplorer() {
         <div className="explorer-control-group">
           <label>Seats</label>
           <select
+            aria-label="Seats"
             className="explorer-select"
             value={seats}
             onChange={e => setSeats(e.target.value)}
@@ -561,6 +562,7 @@ export default function DataExplorer() {
         <div className="explorer-control-group">
           <label>Drivetrain</label>
           <select
+            aria-label="Drivetrain"
             className="explorer-select"
             value={drivetrain}
             onChange={e => setDrivetrain(e.target.value)}
@@ -590,6 +592,7 @@ export default function DataExplorer() {
         <div className="explorer-control-group">
           <label>X-Axis</label>
           <select
+            aria-label="X-Axis"
             className="explorer-select"
             value={xAxis}
             onChange={e => setXAxis(e.target.value)}
@@ -603,6 +606,7 @@ export default function DataExplorer() {
         <div className="explorer-control-group">
           <label>Y-Axis</label>
           <select
+            aria-label="Y-Axis"
             className="explorer-select"
             value={yAxis}
             onChange={e => setYAxis(e.target.value)}
@@ -616,6 +620,7 @@ export default function DataExplorer() {
         <div className="explorer-control-group">
           <label>Bubble Size</label>
           <select
+            aria-label="Bubble Size"
             className="explorer-select"
             value={bubbleSize}
             onChange={e => setBubbleSize(e.target.value)}
@@ -634,7 +639,7 @@ export default function DataExplorer() {
           {plotData.length === 0 ? (
             <p className="explorer-empty">No data for this combination.</p>
           ) : (
-            <Scatter data={chartData} options={chartOptions} />
+            <Scatter data={chartData} options={chartOptions} aria-label="Scatter plot of the selected trims; axes and bubble size follow the Plot settings above" role="img" />
           )}
         </div>
 

@@ -592,14 +592,21 @@ export default function SpecSelectTab({ onRowClick }: Props) {
           const activeCount = sectionFilterCount(section)
           return (
             <div key={section.title} className={`spec-section${isOpen ? ' open' : ''}`}>
-              <div
-                className={`spec-section-title${isAlwaysOpen ? '' : ' collapsible'}`}
-                onClick={isAlwaysOpen ? undefined : () => toggleSection(section.title)}
-                style={isAlwaysOpen ? undefined : { cursor: 'pointer' }}
-              >
-                <span>{section.title}{!isAlwaysOpen && activeCount > 0 ? ` (${activeCount})` : ''}</span>
-                {!isAlwaysOpen && <span className={`spec-section-chevron${isOpen ? ' open' : ''}`}>▾</span>}
-              </div>
+              {isAlwaysOpen ? (
+                <div className="spec-section-title">
+                  <span>{section.title}</span>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="spec-section-title collapsible"
+                  onClick={() => toggleSection(section.title)}
+                  aria-expanded={isOpen}
+                >
+                  <span>{section.title}{activeCount > 0 ? ` (${activeCount})` : ''}</span>
+                  <span className={`spec-section-chevron${isOpen ? ' open' : ''}`} aria-hidden="true">▾</span>
+                </button>
+              )}
               {isOpen && (
                 <div className="spec-section-body">
                   {sectionFilters.map(f => {
@@ -642,7 +649,13 @@ export default function SpecSelectTab({ onRowClick }: Props) {
               <div key={origIdx} className="spec-card" onClick={() => onRowClick(origIdx)}>
                 <div className="spec-card-top">
                   <VehicleBadge vehicle={r.vehicle} />
-                  <span className="spec-card-hint">Tap for specs &rarr;</span>
+                  <button
+                    type="button"
+                    className="spec-card-hint view-details-link"
+                    onClick={(e) => { e.stopPropagation(); onRowClick(origIdx) }}
+                  >
+                    Tap for specs<span className="sr-only">: {r.year} {r.vehicle} {r.trim}</span> <span aria-hidden="true">&rarr;</span>
+                  </button>
                 </div>
                 <div className="spec-card-trim">{r.year} {r.trim}</div>
                 <div className="spec-card-stats">

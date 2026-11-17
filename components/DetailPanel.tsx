@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
 import { DATA, VEHICLE_CLASSES } from '@/lib/data'
+import Drawer from './Drawer'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import Link from 'next/link'
 import { toSlug } from '@/lib/slugs'
@@ -19,21 +19,15 @@ export default function DetailPanel({ idx, onClose }: Props) {
   const open = idx !== null
   const r = open ? DATA.details[idx] : null
 
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
-
   const cls = r ? (VEHICLE_CLASSES[r.vehicle] ?? '') : ''
 
   return (
-    <>
-      <div className={`overlay${open ? ' open' : ''}`} onClick={onClose} />
-      <aside className={`detail-panel${open ? ' open' : ''}`}>
-        <button className="detail-close" onClick={onClose} aria-label="Close">×</button>
+    <Drawer
+      open={open}
+      onClose={onClose}
+      className="detail-panel"
+      title={r ? `${r.year} ${r.vehicle} ${r.trim}: details` : 'Trim details'}
+    >
         {r && (
           <>
             <div className="detail-vehicle-name">
@@ -78,8 +72,7 @@ export default function DetailPanel({ idx, onClose }: Props) {
             )}
           </>
         )}
-      </aside>
-    </>
+    </Drawer>
   )
 }
 

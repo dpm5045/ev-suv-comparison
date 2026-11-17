@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import Drawer from './Drawer'
 import { DATA } from '@/lib/data'
 import { fmtMoney, fmtNum } from '@/lib/utils'
 import Link from 'next/link'
@@ -16,14 +17,6 @@ interface Props {
 
 export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
   const open = vehicle !== null
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
 
   // All trims for this vehicle
   const trims = useMemo(
@@ -79,10 +72,12 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
   }, [trims])
 
   return (
-    <>
-      <div className={`overlay${open ? ' open' : ''}`} onClick={onClose} />
-      <aside className={`vehicle-summary-panel${open ? ' open' : ''}`}>
-        <button className="detail-close" onClick={onClose} aria-label="Close">×</button>
+    <Drawer
+      open={open}
+      onClose={onClose}
+      className="vehicle-summary-panel"
+      title={vehicle ? `${vehicle}: summary` : 'Vehicle summary'}
+    >
         {vehicle && summary && (
           <>
             <div className="vsp-header">
@@ -175,7 +170,6 @@ export default function VehicleSummaryPanel({ vehicle, onClose }: Props) {
             </div>
           </>
         )}
-      </aside>
-    </>
+    </Drawer>
   )
 }
