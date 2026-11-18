@@ -207,3 +207,15 @@ Deriving tables and writer records (WP-G), bot publication (WP-I), agent contain
 - **`accepted.json` and `retired-ids.json` count as data files,** not rule files: they must change together with the rows they describe (a new estimate, a removal). Both are CODEOWNERS-listed, and the contract checks their consistency with `details`.
 - **Withdrawing a value** (to `null`, `TBD` or `N/A`) needs an approval rather than a source, since there's nothing to quote.
 - **Bootstrap:** this PR creates the rule files. Its CI runs the head's contract once, because the base has none, and reports "no data files changed".
+- **The gate is its own workflow, `data-contract.yml`, on `pull_request_target`** (from Codex's step-1 review). Running the base revision's script from the PR's own CI workflow wasn't enough: the PR could edit that workflow. GitHub takes a `pull_request_target` workflow's definition from the default branch, so a PR can't change or skip it. The job never checks out or runs PR code: it fetches the PR's commits as objects and reads data with `git show`, using a read-only token. It also has a `workflow_dispatch` path for WP-I's bot PRs. **After merge, the owner adds `data-contract` as a required check** in `protect-main`. It can't be required before then, because this PR adds the workflow and so can't trigger it.
+- **Other fixes from Codex's step-1 review:**
+  - quotes must state the exact value as a whole number token, and long text must share most of its words with the quote;
+  - `moved` records only append to text fields and keep the original source;
+  - approved identity changes still need a source;
+  - relabelling a range as a manufacturer estimate needs a fresh quoted record;
+  - duplicate count rows fail, and every year present is counted;
+  - each baseline exemption names the original bad value;
+  - new legacy records are rejected;
+  - pre-owned baselines are validated, and changing them needs approval;
+  - the report shows each change's source and quote;
+  - approval lookups paginate.

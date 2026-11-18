@@ -28,7 +28,13 @@ export async function loadApprovals({ repo, token, fetchImpl = fetch }) {
   const owner = meta.owner?.login
   const defaultBranch = meta.default_branch
   const file = APPROVAL_WORKFLOW.split('/').pop()
-  const { workflow_runs: runs = [] } = await api(`repos/${repo}/actions/workflows/${file}/runs?event=workflow_dispatch&status=success&per_page=100`)
+  // Every eligible run, newest first (paginated; approvals live 90 days)
+  const runs = []
+  for (let page = 1; page <= 50; page++) {
+    const { workflow_runs: batch = [] } = await api(`repos/${repo}/actions/workflows/${file}/runs?event=workflow_dispatch&status=success&per_page=100&page=${page}`)
+    runs.push(...batch)
+    if (batch.length < 100) break
+  }
 
   const approvals = []
   const rejected = []

@@ -282,3 +282,54 @@ test('approvals: only owner-triggered default-branch runs of the approval workfl
   assert.match(rejected.join('\n'), /branch feature\/x/)
   assert.match(rejected.join('\n'), /workflow path/)
 })
+
+// Regressions for Codex's review of step 1
+test('a quote of 350 miles does not support 35 miles; whole tokens only', () => {
+  assert.ok(!evidenceSupports(35, 'EPA range 350 miles'))
+  assert.ok(evidenceSupports(350, 'EPA range 350 miles'))
+  assert.ok(!evidenceSupports(4.5, 'from 14.5 seconds'))
+})
+test('long text without numbers still needs most of its words in the quote', () => {
+  const claim = 'Executive rear seating package with heated and ventilated captain chairs'
+  assert.ok(!evidenceSupports(claim, 'A great SUV.'))
+  assert.ok(evidenceSupports(claim, 'The executive rear seating package adds heated, ventilated captain chairs'))
+})
+test('a moved record cannot target a numeric field or rewrite the old text', () => {
+  const id = 'mercedes-benz-glb-electric-2027-glb-250-plus-expected'
+  const intoNumber = run((f) => { const x = row(f, id); x.hp = 300; rec(f, id, 'hp', 300, { method: 'moved', moved_from: 'range_mi' }) })
+  assert.ok(intoNumber.errors.some((e) => e.rule === 'evidence-moved'))
+  const rewrite = run((f) => { const x = row(f, id); x.notes = 'Mercedes estimates ~315 mi.'; rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi' }) })
+  assert.ok(rewrite.errors.some((e) => e.rule === 'evidence-moved' && /keep its old text/.test(e.msg)))
+})
+test('an approved identity change still needs a source for the published field', () => {
+  const r = run((f) => { row(f, EV9).drivetrain = 'RWD' }, {
+    approvals: (s) => evaluate({ repo: s.repo, base: s.base, head: s.head }).exceptions.map((x) => ({ ...x, run_id: 1, approver: 'owner' })),
+  })
+  assert.ok(r.satisfied.some((x) => x.field === '@identity'))
+  assert.ok(r.errors.some((e) => e.rule === 'evidence-missing' && e.field === 'drivetrain'))
+})
+test('relabelling a range as a manufacturer estimate needs a quoted record', () => {
+  const r = run((f) => { const x = row(f, EV9); x.range_basis = 'manufacturer_estimate'; f['scripts/refresh/accepted.json'].range_mi[EV9] = 'Kia estimate' })
+  // Missing or unchanged (stale) record: either way the relabel is blocked
+  assert.ok(r.errors.some((e) => ['evidence-missing', 'evidence-stale'].includes(e.rule) && e.field === 'range_mi'))
+})
+test('a duplicate count row fails, and later years are counted', () => {
+  const dup = run((f) => { const d = f['lib/ev-data.json']; d.count_data.push({ ...d.count_data[0] }); for (const k of Object.keys(d.count_totals)) d.count_totals[k] += d.count_data[0][k] ?? 0 })
+  assert.ok(dup.errors.some((e) => e.rule === 'count-duplicate'))
+  const y2028 = run((f) => { const d = f['lib/ev-data.json']; d.count_data[0].y2028 = 3; d.count_data[0].total += 3; d.count_totals.y2028 = 3; d.count_totals.total += 3 })
+  assert.ok(y2028.errors.some((e) => e.rule === 'count-rows' && /y2028/.test(e.field)))
+})
+test('a baseline exemption covers only the original bad value', () => {
+  const id = 'bmw-ix7-2027-xdrive50-expected'
+  const r = run((f) => { row(f, id).hp = 'TBD (~580 est)' })
+  assert.ok(r.errors.some((e) => e.rule === 'type' && e.id === id && e.field === 'hp'))
+})
+test('a new legacy-marked record is rejected', () => {
+  const r = run((f) => { f['lib/ev-data.provenance.json'].fields[EV9] = { ...(f['lib/ev-data.provenance.json'].fields[EV9] ?? {}), hp: { source_url: 'https://www.kia.com/x', verified_on: '2026-11-17', evidence: 'x', legacy: 'name_keyed' } } })
+  assert.ok(rules(r).includes('legacy-added'))
+})
+test('pre-owned baselines are validated and their changes need approval', () => {
+  const r = run((f) => { const p = f['lib/ev-data.provenance.json'].preowned; const v = Object.keys(p)[0]; const y = Object.keys(p[v].years)[0]; p[v].years[y].avg_price = -5 })
+  assert.ok(rules(r).includes('prov-baseline'))
+  assert.ok(r.errors.some((e) => e.field === '@preowned-baselines'))
+})

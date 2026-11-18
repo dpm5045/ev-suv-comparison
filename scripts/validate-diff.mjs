@@ -27,7 +27,7 @@ export const GATE_FILES = [
   'scripts/validate-data.js', 'scripts/validate-diff.mjs', 'scripts/schema/',
   'scripts/refresh/source-policy.json', 'scripts/refresh/compat.json', 'scripts/refresh/publish-control.json',
   'scripts/refresh/lib/hashes.mjs', 'scripts/refresh/lib/zip.mjs',
-  '.github/workflows/ci.yml', '.github/workflows/approve-data-exception.yml', '.github/CODEOWNERS',
+  '.github/workflows/ci.yml', '.github/workflows/data-contract.yml', '.github/workflows/approve-data-exception.yml', '.github/CODEOWNERS',
 ]
 const BASELINE = 'scripts/schema/known-violations.json'
 const isGate = (p) => GATE_FILES.some((g) => (g.endsWith('/') ? p.startsWith(g) : p === g))
@@ -39,21 +39,32 @@ const show = (repo, sha, path, fallback) => {
 const hostOf = (url) => { try { return new URL(url).hostname.toLowerCase() } catch { return '' } }
 const domainOk = (host, domains) => domains.some((d) => host === d || host.endsWith(`.${d}`))
 
-/** Does the quoted evidence contain the value (mechanically)? */
+/** Whole numbers stated in a text ("$62,500" → 62500, "4.5 s" → 4.5), never fragments of longer numbers. */
+export function numbersIn(text) {
+  return (String(text ?? '').match(/(?<![\d.,])\d{1,3}(?:,\d{3})+(?:\.\d+)?(?![\d,])|(?<![\d.,])\d+(?:\.\d+)?(?![\d])/g) ?? [])
+    .map((t) => Number(t.replace(/,/g, '')))
+}
+const WORD = /[a-z][a-z0-9+-]{3,}/g
+/**
+ * Does the quoted evidence support the value (mechanically)?
+ * - numbers: the evidence states that exact number as a whole token (350 never supports 35);
+ * - short text (<= 60 chars): the evidence contains it;
+ * - long text: every number it states appears as a whole token in the evidence, and at
+ *   least half of its significant words appear too (text with no numbers is still checked).
+ */
 export function evidenceSupports(value, evidence) {
   const ev = String(evidence ?? '').toLowerCase()
-  if (typeof value === 'number') {
-    const forms = new Set([String(value), value.toLocaleString('en-US'), Number.isInteger(value) ? '' : value.toFixed(1)])
-    return [...forms].filter(Boolean).some((f) => ev.includes(f.toLowerCase()))
-  }
+  const evNums = numbersIn(ev)
+  if (typeof value === 'number') return evNums.includes(value)
   if (typeof value === 'string') {
     if (value.length <= 60) return ev.includes(value.toLowerCase())
-    // Long text: every number it states must appear in the evidence (claims are mostly numbers)
-    const nums = value.match(/\d[\d,.]*/g) ?? []
-    return nums.every((n) => ev.includes(n.replace(/[.,]$/, '').toLowerCase()))
+    if (!numbersIn(value).every((n) => evNums.includes(n))) return false
+    const words = [...new Set(value.toLowerCase().match(WORD) ?? [])]
+    return words.length > 0 && words.filter((w) => ev.includes(w)).length / words.length >= 0.5
   }
   return false
 }
+const TEXT_FIELDS = ['notes', 'adas_hardware_note', 'self_driving']
 
 /** Allowed domains for a field of a vehicle, from the (base) source policy. */
 function allowedDomains(policy, field, row) {
@@ -145,13 +156,22 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     if (rec.legacy) return err('evidence-legacy', row.id, field, 'a new or edited record must be a full record (no legacy marker)')
     if (!same(rec.value, newValue)) return err('evidence-value', row.id, field, `record value ${JSON.stringify(rec.value)} differs from the new ${JSON.stringify(newValue)}`)
     if (rec.method === 'moved') {
-      // Text relocated from another field of the same row (e.g. a TBD estimate into notes):
-      // the base row must have held it, and every number it stated must appear in the new value.
-      const src = bRows.get(row.id)?.[rec.moved_from]
-      const nums = typeof src === 'string' ? src.match(/\d[\d,.]*/g) ?? [] : []
-      if (!FIELDS[rec.moved_from] || typeof src !== 'string' || !nums.every((n) => String(newValue).includes(n.replace(/[.,]$/, '')))) {
-        err('evidence-moved', row.id, field, `a moved record needs moved_from naming a field of the base row whose text (and its numbers) the new value carries`)
-      }
+      // Text relocated from another field of the same row (e.g. a TBD estimate into notes).
+      // Only into a text field; the old text of the destination is kept unchanged (append only);
+      // the moved claim must carry every number the source field stated; and its original
+      // source record (if any) travels with it.
+      const bRow = bRows.get(row.id)
+      const src = bRow?.[rec.moved_from]
+      const before = bRow?.[field] ?? ''
+      const added = typeof newValue === 'string' && newValue.startsWith(before) ? newValue.slice(before.length) : null
+      const srcRec = B.prov.fields?.[row.id]?.[rec.moved_from]
+      const problems = []
+      if (!TEXT_FIELDS.includes(field)) problems.push(`moves may only go into a text field (${TEXT_FIELDS.join(', ')})`)
+      if (!FIELDS[rec.moved_from] || typeof src !== 'string' || !/\d/.test(src)) problems.push('moved_from must name a field of the base row holding text with the claim')
+      else if (added === null) problems.push('the destination must keep its old text unchanged and append the moved text')
+      else if (!numbersIn(src).every((n) => numbersIn(added).includes(n))) problems.push('the appended text must state every number the moved text stated')
+      if (srcRec && rec.source_url !== srcRec.source_url) problems.push(`the moved claim must keep its original source (${srcRec.source_url})`)
+      for (const msg of problems) err('evidence-moved', row.id, field, msg)
       return
     }
     const host = hostOf(rec.source_url)
@@ -194,15 +214,24 @@ export function evaluate({ repo, base, head, approvals = [] }) {
       need(id, '@identity', tuple(b), tuple(h), `identity fields changed: ${identity.join(', ')}`)
     }
     for (const f of DETAIL_FIELDS) {
-      if (same(b[f], h[f]) || IDENTITY.includes(f) && f !== 'seats' || f === 'id') continue
+      if (same(b[f], h[f]) || f === 'id') continue
       changes.push({ id, field: f, old: b[f], new: h[f] })
+      // Identity fields: the @identity approval was requested above; published ones also need a source
+      if (IDENTITY.includes(f) && f !== 'seats') { if (FIELDS[f].published !== false) evidence(h, f, h[f]); continue }
       if (f === 'availability') { need(id, f, b[f], h[f], 'availability change'); continue }
       if (f === 'msrp_status') {
         if (same(b.availability, h.availability) && same(b.msrp, h.msrp)) err('meaning-unsupported', id, f, 'msrp_status changed without an availability change or a new msrp')
         continue
       }
       if (f === 'range_basis') {
-        if (same(b.range_mi, h.range_mi) && h.range_basis !== 'manufacturer_estimate' && b.range_basis !== 'manufacturer_estimate') err('meaning-unsupported', id, f, 'range_basis changed without a new range or estimate record')
+        if (h.range_basis === 'manufacturer_estimate') {
+          // Proves the maker supplied this figure, even if range_mi itself did not change
+          if (same(b.range_mi, h.range_mi)) evidence(h, 'range_mi', h.range_mi)
+        } else if (b.range_basis === 'manufacturer_estimate') {
+          need(id, f, b[f], h[f], 'range no longer labelled a manufacturer estimate')
+        } else if (same(b.range_mi, h.range_mi)) {
+          err('meaning-unsupported', id, f, 'range_basis changed without a new range or a sourced estimate')
+        }
         continue
       }
       const prot = PROTECTED.includes(f)
@@ -212,14 +241,24 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     }
   }
 
-  // Provenance records: never deleted while the row exists; edits are full records
+  // Provenance records: never deleted while the row exists; every new or edited record is a full record
   for (const [id, fields] of Object.entries(B.prov.fields ?? {})) {
     if (!hRows.has(id)) continue
+    for (const f of Object.keys(fields)) if (!H.prov.fields?.[id]?.[f]) err('prov-deleted', id, f, 'a provenance record was deleted')
+  }
+  for (const [id, fields] of Object.entries(H.prov.fields ?? {})) {
     for (const [f, rec] of Object.entries(fields)) {
-      const now = H.prov.fields?.[id]?.[f]
-      if (!now) err('prov-deleted', id, f, 'a provenance record was deleted')
-      else if (!same(now, rec) && now.legacy) err('legacy-edited', id, f, 'an edited record must drop the legacy marker and be a full record')
+      const was = B.prov.fields?.[id]?.[f]
+      if (was && same(was, rec)) continue
+      if (rec.legacy) err(was ? 'legacy-edited' : 'legacy-added', id, f, 'a new or edited record must be a full record (no legacy marker)')
     }
+  }
+  if (!same(B.prov.preowned, H.prov.preowned)) need('-', '@preowned-baselines', '(previous)', '(changed)', 'CarGurus pre-owned baselines changed (written by the pre-owned script; WP-G defines their contract)')
+
+  // Attach the source and quote behind each change, for the owner's review
+  for (const c of changes) {
+    const rec = H.prov.fields?.[c.id]?.[c.field]
+    if (rec && !rec.legacy) { c.source = rec.source_url; c.quote = rec.evidence }
   }
 
   // Approvals
@@ -239,8 +278,12 @@ export function renderReport(r, { base, head }) {
   if (!r.dataChanged) return [...L, 'No data files changed.'].join('\n')
   L.push(`proposal_sha256: \`${r.proposal_sha256}\``, '', r.errors.length ? `**${r.errors.length} problem(s).**` : '**Passed.**', '')
   if (r.changes.length) {
-    L.push('| id | field | old | new |', '|---|---|---|---|')
-    for (const c of r.changes.slice(0, 200)) L.push(`| \`${c.id}\` | ${c.field} | ${JSON.stringify(c.old)?.slice(0, 60)} | ${JSON.stringify(c.new)?.slice(0, 60)} |`)
+    L.push('Check that each quote is about this exact configuration: the checker can only confirm it states the value.', '')
+    L.push('| id | field | old | new | source | quote |', '|---|---|---|---|---|---|')
+    const cell = (v) => String(v ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ').slice(0, 140)
+    for (const c of r.changes.slice(0, 200)) {
+      L.push(`| \`${c.id}\` | ${c.field} | ${cell(JSON.stringify(c.old))} | ${cell(JSON.stringify(c.new))} | ${c.source ? `[${hostOf(c.source)}](${c.source})` : ''} | ${cell(c.quote)} |`)
+    }
     L.push('')
   }
   const other = r.errors.filter((e) => e.rule !== 'approval-needed')

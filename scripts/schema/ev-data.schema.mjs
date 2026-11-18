@@ -211,13 +211,20 @@ export function checkState({ data, prov, accepted, retired }) {
   }
   for (const r of rows) if (r.range_basis === 'manufacturer_estimate' && !(r.id in acc)) v('accepted-basis', r.id, 'range_basis', 'manufacturer_estimate without an accepted.json reason')
 
-  // Counts must equal the rows (until WP-G derives them)
+  // Counts must equal the rows (until WP-G derives them): one row per model,
+  // every year that appears in the rows or in any count column
   const counted = {}
   for (const r of rows) counted[`${r.vehicle}|${r.year}`] = (counted[`${r.vehicle}|${r.year}`] ?? 0) + 1
-  const models = new Set((data.count_data ?? []).map((c) => c.model))
+  const models = new Set()
+  for (const c of data.count_data ?? []) {
+    if (models.has(c.model)) v('count-duplicate', null, `count_data.${c.model}`, 'duplicate count_data row for this model')
+    models.add(c.model)
+  }
+  const yearKeys = (o) => Object.keys(o ?? {}).filter((k) => /^y\d{4}$/.test(k)).map((k) => Number(k.slice(1)))
+  const years = [...new Set([...YEARS, ...rows.map((r) => r.year), ...(data.count_data ?? []).flatMap(yearKeys), ...yearKeys(data.count_totals)])].sort()
   for (const c of data.count_data ?? []) {
     let total = 0
-    for (const y of YEARS) {
+    for (const y of years) {
       const want = counted[`${c.model}|${y}`] ?? 0
       if ((c[`y${y}`] ?? 0) !== want) v('count-rows', null, `count_data.${c.model}.y${y}`, `count ${c[`y${y}`] ?? 0} but ${want} rows`)
       total += c[`y${y}`] ?? 0
@@ -225,12 +232,23 @@ export function checkState({ data, prov, accepted, retired }) {
     if (c.total !== total) v('count-total', null, `count_data.${c.model}.total`, `total ${c.total} is not the sum ${total}`)
   }
   for (const veh of new Set(rows.map((r) => r.vehicle))) if (!models.has(veh)) v('count-rows', null, `count_data.${veh}`, 'vehicle has rows but no count_data entry')
-  for (const k of [...YEARS.map((y) => `y${y}`), 'total']) {
+  for (const k of [...years.map((y) => `y${y}`), 'total']) {
     const sum = (data.count_data ?? []).reduce((s, c) => s + (c[k] ?? 0), 0)
     if ((data.count_totals?.[k] ?? 0) !== sum) v('count-total', null, `count_totals.${k}`, `count_totals.${k} is not the column sum ${sum}`)
   }
 
-  // Provenance: keyed by known ids and fields; record shape
+  // Provenance: version; the CarGurus baselines the pre-owned script reads; records keyed by known ids and fields
+  if (prov && prov.schema_version !== 2) v('prov-version', null, 'provenance.schema_version', 'provenance schema_version must be 2 (record fields are additive)')
+  const vehicles = new Set(rows.map((r) => r.vehicle))
+  for (const [veh, b] of Object.entries(prov?.preowned ?? {})) {
+    if (!vehicles.has(veh)) v('prov-baseline', null, `preowned.${veh}`, 'pre-owned baseline for an unknown vehicle')
+    if (!isUrl(b.source_url)) v('prov-baseline', null, `preowned.${veh}`, 'pre-owned baseline needs an https source_url')
+    for (const [year, x] of Object.entries(b.years ?? {})) {
+      if (!/^\d{4}$/.test(year) || typeof x.avg_price !== 'number' || !(x.avg_price > 0) || !isDate(x.as_of) || !['model_year', 'model'].includes(x.basis)) {
+        v('prov-baseline', null, `preowned.${veh}.${year}`, 'malformed pre-owned baseline (avg_price > 0, as_of YYYY-MM-DD, basis model_year|model)')
+      }
+    }
+  }
   for (const [id, fields] of Object.entries(prov?.fields ?? {})) {
     if (!ids.has(id)) v('prov-unknown-id', id, '-', 'provenance for an unknown id')
     for (const [f, rec] of Object.entries(fields)) {
@@ -241,8 +259,14 @@ export function checkState({ data, prov, accepted, retired }) {
         if (!('value' in rec)) v('prov-value', id, f, 'a non-legacy provenance record needs value')
         else if (ids.has(id) && JSON.stringify(rec.value) !== JSON.stringify(ids.get(id)[f])) v('prov-value-mismatch', id, f, `provenance value ${JSON.stringify(rec.value)} differs from the stored ${JSON.stringify(ids.get(id)[f])}`)
         if (!['observed', 'derived', 'moved'].includes(rec.method)) v('prov-method', id, f, 'method must be observed, derived or moved')
+        if (!Number.isInteger(rec.method_version) || rec.method_version < 1) v('prov-method', id, f, 'method_version must be a positive integer')
       }
     }
+  }
+  // Each violation carries the offending value (a baseline exemption covers only that value)
+  for (const x of out) {
+    const r = ids.get(x.id)
+    x.value = r && x.field in r ? r[x.field] : null
   }
   return out
 }
@@ -284,7 +308,8 @@ export function advisories({ data, prov }) {
 
 /** Split violations into baseline-known (warnings) and new (errors); stale baseline entries are errors. */
 export function applyBaseline(violations, baseline) {
-  const key = (x) => `${x.rule}|${x.id}|${x.field}`
+  // An exemption names the rule, row, field AND the original value: a different bad value is a new violation
+  const key = (x) => `${x.rule}|${x.id}|${x.field}|${JSON.stringify(x.value ?? null)}`
   const known = new Set(baseline?.violations ?? [])
   const seen = new Set(violations.map(key))
   const errors = violations.filter((x) => !known.has(key(x)))
