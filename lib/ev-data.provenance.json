@@ -380,7 +380,7 @@
       "cargo_behind_3rd_cu_ft": {
         "source_url": "https://www.kia.com/us/en/ev9/specs",
         "verified_on": "2026-11-17",
-        "evidence": "TEST ONLY (not a real quote): Cargo volume behind 3rd row 20.3 cu ft",
+        "evidence": "TEST ONLY (not a real quote): Cargo volume behind 3rd row 20.3 cu ft (edited)",
         "value": 20.3,
         "method": "observed",
         "method_version": 1
