@@ -13,7 +13,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. For any change bigger than a small fix, plan first:
    1. Write the plan to docs/plans/<name>.md and commit it to the feature branch.
    2. Run: codex exec "Review docs/plans/<name>.md as a senior architect.
-      Follow the Plan Review Rules in AGENTS.md. List problems by severity."
+      Follow the Plan Review Rules in AGENTS.md. List problems by severity." < /dev/null
+      (The `< /dev/null` matters: without a terminal, `codex exec` otherwise waits
+      forever for extra input on stdin. Same for `codex review` run from a tool.)
    3. Revise the plan based on the findings. Show the owner Codex's critique
       and your changes, then stop for the owner's go-ahead before building.
 3. Before opening a PR, run the full check suite (CI runs the same on every PR):
