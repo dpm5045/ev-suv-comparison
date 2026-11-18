@@ -38,3 +38,10 @@ Use this whenever a PR changes the data schema (`schema_version` in `lib/ev-data
 ## Rollback
 
 Revert the whole migration PR together: code, data, `compat.json` and workflows. Never revert the JSON alone: the code would then reject (or misread) the data. After a revert, repeat steps 2–4 before re-enabling anything.
+
+## The `protect-main` ruleset (since 2026-11-17)
+
+`master` accepts changes only through pull requests, with every review conversation resolved (Codex reviews each PR automatically). For this runbook:
+- **Flipping the pause switch** (`scripts/refresh/publish-control.json`) needs a PR like any other change; resolve Codex's conversations and merge. An admin can bypass the ruleset in an emergency, but the PR route leaves a record.
+- **The data workflows' direct pushes are blocked.** Data Watch commits its state straight to `master`, and the agent does the same for deferral-only runs; the ruleset rejects both. While publication is paused they don't push. Before resuming, WP-J moves that state to the `data-state` branch (which the ruleset doesn't cover), and WP-I has the bots publish through PRs that pass the same checks.
+- **Bot PRs and conversation resolution.** Codex's automatic review can leave conversations on bot PRs (pre-owned, Data Watch, agent), which would block their merge until someone resolves them. WP-I must settle how these are handled: for example, the reviewer workflow resolves "no findings" threads, or a person resolves them as part of review.

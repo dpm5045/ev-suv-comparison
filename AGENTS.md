@@ -7,3 +7,19 @@ Read CLAUDE.md for project context.
 - Treat mobile layout breakage or a broken comparison table as P1.
 - Flag duplicated logic and components that should be shared as P1.
 - Flag changes that touch files unrelated to the PR's stated purpose.
+
+### Data model (schema version 2)
+- A source is a record in `lib/ev-data.provenance.json` keyed by the row's `id`, with `source_url`, `verified_on` and quoted `evidence`. A changed spec without one is P0.
+- Every row has a unique, permanent `id`. Changing or reusing an `id`, or keying anything by `name` (seat variants share names), is P0.
+- `availability` decides whether a trim is sold new; only `new` counts. Treat a change to `availability` without the owner's explicit approval as P0, as well as any code that infers "sold new" from a numeric `msrp` or a model year.
+- `msrp` is a number or null, never text ("N/A", "TBD"). `msrp_status` must fit `availability` (for example `historical` only on `used_only`). Showing a historical price as a current one is P0.
+- `range_basis`: "EPA" may appear in generated text only for `epa` rows, which need a reviewed EPA mapping. A manufacturer estimate or an unverified range described as EPA is P0.
+- Protected fields (`seats`, `cargo_behind_*`, `fold_flat`, `cargo_floor_width_in`) must not be changed by automation.
+
+## Plan Review Rules
+Files in docs/plans/ are design plans, not code. Review them as an architect:
+- Does the approach fit the existing structure, or reinvent something that exists?
+- What breaks: data format changes, existing workflows, the validator, published URLs?
+- Missing steps: migration, rollback, tests that prove it works.
+- Is there a simpler way to get the same outcome?
+Treat a plan that could corrupt or misstate vehicle data as P0.
