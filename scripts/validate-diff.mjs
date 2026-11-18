@@ -144,6 +144,14 @@ export function evaluate({ repo, base, head, approvals = [] }) {
   const valuesByName = (rows) => rows.reduce((m, r) => m.set(r.name, [...(m.get(r.name) ?? []), r.preowned_range]), new Map())
   const bVals = valuesByName(B.data?.details ?? [])
   const hVals = valuesByName(H.data.details)
+  // Every entry is judged: a duplicate name would otherwise hide entries behind the last one
+  for (const [label, list] of [['base', B.data?.preowned ?? []], ['head', H.data.preowned ?? []]]) {
+    const seen = new Set()
+    for (const p of list) {
+      if (seen.has(p.name) && label === 'head') err('preowned-table-duplicate', '-', p.name, `the preowned table lists "${p.name}" more than once`)
+      seen.add(p.name)
+    }
+  }
   const bTable = new Map((B.data?.preowned ?? []).map((p) => [p.name, p.preowned_range]))
   const hTable = new Map((H.data.preowned ?? []).map((p) => [p.name, p.preowned_range]))
   for (const [name, val] of bTable) {
@@ -284,7 +292,12 @@ export function evaluate({ repo, base, head, approvals = [] }) {
   // Provenance records: never deleted while the row exists; every new or edited record is a full record
   for (const [id, fields] of Object.entries(B.prov.fields ?? {})) {
     if (!hRows.has(id)) continue
-    for (const f of Object.keys(fields)) if (!H.prov.fields?.[id]?.[f]) err('prov-deleted', id, f, 'a provenance record was deleted')
+    for (const f of Object.keys(fields)) {
+      if (H.prov.fields?.[id]?.[f]) continue
+      // A record may go only with its value: an approved withdrawal (value now null/TBD/N/A, which needs the owner's approval above)
+      const withdrawn = isBlank(hRows.get(id)?.[f]) && !isBlank(bRows.get(id)?.[f])
+      if (!withdrawn) err('prov-deleted', id, f, 'a provenance record was deleted')
+    }
   }
   for (const [id, fields] of Object.entries(H.prov.fields ?? {})) {
     for (const [f, rec] of Object.entries(fields)) {

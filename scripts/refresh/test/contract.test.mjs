@@ -335,6 +335,34 @@ test('pre-owned baselines are validated and their changes need approval', () => 
   assert.ok(r.errors.some((e) => e.field === '@preowned-baselines'))
 })
 
+// Regressions for Codex's PR review (#58)
+test('a duplicated preowned table name cannot hide an entry', () => {
+  const r = run((f) => { const d = f['lib/ev-data.json']; d.preowned.unshift({ ...d.preowned[0], preowned_range: '$1 - $2' }) })
+  assert.ok(rules(r).includes('preowned-table-duplicate'))
+})
+test('an approved withdrawal of a sourced nullable field passes, with its record removed', () => {
+  const id = 'kia-ev9-2027-gt-line'
+  const mutate = (f) => {
+    rec(f, id, 'battery_kwh', row(f, id).battery_kwh) // a fully sourced value...
+  }
+  // Base already has the full record; head withdraws the value and drops the record
+  const s = scenario(mutate)
+  try {
+    const p = (x) => JSON.parse(readFileSync(join(s.repo, x), 'utf8'))
+    const data = p('lib/ev-data.json'); const prov = p('lib/ev-data.provenance.json')
+    data.details.find((x) => x.id === id).battery_kwh = null
+    delete prov.fields[id].battery_kwh
+    write(s.repo, 'lib/ev-data.json', data); write(s.repo, 'lib/ev-data.provenance.json', prov)
+    git(s.repo, 'add', '-A'); git(s.repo, 'commit', '-qm', 'withdraw')
+    const base = s.head
+    const head = git(s.repo, 'rev-parse', 'HEAD')
+    const probe = evaluate({ repo: s.repo, base, head })
+    assert.ok(probe.exceptions.some((x) => x.id === id && x.field === 'battery_kwh'))
+    const r = evaluate({ repo: s.repo, base, head, approvals: probe.exceptions.map((x) => ({ ...x, run_id: 1, approver: 'owner' })) })
+    assert.deepEqual(r.errors, [])
+  } finally { s.done() }
+})
+
 // Regressions for Codex's second review of step 1
 test('a source-only edit is checked too: an off-policy URL on an unchanged spec fails', () => {
   const r = run((f) => { rec(f, EV9, 'msrp', row(f, EV9).msrp, { source_url: 'https://www.example.com/kia' }) })
