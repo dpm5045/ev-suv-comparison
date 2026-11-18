@@ -376,6 +376,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 EV9 Long Range AWD GT-Line: 280 mi",
         "legacy": "name_keyed"
+      },
+      "cargo_behind_3rd_cu_ft": {
+        "source_url": "https://www.kia.com/us/en/ev9/specs",
+        "verified_on": "2026-11-17",
+        "evidence": "TEST ONLY (not a real quote): Cargo volume behind 3rd row 20.3 cu ft",
+        "value": 20.3,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "hyundai-ioniq-9-2026-performance-calligraphy": {
