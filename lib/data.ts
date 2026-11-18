@@ -23,83 +23,35 @@ export interface CountTotals {
   total: number
 }
 
-export type Availability = 'new' | 'used_only' | 'announced' | 'needs_review'
-export type MsrpStatus = 'current' | 'historical' | 'announced' | 'unknown'
-export type RangeBasis = 'epa' | 'manufacturer_estimate' | 'unverified'
+import type { RawDetailRow } from './ev-data.types'
 
-export interface DetailRow {
-  /** Display label "Vehicle, Year, Trim". NOT unique (seat variants share it): never use it as a key. */
-  name: string
-  /** Stable configuration id, assigned once (schema_version 2); the key for provenance, accepted.json and fixes */
-  id: string
-  vehicle: string
-  year: number
-  trim: string
-  seats: number | null
-  drivetrain: string
-  /** MSRP when known, including published prices of announced models; null when unknown or not sold new */
-  msrp: number | null
-  /** Whether this configuration can be bought new today. Only 'new' is eligible for new-car results. */
-  availability: Availability
-  /** What msrp means: current price, last new price (historical), announced price, or unknown */
-  msrp_status: MsrpStatus
-  destination: number | null
-  /** Computed at load — (msrp + destination) * 1.06 + 905; 'TBD' passthrough; null when N/A */
+/*
+ * Row types are GENERATED from the data contract (scripts/schema/ev-data.schema.mjs
+ * → lib/ev-data.types.ts), so TypeScript and the build-time validator can't drift.
+ * Notes on the stored fields:
+ *   - name: display label "Vehicle, Year, Trim"; NOT unique (seat variants share it), never a key
+ *   - id: stable configuration id; the key for provenance, accepted.json and fixes
+ *   - availability: whether the configuration is sold new today; only 'new' is eligible for new-car results
+ *   - msrp / msrp_status: the price (or null) and what it means (current, historical, announced, unknown)
+ *   - range_basis: epa (reviewed mapping only), manufacturer_estimate, or unverified; null without a range
+ */
+export type { RawDetailRow }
+export type Availability = RawDetailRow['availability']
+export type MsrpStatus = RawDetailRow['msrp_status']
+export type RangeBasis = NonNullable<RawDetailRow['range_basis']>
+
+export interface DetailRow extends RawDetailRow {
+  /** Computed at load: (msrp + destination) * 1.06 + 905 for a current or announced price; 'TBD' passthrough; null otherwise */
   otd_new: number | string | null
-  preowned_range: string
   /** Computed at load from preowned_range; sentinel text passed through */
   otd_preowned: string
   /** Parsed from preowned_range at load; null when no used market */
   preowned_low: number | null
   preowned_high: number | null
-  self_driving: string
-  sae_level: 2 | 3 | 4 | 5 | null
-  self_driving_tier: 'Basic L2' | 'Advanced L2' | 'L2+ Hands-Free' | 'L2+ Point-to-Point' | null
-  /** Driver-assist hardware generation label, e.g. "HW3", "Gen 2"; null where it doesn't change capability or isn't researched */
-  adas_hardware: string | null
-  /** current = newest for this vehicle; previous = older; mixed = the model year was built with either */
-  adas_hardware_gen: 'current' | 'previous' | 'mixed' | null
-  adas_hardware_note: string | null
-  /** Computed at load — tier rank (1–4), one lower on older hardware with the same tier as current hardware; null when no tier */
+  /** Computed at load: tier rank (1–4), one lower on older hardware with the same tier as current hardware; null when no tier */
   self_driving_rank: number | null
-  /** Computed at load — true when self_driving_rank was lowered for older hardware */
+  /** Computed at load: true when self_driving_rank was lowered for older hardware */
   adas_downgraded: boolean
-  range_mi: number | string | null
-  /** What range_mi is: a verified EPA rating (reviewed mapping only), a manufacturer estimate, or unverified; null with no range */
-  range_basis: RangeBasis | null
-  hp: number | string | null
-  battery_kwh: number | string | null
-  onboard_ac_kw: number | string | null
-  l2_10_100: number | string | null
-  l2_10_80: number | string | null
-  charging_type: string
-  car_software: string
-  center_display: string
-  gauge_cluster: string
-  hud: string
-  other_displays: string
-  audio: string
-  driver_profiles: string
-  notes: string
-  frunk_cu_ft: number | null
-  cargo_behind_3rd_cu_ft: number | string | null
-  cargo_behind_2nd_cu_ft: number | null
-  cargo_behind_1st_cu_ft: number | null
-  fold_flat: string | null
-  cargo_floor_width_in: number | string | null
-  // Tier 1 + select Tier 2 fields (added March 2026 audit)
-  towing_lbs: number | string | null
-  dc_fast_charge_kw: number | string | null
-  dc_fast_charge_10_80_min: number | string | null
-  curb_weight_lbs: number | string | null
-  length_in: number | string | null
-  width_in: number | string | null
-  height_in: number | string | null
-  third_row_legroom_in: number | string | null
-  third_row_headroom_in: number | string | null
-  torque_lb_ft: number | string | null
-  zero_to_60_sec: number | string | null
-  ground_clearance_in: number | string | null
 }
 
 export interface PreownedRow {
@@ -157,9 +109,6 @@ export interface EVData {
 
 export const OTD_TAX_RATE = 1.06   // PA sales tax 6%
 export const OTD_FIXED_FEES = 905  // doc $422 + title/reg $233 + EV road-use fee $250
-
-/** Raw JSON row: DetailRow minus the fields computed at load. */
-type RawDetailRow = Omit<DetailRow, 'otd_new' | 'otd_preowned' | 'preowned_low' | 'preowned_high' | 'self_driving_rank' | 'adas_downgraded'>
 
 interface RawEVData extends Omit<EVData, 'details'> {
   details: RawDetailRow[]
@@ -232,7 +181,17 @@ function enrich(r: RawDetailRow): Omit<DetailRow, 'self_driving_rank' | 'adas_do
   }
 }
 
-const raw = rawData as unknown as RawEVData
+/**
+ * The one cast in the data layer. JSON imports widen enums to string, so the
+ * import can't be type-checked directly; instead every build validates the file
+ * against the same schema these types are generated from (prebuild:
+ * scripts/validate-data.js), and CI fails if the generated types are stale.
+ */
+function loadEvData(): RawEVData {
+  return rawData as unknown as RawEVData
+}
+
+const raw = loadEvData()
 
 const enriched = raw.details.map(enrich)
 const ranks = rankSelfDriving(enriched)

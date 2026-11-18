@@ -1,0 +1,4 @@
+{
+  "_about": "Append-only list of configuration ids that were removed. A retired id can never be reused. Removing a row needs the owner approval (field @remove) and an entry here.",
+  "ids": []
+}
