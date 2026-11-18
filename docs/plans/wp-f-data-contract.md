@@ -32,8 +32,8 @@ Today `scripts/validate-data.js` checks structure partially. Nothing compares a 
 Plain JS, used by the validator and the diff validator. The site does not import it.
 
 - **One entry per `details` field:** its type (`number`, `string`, `boolean`, enum), whether it is nullable, and, for numeric fields, an explicit allowed sentinel set:
-  - `range_mi`, `hp`, `battery_kwh`: the string `TBD`, or `TBD (<estimate>)` matching `^TBD \(~[0-9][0-9,+\- ]*( est)?[^)]*\)$`, **only on rows whose `availability` is `announced` or `needs_review`**;
-  - `cargo_behind_3rd_cu_ft`, `third_row_legroom_in`, `third_row_headroom_in`: `N/A`, only where `seats` ≤ 5 or the note explains it. *(Open question: verify the three current `N/A` rows.)*
+  - `range_mi`, `hp`, `battery_kwh`: the string `TBD`, **only on rows whose `availability` is `announced` or `needs_review`** (estimates live in `notes`; see Decisions);
+  - `cargo_behind_3rd_cu_ft`, `third_row_legroom_in`, `third_row_headroom_in`: `N/A`, meaning "no third row", allowed only where `seats` ≤ 5, and required there (see Decisions).
   - Every other numeric field: `number | null`.
 - **Unknown keys are errors.** Stored computed keys are errors (`otd_new`, `otd_preowned`, `preowned_low`, `preowned_high`, `self_driving_rank`, `adas_downgraded`).
 - **Enums:** `availability`, `msrp_status`, `range_basis`, `adas_hardware_gen`, `self_driving_tier`, `drivetrain` (drivetrain enum taken from current values).
@@ -96,7 +96,11 @@ Built from `sources.json` (the manufacturer pricing domain per vehicle) plus:
 
 ## Rollout and order
 
-1. Schema plus the `lib/data.ts` loader, and the data normalization (`preowned_range` sentinel). One PR.
+1. Schema plus the `lib/data.ts` loader, and the data normalization, in one PR:
+   - the `preowned_range` sentinel;
+   - `TBD (…)` to `TBD`, with the estimate moved to `notes`;
+   - the third-row `N/A` and `null` corrections;
+   - the Maybach seat count, only with a quoted source and the owner's approval.
 2. Provenance v3 format, the diff validator, the hashes library and the source policy, plus CI wiring. One PR.
 3. The approval workflow and its verification. One PR.
 
@@ -128,8 +132,13 @@ Publication stays paused throughout, so no bot is affected. Human data PRs are a
 - Agent containment (WP-H).
 - Reviewed EPA mappings (WP-J).
 
-## Open questions
+## Decisions (owner delegated, 2026-11-17)
 
-1. The three `N/A` cargo and legroom rows: are they truly not applicable (five-seat), or missing data?
-2. Is the `lib/data.ts` single-cast loader acceptable instead of `satisfies`?
-3. Is `TBD (<estimate>)` acceptable as a pattern, or should the estimates move to `notes`, leaving plain `TBD`?
+1. **What `N/A` in the third-row fields means: "this configuration has no third row".** It is allowed only where `seats` ≤ 5, and a 5-seat row must use it for all three third-row fields. The rows were inspected, and the step-1 data fixes are:
+   - 5-seat rows that carry third-row legroom or headroom numbers (for example the 2021 Model X Long Range Plus 5-seat, at 29.8 in): set to `N/A`;
+   - 6-seat Model X rows with `cargo_behind_3rd_cu_ft: "N/A"` (2021 Long Range Plus and Plaid 6-seat, 2022 Base 6-seat and Plaid): these have a third row, so the value is **missing**. Set it to `null` (unknown), never to a guessed number;
+   - **Maybach EQS 680 SUV (2024–2026):** the data says `seats: 7`, but the notes say "2-row Maybach luxury". The seat count is protected and needs a quoted mbusa.com source. Correct it during the build only with that source, as an owner-approved exception. Until then it wrongly passes Speed Dating's 6+ seat filter.
+
+   These are data corrections, not schema rules, so they ship as a reviewed data change in step 1, with sources where values are set.
+2. **Typing:** the data is validated against the schema at build time, which is standard practice (validate at the boundary), and `lib/data.ts` keeps one documented cast in a `loadEvData()`. The schema is the single source of truth.
+3. **`TBD` estimates:** numeric fields hold `TBD` only. The estimate text moves into `notes` (for example "Range TBD; Lucid estimates ~350–400 mi"), so numbers are numbers, and the sentinel set is exactly `TBD` on `announced` or `needs_review` rows.
