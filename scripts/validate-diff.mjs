@@ -84,9 +84,17 @@ export function evaluate({ repo, base, head, approvals = [] }) {
   const err = (rule, id, field, msg) => errors.push({ rule, id: id ?? '-', field: field ?? '-', msg })
 
   const paths = changedPaths(repo, base, head)
-  const dataPaths = paths.filter((p) => DATA_FILES.includes(p))
-  const gatePaths = paths.filter((p) => isGate(p) && p !== BASELINE)
-  const dataChanged = dataPaths.length > 0 || paths.includes(BASELINE)
+  // A data file counts as changed when its content changes; creating
+  // retired-ids.json with no ids (the bootstrap) changes nothing.
+  const dataPaths = paths.filter((p) => DATA_FILES.includes(p)).filter((p) => p !== 'scripts/refresh/retired-ids.json'
+    || !same(show(repo, base, p, { ids: [] }).ids ?? [], show(repo, head, p, { ids: [] }).ids ?? []))
+  // The known-violations baseline is a rule file, except that removing entries
+  // (because the data was fixed) is part of a data change.
+  const baseKnownList = show(repo, base, BASELINE, null)?.violations
+  const headKnownList = show(repo, head, BASELINE, { violations: [] }).violations ?? []
+  const baselineShrinkOnly = paths.includes(BASELINE) && Array.isArray(baseKnownList) && headKnownList.every((k) => baseKnownList.includes(k))
+  const gatePaths = paths.filter((p) => isGate(p) && !(p === BASELINE && baselineShrinkOnly))
+  const dataChanged = dataPaths.length > 0 || baselineShrinkOnly
   if (!dataChanged) return { errors, exceptions, satisfied: [], changes, dataChanged, proposal_sha256: null, paths }
 
   // §1: rules and data never change together
@@ -254,18 +262,22 @@ async function main() {
   const head = arg('--head')
   if (!base || !head) { console.error('usage: validate-diff.mjs --base <sha> --head <sha> [--repo dir] [--approvals github|none|file] [--report file]'); process.exit(2) }
   const mode = arg('--approvals', 'none')
-  let approvals = []
-  if (mode === 'github') {
-    const repoName = process.env.GITHUB_REPOSITORY
-    const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN
-    if (!repoName || !token) { console.error('--approvals github needs GITHUB_REPOSITORY and GH_TOKEN'); process.exit(2) }
-    const loaded = await loadApprovals({ repo: repoName, token })
-    approvals = loaded.approvals
-    if (loaded.rejected.length) console.log(`Ignored approval runs:\n${loaded.rejected.map((x) => `  - ${x}`).join('\n')}`)
-  } else if (mode !== 'none') {
-    approvals = JSON.parse(readFileSync(mode, 'utf8'))
+  // Evaluate first; read approvals only if some exception actually needs one
+  let r = evaluate({ repo, base, head, approvals: [] })
+  if (r.exceptions.length && mode !== 'none') {
+    let approvals = []
+    if (mode === 'github') {
+      const repoName = process.env.GITHUB_REPOSITORY
+      const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN
+      if (!repoName || !token) { console.error('--approvals github needs GITHUB_REPOSITORY and GH_TOKEN'); process.exit(2) }
+      const loaded = await loadApprovals({ repo: repoName, token })
+      approvals = loaded.approvals
+      if (loaded.rejected.length) console.log(`Ignored approval runs:\n${loaded.rejected.map((x) => `  - ${x}`).join('\n')}`)
+    } else {
+      approvals = JSON.parse(readFileSync(mode, 'utf8'))
+    }
+    r = evaluate({ repo, base, head, approvals })
   }
-  const r = evaluate({ repo, base, head, approvals })
   const report = renderReport(r, { base, head })
   console.log(report)
   const out = arg('--report')

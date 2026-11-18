@@ -1,8 +1,18 @@
-# Trusted configuration: changes need the owner's review once branch protection
-# requires code-owner reviews (build spec WP-F/WP-I).
+# Trusted configuration: the rules that judge data changes (WP-F §1). These
+# files may only change in a PR that changes no data (scripts/validate-diff.mjs
+# enforces that); the owner merges such PRs. Code-owner review isn't a
+# required check (the owner can't approve PRs opened under their own account).
 /.github/workflows/                       @dpm5045
 /.github/CODEOWNERS                       @dpm5045
+/scripts/validate-data.js                 @dpm5045
+/scripts/validate-diff.mjs                @dpm5045
+/scripts/schema/                          @dpm5045
+/scripts/refresh/source-policy.json       @dpm5045
 /scripts/refresh/publish-control.json     @dpm5045
 /scripts/refresh/compat.json              @dpm5045
 /scripts/refresh/can-publish.sh           @dpm5045
+/scripts/refresh/lib/hashes.mjs           @dpm5045
+/scripts/refresh/lib/zip.mjs              @dpm5045
+/scripts/refresh/accepted.json            @dpm5045
+/scripts/refresh/retired-ids.json         @dpm5045
 /docs/migrations/                         @dpm5045

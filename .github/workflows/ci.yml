@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  actions: read   # the data contract reads owner approvals (approve-data-exception.yml runs)
 
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.sha }}
@@ -23,16 +24,45 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0   # the data contract compares the base and head revisions
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: .nvmrc
           cache: npm
 
+      - name: Data contract (rules from the base revision)
+        # WP-F: the contract that judges this change is run from the BASE revision,
+        # so a PR can't loosen the rules that judge it. It needs no npm packages.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          if [ -z "$BASE" ] || [ "$BASE" = 0000000000000000000000000000000000000000 ]; then
+            echo "No base revision to compare with." >> "$GITHUB_STEP_SUMMARY"; exit 0
+          fi
+          git cat-file -e "$HEAD^{commit}" 2>/dev/null || git fetch -q origin "$HEAD"
+          if git cat-file -e "$BASE:scripts/validate-diff.mjs" 2>/dev/null; then
+            git worktree add -q "$RUNNER_TEMP/trusted" "$BASE"
+            script="$RUNNER_TEMP/trusted/scripts/validate-diff.mjs"
+          else
+            echo "Bootstrap: the base revision has no data contract yet, so this revision's is used (once)." >> "$GITHUB_STEP_SUMMARY"
+            script=scripts/validate-diff.mjs
+          fi
+          status=0
+          node "$script" --repo . --base "$BASE" --head "$HEAD" --approvals github --report "$RUNNER_TEMP/contract.md" || status=$?
+          cat "$RUNNER_TEMP/contract.md" >> "$GITHUB_STEP_SUMMARY"
+          exit $status
+
       - run: npm ci
 
       - name: Validate data
         run: npm run validate
+
+      - name: Generated types match the schema
+        run: node scripts/schema/gen-types.mjs --check
 
       - name: Lint
         run: npm run lint

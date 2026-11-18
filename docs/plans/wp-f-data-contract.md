@@ -198,3 +198,12 @@ Deriving tables and writer records (WP-G), bot publication (WP-I), agent contain
 | P1-1 Rollback incompatible with a provenance version bump; writers emit legacy records | §7: record fields are additive and the version is unchanged, so rollback is safe; writers updated in G and I while paused |
 | P1-2 Schema and TS types can drift; rule ownership unclear | §2: types generated from the schema plus a CI drift check; the schema owns every cross-field rule |
 | P1-3 Fixtures don't prove the real merge-time behaviour | Rollout step 2: end-to-end proof with real Actions and the ruleset; page and Playwright checks on migrated data |
+
+## As built: step 1 (deviations from this plan, found while building)
+
+- **Known-violations baseline.** Today's master breaks 104 of the strict rules: 60 "no used market" phrasings, 35 third-row values (including the Maybach), and 9 `TBD (…)` strings. Step 1 changes no data, so these are listed in `scripts/schema/known-violations.json`. They are reported as warnings, and **the list can only shrink**: a stale entry is an error, and an added one is a rule change. Step 3 empties it through the gate.
+- **The parallel `preowned` table is frozen, then removed.** The plan's "rows sharing a name must share a used price" rule is wrong for this data: Model X seat variants share a name and legitimately sell at different used prices (5 groups today). The table also disagrees with `details` on 10 rows, lacks 51 names, and no page reads it. So step 1 freezes it (any change needs an `@preowned-table` approval), and step 3 removes it, pulling that piece forward from WP-G.
+- **`name` is an identity field,** not derived: 11 rows' names carry a seat suffix that `trim` lacks (Volvo EX90 "6-Seater"). Changing it needs the `@identity` approval.
+- **`accepted.json` and `retired-ids.json` count as data files,** not rule files: they must change together with the rows they describe (a new estimate, a removal). Both are CODEOWNERS-listed, and the contract checks their consistency with `details`.
+- **Withdrawing a value** (to `null`, `TBD` or `N/A`) needs an approval rather than a source, since there's nothing to quote.
+- **Bootstrap:** this PR creates the rule files. Its CI runs the head's contract once, because the base has none, and reports "no data files changed".
