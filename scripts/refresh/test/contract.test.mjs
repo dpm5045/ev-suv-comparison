@@ -123,20 +123,21 @@ test('deleting a provenance record fails', () => {
   const r = run((f) => { const p = f['lib/ev-data.provenance.json'].fields; const [id, fields] = Object.entries(p)[0]; delete fields[Object.keys(fields)[0]] })
   assert.ok(rules(r).includes('prov-deleted'))
 })
-test('moving a TBD estimate into notes passes with a moved record', () => {
+test('moving a TBD estimate into notes passes end to end with its approval', () => {
   const id = 'mercedes-benz-glb-electric-2027-glb-250-plus-expected'
-  const r = run((f) => {
+  const mutate = (f) => {
     const x = row(f, id)
     const est = x.range_mi // "TBD (~315 est)"
-    x.range_mi = 'TBD'
-    x.notes = `${x.notes} Range TBD; Mercedes estimates ~315 mi.`.trim()
-    rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi', source_url: 'https://www.mbusa.com/en/future-vehicles' })
-    f['scripts/schema/known-violations.json'].violations = f['scripts/schema/known-violations.json'].violations.filter((k) => k !== `type|${id}|range_mi`)
     assert.match(est, /315/)
-  }, { approvals: (s) => [] })
-  // TBD on range is a withdrawal of a value: needs approval; the moved note itself is accepted
-  assert.ok(!rules(r).includes('evidence-moved'))
-  assert.ok(r.exceptions.some((x) => x.id === id && x.field === 'range_mi'))
+    x.range_mi = 'TBD'
+    x.notes = `${x.notes}${x.notes ? ' ' : ''}Range: ${est}`
+    rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi', source_url: f['lib/ev-data.provenance.json'].fields[id]?.range_mi?.source_url ?? 'https://www.mbusa.com/en/future-vehicles' })
+    const kv = f['scripts/schema/known-violations.json']
+    kv.violations = kv.violations.filter((k) => !k.startsWith(`type|${id}|range_mi|`))
+  }
+  const r = run(mutate, { approvals: (s) => evaluate({ repo: s.repo, base: s.base, head: s.head }).exceptions.map((x) => ({ ...x, run_id: 1, approver: 'owner' })) })
+  assert.ok(r.satisfied.some((x) => x.id === id && x.field === 'range_mi'))
+  assert.deepEqual(r.errors, [])
 })
 
 // Approvals
@@ -332,4 +333,49 @@ test('pre-owned baselines are validated and their changes need approval', () => 
   const r = run((f) => { const p = f['lib/ev-data.provenance.json'].preowned; const v = Object.keys(p)[0]; const y = Object.keys(p[v].years)[0]; p[v].years[y].avg_price = -5 })
   assert.ok(rules(r).includes('prov-baseline'))
   assert.ok(r.errors.some((e) => e.field === '@preowned-baselines'))
+})
+
+// Regressions for Codex's second review of step 1
+test('a source-only edit is checked too: an off-policy URL on an unchanged spec fails', () => {
+  const r = run((f) => { rec(f, EV9, 'msrp', row(f, EV9).msrp, { source_url: 'https://www.example.com/kia' }) })
+  assert.ok(rules(r).includes('evidence-domain'))
+})
+test('clearing a required spec fails', () => {
+  const r = run((f) => { row(f, EV9).charging_type = '' })
+  assert.ok(r.errors.some((e) => e.rule === 'type' && e.field === 'charging_type'))
+})
+test('a details used-price change must keep the preowned table in agreement', () => {
+  const r = run((f) => {
+    const d = f['lib/ev-data.json']
+    const entry = d.preowned.find((p) => d.details.filter((x) => x.name === p.name).length === 1 && d.details.find((x) => x.name === p.name).preowned_range === p.preowned_range)
+    const x = d.details.find((y) => y.name === entry.name)
+    x.preowned_range = '$40,000 - $48,000'
+  })
+  assert.ok(rules(r).includes('preowned-table-disagree'))
+})
+test('a moved record cannot bring a new claim along', () => {
+  const id = 'mercedes-benz-glb-electric-2027-glb-250-plus-expected'
+  const r = run((f) => { const x = row(f, id); const est = x.range_mi; x.range_mi = 'TBD'; x.notes = `${x.notes} Range: ${est}, 0-60 in 5.9 s`; rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi' }) })
+  assert.ok(r.errors.some((e) => e.rule === 'evidence-moved' && /new claim/.test(e.msg)))
+})
+test('a Tesla msrp derived from Car and Driver\'s inclusive price passes; a wrong subtraction fails', () => {
+  const id = 'tesla-model-y-l-2026-launch-series'
+  const ok = run((f) => {
+    const x = row(f, id); x.msrp += 500
+    rec(f, id, 'destination', x.destination, { source_url: 'https://www.caranddriver.com/tesla/model-y/specs', evidence: `Destination charge $${x.destination.toLocaleString('en-US')}` })
+    rec(f, id, 'msrp', x.msrp, { source_url: 'https://www.caranddriver.com/tesla/model-y/specs/2026/x', method: 'derived', derivation: 'quoted_total_minus_destination', quoted_total: x.msrp + x.destination, evidence: `MSRP $${(x.msrp + x.destination).toLocaleString('en-US')}` })
+  })
+  assert.deepEqual(ok.errors.filter((e) => e.field === 'msrp'), [])
+  const bad = run((f) => {
+    const x = row(f, id); x.msrp += 500
+    rec(f, id, 'msrp', x.msrp, { source_url: 'https://www.caranddriver.com/tesla/model-y/specs/2026/x', method: 'derived', derivation: 'quoted_total_minus_destination', quoted_total: x.msrp, evidence: `MSRP $${x.msrp.toLocaleString('en-US')}` })
+  })
+  assert.ok(bad.errors.some((e) => e.rule === 'evidence-derived'))
+})
+test('an unsupported schema version fails even with a migration approval (rules first, then data)', () => {
+  const r = run((f) => { f['lib/ev-data.json'].schema_version = 3 }, {
+    approvals: (s) => evaluate({ repo: s.repo, base: s.base, head: s.head }).exceptions.map((x) => ({ ...x, run_id: 1, approver: 'owner' })),
+  })
+  assert.ok(r.satisfied.some((x) => x.field === '*'))
+  assert.ok(r.errors.some((e) => e.rule === 'schema-version' && /rules-only PR/.test(e.msg)))
 })

@@ -139,7 +139,22 @@ export function evaluate({ repo, base, head, approvals = [] }) {
   for (const k of ['scope', 'count_note', 'us_ev_sales', 'us_ev_sales_notes', 'glossary', 'assumptions']) {
     if (!same(B.data?.[k], H.data[k])) need('-', `@top:${k}`, '(previous)', '(changed)', `top-level ${k} changed`)
   }
-  if (!same(B.data?.preowned, H.data.preowned)) need('-', '@preowned-table', '(previous)', '(changed)', 'the parallel preowned table is frozen until it is removed (WP-F step 3)')
+  // The parallel preowned table (removed in WP-F step 3): an entry may only change to a value
+  // that a details row with the same name now has; and no name may go from agreeing to disagreeing.
+  const valuesByName = (rows) => rows.reduce((m, r) => m.set(r.name, [...(m.get(r.name) ?? []), r.preowned_range]), new Map())
+  const bVals = valuesByName(B.data?.details ?? [])
+  const hVals = valuesByName(H.data.details)
+  const bTable = new Map((B.data?.preowned ?? []).map((p) => [p.name, p.preowned_range]))
+  const hTable = new Map((H.data.preowned ?? []).map((p) => [p.name, p.preowned_range]))
+  for (const [name, val] of bTable) {
+    if (!hTable.has(name)) need('-', '@preowned-table', name, null, `preowned table entry removed: ${name}`)
+  }
+  for (const [name, val] of hTable) {
+    if (bTable.get(name) !== val && !(hVals.get(name) ?? []).includes(val)) need('-', '@preowned-table', bTable.get(name) ?? null, val, `preowned table entry "${name}" changed to a value no details row has`)
+    const agreed = (bVals.get(name) ?? []).includes(bTable.get(name))
+    const agrees = (hVals.get(name) ?? []).includes(val)
+    if (agreed && !agrees) err('preowned-table-disagree', '-', name, `the preowned table entry (${val}) no longer matches any details row named "${name}": update it in the same PR`)
+  }
 
   // Rows by id
   const bRows = new Map((B.data?.details ?? []).map((r) => [r.id, r]))
@@ -148,13 +163,21 @@ export function evaluate({ repo, base, head, approvals = [] }) {
   const hRetired = new Set((H.retired.ids ?? []).map((x) => x.id))
   for (const id of bRetired) if (!hRetired.has(id)) err('retired-append-only', id, 'retired-ids.json', 'retired ids are append-only')
 
+  const checked = new Set()
   const evidence = (row, field, newValue) => {
     const rec = H.prov.fields?.[row.id]?.[field]
     const old = B.prov.fields?.[row.id]?.[field]
     if (!rec) return err('evidence-missing', row.id, field, `${field} changed to ${JSON.stringify(newValue)} without a provenance record`)
     if (old && same(rec, old)) return err('evidence-stale', row.id, field, `${field} changed but its provenance record did not`)
+    checkRecord(row, field, newValue, rec)
+  }
+  /** Every check a new or edited record must pass, whether or not the spec value changed. */
+  function checkRecord(row, field, newValue, rec) {
+    const k = `${row.id}|${field}`
+    if (checked.has(k)) return
+    checked.add(k)
     if (rec.legacy) return err('evidence-legacy', row.id, field, 'a new or edited record must be a full record (no legacy marker)')
-    if (!same(rec.value, newValue)) return err('evidence-value', row.id, field, `record value ${JSON.stringify(rec.value)} differs from the new ${JSON.stringify(newValue)}`)
+    if (!same(rec.value, newValue)) return err('evidence-value', row.id, field, `record value ${JSON.stringify(rec.value)} differs from the stored ${JSON.stringify(newValue)}`)
     if (rec.method === 'moved') {
       // Text relocated from another field of the same row (e.g. a TBD estimate into notes).
       // Only into a text field; the old text of the destination is kept unchanged (append only);
@@ -169,9 +192,26 @@ export function evaluate({ repo, base, head, approvals = [] }) {
       if (!TEXT_FIELDS.includes(field)) problems.push(`moves may only go into a text field (${TEXT_FIELDS.join(', ')})`)
       if (!FIELDS[rec.moved_from] || typeof src !== 'string' || !/\d/.test(src)) problems.push('moved_from must name a field of the base row holding text with the claim')
       else if (added === null) problems.push('the destination must keep its old text unchanged and append the moved text')
-      else if (!numbersIn(src).every((n) => numbersIn(added).includes(n))) problems.push('the appended text must state every number the moved text stated')
+      else {
+        // The original claim travels verbatim (e.g. "TBD (~315 est)"), and nothing new comes with it:
+        // the rest of the appended text may only be a short label with no numbers.
+        const at = added.indexOf(src)
+        const rest = at < 0 ? added : added.slice(0, at) + added.slice(at + src.length)
+        if (at < 0) problems.push(`the appended text must contain the original text verbatim: ${JSON.stringify(src)}`)
+        else if (/\d/.test(rest) || rest.trim().length > 40) problems.push('only the original text (plus a short label without numbers) may be appended; a new claim needs its own source')
+      }
       if (srcRec && rec.source_url !== srcRec.source_url) problems.push(`the moved claim must keep its original source (${srcRec.source_url})`)
       for (const msg of problems) err('evidence-moved', row.id, field, msg)
+      return
+    }
+    if (rec.method === 'derived' && field === 'msrp' && rec.derivation === 'quoted_total_minus_destination') {
+      // Car and Driver quotes a destination-inclusive price (refresh.md): msrp = quoted_total - destination,
+      // with destination carrying its own record
+      const total = rec.quoted_total
+      if (typeof total !== 'number' || !evidenceSupports(total, rec.evidence)) err('evidence-quote', row.id, field, 'a derived msrp needs quoted_total stated in the evidence')
+      else if (typeof row.destination !== 'number' || total - row.destination !== newValue) err('evidence-derived', row.id, field, `quoted_total ${total} minus destination ${row.destination} is not the stored ${newValue}`)
+      if (!H.prov.fields?.[row.id]?.destination) err('evidence-derived', row.id, field, 'a derived msrp needs a sourced destination record')
+      if (!domainOk(hostOf(rec.source_url), allowedDomains(B.policy, field, row))) err('evidence-domain', row.id, field, `${hostOf(rec.source_url)} is not an allowed source for msrp of ${row.vehicle}`)
       return
     }
     const host = hostOf(rec.source_url)
@@ -250,7 +290,9 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     for (const [f, rec] of Object.entries(fields)) {
       const was = B.prov.fields?.[id]?.[f]
       if (was && same(was, rec)) continue
-      if (rec.legacy) err(was ? 'legacy-edited' : 'legacy-added', id, f, 'a new or edited record must be a full record (no legacy marker)')
+      if (rec.legacy) { err(was ? 'legacy-edited' : 'legacy-added', id, f, 'a new or edited record must be a full record (no legacy marker)'); continue }
+      const r = hRows.get(id)
+      if (r && f in r) checkRecord(r, f, r[f], rec) // source policy and quote, even when the spec itself didn't change
     }
   }
   if (!same(B.prov.preowned, H.prov.preowned)) need('-', '@preowned-baselines', '(previous)', '(changed)', 'CarGurus pre-owned baselines changed (written by the pre-owned script; WP-G defines their contract)')

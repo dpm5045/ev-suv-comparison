@@ -208,6 +208,16 @@ Deriving tables and writer records (WP-G), bot publication (WP-I), agent contain
 - **Withdrawing a value** (to `null`, `TBD` or `N/A`) needs an approval rather than a source, since there's nothing to quote.
 - **Bootstrap:** this PR creates the rule files. Its CI runs the head's contract once, because the base has none, and reports "no data files changed".
 - **The gate is its own workflow, `data-contract.yml`, on `pull_request_target`** (from Codex's step-1 review). Running the base revision's script from the PR's own CI workflow wasn't enough: the PR could edit that workflow. GitHub takes a `pull_request_target` workflow's definition from the default branch, so a PR can't change or skip it. The job never checks out or runs PR code: it fetches the PR's commits as objects and reads data with `git show`, using a read-only token. It also has a `workflow_dispatch` path for WP-I's bot PRs. **After merge, the owner adds `data-contract` as a required check** in `protect-main`. It can't be required before then, because this PR adds the workflow and so can't trigger it.
+- **The required check is the `data-contract` commit status** (from Codex's second review). `pull_request_target` runs report against the base branch, so the trusted workflow posts its result as a commit status, with context `data-contract`, on the PR's exact head commit. The owner adds that status, not the job, as a required check. For `workflow_dispatch`, the base must be on the default branch (`merge-base --is-ancestor`), and a base without the contract fails closed.
+  - **Residual limitation (stated, not hidden):** any workflow in this repository that is granted `statuses: write` could post the same context. Only rules-only PRs can change workflows (data PRs that touch them fail), and the owner merges those, so a forged status requires the owner to merge a workflow change. A GitHub App with its own check source would remove this; it isn't warranted for a single-maintainer repository today.
+- **More fixes from Codex's second review:**
+  - required text specs must be non-empty (`notes` and `other_displays` may be empty);
+  - edits to the parallel used-price table must keep it in agreement with `details`;
+  - a move carries the original text verbatim and nothing new;
+  - source-only edits get the full source and quote checks;
+  - Tesla's derived MSRP (Car and Driver's price minus destination) has an explicit, checked derivation;
+  - schema migrations go rules-first (`SUPPORTED_VERSIONS`), then data with a `*` approval;
+  - the moved-estimate test now proves the full migration passes.
 - **Other fixes from Codex's step-1 review:**
   - quotes must state the exact value as a whole number token, and long text must share most of its words with the quote;
   - `moved` records only append to text fields and keep the original source;

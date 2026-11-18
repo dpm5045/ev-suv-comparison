@@ -13,6 +13,13 @@
  */
 
 export const SCHEMA_VERSION = 2
+/**
+ * Data schema versions these rules can judge. A schema migration lands in two PRs:
+ * first a rules-only PR that teaches this module the new version (and adds it
+ * here), then the data PR with the owner's "*" approval. The rules always come
+ * from the base revision, so the second PR is judged by rules that know both.
+ */
+export const SUPPORTED_VERSIONS = [2]
 
 const ENUM = {
   drivetrain: ['AWD', 'RWD', 'AWD (dual motor)'],
@@ -61,10 +68,10 @@ export const FIELDS = {
   center_display: { type: 'string' },
   gauge_cluster: { type: 'string', nullable: true },
   hud: { type: 'string', nullable: true },
-  other_displays: { type: 'string', nullable: true },
+  other_displays: { type: 'string', nullable: true, allowEmpty: true }, // "" = no extra displays
   audio: { type: 'string' },
   driver_profiles: { type: 'string' },
-  notes: { type: 'string' },
+  notes: { type: 'string', allowEmpty: true },
   frunk_cu_ft: { type: 'number', nullable: true },
   cargo_behind_3rd_cu_ft: { type: 'number', nullable: true, sentinels: ['N/A'] },
   cargo_behind_2nd_cu_ft: { type: 'number', nullable: true },
@@ -124,7 +131,7 @@ export function fitsType(field, v) {
   if (v === null) return !!spec.nullable
   if (typeof v === 'string' && spec.sentinels?.includes(v)) return true
   switch (spec.type) {
-    case 'string': return typeof v === 'string'
+    case 'string': return typeof v === 'string' && (spec.allowEmpty || v.trim() !== '')
     case 'number': return typeof v === 'number' && Number.isFinite(v)
     case 'integer': return Number.isInteger(v)
     case 'enum': return spec.values.includes(v)
@@ -143,7 +150,7 @@ export function checkState({ data, prov, accepted, retired }) {
   // Top level
   for (const k of Object.keys(data)) if (!TOP_LEVEL.includes(k)) v('top-level-unknown', null, k, `unknown top-level key ${k}`)
   for (const k of TOP_LEVEL) if (!(k in data)) v('top-level-missing', null, k, `missing top-level key ${k}`)
-  if (data.schema_version !== SCHEMA_VERSION) v('schema-version', null, 'schema_version', `schema_version must be ${SCHEMA_VERSION}`)
+  if (!SUPPORTED_VERSIONS.includes(data.schema_version)) v('schema-version', null, 'schema_version', `schema_version ${data.schema_version} is not supported by these rules (${SUPPORTED_VERSIONS.join(', ')}); land a rules-only PR for the new version first`)
   if (!isDate(data.last_updated)) v('last-updated', null, 'last_updated', 'last_updated must be YYYY-MM-DD')
 
   const rows = Array.isArray(data.details) ? data.details : []

@@ -27,7 +27,8 @@ on:
 
 permissions:
   contents: read
-  actions: read   # owner approvals are read from approve-data-exception.yml runs
+  actions: read     # owner approvals are read from approve-data-exception.yml runs
+  statuses: write   # the result is posted as the `data-contract` status on the PR's own commit
 
 concurrency:
   group: data-contract-${{ github.event.pull_request.number || inputs.head_sha }}
@@ -61,13 +62,30 @@ jobs:
           if [ -n "$PR" ]; then git fetch -q --no-tags origin "+refs/pull/$PR/head:refs/remotes/pr/head"; fi
           git cat-file -e "$HEAD^{commit}" 2>/dev/null || git fetch -q --no-tags origin "$HEAD"
           git cat-file -e "$BASE^{commit}" 2>/dev/null || git fetch -q --no-tags origin "$BASE"
-          # The rules come from the PR's base revision (a trusted worktree)
+          # The rules come from the base revision, which must be on the default branch (a trusted revision)
+          git fetch -q --no-tags origin "${{ github.event.repository.default_branch }}"
+          git merge-base --is-ancestor "$BASE" FETCH_HEAD || { echo "base $BASE is not on the default branch; refusing to load rules from it" >&2; exit 1; }
           git worktree add -q "$RUNNER_TEMP/trusted" "$BASE"
-          if [ ! -f "$RUNNER_TEMP/trusted/scripts/validate-diff.mjs" ]; then
-            echo "The base revision has no data contract; nothing to enforce." >> "$GITHUB_STEP_SUMMARY"; exit 0
-          fi
+          # Fail closed: every base on the default branch after WP-F has the contract
+          [ -f "$RUNNER_TEMP/trusted/scripts/validate-diff.mjs" ] || { echo "the base revision has no data contract" >&2; exit 1; }
           status=0
           node "$RUNNER_TEMP/trusted/scripts/validate-diff.mjs" --repo . --base "$BASE" --head "$HEAD" \
             --approvals github --report "$RUNNER_TEMP/contract.md" || status=$?
           cat "$RUNNER_TEMP/contract.md" >> "$GITHUB_STEP_SUMMARY"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
           exit $status
+        id: contract
+
+      # pull_request_target runs report against the base branch, so the required result is
+      # published here as a commit status on the PR's exact head commit (context: data-contract).
+      - name: Publish the result on the PR's commit
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD: ${{ github.event.pull_request.head.sha || inputs.head_sha }}
+          OUTCOME: ${{ steps.contract.outcome }}
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          state=failure; desc="Data contract failed: see the run summary"
+          [ "$OUTCOME" = success ] && { state=success; desc="Data contract passed"; }
+          gh api "repos/${{ github.repository }}/statuses/$HEAD" -f state="$state" -f context=data-contract -f description="$desc" -f target_url="$URL" >/dev/null
