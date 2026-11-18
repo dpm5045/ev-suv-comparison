@@ -229,3 +229,20 @@ Deriving tables and writer records (WP-G), bot publication (WP-I), agent contain
   - pre-owned baselines are validated, and changing them needs approval;
   - the report shows each change's source and quote;
   - approval lookups paginate.
+
+## Step 2 results: the gate on the real repository (2026-11-17/18)
+
+Run with real Actions, the real `protect-main` ruleset (required checks `build` and `data-contract`) and the owner's account. The throwaway PRs were closed unmerged.
+
+| Proof | PR | Result |
+|---|---|---|
+| An unsourced price change is rejected | #59 | `data-contract` **failed**: `evidence-missing` on msrp; the PR is blocked |
+| Rules and data in one PR are rejected | #61 | **Failed**: `gate-and-data` (source-policy.json) |
+| A protected change waits for the owner's approval | #60 | **Failed**: approval needed; the report gave the exact inputs |
+| The owner's approval unlocks it | #60 | After the owner ran *Approve data exception*: **Passed**, "approved by dpm5045"; the PR was mergeable |
+| A changed base voids the approval | #60 | After moving onto a new master: **failed** again (same proposal hash, new base) |
+| A further data edit voids the approval | #60 | After one more commit: **failed** (new proposal hash) |
+
+**Bug found and fixed (#62).** The first real approval passed every trust check (workflow path, default branch, success, owner), but its artifact download sent `Accept: application/octet-stream`, which GitHub's REST API rejects with HTTP 415. The approval was therefore ignored. The fix sends GitHub's JSON media type. The mocked API now enforces the header, so the tests would have caught it.
+
+**Not provable on the real repository:** a non-owner approval and an approval run from a branch. The repository has one collaborator, and the approval workflow refuses non-default refs before recording anything. Both are covered by the mocked-API tests.
