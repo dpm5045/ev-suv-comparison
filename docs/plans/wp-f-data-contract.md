@@ -1,144 +1,200 @@
-# Plan: WP-F, the enforceable data contract
+# Plan: WP-F, the enforceable data contract (revision 2)
 
 **Spec:** `docs/BUILD-SPEC.md` v3.1, WP-F (F.1–F.4), with I.1's hashes and E.3's pause.
 **Depends on:** WP-E (merged: ids, availability, `msrp_status`, `range_basis`, schema version 2).
-**Status:** plan, for Codex critique and owner go-ahead. Nothing built yet.
+**Status:** revision 2, after Codex's architect critique (6 × P0, 3 × P1, all accepted; see "Critique and changes"). Waiting for the owner's go-ahead. Nothing built yet.
 
 ## Goal
 
-Every change to vehicle data, from a person or a bot, passes the same checks before it can merge:
-- the data is well-formed: a full schema, not today's partial checks;
-- changed values carry a matching, quoted source;
-- protected fields, ids, rows and availability change only with an approval the proposal can't forge.
-
-Today `scripts/validate-data.js` checks structure partially. Nothing compares a PR's data with `master`, so an unsourced price change, a deleted row or an edited seat count passes CI.
+Every change to vehicle data, from a person or a bot, passes the same checks before it can merge, **judged by code and policy the PR cannot change**:
+- the data is well-formed;
+- every changed published value has a matching, quoted source;
+- ids, rows, availability and protected fields change only with the owner's approval, which no proposal can forge.
 
 ## Current state (measured 2026-11-17)
 
-- 165 rows, schema version 2.
+- **165 rows, schema version 2.**
 - **Text sentinels in numeric fields:**
-  - `range_mi`: `TBD`, `TBD (~315 est)`, `TBD (~350-400 est)`;
-  - `hp`: `TBD`, `TBD (~570 est)`, …;
-  - `battery_kwh`: `TBD`, `TBD (~150+ est)`;
-  - `cargo_behind_3rd_cu_ft`, `third_row_legroom_in`, `third_row_headroom_in`: `N/A`.
-- **`preowned_range`** has three "no market" phrasings: `No meaningful used market yet`, `No used market yet`, `N/A - No meaningful used market yet`.
-- **Provenance:** 272 field records (`range_mi` 140, `adas_hardware` 76, `msrp` 33, `destination` 15, `charging_type` 4, `seats` 4). All are marked `legacy: "name_keyed"`, and none carries a `value`. **Most stored values have no source record**, so the contract can only require sources for values that change (grandfathering, below).
-- **CI:** `ci.yml` (`build`) is a required check on `master`, along with PRs only, resolved conversations and up-to-date branches. Publication by the bots is paused (`publish-control.json`), and the agent is disabled.
+  - `range_mi`, `hp` and `battery_kwh` hold `TBD` and `TBD (~… est)`;
+  - three third-row fields hold `N/A`.
+- **`preowned_range`** has three "no market" phrasings.
+- **Provenance:** 272 legacy records (`range_mi` 140, `adas_hardware` 76, `msrp` 33, `destination` 15, …). None has a `value`. Most stored values have no record at all.
+- **Data errors found during planning** (fixed in step 3, through the gate):
+  - 5-seat rows carry third-row legroom and headroom numbers;
+  - 6-seat Model X (2021–22) rows say "N/A" for third-row cargo, which is missing data;
+  - Maybach EQS 680 (2024–26) is stored as 7 seats but is a two-row car, so it passes Speed Dating's 6+ filter.
+- **GitHub:**
+  - `protect-main` requires a PR, resolved conversations, an up-to-date branch and the `build` check;
+  - the repository owner is `dpm5045`;
+  - Codex reviews every PR;
+  - bot publication is paused and the agent is disabled. **No data PRs are open.**
 
 ## Design
 
-### 1. Schema (`scripts/schema/ev-data.schema.mjs`)
+### 1. The gate runs from trusted code (Codex P0-1)
 
-Plain JS, used by the validator and the diff validator. The site does not import it.
+- **Trusted revision.** CI runs the data contract from the **base** revision: it checks out `base_sha` into a separate worktree and runs that worktree's validator, schema, source policy and approval rules against the PR's data files read from `head_sha`. A PR can't loosen the rules that judge it, because those rules come from `master`.
+- **Gate and policy files are separated from data changes.** The validator, schema, `source-policy.json`, `accepted.json`, `retired-ids.json`, `compat.json`, `publish-control.json`, `ci.yml` and `approve-data-exception.yml` may change only in a PR that changes **no** data files. A PR touching both fails. Changing a rule is therefore always its own reviewed PR, merged by the owner, before any data relies on it.
+- **CODEOWNERS** covers all of those files. *Limitation:* GitHub won't let the owner approve their own PRs, and these PRs are opened under the owner's account, so code-owner review can't be a required rule. The separation above plus the owner's merge is the control. This is recorded, not hidden.
+- **Bootstrap.** The first PR that adds the gate can't be judged by a gate that doesn't exist yet. The new checks run from the head revision only when the base revision has no validator, which happens exactly once, and that PR changes no data.
 
-- **One entry per `details` field:** its type (`number`, `string`, `boolean`, enum), whether it is nullable, and, for numeric fields, an explicit allowed sentinel set:
-  - `range_mi`, `hp`, `battery_kwh`: the string `TBD`, **only on rows whose `availability` is `announced` or `needs_review`** (estimates live in `notes`; see Decisions);
-  - `cargo_behind_3rd_cu_ft`, `third_row_legroom_in`, `third_row_headroom_in`: `N/A`, meaning "no third row", allowed only where `seats` ≤ 5, and required there (see Decisions).
-  - Every other numeric field: `number | null`.
-- **Unknown keys are errors.** Stored computed keys are errors (`otd_new`, `otd_preowned`, `preowned_low`, `preowned_high`, `self_driving_rank`, `adas_downgraded`).
-- **Enums:** `availability`, `msrp_status`, `range_basis`, `adas_hardware_gen`, `self_driving_tier`, `drivetrain` (drivetrain enum taken from current values).
-- **`preowned_range`:** `$X - $Y` or `$X` with low ≤ high, within $5,000–$250,000, **or** the single sentinel `No used market yet`. A one-off data change normalizes the three current phrasings to it.
-- **Top-level keys and the other tables** (`glossary`, `assumptions`, `count_*`, `us_ev_sales*`, `preowned`) get shape checks. The `count_*` and `preowned` tables are derived in WP-G, so here they are only shape-checked.
-- **`lib/data.ts`:** JSON imports widen enums to `string`, so `satisfies RawEVData` can't type-check the import. Proposal: keep one cast, in a single `loadEvData()` documented as "validated at build by the schema (prebuild)". That trades a compile-time check for a build-time one, which is enforced on every build. *(The spec said `satisfies`; this is a deliberate deviation, flagged for review.)*
-- `scripts/validate-data.js` keeps its non-schema checks (adas consistency, accepted.json ↔ `range_basis`, provenance shape) and calls the schema for the rest.
+### 2. Schema (`scripts/schema/ev-data.schema.mjs`) and types (Codex P1-2)
 
-### 2. Provenance record format (version 3 of the provenance file)
+- **One entry per `details` field:** type, nullability, enum, and an explicit sentinel set:
+  - `TBD` only on `range_mi`, `hp` and `battery_kwh`, and only on `announced` or `needs_review` rows;
+  - `N/A`, meaning "no third row", is required on the three third-row fields when `seats` ≤ 5, and forbidden otherwise.
+- **Unknown keys and stored computed keys are errors.**
+- **`preowned_range`** must be a price or range (low ≤ high, $5,000–$250,000) or exactly `No used market yet`.
+- **Generated types (no drift).** `scripts/schema/gen-types.mjs` generates `lib/ev-data.types.ts` (`RawDetailRow` and the enums) from the schema. CI fails if the committed file differs from a fresh generation. `lib/data.ts` imports those types, and its single documented cast (`loadEvData()`) is to a type that provably matches the build-time schema.
+- **One owner for each rule.** The schema module owns every per-row and cross-field rule:
+  - the `availability` × `msrp_status` matrix;
+  - `range_mi` versus `range_basis`;
+  - `accepted.json` versus `range_basis`;
+  - adas consistency;
+  - third-row applicability.
 
-A new or changed record has:
-- `source_url`, `verified_on`, `evidence` (quote);
-- **`value`**, which must equal the stored value;
-- **`method`** (`observed` | `derived`) and `method_version`;
-- optional `snapshot: { sha256, run_id, expires_on }`, filled by bots in WP-H/I.
+  `scripts/validate-data.js` becomes a thin runner over it (plus the report). No rule lives in two places.
 
-Existing records stay as they are, marked `legacy`, with no backfill of `value`: nothing can verify what they quoted. `provenance.schema_version` becomes 3. The validator accepts legacy records without `value`, and requires `value`/`method` on any record whose `verified_on` or `evidence` changed.
+### 3. Cross-table consistency until WP-G (Codex P0-4)
 
-### 3. Diff validator (`scripts/validate-diff.mjs --base <sha> --head <sha>`)
+- **`count_data` and `count_totals`** must equal counts computed from `details` (vehicle × year), and their arithmetic is checked as today.
+- **The `preowned` table.** Every entry must match `details` by `name`, and every details `name` must have exactly one entry. Seat variants share a name, so **all rows sharing a name must have the same `preowned_range`**, which the entry must equal. A changed `preowned_range` therefore has to change in both tables together, carrying a source for the `details` change (§5). A deleted entry fails.
+- WP-G later replaces both tables with derived ones and drops these checks.
 
-It reads both revisions with `git show <sha>:<path>`, uses immutable SHAs, and fetches the history it needs. It never uses `origin/master`. Rows are matched by `id`. **One mode for every path**: human PRs and bots alike.
+### 4. Identity and availability (Codex P0-3)
 
-| Rule | Result |
-|---|---|
-| Protected field changed (`seats`, `cargo_behind_*`, `fold_flat`, `cargo_floor_width_in`) | Error unless a trusted approval matches (§4) |
-| Row removed, or `id` changed | Error unless approved |
-| Any `availability` change, or a `schema_version` change | Error unless approved; a migration uses `field: "*"` |
-| Sourced field changed (`msrp`, `destination`, `range_mi`, `preowned_range`, `adas_*`, `self_driving_tier`), or a new row added, without a provenance record whose `value` equals the stored value | Error |
-| Source domain not allowed for that field and vehicle (`scripts/refresh/source-policy.json`) | Error |
-| Provenance record deleted; `value` mismatch; a legacy record re-labelled as verified; `range_basis` set to `epa` (needs WP-J mapping) | Error |
-| Same-day re-verification (`verified_on` unchanged, new `value`/`evidence`) | Allowed |
-| `source-policy.json`, `accepted.json`, `compat.json` or `publish-control.json` changed in the same PR as data | Warning in the report (CODEOWNERS covers who may change them) |
+- **Identity fields:** `vehicle`, `year`, `trim`, `seats`, `drivetrain`.
+  - Changing them on an existing `id` is an **identity change**. It needs an approval with `field: "@identity"`, and the old and new tuples must both be recorded. Otherwise it fails, which catches in-place reassignment.
+- **Retired ids.** `scripts/refresh/retired-ids.json` is append-only (trusted, §1). Removing a row requires an approval (`field: "@remove"`) **and** adding its id there. Any row whose `id` is listed there fails, so a retired id can never come back.
+- **Availability:**
+  - a new row must start as `needs_review` (or `announced` for a Watch List vehicle);
+  - **any** `availability` value other than those on a new row, and **any** change on an existing row, needs an approval;
+  - the same goes for `schema_version` changes (`field: "*"`).
+- **Approval authority: the repository owner only.** The run's triggering actor must equal the repository's owner login (`dpm5045`, read through the API at validation time), not anyone with admin or maintain access.
 
-- **Output:** a Markdown report listing each changed row and field, the rule outcome, and for exceptions the exact `base_sha`, `proposal_sha256`, `id`, `field`, `old` and `new` an approval must match. CI prints it to the job summary.
-- **Hashes:** `proposal_sha256` is the data files' canonical diff (approvals bind to it). `patch_sha256` covers every changed file: path, change type, mode and content hash. The functions live in `scripts/refresh/lib/hashes.mjs`, shared with WP-I.
+### 5. Evidence for every published field (Codex P0-2, P0-5)
 
-### 4. Trusted approvals (`.github/workflows/approve-data-exception.yml`)
+- **Default rule.** Every `details` field is published, so any change to any field (new rows included) needs a provenance record for that field. The only exemptions are computed fields and `name`, which is derived from vehicle, year and trim and checked to match.
+- **Fields with extra rules:**
+  - **`notes`:** a changed note needs a `notes` record, with `evidence` quoting the source of the new claim. A move of existing text (such as a `TBD` estimate) is recorded with `method: "moved"` and `moved_from: "<field>"`, keeping the original record's source.
+  - **Protected fields** (`seats`, `cargo_behind_*`, `fold_flat`, `cargo_floor_width_in`): approval **and** evidence, as independent requirements.
+  - **`preowned_range`:** a CarGurus `derived` record (WP-G defines the full derivation).
+- **What a record holds.** Any new **or edited** record needs:
+  - `source_url`, `verified_on` and `evidence`;
+  - `value`, which must equal the stored value;
+  - `method` (`observed`, `derived` or `moved`) and `method_version`.
 
-- **Trigger:** `workflow_dispatch` with inputs `base_sha`, `proposal_sha256`, `id`, `field`, `old`, `new`, `reason`. It only validates the inputs and uploads `approval.json` as an artifact (90 days).
-- **Verification by `validate-diff`** through the API. An approval counts only if:
-  - the run's workflow path is exactly that file;
-  - the event is `workflow_dispatch`, from the default branch;
-  - the run concluded `success`;
-  - the triggering actor has `admin` or `maintain` permission **at validation time**;
-  - the artifact fields equal the exception exactly.
-- **In CI,** a PR that needs an exception fails with the report. After the owner runs the approval, re-running CI passes. For a human PR, no other bypass is needed.
-- **CI permissions:** `ci.yml` needs `actions: read`, to list runs and download artifacts.
+  **Only byte-for-byte unchanged legacy records are grandfathered.** A URL-only edit counts as an edit.
+- **The quote must support the value (mechanical).** For numeric fields, the evidence must contain the stored value in a recognised format (`315`, `315 mi`, `$62,500`, `62,500`). For text fields, it must contain the value or its key phrase. *Limitation:* the checker can't confirm the quote refers to the right trim. The record's `source_url` and quote are shown in the PR report for the owner, and Codex's AGENTS.md rules make an unsupported quote P0.
+- **Source policy** (`scripts/refresh/source-policy.json`, trusted). For each field, it lists the allowed domains:
+  - `msrp` and `destination`: the vehicle's manufacturer domain, or Car and Driver per-trim pages for blocked manufacturers (Tesla);
+  - `range_mi`: fueleconomy.gov, or for `manufacturer_estimate` the manufacturer's domain, or an allowlisted publication whose evidence quotes the manufacturer (it must name the maker);
+  - specs (`hp`, `battery_kwh`, `towing_lbs`, dimensions, charging): the manufacturer, plus the press allowlist from `CLAUDE.md`;
+  - `adas_*` and `self_driving_tier`: the manufacturer, plus the allowlist.
 
-### 5. CI wiring
+### 6. Approvals (`.github/workflows/approve-data-exception.yml`)
 
-`ci.yml` runs `validate-diff` on every PR (base = `github.event.pull_request.base.sha`, head = the PR head), and as a no-op on pushes to `master`. WP-I adds the `workflow_dispatch` path for bot PRs.
+- **Trigger:** `workflow_dispatch` with inputs `base_sha`, `proposal_sha256`, `id`, `field` (a real field, `@identity`, `@remove` or `*`), `old`, `new` and `reason`. It validates the inputs and uploads `approval.json` (90 days).
+- **`validate-diff` accepts an approval** only if all of these hold:
+  - the workflow path is exact;
+  - the run was `workflow_dispatch` on the default branch, and concluded `success`;
+  - the **triggering actor equals the repository owner**;
+  - the artifact matches `base_sha`, `proposal_sha256`, `id`, `field`, `old` and `new` exactly.
 
-### 6. Source policy (`scripts/refresh/source-policy.json`)
+  A change to the proposal or its base voids it.
+- **CI needs `actions: read`.** A PR that needs approvals fails, and its report lists each one with the exact inputs. The owner runs the workflow, then re-runs CI.
 
-Built from `sources.json` (the manufacturer pricing domain per vehicle) plus:
-- `blocked_manufacturers: ["Tesla"]` (Car and Driver per-trim pages are allowed for `msrp` and `destination`);
-- `range_mi` → fueleconomy.gov, or any domain when `range_basis` is `manufacturer_estimate` (the record must quote the maker);
-- `preowned_range` → cargurus.com, `derived` (WP-G);
-- `adas_*`, `self_driving_tier` → manufacturer domains plus an allowlist of the press domains in `CLAUDE.md`.
+### 7. Provenance format: additive, version unchanged (Codex P1-1)
 
-## Rollout and order
+The new record fields (`value`, `method`, `method_version`, `moved_from`, `snapshot`) are **added without bumping** the provenance file's `schema_version`, which stays at 2. The current validator ignores unknown record fields, so rolling back code never strands data. The refresh writers (`watch.mjs` range records, `preowned.mjs`) still emit legacy-shaped records. They are updated in WP-G and WP-I, and publication stays paused until then (E.3). The contract rejects their old shape for any new record, so they can't write it by accident after resuming.
 
-1. Schema plus the `lib/data.ts` loader, and the data normalization, in one PR:
-   - the `preowned_range` sentinel;
-   - `TBD (…)` to `TBD`, with the estimate moved to `notes`;
-   - the third-row `N/A` and `null` corrections;
-   - the Maybach seat count, only with a quoted source and the owner's approval.
-2. Provenance v3 format, the diff validator, the hashes library and the source policy, plus CI wiring. One PR.
-3. The approval workflow and its verification. One PR.
+### 8. Hashes (`scripts/refresh/lib/hashes.mjs`)
 
-Publication stays paused throughout, so no bot is affected. Human data PRs are affected from step 2: any changed value needs a source record with `value`. The agent instructions (`refresh.md`, `refresh-ci.md`) are updated in step 2.
+- `proposal_sha256`: the data files' canonical diff (the approval binding).
+- `patch_sha256`: every changed file's path, change type, mode and content hash (WP-I).
 
-**Rollback:** each PR reverts on its own. Step 2 can be disabled by removing the CI step without touching data, because no data format changes except the record fields, which old code ignores.
+## Rollout and order (Codex P0-6)
+
+No data changes until the gate and the approval path both exist.
+
+1. **Gate and approvals, no data changes:**
+   - schema, generated types, the `validate-data.js` runner;
+   - the cross-table checks;
+   - `validate-diff` with trusted-base execution;
+   - hashes, source policy, `retired-ids.json` (empty);
+   - the approval workflow, CODEOWNERS, and the CI wiring (`actions: read`).
+
+   It bootstraps once (§1). Today's `master` must pass the full-state checks. One PR, or two if Codex review asks for a split: the gate, then approvals.
+2. **End-to-end proof on the real repository** (Codex P1-3), before any data PR relies on the gate. Using throwaway PRs against `master`, with real Actions, the real ruleset and the owner's account:
+   - an unsourced price change is rejected;
+   - a protected change is rejected, then passes after the owner's approval and a CI re-run;
+   - the approval is voided when the base or proposal changes;
+   - a non-owner approval run is rejected;
+   - a PR changing data and the policy together is rejected.
+
+   The PRs are closed afterwards. Results are recorded in this plan.
+3. **Data corrections, through the gate, each with evidence and the owner's approvals:**
+   - normalize `preowned_range`;
+   - `TBD (…)` to `TBD`, with estimates moved to `notes` (`method: "moved"`);
+   - 5-seat third-row fields to `N/A`;
+   - 6-seat Model X third-row cargo to `null`, missing data (protected: approval);
+   - the Maybach seat count, with a quoted mbusa.com source (protected: approval and evidence).
+
+   CI's generated-page checks and Playwright run on the migrated data. A Speed Dating test asserts the Maybach is no longer in 6+ results.
+4. **Agent docs** (`refresh.md`, `refresh-ci.md`) updated for the record format and approvals.
+
+**At cutover** (start of step 1): confirm no `data-refresh/*` PRs are open, and none is (2026-11-17). The runbook's PR check covers later cutovers.
+
+**Rollback:**
+- Steps 1–2 revert as code only: no data format changed (§7).
+- Step 3's data PRs revert individually through the gate.
+- Reverting a gate PR after data changes doesn't touch provenance records added since, because the format is additive.
 
 ## Tests
 
-- **Mutation fixtures**, each failing with the named rule (base/head pairs built in a temp git repo):
-  - the audit's six (`$1 - $2` used price, deleted pre-owned row, seats 99, removed evidence, `banana` msrp, stored computed fields);
-  - an unsourced msrp change;
-  - an unauthorized cargo edit;
-  - a row deletion;
-  - an availability change;
+- **Mutation fixtures** (temporary git repos), each failing with the named rule:
+  - the audit's six;
+  - an unsourced msrp change, and an **unsourced horsepower edit**;
+  - an **approved cargo edit without evidence**;
+  - an unauthorized cargo edit, and a row deletion;
+  - an **id reassignment**, and a **retired-id reuse**;
+  - a **new row with `availability: new`**, and an availability change;
   - a `value` mismatch;
-  - a legacy record re-labelled as verified;
-  - a disallowed source domain.
-- **Positive cases:** a sourced price change passes; same-day re-verification passes; today's `master` passes.
-- **Approvals** (with a mocked GitHub API):
-  - a matching approval passes;
-  - wrong workflow path, branch run, non-maintainer actor, a different `proposal_sha256` and an agent PR body containing `Allow-Protected` each fail.
-- **Hashes:** stable across runs; any extra file, mode or content change alters `patch_sha256`.
+  - a **URL-only legacy edit**, and a legacy record re-labelled as verified;
+  - a disallowed domain, and an estimate from a non-quoting publication;
+  - **evidence that doesn't contain the value**;
+  - a `preowned` entry changed without `details`, a deleted `preowned` entry, and a count that disagrees with `details`;
+  - **data plus policy in one PR**, and a validator change in a data PR;
+  - generated types out of date.
+- **Positive cases:**
+  - a sourced price change;
+  - same-day re-verification;
+  - a moved note;
+  - an approved protected change with evidence;
+  - today's `master`.
+- **Approvals** (mocked API): an owner's approval passes; a non-owner, branch run, wrong path, wrong hash, and `Allow-Protected` in a PR body all fail.
+- **Real repository:** step 2 above.
 
 ## Out of scope
 
-- Deriving the count and pre-owned tables (WP-G).
-- Bot publication flow (WP-I).
-- Agent containment (WP-H).
-- Reviewed EPA mappings (WP-J).
+Deriving tables and writer records (WP-G), bot publication (WP-I), agent containment (WP-H), and EPA mappings (WP-J).
 
 ## Decisions (owner delegated, 2026-11-17)
 
-1. **What `N/A` in the third-row fields means: "this configuration has no third row".** It is allowed only where `seats` ≤ 5, and a 5-seat row must use it for all three third-row fields. The rows were inspected, and the step-1 data fixes are:
-   - 5-seat rows that carry third-row legroom or headroom numbers (for example the 2021 Model X Long Range Plus 5-seat, at 29.8 in): set to `N/A`;
-   - 6-seat Model X rows with `cargo_behind_3rd_cu_ft: "N/A"` (2021 Long Range Plus and Plaid 6-seat, 2022 Base 6-seat and Plaid): these have a third row, so the value is **missing**. Set it to `null` (unknown), never to a guessed number;
-   - **Maybach EQS 680 SUV (2024–2026):** the data says `seats: 7`, but the notes say "2-row Maybach luxury". The seat count is protected and needs a quoted mbusa.com source. Correct it during the build only with that source, as an owner-approved exception. Until then it wrongly passes Speed Dating's 6+ seat filter.
+1. **Third-row `N/A`** means "no third row": required and allowed only where `seats` ≤ 5. The corrections listed under Current state are made in step 3.
+2. **Typing:** validate at build time, with types **generated** from the schema and a CI drift check. That is the standard "validate at the boundary" pattern, with Codex's conformance fix.
+3. **`TBD` estimates** move to `notes`, and numeric fields hold `TBD` only.
 
-   These are data corrections, not schema rules, so they ship as a reviewed data change in step 1, with sources where values are set.
-2. **Typing:** the data is validated against the schema at build time, which is standard practice (validate at the boundary), and `lib/data.ts` keeps one documented cast in a `loadEvData()`. The schema is the single source of truth.
-3. **`TBD` estimates:** numeric fields hold `TBD` only. The estimate text moves into `notes` (for example "Range TBD; Lucid estimates ~350–400 mi"), so numbers are numbers, and the sentinel set is exactly `TBD` on `announced` or `needs_review` rows.
+## Critique and changes (Codex `codex exec`, 2026-11-17)
+
+| Codex finding | Change |
+|---|---|
+| P0-1 The PR can change the code and policy that judge it; CODEOWNERS gaps | §1: the contract runs from the **base** revision; gate and policy files can't change in a data PR; CODEOWNERS extended; one-time bootstrap. Code-owner review can't be required (owner can't self-approve): stated as a limitation |
+| P0-2 Many published fields unsourced; approval ≠ evidence; notes outside the gate | §5: every published field needs evidence when changed; protected fields need approval **and** evidence; `notes` records, with `method: "moved"` for relocated text |
+| P0-3 ID reassignment and reuse; initial availability; approver too broad | §4: identity-field changes need an `@identity` approval; append-only `retired-ids.json` blocks reuse; new rows start `needs_review`; approver = repository owner only |
+| P0-4 Pre-owned table and counts can contradict `details` | §3: counts must equal `details` counts; `preowned` matched by name, with shared-name rows forced equal; deletions fail |
+| P0-5 URL-only edits skip re-verification; any domain for estimates; quote vs value | §5: any edited record needs full fields, and only unchanged legacy records are grandfathered; estimate sources must be the maker or a publication quoting it; evidence must contain the value (mechanical; the trim match is a stated limitation) |
+| P0-6 Protected data changes before the approval gate exists; open PRs at cutover | Rollout: gate and approvals first, real-repo proof second, data corrections last; cutover PR check (none open today) |
+| P1-1 Rollback incompatible with a provenance version bump; writers emit legacy records | §7: record fields are additive and the version is unchanged, so rollback is safe; writers updated in G and I while paused |
+| P1-2 Schema and TS types can drift; rule ownership unclear | §2: types generated from the schema plus a CI drift check; the schema owns every cross-field rule |
+| P1-3 Fixtures don't prove the real merge-time behaviour | Rollout step 2: end-to-end proof with real Actions and the ruleset; page and Playwright checks on migrated data |
