@@ -1,0 +1,41 @@
+{
+  "_about": "Which websites may source which fields (WP-F, docs/plans/wp-f-data-contract.md §5). Trusted configuration: validate-diff reads it from the BASE revision, and it cannot change in a PR that changes data. A domain matches itself and its subdomains.",
+  "manufacturer": {
+    "Kia EV9": ["kia.com"],
+    "Hyundai IONIQ 9": ["hyundaiusa.com", "hyundainews.com"],
+    "Lucid Gravity": ["lucidmotors.com"],
+    "Rivian R1S": ["rivian.com"],
+    "Tesla Model X": ["tesla.com"],
+    "Tesla Model Y (3-Row)": ["tesla.com"],
+    "Tesla Model Y L": ["tesla.com"],
+    "VinFast VF9": ["vinfastauto.us", "vinfastauto.com"],
+    "Toyota Highlander EV": ["toyota.com", "pressroom.toyota.com"],
+    "Volkswagen ID. Buzz": ["vw.com", "media.vw.com"],
+    "Volvo EX90": ["volvocars.com"],
+    "Cadillac Escalade IQ": ["cadillac.com", "news.gm.com"],
+    "Cadillac VISTIQ": ["cadillac.com", "news.gm.com"],
+    "Mercedes-Benz EQS SUV": ["mbusa.com", "media.mbusa.com"],
+    "Mercedes-Benz GLB Electric": ["mbusa.com", "media.mbusa.com"],
+    "Subaru Getaway": ["subaru.com", "media.subaru.com"],
+    "BMW iX7": ["bmwusa.com", "press.bmwgroup.com"],
+    "Genesis GV90": ["genesis.com", "genesisnewsusa.com"],
+    "Faraday Future FX Super One": ["ff.com"],
+    "Lexus TZ": ["lexus.com", "pressroom.lexus.com"]
+  },
+  "blocked_manufacturers": {
+    "_about": "Vehicles whose manufacturer site blocks automated requests: Car and Driver per-trim specs pages may source msrp and destination (see .claude/commands/refresh.md).",
+    "vehicles": ["Tesla Model X", "Tesla Model Y (3-Row)", "Tesla Model Y L"],
+    "domains": ["caranddriver.com"]
+  },
+  "press": ["caranddriver.com", "edmunds.com", "kbb.com", "cars.com", "motortrend.com", "insideevs.com", "electrek.co", "carbuzz.com", "topspeed.com", "truecar.com"],
+  "specs_databases": ["evkx.net", "evspecifications.com", "fueleconomy.gov"],
+  "fields": {
+    "_about": "Per field: the source classes allowed. 'maker' = the vehicle's manufacturer domains; 'maker_or_blocked' adds blocked_manufacturers.domains for those vehicles; 'press', 'specs' as listed; 'epa' = fueleconomy.gov; 'cargurus' = cargurus.com. Fields not listed use 'default'.",
+    "msrp": ["maker_or_blocked"],
+    "destination": ["maker_or_blocked"],
+    "range_mi": ["epa", "maker_estimate"],
+    "preowned_range": ["cargurus"],
+    "default": ["maker", "press", "specs"]
+  },
+  "maker_estimate": "range_mi with range_basis manufacturer_estimate: the maker's domain, or a press domain whose evidence names the manufacturer (it must quote the maker's figure)."
+}

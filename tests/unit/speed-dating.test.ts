@@ -136,7 +136,7 @@ describe('eligibility', () => {
     cfg({ vehicle: 'Gone', trim: 'c', year: 2025, msrp: null, availability: 'used_only', msrp_status: 'unknown', ...used(50000) }),
     cfg({ vehicle: 'Old', trim: 'd', year: 2022, msrp: 80000, availability: 'used_only', msrp_status: 'historical', ...used(40000) }),
     cfg({ vehicle: 'Five', trim: 'e', year: 2026, msrp: 50000, seats: 5 }),
-    cfg({ vehicle: 'Unknown', trim: 'f', year: 2026, msrp: 50000, seats: null }),
+    cfg({ vehicle: 'Unknown', trim: 'f', year: 2026, msrp: 50000, seats: null as never }), // out of contract (seats is required); eligibility still guards it,
     cfg({ vehicle: 'Six', trim: 'g', year: 2026, msrp: 55000, seats: 6 }),
   ]
   const names = (o: Parameters<typeof eligibleRows>[1]) => eligibleRows(rows, o).map((r) => r.trim)

@@ -1,0 +1,91 @@
+name: Data contract
+
+# The required data gate (WP-F §1). It runs on pull_request_target, so GitHub
+# takes THIS workflow's definition from the default branch, never from the PR:
+# a PR cannot edit or skip the check that judges it. The contract script is
+# also run from the PR's base revision.
+#
+# Safety: pull_request_target runs with the base repository's context, so this
+# job must never execute code from the PR. It does not check out the PR, does
+# not run npm, and reads the PR's files only as data (`git show <sha>:<path>`).
+# The token is read-only (contents, actions: read).
+#
+# workflow_dispatch lets the automated publishers (WP-I) run the same check on
+# a bot PR's exact head commit; it also runs from the default branch.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+  workflow_dispatch:
+    inputs:
+      base_sha:
+        description: 'base commit SHA'
+        required: true
+      head_sha:
+        description: 'head commit SHA'
+        required: true
+
+permissions:
+  contents: read
+  actions: read     # owner approvals are read from approve-data-exception.yml runs
+  statuses: write   # the result is posted as the `data-contract` status on the PR's own commit
+
+concurrency:
+  group: data-contract-${{ github.event.pull_request.number || inputs.head_sha }}
+  cancel-in-progress: true
+
+jobs:
+  data-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      # The default branch's code only; never the PR's.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Check the PR's data against the base revision's rules
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE: ${{ github.event.pull_request.base.sha || inputs.base_sha }}
+          HEAD: ${{ github.event.pull_request.head.sha || inputs.head_sha }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          echo "$BASE" | grep -Eq '^[0-9a-f]{40}$' || { echo "bad base sha" >&2; exit 1; }
+          echo "$HEAD" | grep -Eq '^[0-9a-f]{40}$' || { echo "bad head sha" >&2; exit 1; }
+          # Fetch the PR's commits as objects only (no checkout, nothing executed)
+          if [ -n "$PR" ]; then git fetch -q --no-tags origin "+refs/pull/$PR/head:refs/remotes/pr/head"; fi
+          git cat-file -e "$HEAD^{commit}" 2>/dev/null || git fetch -q --no-tags origin "$HEAD"
+          git cat-file -e "$BASE^{commit}" 2>/dev/null || git fetch -q --no-tags origin "$BASE"
+          # The rules come from the base revision, which must be on the default branch (a trusted revision)
+          git fetch -q --no-tags origin "${{ github.event.repository.default_branch }}"
+          git merge-base --is-ancestor "$BASE" FETCH_HEAD || { echo "base $BASE is not on the default branch; refusing to load rules from it" >&2; exit 1; }
+          git worktree add -q "$RUNNER_TEMP/trusted" "$BASE"
+          # Fail closed: every base on the default branch after WP-F has the contract
+          [ -f "$RUNNER_TEMP/trusted/scripts/validate-diff.mjs" ] || { echo "the base revision has no data contract" >&2; exit 1; }
+          status=0
+          node "$RUNNER_TEMP/trusted/scripts/validate-diff.mjs" --repo . --base "$BASE" --head "$HEAD" \
+            --approvals github --report "$RUNNER_TEMP/contract.md" || status=$?
+          cat "$RUNNER_TEMP/contract.md" >> "$GITHUB_STEP_SUMMARY"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit $status
+        id: contract
+
+      # pull_request_target runs report against the base branch, so the required result is
+      # published here as a commit status on the PR's exact head commit (context: data-contract).
+      - name: Publish the result on the PR's commit
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD: ${{ github.event.pull_request.head.sha || inputs.head_sha }}
+          OUTCOME: ${{ steps.contract.outcome }}
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          state=failure; desc="Data contract failed: see the run summary"
+          [ "$OUTCOME" = success ] && { state=success; desc="Data contract passed"; }
+          gh api "repos/${{ github.repository }}/statuses/$HEAD" -f state="$state" -f context=data-contract -f description="$desc" -f target_url="$URL" >/dev/null

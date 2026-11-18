@@ -50,6 +50,8 @@ npm run test:refresh       # Unit tests for scripts/refresh (node --test)
 node scripts/refresh/fetch-page.mjs <url> [--grep re]   # Page as text, allowlisted sites; used by the data agent
 node scripts/refresh/probe-sources.mjs                  # Which research sites answer from this machine
 node scripts/export-sheet.mjs <dir>                     # CSV per table for the backup Claude Sheet (/sync-sheet)
+node scripts/validate-diff.mjs --base <sha> --head <sha> # The data contract between two revisions (CI runs it from the base revision)
+node scripts/schema/gen-types.mjs [--check]             # Regenerate lib/ev-data.types.ts from the schema (CI checks it is current)
 ```
 
 `tests/unit` holds Vitest unit tests for app and domain code; `tests/e2e` holds the Playwright smoke suite. `.github/workflows/ci.yml` runs lint, type check, both test suites, the build and Playwright (against `next start`) on every PR and push to master. Use Node 22 (`.nvmrc`).

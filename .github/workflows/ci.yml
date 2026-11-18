@@ -11,6 +11,8 @@ on:
 
 permissions:
   contents: read
+# The data contract between revisions is a separate, required workflow that runs
+# from the default branch (data-contract.yml), so a PR can't edit or skip it.
 
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.sha }}
@@ -33,6 +35,9 @@ jobs:
 
       - name: Validate data
         run: npm run validate
+
+      - name: Generated types match the schema
+        run: node scripts/schema/gen-types.mjs --check
 
       - name: Lint
         run: npm run lint

@@ -159,6 +159,18 @@ Only include vehicles with at least "medium" confidence (officially announced wi
 - **No source, no change.** Do not change a value you cannot attach a fetched `source_url` to, and do not record a search-result summary as a source.
 - Do not add entries for fields you did not check. The validator rejects entries for unknown ids or fields.
 
+### The data contract (WP-F): what every data change needs
+
+CI checks every PR against `master` with `scripts/validate-diff.mjs`, running the rules **from master's code**. To pass:
+- **Any changed field (new rows included) needs a full provenance record** for that field:
+  - `source_url`, `verified_on` and `evidence` (an exact quote that **contains the stored value**, e.g. `"Starting MSRP $62,500"`);
+  - `value` (identical to the stored value), `method` (`observed`; `derived` for computed values; `moved` with `moved_from` when text moves from another field of the same row) and `method_version`.
+
+  Remove the `legacy` marker when you edit a record: legacy records are accepted only while untouched.
+- **Sources must come from an allowed domain** for the field (`scripts/refresh/source-policy.json`): the manufacturer for prices (Car and Driver per-trim pages for Tesla), fueleconomy.gov for EPA ranges, the maker or a press source quoting the maker for a manufacturer estimate.
+- **These need the owner's approval:** protected fields, `availability` (and any new row not starting `needs_review`/`announced`), identity changes (`name`, `vehicle`, `year`, `trim`, `drivetrain`), row removals (also add the id to `retired-ids.json`), withdrawing a value to `null`/`TBD`/`N/A`, and schema changes. You cannot grant an approval; list it for the owner. The PR's CI report shows the exact inputs.
+- **Never change the rule files in a data PR:** validator, schema, source policy, workflows, `compat.json`, `publish-control.json`. A PR that does fails.
+
 ### Availability and price meaning (schema_version 2)
 
 Each row has `availability` (`new`, `used_only`, `announced`, `needs_review`) and `msrp_status` (`current`, `historical`, `announced`, `unknown`). `msrp` is a number or `null`, never text.
