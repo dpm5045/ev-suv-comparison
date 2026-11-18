@@ -251,8 +251,10 @@ function zipOne(name, content) {
 }
 function fakeGitHub(runs) {
   const approval = { base_sha: 'a'.repeat(40), proposal_sha256: 'b'.repeat(64), id: 'x', field: 'seats', old: '6', new: '5' }
-  return async (url) => {
+  return async (url, init = {}) => {
     const path = url.replace('https://api.github.com/', '')
+    // Like GitHub: the REST API (artifact downloads included) answers 415 to any other Accept type
+    if (init.headers?.accept !== 'application/vnd.github+json') return { ok: false, status: 415 }
     const json = (v) => ({ ok: true, json: async () => v, arrayBuffer: async () => v })
     if (path === 'repos/o/r') return json({ owner: { login: 'owner' }, default_branch: 'master' })
     if (path.startsWith('repos/o/r/actions/workflows/')) return json({ workflow_runs: runs })

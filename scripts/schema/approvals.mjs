@@ -18,7 +18,7 @@ export const APPROVAL_FIELDS = ['base_sha', 'proposal_sha256', 'id', 'field', 'o
 export async function loadApprovals({ repo, token, fetchImpl = fetch }) {
   const api = async (path, raw = false) => {
     const res = await fetchImpl(`https://api.github.com/${path}`, {
-      headers: { authorization: `Bearer ${token}`, accept: raw ? 'application/octet-stream' : 'application/vnd.github+json', 'x-github-api-version': '2022-11-28' },
+      headers: { authorization: `Bearer ${token}`, accept: 'application/vnd.github+json', 'x-github-api-version': '2022-11-28' },
       redirect: 'follow',
     })
     if (!res.ok) throw new Error(`GitHub API ${path}: HTTP ${res.status}`)
