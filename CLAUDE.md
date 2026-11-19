@@ -50,7 +50,7 @@ npm run test:refresh       # Unit tests for scripts/refresh (node --test)
 node scripts/refresh/fetch-page.mjs <url> [--grep re]   # Page as text, allowlisted sites; used by the data agent
 node scripts/refresh/probe-sources.mjs                  # Which research sites answer from this machine
 node scripts/export-sheet.mjs <dir>                     # CSV per table for the backup Claude Sheet (/sync-sheet)
-node scripts/validate-diff.mjs --base <sha> --head <sha> # The data contract between two revisions (CI runs it from the base revision)
+node scripts/validate-diff.mjs --base <sha> --head <sha> # The data contract between two revisions (CI runs it from the base revision); sensitive changes are flagged `needs-owner-review`, and the owner's merge approves them
 node scripts/schema/gen-types.mjs [--check]             # Regenerate lib/ev-data.types.ts from the schema (CI checks it is current)
 ```
 

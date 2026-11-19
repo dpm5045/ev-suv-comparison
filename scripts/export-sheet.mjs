@@ -57,8 +57,11 @@ const keysOf = (list) => [...new Set(list.flatMap((r) => Object.keys(r)))]
 const detailKeys = keysOf(data.details)
 write('Details', detailKeys, data.details.map((r) => detailKeys.map((k) => r[k])))
 
-const preownedKeys = keysOf(data.preowned)
-write('Pre-owned', preownedKeys, data.preowned.map((r) => preownedKeys.map((k) => r[k])))
+// The parallel pre-owned table is being retired; when it's gone, /sync-sheet removes its tab
+if (data.preowned) {
+  const preownedKeys = keysOf(data.preowned)
+  write('Pre-owned', preownedKeys, data.preowned.map((r) => preownedKeys.map((k) => r[k])))
+}
 
 const countKeys = keysOf(data.count_data)
 write('Model counts', countKeys, [

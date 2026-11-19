@@ -11,7 +11,8 @@ Read CLAUDE.md for project context.
 ### Data model (schema version 2)
 - A source is a record in `lib/ev-data.provenance.json` keyed by the row's `id`, with `source_url`, `verified_on` and quoted `evidence`. A changed spec without one is P0.
 - Every row has a unique, permanent `id`. Changing or reusing an `id`, or keying anything by `name` (seat variants share names), is P0.
-- `availability` decides whether a trim is sold new; only `new` counts. Treat a change to `availability` without the owner's explicit approval as P0, as well as any code that infers "sold new" from a numeric `msrp` or a model year.
+- `availability` decides whether a trim is sold new; only `new` counts. Treat any code that infers "sold new" from a numeric `msrp` or a model year as P0.
+- Sensitive changes (protected fields, availability, identity, removals, withdrawn values) are **flagged for the owner's review** by the `data-contract` check (label `needs-owner-review`); the owner's merge approves them. A flagged change is not a defect. Do flag one whose PR description doesn't explain it, or a bot PR that could auto-merge it.
 - `msrp` is a number or null, never text ("N/A", "TBD"). `msrp_status` must fit `availability` (for example `historical` only on `used_only`). Showing a historical price as a current one is P0.
 - `range_basis`: "EPA" may appear in generated text only for `epa` rows, which need a reviewed EPA mapping. A manufacturer estimate or an unverified range described as EPA is P0.
 - Protected fields (`seats`, `cargo_behind_*`, `fold_flat`, `cargo_floor_width_in`) must not be changed by automation.

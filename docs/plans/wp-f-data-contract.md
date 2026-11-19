@@ -1,5 +1,8 @@
 # Plan: WP-F, the enforceable data contract (revision 2)
 
+> **Superseded in part (2026-11-18), by `docs/plans/simplify-owner-review.md`:** the owner approves by merging. Sensitive changes are flagged `needs-owner-review` instead of needing an "Approve data exception" run, and that workflow and its verification code were removed. Everything else here stands.
+
+
 **Spec:** `docs/BUILD-SPEC.md` v3.1, WP-F (F.1–F.4), with I.1's hashes and E.3's pause.
 **Depends on:** WP-E (merged: ids, availability, `msrp_status`, `range_basis`, schema version 2).
 **Status:** revision 2, after Codex's architect critique (6 × P0, 3 × P1, all accepted; see "Critique and changes"). Waiting for the owner's go-ahead. Nothing built yet.

@@ -168,13 +168,13 @@ CI checks every PR against `master` with `scripts/validate-diff.mjs`, running th
 
   Remove the `legacy` marker when you edit a record: legacy records are accepted only while untouched.
 - **Sources must come from an allowed domain** for the field (`scripts/refresh/source-policy.json`): the manufacturer for prices (Car and Driver per-trim pages for Tesla), fueleconomy.gov for EPA ranges, the maker or a press source quoting the maker for a manufacturer estimate.
-- **These need the owner's approval:** protected fields, `availability` (and any new row not starting `needs_review`/`announced`), identity changes (`name`, `vehicle`, `year`, `trim`, `drivetrain`), row removals (also add the id to `retired-ids.json`), withdrawing a value to `null`/`TBD`/`N/A`, and schema changes. You cannot grant an approval; list it for the owner. The PR's CI report shows the exact inputs.
+- **These are flagged for the owner's review** (they pass, the PR gets the `needs-owner-review` label, and the owner's merge approves them; there is nothing to fill in): protected fields, `availability`, identity changes (`name`, `vehicle`, `year`, `trim`, `drivetrain`), new rows (their protected values are listed), row removals (also add the id to `retired-ids.json`), withdrawing a value to `null`/`TBD`/`N/A`/`No used market yet`, and schema or top-level changes. A flagged bot PR never auto-merges. Protected and identity changes still need a source like any other change.
 - **Never change the rule files in a data PR:** validator, schema, source policy, workflows, `compat.json`, `publish-control.json`. A PR that does fails.
 
 ### Availability and price meaning (schema_version 2)
 
 Each row has `availability` (`new`, `used_only`, `announced`, `needs_review`) and `msrp_status` (`current`, `historical`, `announced`, `unknown`). `msrp` is a number or `null`, never text.
-- **Never change `availability` on your own**, in either direction. Only `new` rows count as sold new; a numeric `msrp` alone proves nothing (it may be historical or announced). A change of availability needs the owner's approval: list it under "For a person".
+- **Never change `availability` on your own**, in either direction. Only `new` rows count as sold new; a numeric `msrp` alone proves nothing (it may be historical or announced). A change of availability is flagged for the owner's review: explain it under "For a person".
 - A **new row** you add gets `availability: "needs_review"` (or `announced` for a Watch List vehicle), the matching `msrp_status`, and an `id` per the rule in `.claude/commands/add-vehicle.md`.
 - `range_basis` is `manufacturer_estimate` for rows in `scripts/refresh/accepted.json` (keyed by `id`), `unverified` otherwise. Never set `epa`: that needs a reviewed EPA mapping (build spec WP-J.3).
 
