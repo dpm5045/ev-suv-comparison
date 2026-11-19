@@ -307,6 +307,7 @@ test('a repricing record must match its row, its baseline and the math', () => {
     'evidence quoting another year\'s row': (f) => { firstRec(f).evidence = '2025 Kia EV9: $39,216' },
     'evidence quoting the model-wide row': (f) => { firstRec(f).evidence = 'Kia EV9: $39,216' },
     'evidence that is not a table row': (f) => { firstRec(f).evidence = 'CarGurus says 2024 Kia EV9 averages $39,216 now' },
+    'evidence quoting another model': (f) => { firstRec(f).evidence = '2024 Model X: $39,216' },
     'a range that is not the scaled one': (f) => { const x = EV9_2024(f)[0]; x.preowned_range = '$1,000 - $2,000'; firstRec(f).value = x.preowned_range },
   }
   for (const [name, spoil] of Object.entries(cases)) {

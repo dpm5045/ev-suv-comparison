@@ -132,6 +132,8 @@ jobs:
                     (if bot then .body else "" end) + "\n\n" + ([.comments[] | select(bot) | .body] | join("\n\n"))' > .data-agent/inbox.md
             # gh reports the workflow bot as "app/github-actions" on an issue body and "github-actions" on comments.
             grep -q '^- ' .data-agent/inbox.md || { echo "The open inbox issue has no items the workflows wrote." >&2; exit 1; }
+            # How much of the inbox this run saw: the publish job closes the issue only if nothing arrived since
+            gh issue view "${{ needs.plan.outputs.issue }}" --json comments --jq '.comments | length' > .data-agent/inbox-seen
           else
             echo "(empty)" > .data-agent/inbox.md
           fi
@@ -192,6 +194,7 @@ jobs:
             : > "$RUNNER_TEMP/handover/agent.patch"
           fi
           cp .data-agent/changelog.md "$RUNNER_TEMP/handover/changelog.md"
+          if [ -f .data-agent/inbox-seen ]; then cp .data-agent/inbox-seen "$RUNNER_TEMP/handover/inbox-seen"; fi
           cat .data-agent/changelog.md >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -294,8 +297,15 @@ jobs:
             *) note="No changes." ;;
           esac
           { echo "$note"; echo; cat "$RUNNER_TEMP/handover/changelog.md"; } > "$RUNNER_TEMP/comment.md"
+          seen=$(cat "$RUNNER_TEMP/handover/inbox-seen" 2>/dev/null || echo 0)
+          now=$(gh issue view "$ISSUE" --json comments --jq '.comments | length')
           gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/comment.md"
-          gh issue close "$ISSUE" --reason completed
+          if [ "$now" -gt "$seen" ]; then
+            # Items arrived after the agent read the inbox: it never saw them, so the issue stays open for the next run
+            gh issue comment "$ISSUE" --body "$((now - seen)) update(s) arrived after this run read the inbox; leaving it open for the next run."
+          else
+            gh issue close "$ISSUE" --reason completed
+          fi
 
       - name: Mark the run as paused (the backup schedule retries it)
         if: steps.publish.outputs.outcome == 'paused'

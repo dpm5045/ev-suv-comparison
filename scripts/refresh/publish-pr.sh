@@ -26,6 +26,8 @@
 # and GITHUB_REPOSITORY, GITHUB_REPOSITORY_OWNER, RUNNER_TEMP.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
+# shellcheck source=lib/checks.sh
+. "$HERE/lib/checks.sh"
 
 producer='' intent='' allow='' title='' body='' rehearsal=no
 while [ $# -gt 0 ]; do
@@ -117,10 +119,8 @@ gh workflow run ci.yml --ref "$branch"
 gh workflow run data-contract.yml -f base_sha="$base" -f head_sha="$head" -f pr="$num"
 build='' contract='' waited=0
 while :; do
-  build=$(gh api "repos/$repo/commits/$head/check-runs" \
-    --jq '[.check_runs[] | select(.name == "build")] | sort_by(.started_at) | last | if . == null then "" else "\(.status):\(.conclusion // "")" end')
-  contract=$(gh api "repos/$repo/commits/$head/status" \
-    --jq '[.statuses[] | select(.context == "data-contract")][0].state // ""')
+  build=$(build_state "$repo" "$head")
+  contract=$(contract_state "$repo" "$head")
   if [[ "$build" == completed:* ]] && [[ "$contract" =~ ^(success|failure|error)$ ]]; then break; fi
   if [ "$waited" -ge "$limit" ]; then break; fi
   sleep "$poll"; waited=$((waited + poll))

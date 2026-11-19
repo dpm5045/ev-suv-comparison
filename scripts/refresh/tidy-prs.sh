@@ -22,6 +22,8 @@
 # and checks/statuses read.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
+# shellcheck source=lib/checks.sh
+. "$HERE/lib/checks.sh"
 producer="${1:?producer}"
 mode="${2:-}"
 repo="${GITHUB_REPOSITORY:?}"
@@ -39,14 +41,14 @@ default=$(gh api "repos/$repo" --jq .default_branch)
 
 # Run whichever required check is missing (or was cancelled) on a PR's current commit
 ensure_checks() {
-  local num=$1 ref=$2 head=$3 tip
+  local num=$1 ref=$2 head=$3 tip build
   # Missing, or cancelled (e.g. superseded): run it. Running or failed: leave it.
-  build=$(gh api "repos/$repo/commits/$head/check-runs" --jq '[.check_runs[] | select(.name == "build")] | sort_by(.started_at) | last | if . == null then "" else "\(.status):\(.conclusion // "")" end')
+  build=$(build_state "$repo" "$head")
   if [ -z "$build" ] || [ "$build" = completed:cancelled ]; then
     gh workflow run ci.yml --ref "$ref"
     say "Ran the build check on PR #$num ($head)."
   fi
-  if [ -z "$(gh api "repos/$repo/commits/$head/status" --jq '[.statuses[] | select(.context == "data-contract")][0].state // ""')" ]; then
+  if [ -z "$(contract_state "$repo" "$head")" ]; then
     tip=$(gh api "repos/$repo/commits/$default" --jq .sha)
     gh workflow run data-contract.yml -f base_sha="$tip" -f head_sha="$head" -f pr="$num"
     say "Ran the data contract on PR #$num ($head)."
