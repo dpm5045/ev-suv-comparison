@@ -62,11 +62,10 @@ This is a **Next.js 16 App Router** app (React 19, TypeScript) focused on compar
 
 ### Data flow
 
-All vehicle data lives in **`lib/ev-data.json`** and is typed + exported via **`lib/data.ts`** as a single `DATA` object with four keys:
+All vehicle data lives in **`lib/ev-data.json`** and is typed + exported via **`lib/data.ts`** as a single `DATA` object:
 - `DATA.details` — array of `DetailRow` (one entry per trim)
 - `DATA.counts` / `DATA.count_totals` — sales counts by model year
 - `DATA.glossary` — field definitions
-- `DATA.preowned` — pre-owned price rows
 - `VEHICLE_CLASSES` — map of vehicle name → CSS class (for color-coded badges)
 
 `lib/utils.ts` exports `fmtMoney` and `fmtNum`, which return `{ text, className }` objects used across all table/card rendering, and `fmtDate` for display dates.
@@ -108,7 +107,7 @@ When modifying `lib/ev-data.json`, always verify:
 - **Schema version 2** (`schema_version` at the top; `scripts/refresh/compat.json` lists what the code accepts). Every row has a unique stable **`id`**: the key for `lib/ev-data.provenance.json`, `scripts/refresh/accepted.json` and range fixes. `name` is a display label shared by seat variants: never a key
 - **`availability`** (`new`/`used_only`/`announced`/`needs_review`) says whether a configuration is sold new today; only `new` rows appear in new-car results. **`msrp`** is a number or null (no text), and **`msrp_status`** (`current`/`historical`/`announced`/`unknown`) says what it means. Changing availability is the owner's decision
 - **`range_basis`**: `manufacturer_estimate` (listed in accepted.json), `unverified` (default), or `epa` (only with a reviewed EPA mapping; none yet); generated text says "EPA" only for `epa`
-- `details` and `preowned` arrays are in sync (matching `name`, matching `preowned_range`). Note `name` is **not unique**: seat variants of a trim (e.g. Model X 5/6/7-seat) share one name, so never use it alone as a key
+- `name` is **not unique**: seat variants of a trim (e.g. Model X 5/6/7-seat) share one name, so never use it alone as a key. A row's used price is its own `preowned_range` (a `$low - $high` range or `"No used market yet"`); there is no separate `preowned` array
 - `count_data` row totals match actual detail entries per vehicle/year (the validator only checks `count_totals` against `count_data`, not against the rows; check this by hand)
 - `count_totals` sums match `count_data` column sums
 - Never store `otd_new` / `otd_preowned` in the JSON — they are computed at load in `lib/data.ts` (the validator errors if a stored OTD field appears)
@@ -119,7 +118,7 @@ When modifying `lib/ev-data.json`, always verify:
 
 ### Pre-owned pricing and provenance
 
-Pre-owned ranges are repriced by `scripts/refresh/preowned.mjs`, not by hand or by web research. It runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`), which opens a data-only PR and merges it straight away. `scripts/refresh/watch.mjs` runs alongside it (`.github/workflows/data-watch.yml`): it checks stored ranges against the EPA vehicle file, corrects `range_mi` where EPA alone settles it (via an auto-merged PR), watches manufacturer pages for price changes, and commits what it last saw (`scripts/refresh/state/watch.json`) straight to the default branch; `vercel.json` skips the deploy for commits that only touch bookkeeping.
+Pre-owned ranges are repriced by `scripts/refresh/preowned.mjs`, not by hand or by web research. It runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`), which opens a data-only PR. Every repriced row carries a CarGurus source record (`derivation: cargurus_scaled`) that the data contract recomputes. `scripts/refresh/watch.mjs` runs alongside it (`.github/workflows/data-watch.yml`): it checks stored ranges against the EPA vehicle file (automatic range fixes are off; mismatches go to the inbox), watches manufacturer pages for price changes, and publishes what it last saw (`scripts/refresh/state/watch.json`); `vercel.json` skips the deploy for commits that only touch bookkeeping. **All three data workflows publish the same way** (`scripts/refresh/publish-pr.sh`; docs/plans/resume-publishing.md): a PR that runs the two required checks (`build`, `data-contract`) on itself, then merges itself when both pass and nothing is flagged `needs-owner-review`; agent PRs that change site data always wait for the owner. They run one at a time (`concurrency: data-publish`), and `scripts/refresh/tidy-prs.sh` replaces leftover bot PRs and keeps owner PRs up to date. Publication can be paused with `scripts/refresh/publish-control.json`.
 
 Whatever the scripts cannot settle goes to one open GitHub issue labelled `data-inbox`. `.github/workflows/data-agent.yml` runs Claude Code unattended on it every Monday after the watch, and does a full pass on the 1st of the month; its instructions are `.claude/commands/refresh-ci.md`. The agent only edits data files, and its PR is the one thing a person reviews; the workflow assigns it to the repo owner and requests their review. GitHub's cron is best effort, so every scheduled job runs off the hour and has a backup schedule a day later that runs only if the first never succeeded (`scripts/refresh/ran-since.sh`). Items it cannot settle go in `scripts/refresh/state/deferred.json`, which keeps them out of the inbox until their date (`needs_local` ones need a session on a home connection, because the source blocks cloud runners). The watch also tracks each model's headline MSRP on Car and Driver as a tripwire (a prompt to check the manufacturer). Car and Driver is a price source only for manufacturers that block automated requests (Tesla), from its per-trim specs pages; see "Prices when the manufacturer blocks automated requests" in `.claude/commands/refresh.md`. Rows whose range is knowingly a manufacturer estimate are listed in `scripts/refresh/accepted.json`. `lib/ev-data.provenance.json` holds the CarGurus baselines the script compares against (`preowned`) and per-row, per-field sources with a last-verified date (`fields`). The site does not import this file. See `.claude/commands/refresh.md` for the rules.
 

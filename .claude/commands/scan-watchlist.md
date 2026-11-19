@@ -52,7 +52,7 @@ Only include vehicles with at least "Medium" confidence.
 
 5. **Ask: "Add any of these to the watchlist?"** If approved:
    - Add skeleton `details` entry to `lib/ev-data.json` (use Subaru 3-Row EV pattern for TBD fields)
-   - Add `preowned` entry with `"No meaningful used market yet"`
+   - Set its `preowned_range` to `"No used market yet"`
    - Add `count_data` row with zero counts
    - Update `count_totals`
    - Add to `VEHICLE_CLASSES` in `lib/data.ts` (reuse existing manufacturer class or create new one)
@@ -104,7 +104,6 @@ Only include vehicles with at least "Medium" confidence.
 
 - Never hardcode model/vehicle counts — always derive from the data.
 - Protected fields are NEVER modified: `seats`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `cargo_floor_width_in`.
-- The `preowned` and `details` arrays must always stay in sync.
 - Present findings for review BEFORE applying changes in every phase.
-- For watchlist vehicles with no used market, keep `preowned_range` as `"No meaningful used market yet"`.
+- For watchlist vehicles with no used market, keep `preowned_range` as `"No used market yet"`.
 - `WATCHLIST_VEHICLES` in `OverviewTab.tsx` is the single source of truth for which vehicles are on the watchlist.

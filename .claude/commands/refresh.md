@@ -21,7 +21,7 @@ This phase is a script, not research. **Do not WebSearch or WebFetch pricing her
 
 3. Include the script's report in the changelog as-is.
 
-4. **Interactive mode only — Ask: "Apply pre-owned pricing updates?"** Then (or straight away in autonomous mode) run `npm run refresh:preowned -- --apply`. It updates `details`, `preowned`, `last_updated` and the baselines together.
+4. **Interactive mode only — Ask: "Apply pre-owned pricing updates?"** Then (or straight away in autonomous mode) run `npm run refresh:preowned -- --apply`. It updates `details`, `last_updated` and the baselines together, and writes a source record (`derivation: cargurus_scaled`) for every row of each repriced model year, which the data contract recomputes.
 
 5. Follow up only on what the report flags:
    - `needs_review` — look at the CarGurus page and decide by hand.
@@ -29,7 +29,7 @@ This phase is a script, not research. **Do not WebSearch or WebFetch pricing her
    - `no_source` — the vehicle has a used price range but no CarGurus page yet (Lucid Gravity as of Nov 2026). Add the URL to `scripts/refresh/sources.json` once CarGurus publishes one.
    - A vehicle that has gained a real used market — set its first `preowned_range` by hand; the script only scales ranges that already exist.
 
-The same script runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`), which opens a PR when something changed and merges it straight away. Moves over 15% go to the Data inbox issue instead. If that run was recent, this phase will report no change. To apply a move over 15% after checking that it is real: `npm run refresh:preowned -- --apply --allow-large "Vehicle|Year"`.
+The same script runs every Monday in GitHub Actions (`.github/workflows/preowned-refresh.yml`), which opens a PR when something changed, runs the required checks on it, and merges it when they pass and nothing is flagged for the owner (`scripts/refresh/publish-pr.sh`). Moves over 15% go to the Data inbox issue instead. If that run was recent, this phase will report no change. To apply a move over 15% after checking that it is real: `npm run refresh:preowned -- --apply --allow-large "Vehicle|Year"`.
 
 ### Why CarGurus percentages, not per-trim prices
 
@@ -241,6 +241,5 @@ All 5 phases are always listed, even if a phase found 0 changes.
 
 - Never hardcode model/vehicle counts — always derive from the data.
 - Protected fields are NEVER overwritten if they already have a confirmed (non-TBD) value: `seats`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `cargo_floor_width_in`. Phase 5 may fill these if currently null/empty/TBD.
-- The `preowned` and `details` arrays must always stay in sync.
 - In interactive mode, present findings for review BEFORE applying changes. In autonomous mode, record findings for the consolidated changelog.
-- For brand-new vehicles with no used market, leave `preowned_range` as `"No meaningful used market yet"`.
+- For brand-new vehicles with no used market, leave `preowned_range` as `"No used market yet"`.

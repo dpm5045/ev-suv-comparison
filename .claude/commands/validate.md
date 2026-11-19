@@ -13,7 +13,7 @@ Every entry in `details` must have: `name`, `vehicle`, `year`, `trim`, `seats`, 
 Flag any duplicate `name` values in `details`. Some duplicates are intentional (different seat configs) — note this.
 
 ### No stored OTD (ERROR)
-`otd_new` / `otd_preowned` must NOT appear anywhere in the JSON — they are computed at load in `lib/data.ts` from `msrp`/`destination`/`preowned_range`. Flag any entry (in `details` or `preowned`) that stores them.
+`otd_new` / `otd_preowned` must NOT appear anywhere in the JSON — they are computed at load in `lib/data.ts` from `msrp`/`destination`/`preowned_range`. Flag any entry in `details` that stores them.
 
 ### Numeric range sanity (WARNING)
 - `range_mi`: 150–500
@@ -23,9 +23,6 @@ Flag any duplicate `name` values in `details`. Some duplicates are intentional (
 
 ### Count totals consistency (ERROR)
 Sum each year column (`y2021`–`y2026`) across `count_data` rows. Compare against `count_totals`. Also check `total`.
-
-### Preowned ↔ details sync (WARNING)
-Every name in the `preowned` array should have a matching entry in `details`.
 
 ### VEHICLE_CLASSES sync (WARNING)
 - Every vehicle name in `VEHICLE_CLASSES` (in `lib/vehicle-theme.ts`) should have at least one detail entry.

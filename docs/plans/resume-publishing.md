@@ -41,7 +41,7 @@ Every change goes through a PR that passes the two required checks, `build` and 
   6. **Then decide:**
      - **`auto`, both pass, no `needs-owner-review` label, and the live pause flag still clear** (re-read right here): `gh pr merge --squash --match-head-commit "$head"`. GitHub refuses the merge if the PR now points anywhere else.
      - **Label present, or intent `owner`:** assign the owner and request their review. Leave the PR open.
-     - **A check fails, the wait times out, or the merge is refused:** leave the PR open, note it in the Data inbox, and **fail the job** so the run doesn't count as done (§6).
+     - **A check fails, the wait times out, or the merge is refused:** close the PR (with a comment saying why) and **fail the job**, so the run doesn't count as done (§6) and GitHub reports the failure. *As built:* no inbox note, because the inbox is the agent's to-do list and it can't act on a failed bot PR.
 
    The label is read **after** `data-contract` has finished on `head`. The contract applies the label *before* it posts success, so a flagged PR can't be merged by mistake.
 - **Permissions and time:** publish jobs get `actions: write` (to dispatch) and a 40-minute timeout.
@@ -142,7 +142,7 @@ Every change goes through a PR that passes the two required checks, `build` and 
   - one with a conflict is left alone;
   - an `auto` PR from an earlier run is closed;
   - refuses files outside the producer's allowlist.
-- **Workflows:** `actionlint` in CI for the edited workflows.
+- **Workflows:** `actionlint` (pinned, checksum-verified) in CI for every workflow. *As built:* without its shellcheck pass, which older workflow scripts haven't been checked against.
 
 ## Docs
 CLAUDE.md ("Pre-owned pricing and provenance"), `.claude/commands/refresh.md` and `refresh-ci.md`, `docs/runbooks/migration.md` (pause/unpause), and a supersession note in BUILD-SPEC for WP-G to WP-J.

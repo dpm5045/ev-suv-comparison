@@ -18,7 +18,7 @@ Use this whenever a PR changes the data schema (`schema_version` in `lib/ev-data
    done
    gh run list --status in_progress --json workflowName -q '.[].workflowName'   # must list none of the three
    ```
-4. **Close open data PRs.** GitHub's auto-merge fires on its own once its checks pass:
+4. **Close open data PRs** (an older PR may still have GitHub's auto-merge enabled):
    ```bash
    gh pr list --state open --json number,headRefName -q '.[] | select(.headRefName | startswith("data-refresh/")) | .number' |
      while read -r n; do gh pr merge "$n" --disable-auto 2>/dev/null; gh pr close "$n" --comment "Closed for a schema migration (docs/runbooks/migration.md)."; done
@@ -32,8 +32,8 @@ Use this whenever a PR changes the data schema (`schema_version` in `lib/ev-data
 ## After merging
 
 6. **Re-enable only what the new code can run.** Every producer refuses data whose `schema_version` isn't listed in `scripts/refresh/compat.json`, so re-enabling is safe; while paused, the jobs still read sources but write nothing.
-   - **During the WP-E to WP-I window:** re-enable **Data Watch** and **Pre-owned Pricing Refresh**. They run in report-only mode: they fetch sources and post to the Data inbox, with no repository writes. Leave **Data Agent** disabled.
-   - **Resume publication** (set `"paused": false`, and re-enable Data Agent) only when WP-F, WP-G and WP-I have all landed, per the build spec.
+   - **While paused:** **Data Watch** and **Pre-owned Pricing Refresh** run in report-only mode: they fetch sources and post to the Data inbox, with no repository writes.
+   - **Resume publication** (docs/plans/resume-publishing.md, "Rollout"): run the rehearsal (Data Watch, manual run with `rehearsal` ticked; it should open a bookkeeping PR and merge it with nobody clicking anything), then merge a PR setting `"paused": false`, and re-enable Data Agent.
 
 ## Rollback
 
@@ -44,5 +44,5 @@ Revert the whole migration PR together: code, data, `compat.json` and workflows.
 `master` accepts changes only through pull requests, with every review conversation resolved (Codex reviews each PR automatically). For this runbook:
 - **Flipping the pause switch** (`scripts/refresh/publish-control.json`) needs a PR like any other change; resolve Codex's conversations and merge. An admin can bypass the ruleset in an emergency, but the PR route leaves a record.
 - **Data PRs with sensitive changes** pass the `data-contract` check but carry the `needs-owner-review` label; the owner's merge approves them (there is no approval form).
-- **The data workflows' direct pushes are blocked.** Data Watch commits its state straight to `master`, and the agent does the same for deferral-only runs; the ruleset rejects both. While publication is paused they don't push. Before resuming, WP-J moves that state to the `data-state` branch (which the ruleset doesn't cover), and WP-I has the bots publish through PRs that pass the same checks.
-- **Bot PRs and conversation resolution.** Codex's automatic review can leave conversations on bot PRs (pre-owned, Data Watch, agent), which would block their merge until someone resolves them. WP-I must settle how these are handled: for example, the reviewer workflow resolves "no findings" threads, or a person resolves them as part of review.
+- **The data workflows publish only through PRs** (`scripts/refresh/publish-pr.sh`): every change, bookkeeping included, is a PR that runs `build` and `data-contract` on itself and then merges itself, unless it is flagged `needs-owner-review` or is an agent PR that changes site data (those wait for the owner).
+- **Bot PRs and conversation resolution.** An open Codex conversation blocks a bot PR's merge. AGENTS.md tells Codex to comment on `data-refresh/*` PRs only for a real P0/P1. If it does, the publisher's merge is refused: the run closes the PR and fails (so the backup schedule retries), and the failure shows in Actions.

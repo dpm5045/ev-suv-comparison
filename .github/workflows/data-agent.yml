@@ -16,7 +16,10 @@ name: Data Agent
 #            only read the repo, and scans its own output for the credential
 #            before handing over a patch.
 #   verify   no secret, read-only: applies the patch, npm ci, tests, build
-#   publish  no secret, never runs npm: pushes the branch, opens the PR
+#   publish  no secret, never runs npm: opens the PR through
+#            scripts/refresh/publish-pr.sh, which runs the required checks on it.
+#            A PR that changes site data waits for the owner's merge; one that
+#            only records deferrals merges itself once the checks pass.
 # Every action is pinned to a commit SHA (tag in the trailing comment).
 
 # The mode is in the run's title so the monthly backup can tell whether the
@@ -225,8 +228,15 @@ jobs:
   publish:
     needs: [plan, verify]
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 45
+    # One data publisher at a time, so each branches from an up-to-date default branch
+    concurrency:
+      group: data-publish
+      cancel-in-progress: false
     permissions:
+      actions: write         # dispatches the required checks on its PR
+      checks: read           # waits for the `build` check
+      statuses: read         # waits for the `data-contract` status
       contents: write
       pull-requests: write
       issues: write
@@ -239,55 +249,46 @@ jobs:
           name: agent-handover
           path: ${{ runner.temp }}/handover
       # No npm here: this job can write to the repo, so no package code runs in it.
-      - name: Open PR and close the inbox
+      - name: Open the PR (owner review for site data; deferrals merge themselves)
         id: publish
         run: |
-          # Publication pause and schema check, read live just before writing (build spec E.3)
-          gate=$(bash scripts/refresh/can-publish.sh)
-          if [ "$gate" != yes ]; then
-            # Not a completed refresh: mark the run so the next-day backup still runs (ran-since.sh)
-            echo "Not publishing: ${gate#no: }" >> "$GITHUB_STEP_SUMMARY"
-            mkdir -p "$RUNNER_TEMP/paused" && echo "$gate" > "$RUNNER_TEMP/paused/reason.txt"
-            echo "paused=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
           H="$RUNNER_TEMP/handover"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          base="${{ github.event.repository.default_branch }}"
-          issue="${{ needs.plan.outputs.issue }}"
           mode="${{ needs.plan.outputs.mode }}"
-          note="No changes."
-          if [ -s "$H/agent.patch" ]; then
-            git apply --index "$H/agent.patch"
-            site=$(git diff --cached --name-only | grep -vxE 'scripts/refresh/state/deferred\.json' || true)
-            if [ -n "$site" ]; then
-              branch="data-refresh/agent-$(date -u +%F)"
-              git checkout -b "$branch"
-              git commit -m "data: agent $mode pass $(date -u +%F)"
-              git push origin "$branch"
-              { cat "$H/changelog.md"; echo; [ -n "$issue" ] && echo "Works through #$issue."; echo; echo '🤖 Generated with [Claude Code](https://claude.com/claude-code)'; } > "$RUNNER_TEMP/body.md"
-              url=$(gh pr create --base "$base" --head "$branch" --title "Data agent: $mode pass $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md")
-              # Ask the repo owner to review, so GitHub emails and notifies them.
-              gh pr edit "$url" --add-assignee "${{ github.repository_owner }}" --add-reviewer "${{ github.repository_owner }}" \
-                || echo "Could not request a review on $url; it is still open." >> "$GITHUB_STEP_SUMMARY"
-              note="Opened $url for review."
-            else
-              # Only deferrals: bookkeeping, no site change, no review needed.
-              git commit -m "data agent: defer items $(date -u +%F)"
-              git push origin "HEAD:$base"
-              note="No site data changed; deferrals recorded on $base."
-            fi
-          fi
-          echo "$note" >> "$GITHUB_STEP_SUMMARY"
-          if [ -n "$issue" ]; then
-            { echo "$note"; echo; cat "$H/changelog.md"; } > "$RUNNER_TEMP/comment.md"
-            gh issue comment "$issue" --body-file "$RUNNER_TEMP/comment.md"
-            gh issue close "$issue" --reason completed
+          issue="${{ needs.plan.outputs.issue }}"
+          if [ -s "$H/agent.patch" ]; then git apply "$H/agent.patch"; fi
+          { cat "$H/changelog.md"; echo; [ -n "$issue" ] && echo "Works through #$issue."; echo; echo '🤖 Generated with [Claude Code](https://claude.com/claude-code)'; } > "$RUNNER_TEMP/body.md"
+          site=$(git status --porcelain --untracked-files=all | awk '{print $NF}' | grep -vxE 'scripts/refresh/state/deferred\.json' || true)
+          if [ -n "$site" ]; then
+            bash scripts/refresh/publish-pr.sh --producer agent --intent owner \
+              --allow 'lib/ev-data\.json|lib/ev-data\.provenance\.json|lib/watchlist\.ts|lib/data-stories\.ts|scripts/refresh/accepted\.json|scripts/refresh/sources\.json|scripts/refresh/state/deferred\.json' \
+              --title "Data agent: $mode pass $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md"
+          else
+            # Only deferrals (or nothing): bookkeeping, no site change
+            bash scripts/refresh/publish-pr.sh --producer deferrals --intent auto \
+              --allow 'scripts/refresh/state/deferred\.json' \
+              --title "Data agent: record deferrals $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md"
           fi
 
+      # Only once the work has a home: an owner PR whose checks passed, merged deferrals, or nothing to do.
+      # A failed publish fails the job before this, so the issue stays open for the next run.
+      - name: Close the inbox
+        if: needs.plan.outputs.issue != '' && contains(fromJSON('["merged","owner","none"]'), steps.publish.outputs.outcome)
+        env:
+          ISSUE: ${{ needs.plan.outputs.issue }}
+          OUTCOME: ${{ steps.publish.outputs.outcome }}
+          PR: ${{ steps.publish.outputs.pr }}
+        run: |
+          case "$OUTCOME" in
+            owner) note="Opened $PR for the owner's review." ;;
+            merged) note="No site data changed; deferrals recorded in $PR." ;;
+            *) note="No changes." ;;
+          esac
+          { echo "$note"; echo; cat "$RUNNER_TEMP/handover/changelog.md"; } > "$RUNNER_TEMP/comment.md"
+          gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/comment.md"
+          gh issue close "$ISSUE" --reason completed
+
       - name: Mark the run as paused (the backup schedule retries it)
-        if: steps.publish.outputs.paused == 'true'
+        if: steps.publish.outputs.outcome == 'paused'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: publication-paused
