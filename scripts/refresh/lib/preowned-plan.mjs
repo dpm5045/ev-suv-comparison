@@ -92,22 +92,26 @@ export function planPreowned({ data, baselines, observations, today, allowLarge 
       continue
     }
 
+    // A different CarGurus page (sources.json changed) restarts the vehicle's baselines: an
+    // average from one page is never compared with another page's. The contract flags the change.
+    const pageChanged = Boolean(baselines?.[g.vehicle]) && baselines[g.vehicle].source_url !== obs.url
     const vehicleBase = (next[g.vehicle] ??= { source_url: obs.url, years: {} })
     vehicleBase.source_url = obs.url
-    const base = vehicleBase.years[String(g.year)]
+    const base = pageChanged ? undefined : vehicleBase.years[String(g.year)]
+    const was = vehicleBase.years[String(g.year)]
 
     if (!base || base.basis !== basis) {
       vehicleBase.years[String(g.year)] = {
         basis,
         avg_price: seen.avgPrice,
         as_of: today,
-        last_repriced: base?.last_repriced ?? null,
-        last_move_pct: base?.last_move_pct ?? null,
+        last_repriced: was?.last_repriced ?? null,
+        last_move_pct: was?.last_move_pct ?? null,
       }
       decisions.push({
         ...d,
         state: 'baseline_set',
-        reason: base ? `Basis changed from ${base.basis} to ${basis}; baseline restarted` : 'First observation; baseline recorded',
+        reason: pageChanged ? 'CarGurus page changed; baseline restarted' : base ? `Basis changed from ${base.basis} to ${basis}; baseline restarted` : 'First observation; baseline recorded',
       })
       continue
     }

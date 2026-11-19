@@ -100,6 +100,18 @@ test('publish: a failed check, a timeout or a refused merge closes the PR and fa
   }
 })
 
+test('publish: an unexpected error after opening the PR (a failed dispatch) still closes it', () => {
+  const s = setup({ dispatchFails: true })
+  try {
+    edit(s)
+    const r = s.publish()
+    assert.notEqual(r.status, 0)
+    assert.ok(has(s.calls(), 'pr', 'close', '7'))
+    assert.ok(!has(s.calls(), 'pr', 'merge'))
+    assert.equal(s.outputs().outcome, 'failed')
+  } finally { s.done() }
+})
+
 test('publish: paused before writing writes nothing; paused while checks run closes unmerged', () => {
   const before = setup({ paused: [true] })
   try {

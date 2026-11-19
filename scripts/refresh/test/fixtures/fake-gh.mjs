@@ -5,7 +5,7 @@
 //   paused:   [bool, ...]  successive reads of publish-control.json (the last value repeats)
 //   build:    "completed:success" (check-runs), contract: "success" (commit status)
 //   labels:   "a,b"        heads: [sha, ...] successive headRefOid reads
-//   mergeFails, updateFails: bool    prs: lines of fields joined by \x1f (gh pr list)
+//   mergeFails, updateFails, dispatchFails: bool    prs: lines of fields joined by \x1f (gh pr list)
 //   behind: {sha: n} commits behind the default branch   buildRuns: {sha: n}   contracts: {sha: state}
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs'
 
@@ -37,3 +37,4 @@ if (cmd === 'api') {
   else if (sub === 'update-branch') process.exit(st.updateFails ? 1 : 0)
   else if (sub === 'list') { if (st.prs) print(st.prs) }
 }
+else if (cmd === 'workflow' && st.dispatchFails) process.exit(1)

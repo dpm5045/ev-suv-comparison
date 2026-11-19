@@ -98,6 +98,18 @@ say "Opened $url ($intent)."
 close() {
   gh pr close "$num" --delete-branch --comment "$1" >/dev/null || true
 }
+# Any unexpected error from here on (a failed dispatch or API call) still closes the PR and fails
+# the run, so no half-published PR is left behind to block the next run or its backup.
+handled=no
+on_exit() {
+  local rc=$?
+  if [ "$rc" -ne 0 ] && [ "$handled" = no ]; then
+    say "Publishing stopped with an error (exit $rc). Closing $url; the next run starts fresh."
+    close "Publishing stopped with an error before this PR was checked. The next scheduled run starts fresh."
+    finish failed "$url"
+  fi
+}
+trap on_exit EXIT
 
 # 4. Run the required checks on this exact commit, and wait for them
 gh workflow run ci.yml --ref "$branch"
@@ -115,7 +127,7 @@ done
 if [ "$build" != completed:success ] || [ "$contract" != success ]; then
   say "Checks on $head did not pass (build: ${build:-not reported}; data-contract: ${contract:-not reported}). Closing $url; the next run starts fresh."
   close "The required checks did not pass on $head (build: ${build:-not reported}; data-contract: ${contract:-not reported}). See the workflow run. The next scheduled run starts fresh."
-  finish failed "$url"; exit 1
+  handled=yes; finish failed "$url"; exit 1
 fi
 
 # 5. Merge, or hand to the owner. The contract labels the PR before it posts success, so the label is final here.
@@ -126,18 +138,18 @@ if [ "$intent" = auto ] && [[ ",$labels," != *",needs-owner-review,"* ]]; then
     if [ "$gate" != yes ]; then
       say "Publication was paused while the checks ran; closing $url unmerged."
       close "Publication was paused while the checks ran (${gate#no: }). The first run after the pause starts fresh."
-      paused "$gate"; finish paused "$url"; exit 0
+      handled=yes; paused "$gate"; finish paused "$url"; exit 0
     fi
   fi
   if gh pr merge "$num" --squash --delete-branch --match-head-commit "$head"; then
-    say "Merged $url."; finish merged "$url"; exit 0
+    handled=yes; say "Merged $url."; finish merged "$url"; exit 0
   fi
   say "GitHub refused to merge $url at $head. Closing it; the next run starts fresh."
   close "GitHub refused the merge at $head. The next scheduled run starts fresh."
-  finish failed "$url"; exit 1
+  handled=yes; finish failed "$url"; exit 1
 fi
 owner="${GITHUB_REPOSITORY_OWNER:?}"
 gh pr edit "$num" --add-assignee "$owner" --add-reviewer "$owner" >/dev/null \
   || say "Could not request a review on $url; it is still open."
 say "$url waits for the owner's review${labels:+ (labels: $labels)}."
-finish owner "$url"
+handled=yes; finish owner "$url"

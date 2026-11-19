@@ -274,7 +274,12 @@ export function evaluate({ repo, base, head }) {
     if (rec.basis !== by.basis || rec.basis !== hy.basis) return bad(`basis ${rec.basis} must equal the baseline's in both revisions (a basis change restarts the baseline; it is not a repricing)`)
     if (by.avg_price !== rec.prev_avg) return bad(`prev_avg ${rec.prev_avg} is not the base baseline average ${by.avg_price}`)
     if (hy.avg_price !== rec.new_avg) return bad(`new_avg ${rec.new_avg} is not the head baseline average ${hy.avg_price}`)
-    if (!evidenceSupports(rec.new_avg, rec.evidence)) return bad(`the evidence does not state the new average ${rec.new_avg}`)
+    // The evidence is the CarGurus table row itself: "<label>: $<average>". A model-year row's
+    // label starts with that year ("2024 EV9"); the model-wide row's has no year ("EV9").
+    const m = /^(.+): \$([\d,]+)$/.exec(String(rec.evidence ?? ''))
+    if (!m || Number(m[2].replace(/,/g, '')) !== rec.new_avg) return bad(`the evidence must be the CarGurus row "<label>: $<average>" stating ${rec.new_avg}`)
+    const labelYear = /^(\d{4})\s/.exec(m[1])?.[1]
+    if (rec.basis === 'model_year' ? labelYear !== year : labelYear !== undefined) return bad(`the quoted row "${m[1]}" is not the ${rec.basis === 'model_year' ? `${year} model-year` : 'model-wide'} row`)
     if (!parseRange(before)) return bad(`only a priced range can be scaled (was ${JSON.stringify(before ?? null)})`)
     const move = rec.new_avg / rec.prev_avg - 1
     if (Math.abs(move) < THRESHOLD) return bad(`a ${(move * 100).toFixed(2)}% move is under the ${THRESHOLD * 100}% repricing threshold`)
