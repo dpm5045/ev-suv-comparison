@@ -55,3 +55,12 @@ A bot PR that passes `build` and `data-contract` **with no review items** may au
 ## Out of scope
 
 Everything else in WP-G to WP-K, which will be re-planned at the same simplified scale.
+
+## Revisions after Codex's critique (2026-11-18)
+
+| Codex finding | Change |
+|---|---|
+| P0: new rows could carry seat or cargo values with no review item, so a bot could auto-merge them | **Protected fields on a new row are review items too.** Every new row lists its seats, cargo and fold-flat values for the owner. Since any review item blocks a bot auto-merge (WP-I), automated writes to protected fields never land unseen. |
+| P0: some review items said only "(previous)" / "(changed)", hiding the change (for example pricing assumptions) | **Review items show the actual values.** Top-level content (assumptions, glossary, sales figures, scope) is listed per changed entry or key with before → after, and so are the preowned table and baselines. |
+| P1: converting the preowned-table checks to review items would let new or edited mismatches through | **While the table exists, a new or edited entry that matches no `details` row stays a hard failure.** Only removing the table, or removing an entry, is a review item. |
+| P1: removing the table would leave a stale "Pre-owned" tab in the backup Claude Sheet | **`/sync-sheet` deletes the Pre-owned tab** when the export produces no Pre-owned CSV (`.claude/commands/sync-sheet.md`). |
