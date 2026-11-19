@@ -246,7 +246,8 @@ test('pre-owned baselines are validated, and changes show the values', () => {
   const bad = run((f) => { const p = f['lib/ev-data.provenance.json'].preowned; const v = Object.keys(p)[0]; const y = Object.keys(p[v].years)[0]; p[v].years[y].avg_price = -5 })
   assert.ok(rules(bad).includes('prov-baseline'))
   const ok = run((f) => { const p = f['lib/ev-data.provenance.json'].preowned; const v = Object.keys(p)[0]; const y = Object.keys(p[v].years)[0]; p[v].years[y].avg_price += 100 })
-  assert.ok(ok.review.some((x) => x.field.startsWith('preowned baseline') && typeof x.new?.avg_price === 'number'))
+  // The whole baseline is compared: a changed year shows as the vehicle's `years` block, with real values
+  assert.ok(ok.review.some((x) => x.field.startsWith('preowned baseline') && x.field.endsWith('.years') && Object.values(x.new).some((y) => typeof y.avg_price === 'number')))
 })
 test('the report says the PR passed and lists review items, with no forms to fill in', () => {
   const r = run((f) => { row(f, EV9).cargo_behind_3rd_cu_ft = 25; rec(f, EV9, 'cargo_behind_3rd_cu_ft', 25) })
