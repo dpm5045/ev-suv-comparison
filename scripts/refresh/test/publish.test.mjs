@@ -168,18 +168,18 @@ test('publish: nothing changed means no PR', () => {
   } finally { s.done() }
 })
 
-test('publish --rehearsal: merges bookkeeping even while paused, and nothing else', () => {
+test('publish --rehearsal: merges its marker even while paused, and nothing else', () => {
   const s = setup({ paused: [true] })
   try {
-    put(s.work, 'scripts/refresh/state/watch.json', '{"seen": 2}\n')
+    put(s.work, 'scripts/refresh/state/rehearsal.json', '{"ran_at": "now"}\n')
     const r = s.publish('--rehearsal')
     assert.equal(r.status, 0, r.stderr)
     assert.equal(s.outputs().outcome, 'merged')
   } finally { s.done() }
   const t = setup({ paused: [true] })
   try {
-    put(t.work, 'scripts/refresh/state/watch.json', '{"seen": 2}\n')
-    edit(t) // data too: refused
+    put(t.work, 'scripts/refresh/state/rehearsal.json', '{"ran_at": "now"}\n')
+    put(t.work, 'scripts/refresh/state/watch.json', '{"seen": 2}\n') // observations too: refused
     const r = t.publish('--rehearsal')
     assert.equal(r.status, 1)
     assert.ok(!has(t.calls(), 'pr', 'create'))
@@ -194,7 +194,7 @@ test('tidy: closes its own leftover auto PR, keeps owner PRs (updating them when
     ['12', 'data-refresh/watch-2026-11-16-2', 'h12', '', 'auto', 'u12'], // another producer's: untouched
     ['13', 'data-refresh/agent-2026-11-16-3', 'old', '', 'owner', 'u13'], // owner, behind: updated + re-checked
   )
-  const s = setup({ prs, behind: { old: 2 }, heads: ['new'], buildRuns: { new: 0 }, contracts: {} })
+  const s = setup({ prs, behind: { old: 2 }, heads: ['new'], builds: {}, contracts: {} })
   try {
     const r = s.tidy('preowned', '--wait-for-agent')
     assert.equal(r.status, 0, r.stderr)
@@ -209,7 +209,7 @@ test('tidy: closes its own leftover auto PR, keeps owner PRs (updating them when
 })
 
 test('tidy: an up-to-date owner PR gets only its missing checks; after a merge it only refreshes owner PRs', () => {
-  const s = setup({ prs: prLines(['31', 'data-refresh/agent-2026-11-16-1', 'h31', '', 'owner', 'u31']), buildRuns: { h31: 1 }, contracts: {} })
+  const s = setup({ prs: prLines(['31', 'data-refresh/agent-2026-11-16-1', 'h31', '', 'owner', 'u31']), builds: { h31: 'completed:success' }, contracts: {} })
   try {
     assert.equal(s.tidy('watch').status, 0)
     const c = s.calls()
@@ -217,6 +217,17 @@ test('tidy: an up-to-date owner PR gets only its missing checks; after a merge i
     assert.ok(!has(c, 'workflow', 'run', 'ci.yml')) // build already reported
     assert.ok(c.some((x) => x[2] === 'data-contract.yml' && x.includes('head_sha=h31')))
   } finally { s.done() }
+  const cancelled = setup({ prs: prLines(['32', 'data-refresh/agent-2026-11-16-1', 'h32', '', 'owner', 'u32']), builds: { h32: 'completed:cancelled' }, contracts: { h32: 'success' } })
+  try {
+    assert.equal(cancelled.tidy('watch').status, 0)
+    assert.ok(has(cancelled.calls(), 'workflow', 'run', 'ci.yml', '--ref', 'data-refresh/agent-2026-11-16-1'))
+    assert.ok(!cancelled.calls().some((x) => x[2] === 'data-contract.yml'))
+  } finally { cancelled.done() }
+  const failedBuild = setup({ prs: prLines(['33', 'data-refresh/agent-2026-11-16-1', 'h33', '', 'owner', 'u33']), builds: { h33: 'completed:failure' }, contracts: { h33: 'success' } })
+  try {
+    assert.equal(failedBuild.tidy('watch').status, 0)
+    assert.ok(!has(failedBuild.calls(), 'workflow', 'run')) // a real failure is for the owner, not a retry loop
+  } finally { failedBuild.done() }
   const after = setup({ prs: prLines(['41', 'data-refresh/watch-2026-11-16-1', 'h41', '', 'auto', 'u41'], ['42', 'data-refresh/agent-2026-11-16-1', 'h42', '', 'owner', 'u42']), behind: { h42: 1 }, heads: ['h42b'] })
   try {
     assert.equal(after.tidy('watch', '--owner-prs-only').status, 0)

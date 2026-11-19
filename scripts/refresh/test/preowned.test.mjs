@@ -153,10 +153,12 @@ test('a reprice writes a source record for every priced row of the group, change
 test('a changed CarGurus page restarts the baselines instead of repricing across pages', () => {
   const data = makeData()
   const NEW = 'https://www.cargurus.com/research/price-trends/Kia-EV9-new'
-  const plan = planPreowned({ data, baselines: baseline({ 2024: b(43000) }), observations: { 'Kia EV9': { url: NEW, parsed: { model: null, years: { 2024: { label: '2024 EV9', avgPrice: 35000, pct30: 0 } } } } }, today: '2026-11-15' })
+  // 2025 has a baseline from the old page but no row on the new one: it must not survive
+  const plan = planPreowned({ data, baselines: baseline({ 2024: b(43000), 2025: b(40000) }), observations: { 'Kia EV9': { url: NEW, parsed: { model: null, years: { 2024: { label: '2024 EV9', avgPrice: 35000, pct30: 0 } } } } }, today: '2026-11-15' })
   assert.equal(state(plan, 2024), 'baseline_set')
   assert.deepEqual(plan.rowChanges, [])
   assert.deepEqual(plan.records, [])
   assert.equal(plan.baselines['Kia EV9'].source_url, NEW)
   assert.equal(plan.baselines['Kia EV9'].years['2024'].avg_price, 35000)
+  assert.deepEqual(Object.keys(plan.baselines['Kia EV9'].years), ['2024'])
 })

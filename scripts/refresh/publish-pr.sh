@@ -17,8 +17,9 @@
 #      A failed check, a timeout or a refused merge: close the PR and exit 1, so the run does not
 #      count as done and the backup schedule retries (ran-since.sh).
 #
-# --rehearsal publishes bookkeeping only (scripts/refresh/state/watch.json), even while paused:
-# it proves the merge path against the real branch rules before publication resumes.
+# --rehearsal publishes only a marker file (scripts/refresh/state/rehearsal.json), even while
+# paused: it proves the merge path against the real branch rules before publication resumes,
+# without touching any data or the watch's observations.
 #
 # Writes outcome=merged|owner|none|paused|failed (and pr=<url>) to $GITHUB_OUTPUT.
 # Needs GH_TOKEN with contents/pull-requests/actions write and checks/statuses read,
@@ -54,9 +55,9 @@ paused() { mkdir -p "$tmp/paused" && echo "$1" > "$tmp/paused/reason.txt"; }
 
 # 1. Pause flag and schema, read live
 if [ "$rehearsal" = yes ]; then
-  allow='scripts/refresh/state/watch\.json'
+  allow='scripts/refresh/state/rehearsal\.json'
   intent=auto
-  say "Rehearsal: publishing bookkeeping only (scripts/refresh/state/watch.json), even while paused."
+  say "Rehearsal: publishing only scripts/refresh/state/rehearsal.json, even while paused."
 else
   gate=$(bash "$HERE/can-publish.sh")
   if [ "$gate" != yes ]; then

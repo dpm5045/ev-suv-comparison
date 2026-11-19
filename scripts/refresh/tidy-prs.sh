@@ -37,10 +37,12 @@ fi
 
 default=$(gh api "repos/$repo" --jq .default_branch)
 
-# Run whichever required check is missing on a PR's current commit
+# Run whichever required check is missing (or was cancelled) on a PR's current commit
 ensure_checks() {
   local num=$1 ref=$2 head=$3 tip
-  if [ "$(gh api "repos/$repo/commits/$head/check-runs" --jq '[.check_runs[] | select(.name == "build")] | length')" = 0 ]; then
+  # Missing, or cancelled (e.g. superseded): run it. Running or failed: leave it.
+  build=$(gh api "repos/$repo/commits/$head/check-runs" --jq '[.check_runs[] | select(.name == "build")] | sort_by(.started_at) | last | if . == null then "" else "\(.status):\(.conclusion // "")" end')
+  if [ -z "$build" ] || [ "$build" = completed:cancelled ]; then
     gh workflow run ci.yml --ref "$ref"
     say "Ran the build check on PR #$num ($head)."
   fi

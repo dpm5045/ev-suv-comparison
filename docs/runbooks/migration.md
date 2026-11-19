@@ -33,7 +33,7 @@ Use this whenever a PR changes the data schema (`schema_version` in `lib/ev-data
 
 6. **Re-enable only what the new code can run.** Every producer refuses data whose `schema_version` isn't listed in `scripts/refresh/compat.json`, so re-enabling is safe; while paused, the jobs still read sources but write nothing.
    - **While paused:** **Data Watch** and **Pre-owned Pricing Refresh** run in report-only mode: they fetch sources and post to the Data inbox, with no repository writes.
-   - **Resume publication** (docs/plans/resume-publishing.md, "Rollout"): run the rehearsal (Data Watch, manual run with `rehearsal` ticked; it should open a bookkeeping PR and merge it with nobody clicking anything), then merge a PR setting `"paused": false`, and re-enable Data Agent.
+   - **Resume publication** (docs/plans/resume-publishing.md, "Rollout"): run the rehearsal (Data Watch, manual run with `rehearsal` ticked; it should open a PR changing only `scripts/refresh/state/rehearsal.json` and merge it with nobody clicking anything), then merge a PR setting `"paused": false`, and re-enable Data Agent.
 
 ## Rollback
 

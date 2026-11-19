@@ -119,7 +119,7 @@ Every change goes through a PR that passes the two required checks, `build` and 
 ## Rollout
 
 1. **Build PR** (code only: workflows, `publish-pr.sh`, producer, contract, tests). The pause stays on. The owner merges.
-2. **Rehearsal**, on the owner's go-ahead to trigger it. Dispatch Data Watch with an input `rehearsal: true`, which bypasses the pause for a **bookkeeping-only** change: it may commit only `scripts/refresh/state/watch.json`. It runs the full §1 path and should merge itself. This confirms items 1 to 3 above against the real ruleset.
+2. **Rehearsal**, on the owner's go-ahead to trigger it. Dispatch Data Watch with an input `rehearsal: true`, which bypasses the pause for a **bookkeeping-only** change: it skips the watch and commits only a marker file, `scripts/refresh/state/rehearsal.json` (so no observations move without their inbox alerts). It runs the full §1 path and should merge itself. This confirms items 1 to 3 above against the real ruleset.
 3. **Unpause PR:** `publish-control.json` `paused: false`, plus the docs. The owner merges.
 4. **First Monday:** I check the three runs and the PRs and report back. If anything misbehaves, the rollback is to set `paused: true` again (one reviewed PR). Every write path checks that flag first.
 

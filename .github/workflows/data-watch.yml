@@ -13,8 +13,10 @@ name: Data Watch
 #   pushes). vercel.json skips the deploy for it. It no longer writes range
 #   sources to provenance (docs/plans/resume-publishing.md §2).
 # - Everything else it notices goes to the Data inbox issue for the agent.
-# - `rehearsal` (manual runs only) publishes that bookkeeping even while
-#   publication is paused, to prove the merge path before resuming.
+# - `rehearsal` (manual runs only) skips the watch and publishes only a marker
+#   file (scripts/refresh/state/rehearsal.json), even while publication is
+#   paused: it proves the bot merge path before resuming, and touches no data
+#   or observations.
 
 on:
   schedule:
@@ -24,7 +26,7 @@ on:
   workflow_dispatch:
     inputs:
       rehearsal:
-        description: 'Publish bookkeeping only (watch.json), even while paused: proves the bot merge path'
+        description: 'Skip the watch; publish only a rehearsal marker, even while paused (proves the bot merge path)'
         type: boolean
         default: false
 
@@ -93,18 +95,24 @@ jobs:
         run: bash scripts/refresh/tidy-prs.sh watch
 
       - name: Check EPA and price pages
-        if: steps.tidy.outputs.skip != 'yes'
+        if: steps.tidy.outputs.skip != 'yes' && !inputs.rehearsal
         run: |
           node scripts/refresh/watch.mjs --apply --report "$RUNNER_TEMP/report.md" --attention "$RUNNER_TEMP/attention.md"
           cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Validate data
-        if: steps.tidy.outputs.skip != 'yes'
+        if: steps.tidy.outputs.skip != 'yes' && !inputs.rehearsal
         run: npm run validate
 
       - name: Send open items to the Data inbox
         if: steps.tidy.outputs.skip != 'yes' && !inputs.rehearsal
         run: bash scripts/refresh/inbox.sh "Data watch $(date -u +%F)" "$RUNNER_TEMP/attention.md"
+
+      - name: Write the rehearsal marker
+        if: inputs.rehearsal
+        run: |
+          printf '{\n  "about": "Written by a Data Watch rehearsal run (docs/plans/resume-publishing.md, Rollout)",\n  "ran_at": "%s",\n  "run_id": "%s"\n}\n' "$(date -u +%FT%TZ)" "$GITHUB_RUN_ID" > scripts/refresh/state/rehearsal.json
+          printf 'Rehearsal of the bot publishing path: this PR changes only a marker file, and should merge itself once `build` and `data-contract` pass.\n' > "$RUNNER_TEMP/report.md"
 
       - name: Publish (PR, required checks, merge)
         id: publish
@@ -115,7 +123,7 @@ jobs:
           # REHEARSAL is empty or the one flag --rehearsal (left unquoted on purpose)
           bash scripts/refresh/publish-pr.sh --producer watch --intent auto $REHEARSAL \
             --allow 'scripts/refresh/state/watch\.json' \
-            --title "Data watch: record state $(date -u +%F)" --body-file "$RUNNER_TEMP/report.md"
+            --title "Data watch: ${REHEARSAL:+rehearsal }record state $(date -u +%F)" --body-file "$RUNNER_TEMP/report.md"
 
       - name: Keep owner PRs current after this merge
         if: steps.publish.outputs.outcome == 'merged' && !inputs.rehearsal

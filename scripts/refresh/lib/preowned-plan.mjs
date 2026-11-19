@@ -94,11 +94,12 @@ export function planPreowned({ data, baselines, observations, today, allowLarge 
 
     // A different CarGurus page (sources.json changed) restarts the vehicle's baselines: an
     // average from one page is never compared with another page's. The contract flags the change.
+    // Every year's old average goes, observed on the new page or not.
     const pageChanged = Boolean(baselines?.[g.vehicle]) && baselines[g.vehicle].source_url !== obs.url
+    if (pageChanged && next[g.vehicle]?.source_url !== obs.url) next[g.vehicle] = { source_url: obs.url, years: {} }
     const vehicleBase = (next[g.vehicle] ??= { source_url: obs.url, years: {} })
-    vehicleBase.source_url = obs.url
+    const was = baselines?.[g.vehicle]?.years?.[String(g.year)]
     const base = pageChanged ? undefined : vehicleBase.years[String(g.year)]
-    const was = vehicleBase.years[String(g.year)]
 
     if (!base || base.basis !== basis) {
       vehicleBase.years[String(g.year)] = {
@@ -111,7 +112,7 @@ export function planPreowned({ data, baselines, observations, today, allowLarge 
       decisions.push({
         ...d,
         state: 'baseline_set',
-        reason: pageChanged ? 'CarGurus page changed; baseline restarted' : base ? `Basis changed from ${base.basis} to ${basis}; baseline restarted` : 'First observation; baseline recorded',
+        reason: pageChanged ? 'CarGurus page changed; baselines restarted from the new page' : base ? `Basis changed from ${base.basis} to ${basis}; baseline restarted` : 'First observation; baseline recorded',
       })
       continue
     }
