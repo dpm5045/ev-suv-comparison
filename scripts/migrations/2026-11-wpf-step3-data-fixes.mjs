@@ -6,14 +6,12 @@
  *   node scripts/migrations/2026-11-wpf-step3-data-fixes.mjs
  *
  * 1. One phrasing for "no used market": every variant becomes "No used market yet".
- * 2. TBD estimates leave the numeric fields (they hold exactly "TBD"):
- *    - Mercedes GLB Electric range: "TBD (~315 est)" moves verbatim into notes (moved record);
- *    - BMW iX7 range/hp/battery and Faraday FX Super One hp: these estimates are WITHDRAWN
- *      (fields become "TBD", flagged for owner review). They had no source record, and the
- *      BMW ones contradicted the row's own notes (notes: ~120 kWh, ~350 mi; fields: ~150+ kWh,
- *      ~350-400 mi; the xDrive50's ~570 hp is in neither). Showing "TBD" until BMW publishes
- *      figures is more honest than keeping an unsourced guess. (A notes "move" can carry only
- *      one source field, so three estimates could not be moved verbatim.)
+ * 2. TBD estimates leave the numeric fields (they hold exactly "TBD"): the Mercedes GLB
+ *    Electric range (~315), BMW iX7 range/hp/battery and Faraday FX Super One hp estimates
+ *    are WITHDRAWN (flagged for owner review). None had a source record, and the BMW ones
+ *    contradicted the row's own notes (notes: ~120 kWh, ~350 mi; fields: ~150+ kWh,
+ *    ~350-400 mi). Showing "TBD" until the maker publishes figures is more honest than
+ *    keeping an unsourced guess; a sourced figure can come back through a normal PR.
  * 3. Third row: on 5-seat rows, legroom and headroom become "N/A" (no third row).
  * 4. 6-seat Model X (2021-22): third-row cargo "N/A" becomes null: the row has a
  *    third row, the figure is missing (protected field; flagged for owner review).
@@ -48,26 +46,10 @@ for (const r of data.details) {
   }
 }
 
-// 2. TBD estimates
-for (const id of ['mercedes-benz-glb-electric-2027-glb-250-plus-expected', 'mercedes-benz-glb-electric-2027-glb-350-4matic-expected']) {
-  const r = byId.get(id)
-  const est = r.range_mi
-  if (!/^TBD \(.+\)$/.test(est)) throw new Error(`${id}: unexpected range ${est}`)
-  const baseRec = prov.fields[id]?.range_mi
-  r.range_mi = 'TBD'
-  r.notes = `${r.notes}${r.notes ? ' ' : ''}Range: ${est}`
-  ;(prov.fields[id] ??= {}).notes = {
-    source_url: baseRec?.source_url ?? 'https://www.mbusa.com/en/future-vehicles',
-    verified_on: TODAY,
-    evidence: `Moved from range_mi, unchanged: ${est}`,
-    value: r.notes,
-    method: 'moved',
-    moved_from: 'range_mi',
-    method_version: 1,
-  }
-  log.push(`${id}: range_mi ${est} -> "TBD" (moved into notes)`)
-}
+// 2. TBD estimates: withdrawn (unsourced; see the header)
 for (const [id, fields] of [
+  ['mercedes-benz-glb-electric-2027-glb-250-plus-expected', ['range_mi']],
+  ['mercedes-benz-glb-electric-2027-glb-350-4matic-expected', ['range_mi']],
   ['bmw-ix7-2027-xdrive50-expected', ['range_mi', 'hp', 'battery_kwh']],
   ['bmw-ix7-2027-m70-expected', ['range_mi', 'hp', 'battery_kwh']],
   ['faraday-future-fx-super-one-2027-base-expected', ['hp']],

@@ -2129,28 +2129,6 @@
         "evidence": "PREMIUM SPORT From: $148,205",
         "legacy": "name_keyed"
       }
-    },
-    "mercedes-benz-glb-electric-2027-glb-250-plus-expected": {
-      "notes": {
-        "source_url": "https://www.mbusa.com/en/future-vehicles",
-        "verified_on": "2026-11-19",
-        "evidence": "Moved from range_mi, unchanged: TBD (~315 est)",
-        "value": "MY2027 electric GLB (GLB with EQ Technology). US sales start fall 2026; hybrid follows early 2027. Shares an 85 kWh, 800V platform across both trims. Third row is an option (5-seat is standard); Mercedes says it suits people up to about 5 ft 6 in. No official US pricing yet: Consumer Reports lists a $48,900-$52,600 range, other sources disagree. Range is an unconfirmed estimate (EPA pending). Range: TBD (~315 est)",
-        "method": "moved",
-        "moved_from": "range_mi",
-        "method_version": 1
-      }
-    },
-    "mercedes-benz-glb-electric-2027-glb-350-4matic-expected": {
-      "notes": {
-        "source_url": "https://www.mbusa.com/en/future-vehicles",
-        "verified_on": "2026-11-19",
-        "evidence": "Moved from range_mi, unchanged: TBD (~315 est)",
-        "value": "MY2027 electric GLB (GLB with EQ Technology). US sales start fall 2026; hybrid follows early 2027. Shares an 85 kWh, 800V platform across both trims. Third row is an option (5-seat is standard); Mercedes says it suits people up to about 5 ft 6 in. No official US pricing yet: Consumer Reports lists a $48,900-$52,600 range, other sources disagree. Range is an unconfirmed estimate (EPA pending). Range: TBD (~315 est)",
-        "method": "moved",
-        "moved_from": "range_mi",
-        "method_version": 1
-      }
     }
   }
 }
