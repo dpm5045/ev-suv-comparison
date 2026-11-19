@@ -245,7 +245,8 @@ export function evaluate({ repo, base, head }) {
     }
     if (!evidenceSupports(newValue, rec.evidence)) err('evidence-quote', row.id, field, `the quoted evidence does not contain ${JSON.stringify(newValue)}`)
   }
-  const isBlank = (v) => v === null || v === 'TBD' || v === 'N/A' || v === NO_MARKET
+  // A "blank" value carries no claim to source: null, TBD, N/A, and (for the used price only) the no-market sentinel
+  const isBlank = (v, f) => v === null || v === 'TBD' || v === 'N/A' || (f === 'preowned_range' && v === NO_MARKET)
 
   // Removed rows
   for (const [id, r] of bRows) {
@@ -263,7 +264,7 @@ export function evaluate({ repo, base, head }) {
     if (bRetired.has(id)) err('id-reuse', id, 'id', 'this id was retired and cannot be reused')
     need(id, '@add', null, r.name, `new row: ${r.availability}`)
     for (const f of PROTECTED) need(id, f, null, r[f], 'protected value on a new row')
-    for (const f of PUBLISHED) if (!isBlank(r[f])) evidence(r, f, r[f])
+    for (const f of PUBLISHED) if (!isBlank(r[f], f)) evidence(r, f, r[f])
   }
 
   // Changed rows
@@ -298,7 +299,7 @@ export function evaluate({ repo, base, head }) {
       }
       const prot = PROTECTED.includes(f)
       if (prot) need(id, f, b[f], h[f], 'protected field change')
-      if (isBlank(h[f])) { if (!prot) need(id, f, b[f], h[f], `${f} withdrawn to ${JSON.stringify(h[f])}`); continue }
+      if (isBlank(h[f], f)) { if (!prot) need(id, f, b[f], h[f], `${f} withdrawn to ${JSON.stringify(h[f])}`); continue }
       if (FIELDS[f].published !== false) evidence(h, f, h[f])
     }
   }
@@ -309,7 +310,7 @@ export function evaluate({ repo, base, head }) {
     for (const f of Object.keys(fields)) {
       if (H.prov.fields?.[id]?.[f]) continue
       // A record may go only with its value: a withdrawal (value now blank, which is flagged for review above)
-      const withdrawn = isBlank(hRows.get(id)?.[f]) && !isBlank(bRows.get(id)?.[f])
+      const withdrawn = isBlank(hRows.get(id)?.[f], f) && !isBlank(bRows.get(id)?.[f], f)
       if (!withdrawn) err('prov-deleted', id, f, 'a provenance record was deleted')
     }
   }
@@ -323,7 +324,7 @@ export function evaluate({ repo, base, head }) {
     }
   }
   for (const veh of new Set([...Object.keys(B.prov.preowned ?? {}), ...Object.keys(H.prov.preowned ?? {})])) {
-    reviewDiff(`preowned baseline ${veh}`, B.prov.preowned?.[veh]?.years, H.prov.preowned?.[veh]?.years)
+    reviewDiff(`preowned baseline ${veh}`, B.prov.preowned?.[veh], H.prov.preowned?.[veh]) // source_url and years
   }
 
   // Attach the source and quote behind each change, for the owner's review

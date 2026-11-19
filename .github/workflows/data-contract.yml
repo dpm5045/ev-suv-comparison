@@ -39,8 +39,9 @@ permissions:
   statuses: write        # the result is posted as the `data-contract` status on the PR's own commit
   pull-requests: write   # only to add or remove the `needs-owner-review` label
 
+# One run at a time per PR (dispatched runs pass `pr`), so label updates can't race
 concurrency:
-  group: data-contract-${{ github.event.pull_request.number || inputs.head_sha }}
+  group: data-contract-${{ github.event.pull_request.number || inputs.pr || inputs.head_sha }}
   cancel-in-progress: true
 
 jobs:
@@ -102,14 +103,21 @@ jobs:
           if [ "$OUTCOME" = success ]; then
             state=success
             if [ "${REVIEW:-0}" -gt 0 ]; then desc="Passed: $REVIEW change(s) need the owner's review (merge to approve)"; else desc="Data contract passed"; fi
-          fi
-          gh api "repos/$repo/statuses/$HEAD" -f state="$state" -f context=data-contract -f description="$desc" -f target_url="$URL" >/dev/null
-          # The needs-owner-review label tracks whether this head has sensitive changes
-          if [ -n "$PR" ] && [ "$OUTCOME" = success ]; then
-            if [ "${REVIEW:-0}" -gt 0 ]; then
-              gh api "repos/$repo/labels" -f name=needs-owner-review -f color=FBCA04 -f description="Sensitive data changes: the owner reviews before merging (bots never auto-merge these)" >/dev/null 2>&1 || true
-              gh api "repos/$repo/issues/$PR/labels" -f "labels[]=needs-owner-review" >/dev/null
-            else
-              gh api -X DELETE "repos/$repo/issues/$PR/labels/needs-owner-review" >/dev/null 2>&1 || true
+            # The needs-owner-review label goes on BEFORE success is published, and only while the
+            # PR still points at the commit that was checked (a stale run must not touch the label).
+            # If labelling fails, the result is failure, so a sensitive PR is never "passed" unlabelled.
+            if [ -n "$PR" ]; then
+              current=$(gh api "repos/$repo/pulls/$PR" --jq .head.sha)
+              if [ "$current" = "$HEAD" ]; then
+                if [ "${REVIEW:-0}" -gt 0 ]; then
+                  gh api "repos/$repo/labels" -f name=needs-owner-review -f color=FBCA04 -f description="Sensitive data changes: the owner reviews before merging (bots never auto-merge these)" >/dev/null 2>&1 || true
+                  gh api "repos/$repo/issues/$PR/labels" -f "labels[]=needs-owner-review" >/dev/null || { state=failure; desc="Could not add the needs-owner-review label; re-run"; }
+                else
+                  gh api -X DELETE "repos/$repo/issues/$PR/labels/needs-owner-review" >/dev/null 2>&1 || true
+                fi
+              else
+                echo "PR #$PR moved on ($current); leaving its label to the newer run." >> "$GITHUB_STEP_SUMMARY"
+              fi
             fi
           fi
+          gh api "repos/$repo/statuses/$HEAD" -f state="$state" -f context=data-contract -f description="$desc" -f target_url="$URL" >/dev/null

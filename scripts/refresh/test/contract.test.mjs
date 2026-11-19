@@ -318,6 +318,16 @@ test('a moved record cannot bring a new claim along', () => {
   assert.ok(r.errors.some((e) => e.rule === 'evidence-moved' && /new claim/.test(e.msg)))
 })
 
+// ── Regressions for Codex's review of the simplification ──
+test('"No used market yet" is a blank only for the used price: on another spec it needs a source', () => {
+  const r = run((f) => { row(f, EV9).charging_type = 'No used market yet' })
+  assert.ok(r.errors.some((e) => e.rule === 'evidence-missing' && e.field === 'charging_type'))
+})
+test('a changed pre-owned baseline source URL is flagged for review', () => {
+  const r = run((f) => { const p = f['lib/ev-data.provenance.json'].preowned; const v = Object.keys(p)[0]; p[v].source_url = 'https://www.cargurus.com/research/other' })
+  assert.ok(r.review.some((x) => x.field.startsWith('preowned baseline') && x.field.endsWith('.source_url')))
+})
+
 // ── Helpers ──
 test('evidence matching accepts the usual number formats, as whole tokens', () => {
   assert.ok(evidenceSupports(62500, 'Starting MSRP $62,500'))
