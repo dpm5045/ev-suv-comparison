@@ -100,7 +100,8 @@ export interface EVData {
   us_ev_sales: USEVSales
   us_ev_sales_notes: USEVSalesNotes
   details: DetailRow[]
-  preowned: PreownedRow[]
+  /** Parallel pre-owned table, being retired (no page reads it) */
+  preowned?: PreownedRow[]
   glossary: GlossaryRow[]
   assumptions: AssumptionRow[]
 }

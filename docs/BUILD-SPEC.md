@@ -1,5 +1,8 @@
 # ThreeRowEV: Remediation Build Spec (v3.1)
 
+> **Superseded in part (2026-11-18), by `docs/plans/simplify-owner-review.md`:** the owner approves by merging. Sensitive changes are flagged `needs-owner-review` instead of needing an "Approve data exception" run, and that workflow and its verification code were removed. Everything else here stands.
+
+
 **Responds to:** "ThreeRowEV architecture and codebase audit" (2026-11-16, revision `0704645`), "Review of ThreeRowEV remediation build spec" (2026-11-16), and the reviewer's notes on v2 (2026-11-17).
 **Status:** v3.1. **Design approved to proceed** (reviewer, 2026-11-17), with the two safeguards in "What changed in v3.1". **WP-A, WP-B, WP-C and WP-D are built and live**. The reviewer's approval covers the design only, not those implementations, which still need review of their changes and test results (PRs #44–#47, #50). WP-K is in progress.
 

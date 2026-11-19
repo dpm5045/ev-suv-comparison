@@ -149,7 +149,8 @@ export function checkState({ data, prov, accepted, retired }) {
 
   // Top level
   for (const k of Object.keys(data)) if (!TOP_LEVEL.includes(k)) v('top-level-unknown', null, k, `unknown top-level key ${k}`)
-  for (const k of TOP_LEVEL) if (!(k in data)) v('top-level-missing', null, k, `missing top-level key ${k}`)
+  const OPTIONAL_TOP = ['preowned'] // the parallel preowned table is being retired (WP-F step 3)
+  for (const k of TOP_LEVEL) if (!(k in data) && !OPTIONAL_TOP.includes(k)) v('top-level-missing', null, k, `missing top-level key ${k}`)
   if (!SUPPORTED_VERSIONS.includes(data.schema_version)) v('schema-version', null, 'schema_version', `schema_version ${data.schema_version} is not supported by these rules (${SUPPORTED_VERSIONS.join(', ')}); land a rules-only PR for the new version first`)
   if (!isDate(data.last_updated)) v('last-updated', null, 'last_updated', 'last_updated must be YYYY-MM-DD')
 

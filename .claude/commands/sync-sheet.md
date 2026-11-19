@@ -2,6 +2,8 @@ Refresh the backup Claude Sheet ("ThreeRowEV Data") from `lib/ev-data.json` and 
 
 Sheet: https://claude.ai/artifact/Ck7d1nr1WvSHca3FjQXuZn — one tab per table: Details, Pre-owned, Model counts, Glossary, Sources, CarGurus baselines.
 
+**The Pre-owned tab is being retired** (the parallel `preowned` table leaves `lib/ev-data.json` in WP-F step 3; each trim's used price stays on Details). When the export produces no `Pre-owned.csv`, `deleteSheet` the Pre-owned tab in the same `applyEdits` as the other tab swaps, so the backup doesn't keep stale prices.
+
 The data in git is the source of truth; this Sheet is a browsable backup. It needs the Claude Docs connector (Sheets type), so it runs in a local or claude.ai session, not in the GitHub Actions agent. If the connector isn't available, say so and stop.
 
 ## Steps

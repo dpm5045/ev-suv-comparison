@@ -3,22 +3,25 @@
  * The data contract between two revisions (WP-F; docs/plans/wp-f-data-contract.md).
  *
  *   node scripts/validate-diff.mjs --base <sha> --head <sha> [--repo <dir>]
- *        [--approvals github|none|<file.json>] [--report <file.md>]
+ *        [--report <file.md>] [--json <file.json>]
  *
  * CI runs THIS FILE FROM THE BASE REVISION (a trusted worktree) against the
  * PR's repository, so a PR can't loosen the rules that judge it. It reads both
  * revisions with `git show <sha>:<path>`; it never uses a branch name.
  * One mode for every path: people and bots are held to the same rules.
- * Exit 0 = pass, 1 = contract violations (the report lists any approvals
- * that would resolve them, with their exact inputs).
+ * Exit 0 = pass, 1 = contract violations. Sensitive changes (protected fields,
+ * availability, identity, removals, withdrawn values, schema and top-level
+ * content) are not failures: they are REVIEW ITEMS, listed with before/after
+ * values. The owner's merge is the approval; a bot PR with review items never
+ * auto-merges (docs/plans/simplify-owner-review.md).
  */
 import { execFileSync } from 'node:child_process'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { checkState, applyBaseline, DETAIL_FIELDS, PROTECTED, PUBLISHED, IDENTITY, FIELDS } from './schema/ev-data.schema.mjs'
-import { loadApprovals, matches } from './schema/approvals.mjs'
-import { DATA_FILES, proposalSha256, changedPaths } from './refresh/lib/hashes.mjs'
+import { DATA_FILES, changedPaths } from './refresh/lib/hashes.mjs'
+import { NO_MARKET } from './schema/ev-data.schema.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 
@@ -26,8 +29,8 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 export const GATE_FILES = [
   'scripts/validate-data.js', 'scripts/validate-diff.mjs', 'scripts/schema/',
   'scripts/refresh/source-policy.json', 'scripts/refresh/compat.json', 'scripts/refresh/publish-control.json',
-  'scripts/refresh/lib/hashes.mjs', 'scripts/refresh/lib/zip.mjs',
-  '.github/workflows/ci.yml', '.github/workflows/data-contract.yml', '.github/workflows/approve-data-exception.yml', '.github/CODEOWNERS',
+  'scripts/refresh/lib/hashes.mjs',
+  '.github/workflows/ci.yml', '.github/workflows/data-contract.yml', '.github/CODEOWNERS',
 ]
 const BASELINE = 'scripts/schema/known-violations.json'
 const isGate = (p) => GATE_FILES.some((g) => (g.endsWith('/') ? p.startsWith(g) : p === g))
@@ -85,12 +88,12 @@ function allowedDomains(policy, field, row) {
 }
 
 /**
- * Evaluate the contract. Pure apart from git reads; approvals are passed in.
- * @returns {{ errors: object[], exceptions: object[], satisfied: object[], changes: object[], dataChanged: boolean, proposal_sha256: string|null }}
+ * Evaluate the contract. Pure apart from git reads.
+ * @returns {{ errors: object[], review: object[], changes: object[], dataChanged: boolean }}
  */
-export function evaluate({ repo, base, head, approvals = [] }) {
+export function evaluate({ repo, base, head }) {
   const errors = []
-  const exceptions = []
+  const review = []
   const changes = []
   const err = (rule, id, field, msg) => errors.push({ rule, id: id ?? '-', field: field ?? '-', msg })
 
@@ -106,7 +109,7 @@ export function evaluate({ repo, base, head, approvals = [] }) {
   const baselineShrinkOnly = paths.includes(BASELINE) && Array.isArray(baseKnownList) && headKnownList.every((k) => baseKnownList.includes(k))
   const gatePaths = paths.filter((p) => isGate(p) && !(p === BASELINE && baselineShrinkOnly))
   const dataChanged = dataPaths.length > 0 || baselineShrinkOnly
-  if (!dataChanged) return { errors, exceptions, satisfied: [], changes, dataChanged, proposal_sha256: null, paths }
+  if (!dataChanged) return { errors, review, changes, dataChanged, paths }
 
   // §1: rules and data never change together
   for (const p of gatePaths) err('gate-and-data', '-', p, `${p} defines the data rules and cannot change in a PR that changes data; split it into its own PR`)
@@ -121,10 +124,22 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     accepted: show(repo, head, 'scripts/refresh/accepted.json', {}), retired: show(repo, head, 'scripts/refresh/retired-ids.json', { ids: [] }),
     baseline: show(repo, head, BASELINE, { violations: [] }),
   }
-  if (!H.data) { err('unreadable', '-', 'lib/ev-data.json', 'head data is missing or not JSON'); return { errors, exceptions, satisfied: [], changes, dataChanged, proposal_sha256: null, paths } }
+  if (!H.data) { err('unreadable', '-', 'lib/ev-data.json', 'head data is missing or not JSON'); return { errors, review, changes, dataChanged, paths } }
 
-  const proposal_sha256 = proposalSha256(repo, base, head)
-  const need = (id, field, oldV, newV, why) => exceptions.push({ base_sha: base, proposal_sha256, id, field, old: JSON.stringify(oldV ?? null), new: JSON.stringify(newV ?? null), why })
+  /** A sensitive change for the owner to see before merging (not a failure). */
+  const need = (id, field, oldV, newV, why) => review.push({ id, field, old: oldV ?? null, new: newV ?? null, why })
+  /** Review items for every changed entry of a list or key of an object, with real before/after values. */
+  const reviewDiff = (label, before, after) => {
+    if (same(before, after)) return
+    if (Array.isArray(before) && Array.isArray(after)) {
+      const n = Math.max(before.length, after.length)
+      for (let i = 0; i < n; i++) if (!same(before[i], after[i])) need('-', `${label}[${i}]`, before[i], after[i], `${label} entry ${before[i] === undefined ? 'added' : after[i] === undefined ? 'removed' : 'changed'}`)
+    } else if (before && after && typeof before === 'object' && typeof after === 'object') {
+      for (const k of new Set([...Object.keys(before), ...Object.keys(after)])) if (!same(before[k], after[k])) need('-', `${label}.${k}`, before[k], after[k], `${label}.${k} changed`)
+    } else {
+      need('-', label, before, after, `${label} changed`)
+    }
+  }
 
   // The known-violations baseline may only shrink, and only alongside data
   const baseKnown = new Set(B.baseline.violations ?? [])
@@ -135,10 +150,8 @@ export function evaluate({ repo, base, head, approvals = [] }) {
   for (const e of stateErrors) errors.push(e)
 
   // Schema version and other top-level content
-  if (!same(B.data?.schema_version, H.data.schema_version)) need('-', '*', B.data?.schema_version, H.data.schema_version, 'schema_version change (migration)')
-  for (const k of ['scope', 'count_note', 'us_ev_sales', 'us_ev_sales_notes', 'glossary', 'assumptions']) {
-    if (!same(B.data?.[k], H.data[k])) need('-', `@top:${k}`, '(previous)', '(changed)', `top-level ${k} changed`)
-  }
+  if (!same(B.data?.schema_version, H.data.schema_version)) need('-', 'schema_version', B.data?.schema_version, H.data.schema_version, 'schema_version change (migration)')
+  for (const k of ['scope', 'count_note', 'us_ev_sales', 'us_ev_sales_notes', 'glossary', 'assumptions']) reviewDiff(k, B.data?.[k], H.data[k])
   // The parallel preowned table (removed in WP-F step 3): an entry may only change to a value
   // that a details row with the same name now has; and no name may go from agreeing to disagreeing.
   const valuesByName = (rows) => rows.reduce((m, r) => m.set(r.name, [...(m.get(r.name) ?? []), r.preowned_range]), new Map())
@@ -154,11 +167,11 @@ export function evaluate({ repo, base, head, approvals = [] }) {
   }
   const bTable = new Map((B.data?.preowned ?? []).map((p) => [p.name, p.preowned_range]))
   const hTable = new Map((H.data.preowned ?? []).map((p) => [p.name, p.preowned_range]))
-  for (const [name, val] of bTable) {
-    if (!hTable.has(name)) need('-', '@preowned-table', name, null, `preowned table entry removed: ${name}`)
-  }
+  if (B.data && 'preowned' in B.data && !('preowned' in H.data)) need('-', 'preowned', `${bTable.size} entries`, null, 'the parallel preowned table is removed (no page reads it)')
+  else for (const [name, val] of bTable) if (!hTable.has(name)) need('-', `preowned:${name}`, val, null, 'preowned table entry removed')
   for (const [name, val] of hTable) {
-    if (bTable.get(name) !== val && !(hVals.get(name) ?? []).includes(val)) need('-', '@preowned-table', bTable.get(name) ?? null, val, `preowned table entry "${name}" changed to a value no details row has`)
+    // While the table exists, a new or edited entry must match a details row of that name
+    if (bTable.get(name) !== val && !(hVals.get(name) ?? []).includes(val)) err('preowned-table-mismatch', '-', name, `preowned table entry "${name}" is ${val}, which no details row of that name has`)
     const agreed = (bVals.get(name) ?? []).includes(bTable.get(name))
     const agrees = (hVals.get(name) ?? []).includes(val)
     if (agreed && !agrees) err('preowned-table-disagree', '-', name, `the preowned table entry (${val}) no longer matches any details row named "${name}": update it in the same PR`)
@@ -232,7 +245,8 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     }
     if (!evidenceSupports(newValue, rec.evidence)) err('evidence-quote', row.id, field, `the quoted evidence does not contain ${JSON.stringify(newValue)}`)
   }
-  const isBlank = (v) => v === null || v === 'TBD' || v === 'N/A'
+  // A "blank" value carries no claim to source: null, TBD, N/A, and (for the used price only) the no-market sentinel
+  const isBlank = (v, f) => v === null || v === 'TBD' || v === 'N/A' || (f === 'preowned_range' && v === NO_MARKET)
 
   // Removed rows
   for (const [id, r] of bRows) {
@@ -248,8 +262,9 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     if (bRows.has(id)) continue
     changes.push({ id, field: '@add', old: null, new: r.name })
     if (bRetired.has(id)) err('id-reuse', id, 'id', 'this id was retired and cannot be reused')
-    if (r.availability !== 'needs_review' && r.availability !== 'announced') need(id, 'availability', null, r.availability, `a new row must start as needs_review or announced, not ${r.availability}`)
-    for (const f of PUBLISHED) if (!isBlank(r[f])) evidence(r, f, r[f])
+    need(id, '@add', null, r.name, `new row: ${r.availability}`)
+    for (const f of PROTECTED) need(id, f, null, r[f], 'protected value on a new row')
+    for (const f of PUBLISHED) if (!isBlank(r[f], f)) evidence(r, f, r[f])
   }
 
   // Changed rows
@@ -264,7 +279,7 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     for (const f of DETAIL_FIELDS) {
       if (same(b[f], h[f]) || f === 'id') continue
       changes.push({ id, field: f, old: b[f], new: h[f] })
-      // Identity fields: the @identity approval was requested above; published ones also need a source
+      // Identity fields: flagged above for review; published ones also need a source
       if (IDENTITY.includes(f) && f !== 'seats') { if (FIELDS[f].published !== false) evidence(h, f, h[f]); continue }
       if (f === 'availability') { need(id, f, b[f], h[f], 'availability change'); continue }
       if (f === 'msrp_status') {
@@ -284,7 +299,7 @@ export function evaluate({ repo, base, head, approvals = [] }) {
       }
       const prot = PROTECTED.includes(f)
       if (prot) need(id, f, b[f], h[f], 'protected field change')
-      if (isBlank(h[f])) { if (!prot) need(id, f, b[f], h[f], `${f} withdrawn to ${JSON.stringify(h[f])}`); continue }
+      if (isBlank(h[f], f)) { if (!prot) need(id, f, b[f], h[f], `${f} withdrawn to ${JSON.stringify(h[f])}`); continue }
       if (FIELDS[f].published !== false) evidence(h, f, h[f])
     }
   }
@@ -294,8 +309,8 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     if (!hRows.has(id)) continue
     for (const f of Object.keys(fields)) {
       if (H.prov.fields?.[id]?.[f]) continue
-      // A record may go only with its value: an approved withdrawal (value now null/TBD/N/A, which needs the owner's approval above)
-      const withdrawn = isBlank(hRows.get(id)?.[f]) && !isBlank(bRows.get(id)?.[f])
+      // A record may go only with its value: a withdrawal (value now blank, which is flagged for review above)
+      const withdrawn = isBlank(hRows.get(id)?.[f], f) && !isBlank(bRows.get(id)?.[f], f)
       if (!withdrawn) err('prov-deleted', id, f, 'a provenance record was deleted')
     }
   }
@@ -308,7 +323,9 @@ export function evaluate({ repo, base, head, approvals = [] }) {
       if (r && f in r) checkRecord(r, f, r[f], rec) // source policy and quote, even when the spec itself didn't change
     }
   }
-  if (!same(B.prov.preowned, H.prov.preowned)) need('-', '@preowned-baselines', '(previous)', '(changed)', 'CarGurus pre-owned baselines changed (written by the pre-owned script; WP-G defines their contract)')
+  for (const veh of new Set([...Object.keys(B.prov.preowned ?? {}), ...Object.keys(H.prov.preowned ?? {})])) {
+    reviewDiff(`preowned baseline ${veh}`, B.prov.preowned?.[veh], H.prov.preowned?.[veh]) // source_url and years
+  }
 
   // Attach the source and quote behind each change, for the owner's review
   for (const c of changes) {
@@ -316,40 +333,30 @@ export function evaluate({ repo, base, head, approvals = [] }) {
     if (rec && !rec.legacy) { c.source = rec.source_url; c.quote = rec.evidence }
   }
 
-  // Approvals
-  const satisfied = []
-  const open = []
-  for (const x of exceptions) {
-    const a = approvals.find((ap) => matches(ap, x))
-    if (a) satisfied.push({ ...x, run_id: a.run_id, approver: a.approver })
-    else open.push(x)
-  }
-  for (const x of open) err('approval-needed', x.id, x.field, `${x.why}: needs the owner's approval (see report)`)
-  return { errors, exceptions: open, satisfied, changes, dataChanged, proposal_sha256, paths }
+  return { errors, review, changes, dataChanged, paths }
 }
 
 export function renderReport(r, { base, head }) {
   const L = [`## Data contract`, '', `Base \`${base.slice(0, 12)}\` → head \`${head.slice(0, 12)}\``, '']
   if (!r.dataChanged) return [...L, 'No data files changed.'].join('\n')
-  L.push(`proposal_sha256: \`${r.proposal_sha256}\``, '', r.errors.length ? `**${r.errors.length} problem(s).**` : '**Passed.**', '')
+  const cell = (v) => String(v ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ').slice(0, 160)
+  const status = r.errors.length ? `**Failed: ${r.errors.length} problem(s).**` : r.review.length ? `**Passed. ${r.review.length} change(s) need the owner's review before merging** (label \`needs-owner-review\`).` : '**Passed.**'
+  L.push(status, '')
+  if (r.errors.length) { L.push('### Problems', ''); for (const e of r.errors) L.push(`- [${e.rule}] \`${e.id}\` ${e.field}: ${e.msg}`); L.push('') }
+  if (r.review.length) {
+    L.push("### Needs the owner's review", '', 'Sensitive changes. Merging the PR approves them; nothing to fill in.', '')
+    L.push('| id | field | before | after | why |', '|---|---|---|---|---|')
+    for (const x of r.review.slice(0, 300)) L.push(`| \`${x.id}\` | ${x.field} | ${cell(JSON.stringify(x.old))} | ${cell(JSON.stringify(x.new))} | ${x.why} |`)
+    L.push('')
+  }
   if (r.changes.length) {
-    L.push('Check that each quote is about this exact configuration: the checker can only confirm it states the value.', '')
+    L.push('### All changes', '', 'Check that each quote is about this exact configuration: the checker confirms it states the value.', '')
     L.push('| id | field | old | new | source | quote |', '|---|---|---|---|---|---|')
-    const cell = (v) => String(v ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ').slice(0, 140)
-    for (const c of r.changes.slice(0, 200)) {
+    for (const c of r.changes.slice(0, 300)) {
       L.push(`| \`${c.id}\` | ${c.field} | ${cell(JSON.stringify(c.old))} | ${cell(JSON.stringify(c.new))} | ${c.source ? `[${hostOf(c.source)}](${c.source})` : ''} | ${cell(c.quote)} |`)
     }
     L.push('')
   }
-  const other = r.errors.filter((e) => e.rule !== 'approval-needed')
-  if (other.length) { L.push('### Problems', ''); for (const e of other) L.push(`- [${e.rule}] \`${e.id}\` ${e.field}: ${e.msg}`); L.push('') }
-  if (r.exceptions.length) {
-    L.push('### Needs the owner\'s approval', '', 'Run **Approve data exception** (Actions → Approve data exception → Run workflow) once per line, with exactly these inputs, then re-run CI:', '')
-    L.push('| id | field | old | new | base_sha | proposal_sha256 | why |', '|---|---|---|---|---|---|---|')
-    for (const x of r.exceptions) L.push(`| \`${x.id}\` | \`${x.field}\` | \`${x.old}\` | \`${x.new}\` | \`${x.base_sha}\` | \`${x.proposal_sha256}\` | ${x.why} |`)
-    L.push('')
-  }
-  if (r.satisfied.length) { L.push('### Approved', ''); for (const x of r.satisfied) L.push(`- \`${x.id}\` ${x.field}: approved by ${x.approver} (run ${x.run_id})`) }
   return L.join('\n')
 }
 
@@ -358,28 +365,14 @@ async function main() {
   const repo = resolve(arg('--repo', resolve(HERE, '..')))
   const base = arg('--base')
   const head = arg('--head')
-  if (!base || !head) { console.error('usage: validate-diff.mjs --base <sha> --head <sha> [--repo dir] [--approvals github|none|file] [--report file]'); process.exit(2) }
-  const mode = arg('--approvals', 'none')
-  // Evaluate first; read approvals only if some exception actually needs one
-  let r = evaluate({ repo, base, head, approvals: [] })
-  if (r.exceptions.length && mode !== 'none') {
-    let approvals = []
-    if (mode === 'github') {
-      const repoName = process.env.GITHUB_REPOSITORY
-      const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN
-      if (!repoName || !token) { console.error('--approvals github needs GITHUB_REPOSITORY and GH_TOKEN'); process.exit(2) }
-      const loaded = await loadApprovals({ repo: repoName, token })
-      approvals = loaded.approvals
-      if (loaded.rejected.length) console.log(`Ignored approval runs:\n${loaded.rejected.map((x) => `  - ${x}`).join('\n')}`)
-    } else {
-      approvals = JSON.parse(readFileSync(mode, 'utf8'))
-    }
-    r = evaluate({ repo, base, head, approvals })
-  }
+  if (!base || !head) { console.error('usage: validate-diff.mjs --base <sha> --head <sha> [--repo dir] [--report file.md] [--json file.json]'); process.exit(2) }
+  const r = evaluate({ repo, base, head })
   const report = renderReport(r, { base, head })
   console.log(report)
   const out = arg('--report')
   if (out) writeFileSync(out, report + '\n')
+  const json = arg('--json')
+  if (json) writeFileSync(json, JSON.stringify({ errors: r.errors.length, review: r.review.length, dataChanged: r.dataChanged }) + '\n')
   process.exit(r.errors.length ? 1 : 0)
 }
 

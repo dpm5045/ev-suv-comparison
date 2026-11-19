@@ -12,7 +12,7 @@
  * leading apostrophe, so it comes in exactly as stored.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync } from 'node:fs'
 import { dirname, resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -57,8 +57,15 @@ const keysOf = (list) => [...new Set(list.flatMap((r) => Object.keys(r)))]
 const detailKeys = keysOf(data.details)
 write('Details', detailKeys, data.details.map((r) => detailKeys.map((k) => r[k])))
 
-const preownedKeys = keysOf(data.preowned)
-write('Pre-owned', preownedKeys, data.preowned.map((r) => preownedKeys.map((k) => r[k])))
+// The parallel pre-owned table is being retired; when it's gone, /sync-sheet removes its tab
+if (data.preowned) {
+  const preownedKeys = keysOf(data.preowned)
+  write('Pre-owned', preownedKeys, data.preowned.map((r) => preownedKeys.map((k) => r[k])))
+} else if (existsSync(join(out, 'Pre-owned.csv'))) {
+  // A reused export folder must not keep a stale Pre-owned.csv: /sync-sheet reads its absence as "drop the tab"
+  unlinkSync(join(out, 'Pre-owned.csv'))
+  console.log('Pre-owned.csv: removed (the table is retired)')
+}
 
 const countKeys = keysOf(data.count_data)
 write('Model counts', countKeys, [

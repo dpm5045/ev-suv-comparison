@@ -12,7 +12,6 @@
 /scripts/refresh/compat.json              @dpm5045
 /scripts/refresh/can-publish.sh           @dpm5045
 /scripts/refresh/lib/hashes.mjs           @dpm5045
-/scripts/refresh/lib/zip.mjs              @dpm5045
 /scripts/refresh/accepted.json            @dpm5045
 /scripts/refresh/retired-ids.json         @dpm5045
 /docs/migrations/                         @dpm5045

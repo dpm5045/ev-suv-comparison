@@ -5,10 +5,16 @@ name: Data contract
 # a PR cannot edit or skip the check that judges it. The contract script is
 # also run from the PR's base revision.
 #
+# Hard failures: invalid or unsourced data, rules and data changed together, etc.
+# Sensitive changes (protected fields, availability, identity, removals, withdrawn
+# values, schema/top-level content) PASS but are listed for the owner and the PR
+# is labelled `needs-owner-review`. The owner's merge is the approval: there is
+# nothing to fill in (docs/plans/simplify-owner-review.md). Bot PRs with that
+# label never auto-merge (WP-I).
+#
 # Safety: pull_request_target runs with the base repository's context, so this
 # job must never execute code from the PR. It does not check out the PR, does
 # not run npm, and reads the PR's files only as data (`git show <sha>:<path>`).
-# The token is read-only (contents, actions: read).
 #
 # workflow_dispatch lets the automated publishers (WP-I) run the same check on
 # a bot PR's exact head commit; it also runs from the default branch.
@@ -24,14 +30,18 @@ on:
       head_sha:
         description: 'head commit SHA'
         required: true
+      pr:
+        description: 'PR number (for the needs-owner-review label)'
+        required: false
 
 permissions:
   contents: read
-  actions: read     # owner approvals are read from approve-data-exception.yml runs
-  statuses: write   # the result is posted as the `data-contract` status on the PR's own commit
+  statuses: write        # the result is posted as the `data-contract` status on the PR's own commit
+  pull-requests: write   # only to add or remove the `needs-owner-review` label
 
+# One run at a time per PR (dispatched runs pass `pr`), so label updates can't race
 concurrency:
-  group: data-contract-${{ github.event.pull_request.number || inputs.head_sha }}
+  group: data-contract-${{ github.event.pull_request.number || inputs.pr || inputs.head_sha }}
   cancel-in-progress: true
 
 jobs:
@@ -50,8 +60,8 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Check the PR's data against the base revision's rules
+        id: contract
         env:
-          GH_TOKEN: ${{ github.token }}
           BASE: ${{ github.event.pull_request.base.sha || inputs.base_sha }}
           HEAD: ${{ github.event.pull_request.head.sha || inputs.head_sha }}
           PR: ${{ github.event.pull_request.number }}
@@ -70,22 +80,44 @@ jobs:
           [ -f "$RUNNER_TEMP/trusted/scripts/validate-diff.mjs" ] || { echo "the base revision has no data contract" >&2; exit 1; }
           status=0
           node "$RUNNER_TEMP/trusted/scripts/validate-diff.mjs" --repo . --base "$BASE" --head "$HEAD" \
-            --approvals github --report "$RUNNER_TEMP/contract.md" || status=$?
+            --report "$RUNNER_TEMP/contract.md" --json "$RUNNER_TEMP/contract.json" || status=$?
           cat "$RUNNER_TEMP/contract.md" >> "$GITHUB_STEP_SUMMARY"
-          echo "status=$status" >> "$GITHUB_OUTPUT"
+          review=$(node -e 'try { console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).review ?? 0) } catch { console.log(0) }' "$RUNNER_TEMP/contract.json")
+          echo "review=$review" >> "$GITHUB_OUTPUT"
           exit $status
-        id: contract
 
       # pull_request_target runs report against the base branch, so the required result is
       # published here as a commit status on the PR's exact head commit (context: data-contract).
-      - name: Publish the result on the PR's commit
+      - name: Publish the result on the PR's commit, and flag owner review
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
           HEAD: ${{ github.event.pull_request.head.sha || inputs.head_sha }}
+          PR: ${{ github.event.pull_request.number || inputs.pr }}
           OUTCOME: ${{ steps.contract.outcome }}
+          REVIEW: ${{ steps.contract.outputs.review }}
           URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
+          repo="${{ github.repository }}"
           state=failure; desc="Data contract failed: see the run summary"
-          [ "$OUTCOME" = success ] && { state=success; desc="Data contract passed"; }
-          gh api "repos/${{ github.repository }}/statuses/$HEAD" -f state="$state" -f context=data-contract -f description="$desc" -f target_url="$URL" >/dev/null
+          if [ "$OUTCOME" = success ]; then
+            state=success
+            if [ "${REVIEW:-0}" -gt 0 ]; then desc="Passed: $REVIEW change(s) need the owner's review (merge to approve)"; else desc="Data contract passed"; fi
+            # The needs-owner-review label goes on BEFORE success is published, and only while the
+            # PR still points at the commit that was checked (a stale run must not touch the label).
+            # If labelling fails, the result is failure, so a sensitive PR is never "passed" unlabelled.
+            if [ -n "$PR" ]; then
+              current=$(gh api "repos/$repo/pulls/$PR" --jq .head.sha)
+              if [ "$current" = "$HEAD" ]; then
+                if [ "${REVIEW:-0}" -gt 0 ]; then
+                  gh api "repos/$repo/labels" -f name=needs-owner-review -f color=FBCA04 -f description="Sensitive data changes: the owner reviews before merging (bots never auto-merge these)" >/dev/null 2>&1 || true
+                  gh api "repos/$repo/issues/$PR/labels" -f "labels[]=needs-owner-review" >/dev/null || { state=failure; desc="Could not add the needs-owner-review label; re-run"; }
+                else
+                  gh api -X DELETE "repos/$repo/issues/$PR/labels/needs-owner-review" >/dev/null 2>&1 || true
+                fi
+              else
+                echo "PR #$PR moved on ($current); leaving its label to the newer run." >> "$GITHUB_STEP_SUMMARY"
+              fi
+            fi
+          fi
+          gh api "repos/$repo/statuses/$HEAD" -f state="$state" -f context=data-contract -f description="$desc" -f target_url="$URL" >/dev/null
