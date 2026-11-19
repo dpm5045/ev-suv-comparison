@@ -1418,6 +1418,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 EQS 680 4matic Maybach (SUV): 321 mi",
         "legacy": "name_keyed"
+      },
+      "seats": {
+        "source_url": "https://www.mbusa.com/en/vehicles/model/eqs/suv/eqs680z4",
+        "verified_on": "2026-11-19",
+        "evidence": "Interior Dimensions: Passenger capacity 5 (4 optional). (Current mbusa.com page, 2026 model; the 2024 Maybach EQS SUV has the same two-row cabin, per this row's notes.)",
+        "value": 5,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2025-maybach-eqs-680-4matic": {
@@ -1426,6 +1434,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 EQS 680 4matic Maybach (SUV): 302 mi",
         "legacy": "name_keyed"
+      },
+      "seats": {
+        "source_url": "https://www.mbusa.com/en/vehicles/model/eqs/suv/eqs680z4",
+        "verified_on": "2026-11-19",
+        "evidence": "Interior Dimensions: Passenger capacity 5 (4 optional). (Current mbusa.com page, 2026 model; the 2025 Maybach EQS SUV has the same two-row cabin, per this row's notes.)",
+        "value": 5,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2026-eqs-400-4matic": {
@@ -1844,6 +1860,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 EQS 680 4matic Maybach (SUV): 300 mi",
         "legacy": "name_keyed"
+      },
+      "seats": {
+        "source_url": "https://www.mbusa.com/en/vehicles/model/eqs/suv/eqs680z4",
+        "verified_on": "2026-11-19",
+        "evidence": "Interior Dimensions: Passenger capacity 5 (4 optional)",
+        "value": 5,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "vinfast-vf9-2025-plus-7-seat": {
@@ -2104,6 +2128,28 @@
         "verified_on": "2026-11-16",
         "evidence": "PREMIUM SPORT From: $148,205",
         "legacy": "name_keyed"
+      }
+    },
+    "mercedes-benz-glb-electric-2027-glb-250-plus-expected": {
+      "notes": {
+        "source_url": "https://www.mbusa.com/en/future-vehicles",
+        "verified_on": "2026-11-19",
+        "evidence": "Moved from range_mi, unchanged: TBD (~315 est)",
+        "value": "MY2027 electric GLB (GLB with EQ Technology). US sales start fall 2026; hybrid follows early 2027. Shares an 85 kWh, 800V platform across both trims. Third row is an option (5-seat is standard); Mercedes says it suits people up to about 5 ft 6 in. No official US pricing yet: Consumer Reports lists a $48,900-$52,600 range, other sources disagree. Range is an unconfirmed estimate (EPA pending). Range: TBD (~315 est)",
+        "method": "moved",
+        "moved_from": "range_mi",
+        "method_version": 1
+      }
+    },
+    "mercedes-benz-glb-electric-2027-glb-350-4matic-expected": {
+      "notes": {
+        "source_url": "https://www.mbusa.com/en/future-vehicles",
+        "verified_on": "2026-11-19",
+        "evidence": "Moved from range_mi, unchanged: TBD (~315 est)",
+        "value": "MY2027 electric GLB (GLB with EQ Technology). US sales start fall 2026; hybrid follows early 2027. Shares an 85 kWh, 800V platform across both trims. Third row is an option (5-seat is standard); Mercedes says it suits people up to about 5 ft 6 in. No official US pricing yet: Consumer Reports lists a $48,900-$52,600 range, other sources disagree. Range is an unconfirmed estimate (EPA pending). Range: TBD (~315 est)",
+        "method": "moved",
+        "moved_from": "range_mi",
+        "method_version": 1
       }
     }
   }
