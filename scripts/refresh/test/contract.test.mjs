@@ -19,11 +19,13 @@ const read = (repo, p) => JSON.parse(readFileSync(join(repo, p), 'utf8'))
 const write = (repo, p, v) => { mkdirSync(dirname(join(repo, p)), { recursive: true }); writeFileSync(join(repo, p), JSON.stringify(v, null, 2) + '\n') }
 
 /** A temp repo with today's data committed as base; mutate() edits files for the head commit. */
-function scenario(mutate, { extraFiles = {} } = {}) {
+function scenario(mutate, { extraFiles = {}, prep } = {}) {
   const repo = mkdtempSync(join(tmpdir(), 'contract-'))
   git(repo, 'init', '-q')
   git(repo, 'config', 'user.email', 't@example.com'); git(repo, 'config', 'user.name', 't')
-  for (const f of FILES) write(repo, f, JSON.parse(readFileSync(join(ROOT, f), 'utf8')))
+  const baseFiles = Object.fromEntries(FILES.map((f) => [f, JSON.parse(readFileSync(join(ROOT, f), 'utf8'))]))
+  if (prep) prep(baseFiles) // shape the base (e.g. bring back data that today's master no longer has)
+  for (const [f, v] of Object.entries(baseFiles)) write(repo, f, v)
   git(repo, 'add', '-A'); git(repo, 'commit', '-qm', 'base')
   const base = git(repo, 'rev-parse', 'HEAD')
   const files = Object.fromEntries(FILES.map((f) => [f, read(repo, f)]))
@@ -50,6 +52,24 @@ const rec = (files, id, field, value, extra = {}) => {
 }
 const EV9 = 'kia-ev9-2026-gt-line'
 const EV9_NEW = 'kia-ev9-2027-gt-line'
+const GLB = 'mercedes-benz-glb-electric-2027-glb-250-plus-expected'
+const GLB_EST = 'TBD (~315 est)'
+
+/** Base with a parallel preowned table (removed from master in WP-F step 3), one entry per name, agreeing with details. */
+const withTable = (f) => {
+  const d = f['lib/ev-data.json']
+  const seen = new Set()
+  d.preowned = d.details.filter((r) => !seen.has(r.name) && seen.add(r.name)).map((r) => ({ name: r.name, vehicle: r.vehicle, year: r.year, trim: r.trim, preowned_range: r.preowned_range }))
+}
+/** Base where the GLB still holds its range estimate in range_mi (as before WP-F step 3). */
+const withGlbEstimate = (f) => {
+  const x = row(f, GLB)
+  x.range_mi = GLB_EST
+  x.notes = x.notes.replace(` Range: ${GLB_EST}`, '')
+  delete f['lib/ev-data.provenance.json'].fields[GLB]?.notes
+  f['scripts/schema/known-violations.json'].violations.push(`type|${GLB}|range_mi|${JSON.stringify(GLB_EST)}`)
+}
+const glbBaseline = (f) => { const kv = f['scripts/schema/known-violations.json']; kv.violations = kv.violations.filter((k) => !k.startsWith(`type|${GLB}|range_mi|`)) }
 
 test('today\'s data passes the full-state contract (known violations are baselined)', () => {
   const j = (p) => JSON.parse(readFileSync(join(ROOT, p), 'utf8'))
@@ -68,7 +88,7 @@ test('audit: a $1 - $2 used price fails', () => {
   assert.ok(rules(run((f) => { row(f, EV9).preowned_range = '$1 - $2' })).includes('preowned-bounds'))
 })
 test('audit: deleting a preowned table entry is flagged for review', () => {
-  const r = run((f) => { f['lib/ev-data.json'].preowned.pop() })
+  const r = run((f) => { f['lib/ev-data.json'].preowned.pop() }, { prep: withTable })
   assert.ok(r.review.some((x) => x.field.startsWith('preowned:')))
 })
 test('audit: seats 99 is flagged for review and still needs a source', () => {
@@ -206,32 +226,28 @@ test('withdrawing a value (to null) is a review item; a sourced record can go wi
 })
 test('normalizing a no-market phrasing to "No used market yet" is a review item, not an evidence demand', () => {
   const id = 'kia-ev9-2027-light'
+  const OLD = 'No meaningful used market yet'
   const r = run((f) => {
-    const x = row(f, id); const old = x.preowned_range
-    x.preowned_range = 'No used market yet'
+    row(f, id).preowned_range = 'No used market yet'
     const kv = f['scripts/schema/known-violations.json']
-    kv.violations = kv.violations.filter((k) => k !== `preowned-format|${id}|preowned_range|${JSON.stringify(old)}`)
-    const t = f['lib/ev-data.json'].preowned.find((p) => p.name === x.name); if (t) t.preowned_range = 'No used market yet'
-  })
+    kv.violations = kv.violations.filter((k) => k !== `preowned-format|${id}|preowned_range|${JSON.stringify(OLD)}`)
+  }, { prep: (f) => { row(f, id).preowned_range = OLD; f['scripts/schema/known-violations.json'].violations.push(`preowned-format|${id}|preowned_range|${JSON.stringify(OLD)}`) } })
   assert.deepEqual(r.errors, [])
   assert.ok(reviewed(r, id, 'preowned_range'))
 })
 test('moving a TBD estimate into notes passes end to end (withdrawal flagged for review)', () => {
-  const id = 'mercedes-benz-glb-electric-2027-glb-250-plus-expected'
   const r = run((f) => {
-    const x = row(f, id); const est = x.range_mi
-    assert.match(est, /315/)
+    const x = row(f, GLB)
     x.range_mi = 'TBD'
-    x.notes = `${x.notes}${x.notes ? ' ' : ''}Range: ${est}`
-    rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi', source_url: f['lib/ev-data.provenance.json'].fields[id]?.range_mi?.source_url ?? 'https://www.mbusa.com/en/future-vehicles' })
-    const kv = f['scripts/schema/known-violations.json']
-    kv.violations = kv.violations.filter((k) => !k.startsWith(`type|${id}|range_mi|`))
-  })
+    x.notes = `${x.notes}${x.notes ? ' ' : ''}Range: ${GLB_EST}`
+    rec(f, GLB, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi', source_url: f['lib/ev-data.provenance.json'].fields[GLB]?.range_mi?.source_url ?? 'https://www.mbusa.com/en/future-vehicles' })
+    glbBaseline(f)
+  }, { prep: withGlbEstimate })
   assert.deepEqual(r.errors, [])
-  assert.ok(reviewed(r, id, 'range_mi'))
+  assert.ok(reviewed(r, GLB, 'range_mi'))
 })
 test('removing the whole preowned table is one review item', () => {
-  const r = run((f) => { delete f['lib/ev-data.json'].preowned })
+  const r = run((f) => { delete f['lib/ev-data.json'].preowned }, { prep: withTable })
   assert.deepEqual(r.errors, [])
   assert.ok(reviewed(r, '-', 'preowned'))
 })
@@ -282,10 +298,12 @@ test('a duplicate count row fails, and later years are counted', () => {
 })
 test('a baseline exemption covers only the original bad value', () => {
   const id = 'bmw-ix7-2027-xdrive50-expected'
-  assert.ok(run((f) => { row(f, id).hp = 'TBD (~580 est)' }).errors.some((e) => e.rule === 'type' && e.id === id && e.field === 'hp'))
+  // Base: the old estimate is baselined; head swaps it for a different bad value
+  const prep = (f) => { row(f, id).hp = 'TBD (~570 est)'; f['scripts/schema/known-violations.json'].violations.push(`type|${id}|hp|"TBD (~570 est)"`) }
+  assert.ok(run((f) => { row(f, id).hp = 'TBD (~580 est)' }, { prep }).errors.some((e) => e.rule === 'type' && e.id === id && e.field === 'hp'))
 })
 test('a preowned table entry that matches no details row fails while the table exists', () => {
-  const r = run((f) => { f['lib/ev-data.json'].preowned[0].preowned_range = '$41,000 - $47,000' })
+  const r = run((f) => { f['lib/ev-data.json'].preowned[0].preowned_range = '$41,000 - $47,000' }, { prep: withTable })
   assert.ok(rules(r).includes('preowned-table-mismatch'))
 })
 test('a details used-price change must keep the preowned table in agreement', () => {
@@ -293,11 +311,11 @@ test('a details used-price change must keep the preowned table in agreement', ()
     const d = f['lib/ev-data.json']
     const entry = d.preowned.find((p) => d.details.filter((x) => x.name === p.name).length === 1 && d.details.find((x) => x.name === p.name).preowned_range === p.preowned_range)
     d.details.find((y) => y.name === entry.name).preowned_range = '$40,000 - $48,000'
-  })
+  }, { prep: withTable })
   assert.ok(rules(r).includes('preowned-table-disagree'))
 })
 test('a duplicated preowned table name cannot hide an entry', () => {
-  const r = run((f) => { const d = f['lib/ev-data.json']; d.preowned.unshift({ ...d.preowned[0], preowned_range: '$1 - $2' }) })
+  const r = run((f) => { const d = f['lib/ev-data.json']; d.preowned.unshift({ ...d.preowned[0], preowned_range: '$1 - $2' }) }, { prep: withTable })
   assert.ok(rules(r).includes('preowned-table-duplicate'))
 })
 test('an unsupported schema version fails (rules first, then data); the change is listed for review', () => {
@@ -308,14 +326,14 @@ test('an unsupported schema version fails (rules first, then data); the change i
 
 // ── Moves ──
 test('a moved record cannot target a numeric field or rewrite the old text', () => {
-  const id = 'mercedes-benz-glb-electric-2027-glb-250-plus-expected'
-  assert.ok(run((f) => { row(f, id).hp = 300; rec(f, id, 'hp', 300, { method: 'moved', moved_from: 'range_mi' }) }).errors.some((e) => e.rule === 'evidence-moved'))
-  const rewrite = run((f) => { const x = row(f, id); x.notes = 'Mercedes estimates ~315 mi.'; rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi' }) })
+  const id = GLB
+  assert.ok(run((f) => { row(f, id).hp = 300; rec(f, id, 'hp', 300, { method: 'moved', moved_from: 'range_mi' }) }, { prep: withGlbEstimate }).errors.some((e) => e.rule === 'evidence-moved'))
+  const rewrite = run((f) => { const x = row(f, id); x.notes = 'Mercedes estimates ~315 mi.'; rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi' }) }, { prep: withGlbEstimate })
   assert.ok(rewrite.errors.some((e) => e.rule === 'evidence-moved' && /keep its old text/.test(e.msg)))
 })
 test('a moved record cannot bring a new claim along', () => {
-  const id = 'mercedes-benz-glb-electric-2027-glb-250-plus-expected'
-  const r = run((f) => { const x = row(f, id); const est = x.range_mi; x.range_mi = 'TBD'; x.notes = `${x.notes} Range: ${est}, 0-60 in 5.9 s`; rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi' }) })
+  const id = GLB
+  const r = run((f) => { const x = row(f, id); x.range_mi = 'TBD'; x.notes = `${x.notes} Range: ${GLB_EST}, 0-60 in 5.9 s`; rec(f, id, 'notes', x.notes, { method: 'moved', moved_from: 'range_mi' }); glbBaseline(f) }, { prep: withGlbEstimate })
   assert.ok(r.errors.some((e) => e.rule === 'evidence-moved' && /new claim/.test(e.msg)))
 })
 

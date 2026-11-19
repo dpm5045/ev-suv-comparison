@@ -172,6 +172,13 @@ describe('against the real data', () => {
   const run = (condition: 'new' | 'preowned', budget: string, p1: string, p2: string) =>
     rankConfigurations(eligibleRows(DATA.details, { condition, budget, sixSeat: false, dataYear, exclude: isWatchlistVehicle, minSeats: MIN_SPEED_DATING_SEATS }), p1, p2, condition)
 
+  it('keeps the two-row Maybach EQS SUV (5 seats) out of three-row results', () => {
+    for (const condition of ['new', 'preowned'] as const) {
+      const ids = eligibleRows(DATA.details, { condition, budget: 'all', sixSeat: false, dataYear, exclude: isWatchlistVehicle, minSeats: MIN_SPEED_DATING_SEATS }).map((r) => r.id)
+      expect(ids.filter((id) => id.includes('maybach'))).toEqual([])
+    }
+  })
+
   it('New + Any price (/?condition=new&budget=all&pref1=range&pref2=power) has no used-only configuration', () => {
     const ranked = run('new', 'all', 'range', 'power')
     expect(ranked.length).toBeGreaterThan(0)
