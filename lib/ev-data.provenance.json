@@ -1420,9 +1420,9 @@
         "legacy": "name_keyed"
       },
       "seats": {
-        "source_url": "https://www.mbusa.com/en/vehicles/model/eqs/suv/eqs680z4",
+        "source_url": "https://www.kbb.com/mercedes-benz/mercedes-maybach-eqs-suv/2024/eqs-680-4matic-sport-utility-4d/",
         "verified_on": "2026-11-19",
-        "evidence": "Interior Dimensions: Passenger capacity 5 (4 optional). (Current mbusa.com page, 2026 model; the 2024 Maybach EQS SUV has the same two-row cabin, per this row's notes.)",
+        "evidence": "Max Seating Capacity 5",
         "value": 5,
         "method": "observed",
         "method_version": 1
@@ -1436,9 +1436,9 @@
         "legacy": "name_keyed"
       },
       "seats": {
-        "source_url": "https://www.mbusa.com/en/vehicles/model/eqs/suv/eqs680z4",
+        "source_url": "https://www.kbb.com/mercedes-benz/mercedes-maybach-eqs-suv/2025/eqs-680-4matic-sport-utility-4d/",
         "verified_on": "2026-11-19",
-        "evidence": "Interior Dimensions: Passenger capacity 5 (4 optional). (Current mbusa.com page, 2026 model; the 2025 Maybach EQS SUV has the same two-row cabin, per this row's notes.)",
+        "evidence": "Max Seating Capacity 5",
         "value": 5,
         "method": "observed",
         "method_version": 1

@@ -8,13 +8,18 @@
  * 1. One phrasing for "no used market": every variant becomes "No used market yet".
  * 2. TBD estimates leave the numeric fields (they hold exactly "TBD"):
  *    - Mercedes GLB Electric range: "TBD (~315 est)" moves verbatim into notes (moved record);
- *    - BMW iX7 range/hp/battery and Faraday FX Super One hp: the notes already state
- *      these estimates, so the fields just become "TBD" (withdrawal).
+ *    - BMW iX7 range/hp/battery and Faraday FX Super One hp: these estimates are WITHDRAWN
+ *      (fields become "TBD", flagged for owner review). They had no source record, and the
+ *      BMW ones contradicted the row's own notes (notes: ~120 kWh, ~350 mi; fields: ~150+ kWh,
+ *      ~350-400 mi; the xDrive50's ~570 hp is in neither). Showing "TBD" until BMW publishes
+ *      figures is more honest than keeping an unsourced guess. (A notes "move" can carry only
+ *      one source field, so three estimates could not be moved verbatim.)
  * 3. Third row: on 5-seat rows, legroom and headroom become "N/A" (no third row).
  * 4. 6-seat Model X (2021-22): third-row cargo "N/A" becomes null: the row has a
  *    third row, the figure is missing (protected field; flagged for owner review).
- * 5. Maybach EQS 680 SUV (2024-26): seats 7 -> 5, sourced from mbusa.com
- *    ("Passenger capacity 5 (4 optional)"); protected, flagged for owner review.
+ * 5. Maybach EQS 680 SUV (2024-26): seats 7 -> 5, each year sourced on its own model-year page:
+ *    2026 mbusa.com ("Passenger capacity 5 (4 optional)"), 2024 and 2025 kbb.com
+ *    ("Max Seating Capacity 5"); protected, flagged for owner review.
  * 6. The parallel `preowned` table is removed (no page reads it; each row keeps preowned_range).
  * 7. The known-violations baseline is emptied, and last_updated bumped.
  */
@@ -70,7 +75,7 @@ for (const [id, fields] of [
   const r = byId.get(id)
   for (const f of fields) {
     if (!/^TBD \(.+\)$/.test(r[f])) throw new Error(`${id}: unexpected ${f} ${r[f]}`)
-    log.push(`${id}: ${f} ${r[f]} -> "TBD" (the notes already state the estimate)`)
+    log.push(`${id}: ${f} ${r[f]} -> "TBD" (unsourced estimate withdrawn)`)
     r[f] = 'TBD'
   }
 }
@@ -98,16 +103,14 @@ for (const id of ['mercedes-benz-eqs-suv-2024-maybach-eqs-680-4matic', 'mercedes
   r.seats = 5
   const year = r.year
   ;(prov.fields[id] ??= {}).seats = {
-    source_url: MAYBACH_URL,
+    source_url: year === 2026 ? MAYBACH_URL : `https://www.kbb.com/mercedes-benz/mercedes-maybach-eqs-suv/${year}/eqs-680-4matic-sport-utility-4d/`,
     verified_on: TODAY,
-    evidence: year === 2026
-      ? 'Interior Dimensions: Passenger capacity 5 (4 optional)'
-      : `Interior Dimensions: Passenger capacity 5 (4 optional). (Current mbusa.com page, 2026 model; the ${year} Maybach EQS SUV has the same two-row cabin, per this row's notes.)`,
+    evidence: year === 2026 ? 'Interior Dimensions: Passenger capacity 5 (4 optional)' : 'Max Seating Capacity 5',
     value: 5,
     method: 'observed',
     method_version: 1,
   }
-  log.push(`${id}: seats 7 -> 5 (mbusa.com: Passenger capacity 5 (4 optional))`)
+  log.push(`${id}: seats 7 -> 5 (${year === 2026 ? 'mbusa.com' : 'kbb.com'})`)
 }
 
 // 6. Remove the parallel preowned table
