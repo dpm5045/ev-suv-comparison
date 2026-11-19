@@ -85,7 +85,8 @@ if [ "$remote" != "$base" ]; then
   say "$default moved since this run started ($base -> $remote); nothing published. The next run starts fresh."
   finish failed; exit 1
 fi
-branch="data-refresh/$producer-$(date -u +%F)-${GITHUB_RUN_ID:-local}"
+# Run id and attempt: a re-run never collides with a branch a failed attempt left behind
+branch="data-refresh/$producer-$(date -u +%F)-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}"
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 git checkout -q -b "$branch"

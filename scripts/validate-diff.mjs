@@ -280,10 +280,11 @@ export function evaluate({ repo, base, head }) {
     if (!m || Number(m[2].replace(/,/g, '')) !== rec.new_avg) return bad(`the evidence must be the CarGurus row "<label>: $<average>" stating ${rec.new_avg}`)
     const labelYear = /^(\d{4})\s/.exec(m[1])?.[1]
     if (rec.basis === 'model_year' ? labelYear !== year : labelYear !== undefined) return bad(`the quoted row "${m[1]}" is not the ${rec.basis === 'model_year' ? `${year} model-year` : 'model-wide'} row`)
-    // ...and names this model: CarGurus' label ("EV9", "ID.Buzz", "EQS SUV") is part of our vehicle name, ignoring punctuation
-    const norm = (t) => String(t).toLowerCase().replace(/[^a-z0-9]/g, '')
+    // ...and names this model: CarGurus' label ("EV9", "ID.Buzz", "EQS SUV") is how our vehicle
+    // name ends, ignoring punctuation and any "(...)" note, so a brand alone ("Tesla") never matches
+    const norm = (t) => String(t).toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z0-9]/g, '')
     const model = norm(m[1].replace(/^\d{4}\s+/, ''))
-    if (!model || !norm(row.vehicle).includes(model)) return bad(`the quoted row "${m[1]}" does not name ${row.vehicle}`)
+    if (!model || !norm(row.vehicle).endsWith(model)) return bad(`the quoted row "${m[1]}" does not name ${row.vehicle}`)
     if (!parseRange(before)) return bad(`only a priced range can be scaled (was ${JSON.stringify(before ?? null)})`)
     const move = rec.new_avg / rec.prev_avg - 1
     if (Math.abs(move) < THRESHOLD) return bad(`a ${(move * 100).toFixed(2)}% move is under the ${THRESHOLD * 100}% repricing threshold`)

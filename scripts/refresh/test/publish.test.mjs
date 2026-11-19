@@ -61,7 +61,7 @@ test('publish: runs both checks on the exact commit, then merges bound to it', (
     const c = s.calls()
     const head = git(s.work, 'rev-parse', 'HEAD')
     const base = git(s.work, 'rev-parse', 'master')
-    assert.match(git(s.work, 'branch', '--show-current'), /^data-refresh\/preowned-\d{4}-\d{2}-\d{2}-99$/)
+    assert.match(git(s.work, 'branch', '--show-current'), /^data-refresh\/preowned-\d{4}-\d{2}-\d{2}-99-1$/)
     assert.ok(s.remoteBranches().some((b) => b.startsWith('data-refresh/preowned-')))
     assert.ok(has(c, 'workflow', 'run', 'ci.yml', '--ref'))
     assert.deepEqual(find(c, 'workflow', 'run', 'data-contract.yml').slice(3), ['-f', `base_sha=${base}`, '-f', `head_sha=${head}`, '-f', 'pr=7'])
