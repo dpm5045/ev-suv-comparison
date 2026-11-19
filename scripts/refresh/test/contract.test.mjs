@@ -55,11 +55,16 @@ const EV9_NEW = 'kia-ev9-2027-gt-line'
 const GLB = 'mercedes-benz-glb-electric-2027-glb-250-plus-expected'
 const GLB_EST = 'TBD (~315 est)'
 
-/** Base with a parallel preowned table (removed from master in WP-F step 3), one entry per name, agreeing with details. */
+/**
+ * Base with a parallel preowned table (removed from master in WP-F step 3), in its legacy
+ * shape (one entry per display name). Built only from trims whose name belongs to a single
+ * id, so seat variants sharing a name never have to be tie-broken.
+ */
 const withTable = (f) => {
   const d = f['lib/ev-data.json']
-  const seen = new Set()
-  d.preowned = d.details.filter((r) => !seen.has(r.name) && seen.add(r.name)).map((r) => ({ name: r.name, vehicle: r.vehicle, year: r.year, trim: r.trim, preowned_range: r.preowned_range }))
+  const ids = new Map()
+  for (const r of d.details) ids.set(r.name, (ids.get(r.name) ?? 0) + 1)
+  d.preowned = d.details.filter((r) => ids.get(r.name) === 1).map((r) => ({ name: r.name, vehicle: r.vehicle, year: r.year, trim: r.trim, preowned_range: r.preowned_range }))
 }
 /** Base where the GLB still holds its range estimate in range_mi (as before WP-F step 3). */
 const withGlbEstimate = (f) => {
