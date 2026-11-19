@@ -243,12 +243,18 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+      # The default branch as it is now (another publisher may have merged during research);
+      # the PR's own checks then re-validate the agent's patch against it
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: agent-handover
           path: ${{ runner.temp }}/handover
       # No npm here: this job can write to the repo, so no package code runs in it.
+      - name: Tidy leftover deferral PRs
+        run: bash scripts/refresh/tidy-prs.sh deferrals
       - name: Open the PR (owner review for site data; deferrals merge themselves)
         id: publish
         run: |
@@ -268,6 +274,10 @@ jobs:
               --allow 'scripts/refresh/state/deferred\.json' \
               --title "Data agent: record deferrals $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md"
           fi
+
+      - name: Keep owner PRs current after this merge
+        if: steps.publish.outputs.outcome == 'merged'
+        run: bash scripts/refresh/tidy-prs.sh deferrals --owner-prs-only
 
       # Only once the work has a home: an owner PR whose checks passed, merged deferrals, or nothing to do.
       # A failed publish fails the job before this, so the issue stays open for the next run.

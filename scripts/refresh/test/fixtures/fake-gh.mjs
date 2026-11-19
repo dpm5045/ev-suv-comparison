@@ -5,7 +5,8 @@
 //   paused:   [bool, ...]  successive reads of publish-control.json (the last value repeats)
 //   build:    "completed:success" (check-runs), contract: "success" (commit status)
 //   labels:   "a,b"        heads: [sha, ...] successive headRefOid reads
-//   mergeFails, updateFails: bool    prs: "tsv lines" (gh pr list)
+//   mergeFails, updateFails: bool    prs: lines of fields joined by \x1f (gh pr list)
+//   behind: {sha: n} commits behind the default branch   buildRuns: {sha: n}   contracts: {sha: state}
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs'
 
 const args = process.argv.slice(2)
@@ -20,7 +21,10 @@ const [cmd, sub] = args
 if (cmd === 'api') {
   const path = sub
   if (path.includes('/contents/scripts/refresh/publish-control.json')) print(JSON.stringify({ paused: next('paused', false), reason: 'test' }))
+  else if (path.includes('/compare/')) print(st.behind?.[path.split('...')[1]] ?? 0)
+  else if (path.endsWith('/check-runs') && args.some((a) => a.includes('length'))) print(st.buildRuns?.[path.split('/')[4]] ?? 1)
   else if (path.endsWith('/check-runs')) print(st.build ?? 'completed:success')
+  else if (path.endsWith('/status') && st.contracts) print(st.contracts[path.split('/')[4]] ?? '')
   else if (path.endsWith('/status')) print(st.contract ?? 'success')
   else if (/\/commits\/[^/]+$/.test(path)) print('0123456789abcdef0123456789abcdef01234567')
   else if (/^repos\/[^/]+\/[^/]+$/.test(path)) print('master')

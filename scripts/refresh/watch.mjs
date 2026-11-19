@@ -10,14 +10,14 @@
  *   node scripts/refresh/watch.mjs                  # dry run: report only
  *   node scripts/refresh/watch.mjs --apply          # also save state
  *   node scripts/refresh/watch.mjs --report out.md
- *   node scripts/refresh/watch.mjs --apply --fix-ranges   # also correct range_mi where EPA settles it
+ *   node scripts/refresh/watch.mjs --apply --fix-ranges   # DISABLED (see below): would correct range_mi from EPA
  *   node scripts/refresh/watch.mjs --attention out.md     # the "Needs a look" items alone, for the inbox
  *   node scripts/refresh/watch.mjs --save-snapshots dir | --from-snapshots dir
  *
  * --apply writes scripts/refresh/state/watch.json (what was seen, for the next
  * run to compare against). It no longer writes range sources to
  * lib/ev-data.provenance.json (docs/plans/resume-publishing.md §2).
- * With --fix-ranges it also writes lib/ev-data.json, changing only range_mi
+ * --fix-ranges is disabled for now (no source records yet). It would write lib/ev-data.json, changing only range_mi
  * (and last_updated) on rows planRangeFixes can settle from EPA alone.
  *
  * Items listed in scripts/refresh/state/deferred.json are left out of the
@@ -49,7 +49,13 @@ const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : n
 const apply = flag('--apply')
 const reportPath = option('--report')
 const attentionPath = option('--attention')
-const fixRanges = flag('--fix-ranges') && apply // without --apply the report shows what would change
+// Range fixes stay off until they write a sourced, id-keyed provenance record with each change
+// (reviewed EPA mappings; docs/plans/resume-publishing.md §5). A fix without one fails the data contract.
+if (flag('--fix-ranges') && apply) {
+  console.error('--fix-ranges is disabled: it would change range_mi without a valid source record. The report lists what it would fix.')
+  process.exit(2)
+}
+const fixRanges = false
 const saveDir = option('--save-snapshots')
 const fromDir = option('--from-snapshots')
 const today = option('--today') ?? new Date().toISOString().slice(0, 10)

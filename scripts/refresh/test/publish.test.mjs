@@ -174,13 +174,15 @@ test('publish --rehearsal: merges bookkeeping even while paused, and nothing els
   } finally { t.done() }
 })
 
+const prLines = (...rows) => rows.map((r) => r.join('\x1f')).join('\n')
+
 test('tidy: closes its own leftover auto PR, keeps owner PRs (updating them when behind), and waits for them', () => {
-  const prs = [
-    ['11', 'data-refresh/preowned-2026-11-16-1', '', 'auto', 'CLEAN', 'u11'], // own leftover: closed
-    ['12', 'data-refresh/watch-2026-11-16-2', '', 'auto', 'CLEAN', 'u12'], // another producer's: untouched
-    ['13', 'data-refresh/agent-2026-11-16-3', '', 'owner', 'BEHIND', 'u13'], // owner, behind: updated + re-checked
-  ].map((r) => r.join('\x1f')).join('\n')
-  const s = setup({ prs, heads: ['old', 'new'] })
+  const prs = prLines(
+    ['11', 'data-refresh/preowned-2026-11-16-1', 'h11', '', 'auto', 'u11'], // own leftover: closed
+    ['12', 'data-refresh/watch-2026-11-16-2', 'h12', '', 'auto', 'u12'], // another producer's: untouched
+    ['13', 'data-refresh/agent-2026-11-16-3', 'old', '', 'owner', 'u13'], // owner, behind: updated + re-checked
+  )
+  const s = setup({ prs, behind: { old: 2 }, heads: ['new'], buildRuns: { new: 0 }, contracts: {} })
   try {
     const r = s.tidy('preowned', '--wait-for-agent')
     assert.equal(r.status, 0, r.stderr)
@@ -194,14 +196,43 @@ test('tidy: closes its own leftover auto PR, keeps owner PRs (updating them when
   } finally { s.done() }
 })
 
+test('tidy: an up-to-date owner PR gets only its missing checks; after a merge it only refreshes owner PRs', () => {
+  const s = setup({ prs: prLines(['31', 'data-refresh/agent-2026-11-16-1', 'h31', '', 'owner', 'u31']), buildRuns: { h31: 1 }, contracts: {} })
+  try {
+    assert.equal(s.tidy('watch').status, 0)
+    const c = s.calls()
+    assert.ok(!has(c, 'pr', 'update-branch'))
+    assert.ok(!has(c, 'workflow', 'run', 'ci.yml')) // build already reported
+    assert.ok(c.some((x) => x[2] === 'data-contract.yml' && x.includes('head_sha=h31')))
+  } finally { s.done() }
+  const after = setup({ prs: prLines(['41', 'data-refresh/watch-2026-11-16-1', 'h41', '', 'auto', 'u41'], ['42', 'data-refresh/agent-2026-11-16-1', 'h42', '', 'owner', 'u42']), behind: { h42: 1 }, heads: ['h42b'] })
+  try {
+    assert.equal(after.tidy('watch', '--owner-prs-only').status, 0)
+    const c = after.calls()
+    assert.ok(!has(c, 'pr', 'close')) // its own auto PR is the one that just merged; nothing to close
+    assert.ok(has(c, 'pr', 'update-branch', '42'))
+    assert.equal(after.outputs().skip, 'no')
+  } finally { after.done() }
+})
+
+test('tidy: while paused it changes nothing', () => {
+  const s = setup({ paused: [true], prs: prLines(['51', 'data-refresh/preowned-2026-11-16-1', 'h51', '', 'auto', 'u51'], ['52', 'data-refresh/agent-x', 'h52', '', 'owner', 'u52']), behind: { h52: 3 } })
+  try {
+    assert.equal(s.tidy('preowned').status, 0)
+    const c = s.calls()
+    assert.ok(!has(c, 'pr', 'close') && !has(c, 'pr', 'update-branch') && !has(c, 'workflow', 'run'))
+    assert.equal(s.outputs().skip, 'no')
+  } finally { s.done() }
+})
+
 test('tidy: a flagged PR of its own blocks the producer; nothing open means go', () => {
-  const flagged = setup({ prs: ['21', 'data-refresh/preowned-2026-11-16-1', 'needs-owner-review', 'auto', 'CLEAN', 'u21'].join('\x1f') })
+  const flagged = setup({ prs: prLines(['21', 'data-refresh/preowned-2026-11-16-1', 'h21', 'needs-owner-review', 'auto', 'u21']) })
   try {
     assert.equal(flagged.tidy('preowned').status, 0)
     assert.ok(!has(flagged.calls(), 'pr', 'close'))
     assert.equal(flagged.outputs().skip, 'yes')
   } finally { flagged.done() }
-  const agentOnly = setup({ prs: ['22', 'data-refresh/agent-2026-11-16-1', '', 'owner', 'CLEAN', 'u22'].join('\x1f') })
+  const agentOnly = setup({ prs: prLines(['22', 'data-refresh/agent-2026-11-16-1', 'h22', '', 'owner', 'u22']) })
   try {
     assert.equal(agentOnly.tidy('watch').status, 0) // without --wait-for-agent
     assert.equal(agentOnly.outputs().skip, 'no')

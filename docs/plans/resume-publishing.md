@@ -107,7 +107,7 @@ Every change goes through a PR that passes the two required checks, `build` and 
 - **Inbox.** The agent closes the inbox issue only once its PR's checks have passed (owner PR open) or its deferral PR has merged. Otherwise the issue stays open for the next run.
 - **Rollback** has two levels:
   - **Stop publishing:** set `paused: true` (one PR). Every write and every auto-merge re-reads it first.
-  - **Undo published data:** revert the bad data PR. The revert is an ordinary PR through the same checks, which I open on the owner's word; the owner merges it. The contract treats the revert like any other change: values going back need their old records, which the revert restores too.
+  - **Undo published data:** revert the bad data PR, opened on the owner's word. A revert of a **repricing** won't pass `data-contract`: the restored prices have no current source (the restored records describe an older move, or there were none). That's deliberate: the contract can't tell a good undo from a bad edit. So an undo is the one case where the owner merges with the ruleset's **admin bypass** (it shows as a bypassed check in the PR's history). After it, the pricing baseline and the prices agree again, and the next weekly run reprices from there. Undoing is rare and owner-started, so a contract-valid "un-reprice" path isn't worth building now. *Added after Codex's review of the build, which asked for one; see the PR.*
 
 ## Things to confirm before relying on this
 

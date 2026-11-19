@@ -321,6 +321,14 @@ test('a repricing under the 3% threshold is rejected; one over 15% passes only f
   assert.deepEqual(large.errors, [])
   assert.ok(large.review.some((x) => x.field === 'preowned_range' && /over the 15% automatic limit/.test(x.why)))
 })
+test('a baseline average moves without review only when every row passed the repricing check', () => {
+  // Rows keep their prices with "observed" records that merely carry the repricing fields
+  const r = run((f) => {
+    const p = f['lib/ev-data.provenance.json']; p.preowned['Kia EV9'].years['2024'].avg_price = 39216
+    for (const x of EV9_2024(f)) (p.fields[x.id] ??= {}).preowned_range = { source_url: CG, verified_on: '2026-11-23', evidence: `2024 Kia EV9: ${x.preowned_range}`, value: x.preowned_range, method: 'observed', method_version: 1, derivation: 'cargurus_scaled', vehicle: 'Kia EV9', year: 2024, basis: 'model_year', prev_avg: 41280, new_avg: 39216 }
+  })
+  assert.ok(r.review.some((x) => x.field === 'preowned baseline Kia EV9.years.2024.avg_price'), JSON.stringify(r.errors.slice(0, 2)))
+})
 test('a baseline restart (basis change) or a new year is reviewed', () => {
   const basis = run((f) => { reprice(f, { 2025: 45000 }) }) // 2025 was model-wide; a year row restarts the baseline
   assert.deepEqual(basis.errors, [])

@@ -187,6 +187,7 @@ export function evaluate({ repo, base, head }) {
   for (const id of bRetired) if (!hRetired.has(id)) err('retired-append-only', id, 'retired-ids.json', 'retired ids are append-only')
 
   const checked = new Set()
+  const scaledOk = new Set() // rows whose cargurus_scaled record passed every check
   const evidence = (row, field, newValue) => {
     const rec = H.prov.fields?.[row.id]?.[field]
     const old = B.prov.fields?.[row.id]?.[field]
@@ -254,6 +255,11 @@ export function evaluate({ repo, base, head }) {
    * against this row, the base and head baselines, and the base revision's repricing rules.
    */
   function checkScaled(row, rec, newValue) {
+    const before_ = errors.length
+    checkScaledInner(row, rec, newValue)
+    if (errors.length === before_) scaledOk.add(row.id)
+  }
+  function checkScaledInner(row, rec, newValue) {
     const bad = (msg) => err('evidence-scaled', row.id, 'preowned_range', msg)
     const before = bRows.get(row.id)?.preowned_range
     const year = String(row.year)
@@ -380,7 +386,7 @@ export function evaluate({ repo, base, head }) {
       const priced = [...hRows.values()].filter((r) => r.vehicle === veh && String(r.year) === year && parseRange(bRows.get(r.id)?.preowned_range))
       const moved = priced.length > 0 && priced.every((r) => {
         const rec = H.prov.fields?.[r.id]?.preowned_range
-        return rec?.derivation === 'cargurus_scaled' && rec.prev_avg === by.avg_price && rec.new_avg === hy.avg_price && !same(rec, B.prov.fields?.[r.id]?.preowned_range)
+        return scaledOk.has(r.id) && rec.prev_avg === by.avg_price && rec.new_avg === hy.avg_price
       })
       if (!moved) need('-', `${label}.avg_price`, by.avg_price, hy.avg_price, 'baseline average changed without repricing every priced row of that year')
     }

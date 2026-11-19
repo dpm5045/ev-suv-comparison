@@ -74,7 +74,11 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+      # The default branch as it is now, not the commit that triggered the run: this job may
+      # have waited for the data-publish lock while another publisher merged
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
@@ -85,6 +89,7 @@ jobs:
 
       - name: Tidy open data PRs
         id: tidy
+        if: '!inputs.rehearsal'   # a rehearsal touches nothing but its own bookkeeping PR
         run: bash scripts/refresh/tidy-prs.sh watch
 
       - name: Check EPA and price pages
@@ -111,6 +116,10 @@ jobs:
           bash scripts/refresh/publish-pr.sh --producer watch --intent auto $REHEARSAL \
             --allow 'scripts/refresh/state/watch\.json' \
             --title "Data watch: record state $(date -u +%F)" --body-file "$RUNNER_TEMP/report.md"
+
+      - name: Keep owner PRs current after this merge
+        if: steps.publish.outputs.outcome == 'merged' && !inputs.rehearsal
+        run: bash scripts/refresh/tidy-prs.sh watch --owner-prs-only
 
       - name: Mark the run as paused (the backup schedule retries it)
         if: steps.publish.outputs.outcome == 'paused'
