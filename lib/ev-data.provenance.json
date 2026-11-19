@@ -1418,6 +1418,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2024 EQS 680 4matic Maybach (SUV): 321 mi",
         "legacy": "name_keyed"
+      },
+      "seats": {
+        "source_url": "https://www.kbb.com/mercedes-benz/mercedes-maybach-eqs-suv/2024/eqs-680-4matic-sport-utility-4d/",
+        "verified_on": "2026-11-19",
+        "evidence": "Max Seating Capacity 5",
+        "value": 5,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2025-maybach-eqs-680-4matic": {
@@ -1426,6 +1434,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 EQS 680 4matic Maybach (SUV): 302 mi",
         "legacy": "name_keyed"
+      },
+      "seats": {
+        "source_url": "https://www.kbb.com/mercedes-benz/mercedes-maybach-eqs-suv/2025/eqs-680-4matic-sport-utility-4d/",
+        "verified_on": "2026-11-19",
+        "evidence": "Max Seating Capacity 5",
+        "value": 5,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2026-eqs-400-4matic": {
@@ -1844,6 +1860,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2026 EQS 680 4matic Maybach (SUV): 300 mi",
         "legacy": "name_keyed"
+      },
+      "seats": {
+        "source_url": "https://www.mbusa.com/en/vehicles/model/eqs/suv/eqs680z4",
+        "verified_on": "2026-11-19",
+        "evidence": "Interior Dimensions: Passenger capacity 5 (4 optional)",
+        "value": 5,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "vinfast-vf9-2025-plus-7-seat": {

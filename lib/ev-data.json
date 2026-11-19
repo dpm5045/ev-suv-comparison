@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "last_updated": "2026-11-17",
+  "last_updated": "2026-11-19",
   "scope": "Scope of Car Models Analyzed: 140 trims were analyzed across seven years & 19 car models.",
   "count_note": "Notes: Six vehicles are on the Watchlist (not yet available in the US): Toyota Highlander EV, Subaru Getaway, BMW iX7, Genesis GV90, Faraday Future FX Super One, and Lexus TZ. The Tesla Model Y (3-Row) has a child-sized third row. Rivian R1S Gen1 (2022â€“2024) and Gen2 (2025+) models are both included.",
   "count_data": [
@@ -1364,7 +1364,7 @@
       "l2_10_80": 5.3,
       "charging_type": "NACS (+CCS adpt)",
       "audio": "8-speaker sound system w/ amp (Meridian upgrade on Land/GT-Line)",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "notes": "MY2027 Light (Short Range) RWD. Pricing per Kia America announcement (Oct 27, 2026); MSRP = destination-inclusive price minus $1,645. Other specs carried over from MY2026 pending 2027 EPA/OEM spec sheets.",
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 43.5,
@@ -1418,7 +1418,7 @@
       "l2_10_80": 7.1,
       "charging_type": "NACS (+CCS adpt)",
       "audio": "8-speaker sound system w/ amp (Meridian upgrade on Land/GT-Line)",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "notes": "MY2027 Light Long Range RWD. Pricing per Kia America announcement (Oct 27, 2026); MSRP = destination-inclusive price minus $1,645. Other specs carried over from MY2026 pending 2027 EPA/OEM spec sheets.",
       "cargo_behind_3rd_cu_ft": 20.2,
       "cargo_behind_2nd_cu_ft": 41.5,
@@ -1448,7 +1448,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1645,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Kia HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -1502,7 +1502,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1645,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Kia HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -1556,7 +1556,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1645,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Kia HDA 2 (Lane Following Assist + Lane Change Assist)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -3482,8 +3482,8 @@
       "length_in": 198.3,
       "width_in": 78.7,
       "height_in": 66,
-      "third_row_legroom_in": 29.8,
-      "third_row_headroom_in": 37.1,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 557,
       "zero_to_60_sec": 4.4,
       "ground_clearance_in": 6.5
@@ -3526,7 +3526,7 @@
       "l2_10_80": 9.8,
       "charging_type": "Tesla (pre-NACS)",
       "notes": "Pre-refresh. 6-seat captain chair config.",
-      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_3rd_cu_ft": null,
       "cargo_behind_2nd_cu_ft": 39.2,
       "cargo_behind_1st_cu_ft": 70.7,
       "towing_lbs": 5000,
@@ -3644,8 +3644,8 @@
       "length_in": 199.1,
       "width_in": 78.7,
       "height_in": 66.1,
-      "third_row_legroom_in": 32.3,
-      "third_row_headroom_in": 37.2,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 590,
       "zero_to_60_sec": 3.8,
       "ground_clearance_in": 6.5
@@ -3688,7 +3688,7 @@
       "l2_10_80": 9.8,
       "charging_type": "NACS",
       "notes": "Post-refresh. 6-seat captain chair config.",
-      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_3rd_cu_ft": null,
       "cargo_behind_2nd_cu_ft": 39.2,
       "cargo_behind_1st_cu_ft": 70.7,
       "towing_lbs": 5000,
@@ -3796,7 +3796,7 @@
       "l2_10_80": 6.8,
       "charging_type": "NACS",
       "notes": "Post-refresh tri-motor Plaid. 6-seat only.",
-      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_3rd_cu_ft": null,
       "cargo_behind_2nd_cu_ft": 39.2,
       "cargo_behind_1st_cu_ft": 70.7,
       "towing_lbs": 5000,
@@ -3860,8 +3860,8 @@
       "length_in": 199.1,
       "width_in": 78.7,
       "height_in": 66.1,
-      "third_row_legroom_in": 32.3,
-      "third_row_headroom_in": 37.2,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 590,
       "zero_to_60_sec": 3.8,
       "ground_clearance_in": 6.5
@@ -4022,8 +4022,8 @@
       "length_in": 199.1,
       "width_in": 78.7,
       "height_in": 66.1,
-      "third_row_legroom_in": 32.3,
-      "third_row_headroom_in": 37.2,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 1050,
       "zero_to_60_sec": 2.5,
       "ground_clearance_in": 6.5
@@ -4184,8 +4184,8 @@
       "length_in": 199.1,
       "width_in": 78.7,
       "height_in": 66.1,
-      "third_row_legroom_in": 32.3,
-      "third_row_headroom_in": 37.2,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 590,
       "zero_to_60_sec": 3.8,
       "ground_clearance_in": 6.5
@@ -4346,8 +4346,8 @@
       "length_in": 199.1,
       "width_in": 78.7,
       "height_in": 66.1,
-      "third_row_legroom_in": 32.3,
-      "third_row_headroom_in": 37.2,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 1050,
       "zero_to_60_sec": 2.5,
       "ground_clearance_in": 6.5
@@ -4508,8 +4508,8 @@
       "length_in": 199.1,
       "width_in": 78.7,
       "height_in": 66.1,
-      "third_row_legroom_in": 32.3,
-      "third_row_headroom_in": 37.2,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 590,
       "zero_to_60_sec": 3.8,
       "ground_clearance_in": 6.5
@@ -4724,8 +4724,8 @@
       "length_in": 199.1,
       "width_in": 78.7,
       "height_in": 66.1,
-      "third_row_legroom_in": 32.3,
-      "third_row_headroom_in": 37.2,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 590,
       "zero_to_60_sec": 3.8,
       "ground_clearance_in": 6.5
@@ -4958,7 +4958,7 @@
       "availability": "used_only",
       "msrp_status": "historical",
       "destination": 1650,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Lucid DreamDrive / DreamDrive Pro (trim/options)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -5012,7 +5012,7 @@
       "availability": "used_only",
       "msrp_status": "historical",
       "destination": 1650,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Lucid DreamDrive Pro (32-sensor suite)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -5066,7 +5066,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1850,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Lucid DreamDrive / DreamDrive Pro (trim/options)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -5120,7 +5120,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1850,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Lucid DreamDrive / DreamDrive Pro (trim/options)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -5174,7 +5174,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1850,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Lucid DreamDrive Pro (32-sensor suite)",
       "sae_level": 2,
       "self_driving_tier": "Advanced L2",
@@ -5606,7 +5606,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Super Cruise (hands-free highway driving)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -5660,7 +5660,7 @@
       "availability": "used_only",
       "msrp_status": "historical",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Super Cruise (hands-free highway driving)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -5804,8 +5804,8 @@
       "length_in": 201.8,
       "width_in": 77.1,
       "height_in": 67.6,
-      "third_row_legroom_in": 32,
-      "third_row_headroom_in": 35.4,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 590,
       "zero_to_60_sec": 6.2,
       "ground_clearance_in": 7.1
@@ -5858,8 +5858,8 @@
       "length_in": 201.8,
       "width_in": 77.1,
       "height_in": 67.6,
-      "third_row_legroom_in": 32,
-      "third_row_headroom_in": 35.4,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 633,
       "zero_to_60_sec": 4.5,
       "ground_clearance_in": 7.1
@@ -5876,7 +5876,7 @@
       "availability": "announced",
       "msrp_status": "unknown",
       "destination": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Subaru EyeSight",
       "sae_level": 2,
       "self_driving_tier": "Basic L2",
@@ -6244,7 +6244,7 @@
     },
     {
       "vehicle": "Mercedes-Benz EQS SUV",
-      "seats": 7,
+      "seats": 5,
       "drivetrain": "AWD",
       "onboard_ac_kw": 9.6,
       "car_software": "MBUX with Apple CarPlay & Android Auto",
@@ -6298,7 +6298,7 @@
     },
     {
       "vehicle": "Mercedes-Benz EQS SUV",
-      "seats": 7,
+      "seats": 5,
       "drivetrain": "AWD",
       "onboard_ac_kw": 9.6,
       "car_software": "MBUX with Apple CarPlay & Android Auto",
@@ -6336,7 +6336,7 @@
       "other_displays": "12.3\" OLED front passenger display (MBUX Hyperscreen)",
       "audio": "Burmester 4D surround sound (Dolby Atmos)",
       "notes": "2-row Maybach luxury. Executive rear seating. NACS charging.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 3968,
       "dc_fast_charge_kw": 200,
       "dc_fast_charge_10_80_min": 31,
@@ -6390,7 +6390,7 @@
       "other_displays": "",
       "audio": "Burmester 3D surround sound",
       "notes": "Optional 3rd-row seating. Replaces EQS 450+ naming for 2026. On sale.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 3968,
       "dc_fast_charge_kw": 200,
       "dc_fast_charge_10_80_min": 31,
@@ -6444,7 +6444,7 @@
       "other_displays": "12.3\" OLED front passenger display (MBUX Hyperscreen)",
       "audio": "Burmester 3D surround sound",
       "notes": "Optional 3rd-row seating. Replaces EQS 580 naming for 2026. Performance variant.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 3968,
       "dc_fast_charge_kw": 200,
       "dc_fast_charge_10_80_min": 31,
@@ -6460,7 +6460,7 @@
     },
     {
       "vehicle": "Mercedes-Benz EQS SUV",
-      "seats": 7,
+      "seats": 5,
       "drivetrain": "AWD",
       "onboard_ac_kw": 9.6,
       "car_software": "MBUX with Apple CarPlay & Android Auto",
@@ -6498,7 +6498,7 @@
       "other_displays": "12.3\" OLED front passenger display (MBUX Hyperscreen)",
       "audio": "Burmester 4D surround sound (Dolby Atmos)",
       "notes": "2-row Maybach luxury. Executive rear seating.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 3968,
       "dc_fast_charge_kw": 200,
       "dc_fast_charge_10_80_min": 31,
@@ -6552,7 +6552,7 @@
       "l2_10_100": 15.6,
       "audio": "AKG 19-speaker",
       "notes": "Base trim. 11.5 kW charger standard; 19.2 kW available.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 8000,
       "dc_fast_charge_kw": 350,
       "dc_fast_charge_10_80_min": 52,
@@ -6606,7 +6606,7 @@
       "l2_10_100": 15.6,
       "audio": "AKG 19-speaker",
       "notes": "Same as Luxury 1 with sportier exterior styling.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 8000,
       "dc_fast_charge_kw": 350,
       "dc_fast_charge_10_80_min": 52,
@@ -6660,7 +6660,7 @@
       "l2_10_100": 9.4,
       "audio": "AKG 36-speaker",
       "notes": "Premium trim with 19.2 kW charger standard.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 8000,
       "dc_fast_charge_kw": 350,
       "dc_fast_charge_10_80_min": 52,
@@ -6714,7 +6714,7 @@
       "l2_10_100": 9.4,
       "audio": "AKG 36-speaker",
       "notes": "Same as Luxury 2 with sportier exterior styling.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 8000,
       "dc_fast_charge_kw": 350,
       "dc_fast_charge_10_80_min": 52,
@@ -6768,7 +6768,7 @@
       "availability": "new",
       "msrp_status": "current",
       "notes": "Same as Luxury with sportier exterior styling.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 8000,
       "dc_fast_charge_kw": 350,
       "dc_fast_charge_10_80_min": 52,
@@ -6822,7 +6822,7 @@
       "availability": "new",
       "msrp_status": "current",
       "notes": "Premium trim. Night Vision, massaging front seats.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 8000,
       "dc_fast_charge_kw": 350,
       "dc_fast_charge_10_80_min": 52,
@@ -6876,7 +6876,7 @@
       "availability": "new",
       "msrp_status": "current",
       "notes": "Same as Premium Luxury with sportier exterior styling.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 8000,
       "dc_fast_charge_kw": 350,
       "dc_fast_charge_10_80_min": 52,
@@ -6930,7 +6930,7 @@
       "msrp_status": "historical",
       "destination": 1695,
       "notes": "Same powertrain as Luxury with sportier exterior.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 5000,
       "dc_fast_charge_kw": 190,
       "dc_fast_charge_10_80_min": 30,
@@ -6984,7 +6984,7 @@
       "msrp_status": "historical",
       "destination": 1695,
       "notes": "Air Ride Adaptive Suspension, Active Rear Steering, Night Vision, 19.2 kW charger.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 5000,
       "dc_fast_charge_kw": 190,
       "dc_fast_charge_10_80_min": 30,
@@ -7038,7 +7038,7 @@
       "msrp_status": "historical",
       "destination": 1695,
       "notes": "Top trim. Brembo brakes, exclusive interior options.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 5000,
       "dc_fast_charge_kw": 190,
       "dc_fast_charge_10_80_min": 30,
@@ -7092,7 +7092,7 @@
       "msrp_status": "current",
       "destination": 1995,
       "notes": "MY2027 Luxury. NACS charge port now standard; 11.5 kW onboard charger standard, 19.2 kW available. Seven seats standard, six-seat captain’s chairs available. MSRP per cadillac.com, excl. destination. Other specs carried over from MY2026 pending Cadillac 2027 spec sheets.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 5000,
       "dc_fast_charge_kw": 190,
       "dc_fast_charge_10_80_min": 30,
@@ -7146,7 +7146,7 @@
       "msrp_status": "current",
       "destination": 1995,
       "notes": "MY2027 Sport. Luxury equipment with Sport exterior trim. NACS charge port now standard; 11.5 kW onboard charger standard, 19.2 kW available. MSRP per cadillac.com, excl. destination. Other specs carried over from MY2026 pending Cadillac 2027 spec sheets.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 5000,
       "dc_fast_charge_kw": 190,
       "dc_fast_charge_10_80_min": 30,
@@ -7200,7 +7200,7 @@
       "msrp_status": "current",
       "destination": 1995,
       "notes": "MY2027 Premium Luxury. Second-row captain’s chairs (six seats) now standard, with Air Ride Adaptive Suspension, Active Rear Steering, AR head-up display, Night Vision and the 19.2 kW charger. NACS charge port now standard. MSRP per cadillac.com, excl. destination. Other specs carried over from MY2026 pending Cadillac 2027 spec sheets.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 5000,
       "dc_fast_charge_kw": 190,
       "dc_fast_charge_10_80_min": 30,
@@ -7254,7 +7254,7 @@
       "msrp_status": "current",
       "destination": 1995,
       "notes": "MY2027 Platinum. Adds Brembo front brakes and Platinum trim to Premium Luxury equipment; six seats standard. NACS charge port now standard. MSRP per cadillac.com, excl. destination. Other specs carried over from MY2026 pending Cadillac 2027 spec sheets.",
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "towing_lbs": 5000,
       "dc_fast_charge_kw": 190,
       "dc_fast_charge_10_80_min": 30,
@@ -7442,7 +7442,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7496,7 +7496,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7550,7 +7550,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7604,7 +7604,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7658,7 +7658,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7712,7 +7712,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7766,7 +7766,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7820,7 +7820,7 @@
       "availability": "new",
       "msrp_status": "current",
       "destination": 1895,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Rivian Autonomy+ (Universal Hands-Free)",
       "sae_level": 2,
       "self_driving_tier": "L2+ Hands-Free",
@@ -7910,8 +7910,8 @@
       "length_in": 199.1,
       "width_in": 78.7,
       "height_in": 66.1,
-      "third_row_legroom_in": 32.3,
-      "third_row_headroom_in": 37.2,
+      "third_row_legroom_in": "N/A",
+      "third_row_headroom_in": "N/A",
       "torque_lb_ft": 1050,
       "zero_to_60_sec": 2.5,
       "ground_clearance_in": 6.5
@@ -7952,7 +7952,7 @@
       "id": "tesla-model-x-2021-plaid-6s",
       "trim": "Plaid",
       "seats": 6,
-      "cargo_behind_3rd_cu_ft": "N/A",
+      "cargo_behind_3rd_cu_ft": null,
       "cargo_behind_2nd_cu_ft": 39.2,
       "cargo_behind_1st_cu_ft": 70.7,
       "notes": "Refreshed 2021 Plaid. Tri-motor, 1,020 hp. Captain chairs. Original MSRP $119,990; a 2021 model is no longer sold new.",
@@ -8047,7 +8047,7 @@
       "driver_profiles": "Volvo profiles",
       "frunk_cu_ft": 1.6,
       "cargo_floor_width_in": 44.5,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "Volvo EX90, 2026, Single Motor Plus",
       "id": "volvo-ex90-2026-single-motor-plus",
       "trim": "Single Motor Plus",
@@ -8101,7 +8101,7 @@
       "driver_profiles": "Volvo profiles",
       "frunk_cu_ft": 1.6,
       "cargo_floor_width_in": 44.5,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "Volvo EX90, 2026, Twin Motor Plus",
       "id": "volvo-ex90-2026-twin-motor-plus",
       "trim": "Twin Motor Plus",
@@ -8155,7 +8155,7 @@
       "driver_profiles": "Volvo profiles",
       "frunk_cu_ft": 1.6,
       "cargo_floor_width_in": 44.5,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "Volvo EX90, 2026, Twin Motor Ultra",
       "id": "volvo-ex90-2026-twin-motor-ultra",
       "trim": "Twin Motor Ultra",
@@ -8209,7 +8209,7 @@
       "driver_profiles": "Volvo profiles",
       "frunk_cu_ft": 1.6,
       "cargo_floor_width_in": 44.5,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "Volvo EX90, 2026, Twin Motor Performance Plus",
       "id": "volvo-ex90-2026-twin-motor-performance-plus",
       "trim": "Twin Motor Performance Plus",
@@ -8263,7 +8263,7 @@
       "driver_profiles": "Volvo profiles",
       "frunk_cu_ft": 1.6,
       "cargo_floor_width_in": 44.5,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "Volvo EX90, 2026, Twin Motor Performance Ultra",
       "id": "volvo-ex90-2026-twin-motor-performance-ultra",
       "trim": "Twin Motor Performance Ultra",
@@ -8317,7 +8317,7 @@
       "driver_profiles": "Driver profiles supported",
       "frunk_cu_ft": 4.1,
       "cargo_floor_width_in": null,
-      "preowned_range": "N/A - No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "Tesla Model Y (3-Row), 2026, Long Range AWD",
       "id": "tesla-model-y-3-row-2026-long-range-awd",
       "trim": "Long Range AWD",
@@ -8371,7 +8371,7 @@
       "driver_profiles": "Amazon Alexa voice assistant (no saved driver profile system)",
       "frunk_cu_ft": 3.5,
       "cargo_floor_width_in": null,
-      "preowned_range": "N/A - No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "VinFast VF9, 2025, Eco",
       "id": "vinfast-vf9-2025-eco",
       "trim": "Eco",
@@ -8425,7 +8425,7 @@
       "driver_profiles": "Amazon Alexa voice assistant (no saved driver profile system)",
       "frunk_cu_ft": 3.5,
       "cargo_floor_width_in": null,
-      "preowned_range": "N/A - No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "VinFast VF9, 2025, Plus (7-seat)",
       "id": "vinfast-vf9-2025-plus-7-seat",
       "trim": "Plus (7-seat)",
@@ -8479,7 +8479,7 @@
       "driver_profiles": "Amazon Alexa voice assistant (no saved driver profile system)",
       "frunk_cu_ft": 3.5,
       "cargo_floor_width_in": null,
-      "preowned_range": "N/A - No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "VinFast VF9, 2025, Plus (6-seat)",
       "id": "vinfast-vf9-2025-plus-6-seat",
       "trim": "Plus (6-seat)",
@@ -8533,7 +8533,7 @@
       "driver_profiles": "Amazon Alexa voice assistant (no saved driver profile system)",
       "frunk_cu_ft": 3.5,
       "cargo_floor_width_in": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "VinFast VF9, 2027, Plus (7-seat)",
       "id": "vinfast-vf9-2027-plus-7-seat",
       "trim": "Plus (7-seat)",
@@ -8587,7 +8587,7 @@
       "driver_profiles": "Amazon Alexa voice assistant (no saved driver profile system)",
       "frunk_cu_ft": 3.5,
       "cargo_floor_width_in": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "VinFast VF9, 2027, Plus (6-seat)",
       "id": "vinfast-vf9-2027-plus-6-seat",
       "trim": "Plus (6-seat)",
@@ -8630,17 +8630,17 @@
       "availability": "announced",
       "msrp_status": "unknown",
       "destination": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "TBD",
       "sae_level": null,
       "self_driving_tier": null,
       "adas_hardware": null,
       "adas_hardware_gen": null,
       "adas_hardware_note": null,
-      "range_mi": "TBD (~350-400 est)",
+      "range_mi": "TBD",
       "range_basis": null,
-      "hp": "TBD (~570 est)",
-      "battery_kwh": "TBD (~150+ est)",
+      "hp": "TBD",
+      "battery_kwh": "TBD",
       "onboard_ac_kw": null,
       "l2_10_100": null,
       "l2_10_80": null,
@@ -8684,17 +8684,17 @@
       "availability": "announced",
       "msrp_status": "unknown",
       "destination": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "TBD",
       "sae_level": null,
       "self_driving_tier": null,
       "adas_hardware": null,
       "adas_hardware_gen": null,
       "adas_hardware_note": null,
-      "range_mi": "TBD (~350-400 est)",
+      "range_mi": "TBD",
       "range_basis": null,
-      "hp": "TBD (~800+ est)",
-      "battery_kwh": "TBD (~150+ est)",
+      "hp": "TBD",
+      "battery_kwh": "TBD",
       "onboard_ac_kw": null,
       "l2_10_100": null,
       "l2_10_80": null,
@@ -8738,7 +8738,7 @@
       "availability": "announced",
       "msrp_status": "unknown",
       "destination": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "TBD",
       "sae_level": null,
       "self_driving_tier": null,
@@ -8792,7 +8792,7 @@
       "availability": "announced",
       "msrp_status": "unknown",
       "destination": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "TBD",
       "sae_level": null,
       "self_driving_tier": null,
@@ -8801,7 +8801,7 @@
       "adas_hardware_note": null,
       "range_mi": "TBD",
       "range_basis": null,
-      "hp": "TBD (~700-1,050 est, dual/tri motor)",
+      "hp": "TBD",
       "battery_kwh": "TBD",
       "onboard_ac_kw": null,
       "l2_10_100": null,
@@ -8846,14 +8846,14 @@
       "availability": "announced",
       "msrp_status": "unknown",
       "destination": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "TBD",
       "sae_level": null,
       "self_driving_tier": null,
       "adas_hardware": null,
       "adas_hardware_gen": null,
       "adas_hardware_note": null,
-      "range_mi": "TBD (~315 est)",
+      "range_mi": "TBD",
       "range_basis": null,
       "hp": "TBD",
       "battery_kwh": 85,
@@ -8900,14 +8900,14 @@
       "availability": "announced",
       "msrp_status": "unknown",
       "destination": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "TBD",
       "sae_level": null,
       "self_driving_tier": null,
       "adas_hardware": null,
       "adas_hardware_gen": null,
       "adas_hardware_note": null,
-      "range_mi": "TBD (~315 est)",
+      "range_mi": "TBD",
       "range_basis": null,
       "hp": "TBD",
       "battery_kwh": 85,
@@ -8950,7 +8950,7 @@
       "seats": 6,
       "drivetrain": "AWD",
       "destination": 1550,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Lexus Safety System+ 4.0 (Pre-Collision System, Lane Change Assist, Risk Avoidance Emergency Steer Assist)",
       "sae_level": 2,
       "self_driving_tier": "Basic L2",
@@ -9004,7 +9004,7 @@
       "seats": 6,
       "drivetrain": "AWD",
       "destination": 1550,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Lexus Safety System+ 4.0 (Pre-Collision System, Lane Change Assist, Risk Avoidance Emergency Steer Assist)",
       "sae_level": 2,
       "self_driving_tier": "Basic L2",
@@ -9058,7 +9058,7 @@
       "seats": 6,
       "drivetrain": "AWD",
       "destination": 1550,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "self_driving": "Lexus Safety System+ 4.0 (Pre-Collision System, Lane Change Assist, Risk Avoidance Emergency Steer Assist)",
       "sae_level": 2,
       "self_driving_tier": "Basic L2",
@@ -9127,7 +9127,7 @@
       "driver_profiles": "Driver profiles supported",
       "frunk_cu_ft": 4.1,
       "cargo_floor_width_in": null,
-      "preowned_range": "No meaningful used market yet",
+      "preowned_range": "No used market yet",
       "name": "Tesla Model Y L, 2026, Launch Series",
       "id": "tesla-model-y-l-2026-launch-series",
       "trim": "Launch Series",
@@ -9157,691 +9157,6 @@
       "torque_lb_ft": 364,
       "zero_to_60_sec": 4.4,
       "ground_clearance_in": 6.7
-    }
-  ],
-  "preowned": [
-    {
-      "name": "Kia EV9, 2024, Light RWD",
-      "vehicle": "Kia EV9",
-      "year": 2024,
-      "trim": "Light RWD",
-      "preowned_range": "$30,000 - $35,000"
-    },
-    {
-      "name": "Kia EV9, 2024, Light Long Range RWD",
-      "vehicle": "Kia EV9",
-      "year": 2024,
-      "trim": "Light Long Range RWD",
-      "preowned_range": "$31,000 - $36,000"
-    },
-    {
-      "name": "Kia EV9, 2024, Wind",
-      "vehicle": "Kia EV9",
-      "year": 2024,
-      "trim": "Wind",
-      "preowned_range": "$30,000 - $36,000"
-    },
-    {
-      "name": "Kia EV9, 2024, Land",
-      "vehicle": "Kia EV9",
-      "year": 2024,
-      "trim": "Land",
-      "preowned_range": "$40,000 - $47,000"
-    },
-    {
-      "name": "Kia EV9, 2024, GT-Line",
-      "vehicle": "Kia EV9",
-      "year": 2024,
-      "trim": "GT-Line",
-      "preowned_range": "$40,000 - $49,000"
-    },
-    {
-      "name": "Kia EV9, 2025, Light RWD",
-      "vehicle": "Kia EV9",
-      "year": 2025,
-      "trim": "Light RWD",
-      "preowned_range": "$37,000 - $43,000"
-    },
-    {
-      "name": "Kia EV9, 2025, Light Long Range RWD",
-      "vehicle": "Kia EV9",
-      "year": 2025,
-      "trim": "Light Long Range RWD",
-      "preowned_range": "$40,000 - $46,000"
-    },
-    {
-      "name": "Kia EV9, 2025, Wind",
-      "vehicle": "Kia EV9",
-      "year": 2025,
-      "trim": "Wind",
-      "preowned_range": "$40,000 - $47,000"
-    },
-    {
-      "name": "Kia EV9, 2025, Land",
-      "vehicle": "Kia EV9",
-      "year": 2025,
-      "trim": "Land",
-      "preowned_range": "$44,000 - $50,000"
-    },
-    {
-      "name": "Kia EV9, 2025, GT-Line",
-      "vehicle": "Kia EV9",
-      "year": 2025,
-      "trim": "GT-Line",
-      "preowned_range": "$45,000 - $55,000"
-    },
-    {
-      "name": "Kia EV9, 2026, Light RWD",
-      "vehicle": "Kia EV9",
-      "year": 2026,
-      "trim": "Light RWD",
-      "preowned_range": "$39,000 - $43,000"
-    },
-    {
-      "name": "Kia EV9, 2026, Light Long Range RWD",
-      "vehicle": "Kia EV9",
-      "year": 2026,
-      "trim": "Light Long Range RWD",
-      "preowned_range": "$40,000 - $45,000"
-    },
-    {
-      "name": "Kia EV9, 2026, Wind",
-      "vehicle": "Kia EV9",
-      "year": 2026,
-      "trim": "Wind",
-      "preowned_range": "$42,000 - $48,000"
-    },
-    {
-      "name": "Kia EV9, 2026, Land",
-      "vehicle": "Kia EV9",
-      "year": 2026,
-      "trim": "Land",
-      "preowned_range": "$48,000 - $50,000"
-    },
-    {
-      "name": "Kia EV9, 2026, GT-Line",
-      "vehicle": "Kia EV9",
-      "year": 2026,
-      "trim": "GT-Line",
-      "preowned_range": "$47,000 - $58,000"
-    },
-    {
-      "name": "Kia EV9, 2024, Land + 2nd Row VIP Relaxation Package",
-      "vehicle": "Kia EV9",
-      "year": 2024,
-      "trim": "Land + 2nd Row VIP Relaxation Package",
-      "preowned_range": "$39,000 - $46,000"
-    },
-    {
-      "name": "Kia EV9, 2024, GT-Line + 2nd Row VIP Relaxation Package",
-      "vehicle": "Kia EV9",
-      "year": 2024,
-      "trim": "GT-Line + 2nd Row VIP Relaxation Package",
-      "preowned_range": "$42,000 - $48,000"
-    },
-    {
-      "name": "Kia EV9, 2026, Land Nightfall Edition (6-pass)",
-      "vehicle": "Kia EV9",
-      "year": 2026,
-      "trim": "Land Nightfall Edition (6-pass)",
-      "preowned_range": "$48,000 - $52,000"
-    },
-    {
-      "name": "Kia EV9, 2026, Land Nightfall Edition (7-pass)",
-      "vehicle": "Kia EV9",
-      "year": 2026,
-      "trim": "Land Nightfall Edition (7-pass)",
-      "preowned_range": "$48,000 - $52,000"
-    },
-    {
-      "name": "Kia EV9, 2026, GT-Line + 2nd Row Relaxation Package",
-      "vehicle": "Kia EV9",
-      "year": 2026,
-      "trim": "GT-Line + 2nd Row Relaxation Package",
-      "preowned_range": "$49,000 - $60,000"
-    },
-    {
-      "name": "Hyundai IONIQ 9, 2026, S RWD",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2026,
-      "trim": "S RWD",
-      "preowned_range": "$47,000 - $51,000"
-    },
-    {
-      "name": "Hyundai IONIQ 9, 2026, SE",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2026,
-      "trim": "SE",
-      "preowned_range": "$43,000 - $53,000"
-    },
-    {
-      "name": "Hyundai IONIQ 9, 2026, SEL",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2026,
-      "trim": "SEL",
-      "preowned_range": "$47,000 - $55,000"
-    },
-    {
-      "name": "Hyundai IONIQ 9, 2026, Performance Limited",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2026,
-      "trim": "Performance Limited",
-      "preowned_range": "$48,000 - $52,000"
-    },
-    {
-      "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2026,
-      "trim": "Performance Calligraphy",
-      "preowned_range": "$54,000 - $58,000"
-    },
-    {
-      "name": "Hyundai IONIQ 9, 2026, Performance Calligraphy Design",
-      "vehicle": "Hyundai IONIQ 9",
-      "year": 2026,
-      "trim": "Performance Calligraphy Design",
-      "preowned_range": "$56,000 - $62,000"
-    },
-    {
-      "name": "Volvo EX90, 2025, Twin Motor Plus 7-Seater",
-      "vehicle": "Volvo EX90",
-      "year": 2025,
-      "trim": "Twin Motor Plus 7-Seater",
-      "preowned_range": "$56,000 - $66,000"
-    },
-    {
-      "name": "Volvo EX90, 2025, Twin Motor Plus 6-Seater",
-      "vehicle": "Volvo EX90",
-      "year": 2025,
-      "trim": "Twin Motor Plus 6-Seater",
-      "preowned_range": "$56,000 - $66,000"
-    },
-    {
-      "name": "Volvo EX90, 2025, Twin Motor Ultra 7-Seater",
-      "vehicle": "Volvo EX90",
-      "year": 2025,
-      "trim": "Twin Motor Ultra 7-Seater",
-      "preowned_range": "$60,000 - $70,000"
-    },
-    {
-      "name": "Volvo EX90, 2025, Twin Motor Ultra 6-Seater",
-      "vehicle": "Volvo EX90",
-      "year": 2025,
-      "trim": "Twin Motor Ultra 6-Seater",
-      "preowned_range": "$60,000 - $70,000"
-    },
-    {
-      "name": "Volvo EX90, 2025, Twin Motor Performance Plus 7-Seater",
-      "vehicle": "Volvo EX90",
-      "year": 2025,
-      "trim": "Twin Motor Performance Plus 7-Seater",
-      "preowned_range": "$58,000 - $68,000"
-    },
-    {
-      "name": "Volvo EX90, 2025, Twin Motor Performance Plus 6-Seater",
-      "vehicle": "Volvo EX90",
-      "year": 2025,
-      "trim": "Twin Motor Performance Plus 6-Seater",
-      "preowned_range": "$58,000 - $68,000"
-    },
-    {
-      "name": "Volvo EX90, 2025, Twin Motor Performance Ultra 7-Seater",
-      "vehicle": "Volvo EX90",
-      "year": 2025,
-      "trim": "Twin Motor Performance Ultra 7-Seater",
-      "preowned_range": "$63,000 - $74,000"
-    },
-    {
-      "name": "Volvo EX90, 2025, Twin Motor Performance Ultra 6-Seater",
-      "vehicle": "Volvo EX90",
-      "year": 2025,
-      "trim": "Twin Motor Performance Ultra 6-Seater",
-      "preowned_range": "$63,000 - $74,000"
-    },
-    {
-      "name": "Volvo EX90, 2026, Single Motor Plus",
-      "vehicle": "Volvo EX90",
-      "year": 2026,
-      "trim": "Single Motor Plus",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Volvo EX90, 2026, Twin Motor Plus",
-      "vehicle": "Volvo EX90",
-      "year": 2026,
-      "trim": "Twin Motor Plus",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Volvo EX90, 2026, Twin Motor Performance Plus",
-      "vehicle": "Volvo EX90",
-      "year": 2026,
-      "trim": "Twin Motor Performance Plus",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Rivian R1S, 2025, Adventure Dual Standard",
-      "vehicle": "Rivian R1S",
-      "year": 2025,
-      "trim": "Adventure Dual Standard",
-      "preowned_range": "$58,000 - $65,000"
-    },
-    {
-      "name": "Rivian R1S, 2025, Adventure Dual Large (\"Dual Long\")",
-      "vehicle": "Rivian R1S",
-      "year": 2025,
-      "trim": "Adventure Dual Large (\"Dual Long\")",
-      "preowned_range": "$61,000 - $69,000"
-    },
-    {
-      "name": "Rivian R1S, 2025, Adventure Dual Max",
-      "vehicle": "Rivian R1S",
-      "year": 2025,
-      "trim": "Adventure Dual Max",
-      "preowned_range": "$69,000 - $79,000"
-    },
-    {
-      "name": "Rivian R1S, 2025, Performance Dual Large",
-      "vehicle": "Rivian R1S",
-      "year": 2025,
-      "trim": "Performance Dual Large",
-      "preowned_range": "$67,000 - $75,000"
-    },
-    {
-      "name": "Rivian R1S, 2025, Performance Dual Max",
-      "vehicle": "Rivian R1S",
-      "year": 2025,
-      "trim": "Performance Dual Max",
-      "preowned_range": "$72,000 - $82,000"
-    },
-    {
-      "name": "Rivian R1S, 2025, Ascend Tri Max",
-      "vehicle": "Rivian R1S",
-      "year": 2025,
-      "trim": "Ascend Tri Max",
-      "preowned_range": "$70,000 - $82,000"
-    },
-    {
-      "name": "Rivian R1S, 2026, Dual Standard",
-      "vehicle": "Rivian R1S",
-      "year": 2026,
-      "trim": "Dual Standard",
-      "preowned_range": "$66,000 - $74,000"
-    },
-    {
-      "name": "Rivian R1S, 2026, Dual Large",
-      "vehicle": "Rivian R1S",
-      "year": 2026,
-      "trim": "Dual Large",
-      "preowned_range": "$68,000 - $76,000"
-    },
-    {
-      "name": "Rivian R1S, 2026, Dual Max (\"Max Battery\")",
-      "vehicle": "Rivian R1S",
-      "year": 2026,
-      "trim": "Dual Max (\"Max Battery\")",
-      "preowned_range": "$80,000 - $89,000"
-    },
-    {
-      "name": "Rivian R1S, 2026, Tri Max",
-      "vehicle": "Rivian R1S",
-      "year": 2026,
-      "trim": "Tri Max",
-      "preowned_range": "$87,000 - $99,000"
-    },
-    {
-      "name": "Rivian R1S, 2027, Premium (7-seat)",
-      "vehicle": "Rivian R1S",
-      "year": 2027,
-      "trim": "Premium (7-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Rivian R1S, 2027, Premium (6-seat)",
-      "vehicle": "Rivian R1S",
-      "year": 2027,
-      "trim": "Premium (6-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Rivian R1S, 2027, Premium Long Range (7-seat)",
-      "vehicle": "Rivian R1S",
-      "year": 2027,
-      "trim": "Premium Long Range (7-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Rivian R1S, 2027, Premium Long Range (6-seat)",
-      "vehicle": "Rivian R1S",
-      "year": 2027,
-      "trim": "Premium Long Range (6-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Rivian R1S, 2027, Performance (7-seat)",
-      "vehicle": "Rivian R1S",
-      "year": 2027,
-      "trim": "Performance (7-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Rivian R1S, 2027, Performance (6-seat)",
-      "vehicle": "Rivian R1S",
-      "year": 2027,
-      "trim": "Performance (6-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Rivian R1S, 2027, Quad (7-seat)",
-      "vehicle": "Rivian R1S",
-      "year": 2027,
-      "trim": "Quad (7-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Rivian R1S, 2027, Quad (6-seat)",
-      "vehicle": "Rivian R1S",
-      "year": 2027,
-      "trim": "Quad (6-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Tesla Model X, 2026, Base",
-      "vehicle": "Tesla Model X",
-      "year": 2026,
-      "trim": "Base",
-      "preowned_range": "$100,000 - $128,000"
-    },
-    {
-      "name": "Tesla Model X, 2026, Plaid",
-      "vehicle": "Tesla Model X",
-      "year": 2026,
-      "trim": "Plaid",
-      "preowned_range": "$112,000 - $150,000"
-    },
-    {
-      "name": "Tesla Model X, 2024, Base",
-      "vehicle": "Tesla Model X",
-      "year": 2024,
-      "trim": "Base",
-      "preowned_range": "$65,000 - $74,000"
-    },
-    {
-      "name": "Tesla Model X, 2024, Plaid",
-      "vehicle": "Tesla Model X",
-      "year": 2024,
-      "trim": "Plaid",
-      "preowned_range": "$78,000 - $90,000"
-    },
-    {
-      "name": "Tesla Model X, 2023, Base",
-      "vehicle": "Tesla Model X",
-      "year": 2023,
-      "trim": "Base",
-      "preowned_range": "$50,000 - $59,000"
-    },
-    {
-      "name": "Tesla Model X, 2023, Plaid",
-      "vehicle": "Tesla Model X",
-      "year": 2023,
-      "trim": "Plaid",
-      "preowned_range": "$65,000 - $74,000"
-    },
-    {
-      "name": "Lucid Gravity, 2026, Touring",
-      "vehicle": "Lucid Gravity",
-      "year": 2026,
-      "trim": "Touring",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Lucid Gravity, 2026, Grand Touring",
-      "vehicle": "Lucid Gravity",
-      "year": 2026,
-      "trim": "Grand Touring",
-      "preowned_range": "$80,000 - $88,000"
-    },
-    {
-      "name": "Lucid Gravity, 2026, Dream Edition",
-      "vehicle": "Lucid Gravity",
-      "year": 2026,
-      "trim": "Dream Edition",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Lucid Gravity, 2027, Touring",
-      "vehicle": "Lucid Gravity",
-      "year": 2027,
-      "trim": "Touring",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Lucid Gravity, 2027, Grand Touring",
-      "vehicle": "Lucid Gravity",
-      "year": 2027,
-      "trim": "Grand Touring",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Lucid Gravity, 2027, GT-S",
-      "vehicle": "Lucid Gravity",
-      "year": 2027,
-      "trim": "GT-S",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Toyota Highlander EV, 2027, XLE (expected)",
-      "vehicle": "Toyota Highlander EV",
-      "year": 2027,
-      "trim": "XLE (expected)",
-      "preowned_range": "No used market yet"
-    },
-    {
-      "name": "Toyota Highlander EV, 2027, Limited (expected)",
-      "vehicle": "Toyota Highlander EV",
-      "year": 2027,
-      "trim": "Limited (expected)",
-      "preowned_range": "No used market yet"
-    },
-    {
-      "name": "Kia EV9, 2027, Light",
-      "vehicle": "Kia EV9",
-      "year": 2027,
-      "trim": "Light",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Kia EV9, 2027, Light Long Range RWD",
-      "vehicle": "Kia EV9",
-      "year": 2027,
-      "trim": "Light Long Range RWD",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Kia EV9, 2027, Wind",
-      "vehicle": "Kia EV9",
-      "year": 2027,
-      "trim": "Wind",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Kia EV9, 2027, Land",
-      "vehicle": "Kia EV9",
-      "year": 2027,
-      "trim": "Land",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Kia EV9, 2027, GT-Line",
-      "vehicle": "Kia EV9",
-      "year": 2027,
-      "trim": "GT-Line",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Tesla Model X, 2025, Base",
-      "vehicle": "Tesla Model X",
-      "year": 2025,
-      "trim": "Base",
-      "preowned_range": "$70,000 - $85,000"
-    },
-    {
-      "name": "Tesla Model X, 2025, Plaid",
-      "vehicle": "Tesla Model X",
-      "year": 2025,
-      "trim": "Plaid",
-      "preowned_range": "$86,000 - $98,000"
-    },
-    {
-      "name": "Cadillac Escalade IQ, 2026, Luxury",
-      "vehicle": "Cadillac Escalade IQ",
-      "year": 2026,
-      "trim": "Luxury",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Cadillac VISTIQ, 2026, Luxury",
-      "vehicle": "Cadillac VISTIQ",
-      "year": 2026,
-      "trim": "Luxury",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Mercedes-Benz EQS SUV, 2026, EQS 400 4MATIC",
-      "vehicle": "Mercedes-Benz EQS SUV",
-      "year": 2026,
-      "trim": "EQS 450+ 4MATIC",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Mercedes-Benz EQS SUV, 2026, EQS 550 4MATIC",
-      "vehicle": "Mercedes-Benz EQS SUV",
-      "year": 2026,
-      "trim": "EQS 580 4MATIC",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Subaru Getaway, 2027, Premium",
-      "vehicle": "Subaru Getaway",
-      "year": 2027,
-      "trim": "Premium",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "BMW iX7, 2027, xDrive50 (expected)",
-      "vehicle": "BMW iX7",
-      "year": 2027,
-      "trim": "xDrive50 (expected)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "BMW iX7, 2027, M70 (expected)",
-      "vehicle": "BMW iX7",
-      "year": 2027,
-      "trim": "M70 (expected)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Genesis GV90, 2027, Base (expected)",
-      "vehicle": "Genesis GV90",
-      "year": 2027,
-      "trim": "Base (expected)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Faraday Future FX Super One, 2027, Base (expected)",
-      "vehicle": "Faraday Future FX Super One",
-      "year": 2027,
-      "trim": "Base (expected)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Mercedes-Benz GLB Electric, 2027, GLB 250+ (expected)",
-      "vehicle": "Mercedes-Benz GLB Electric",
-      "year": 2027,
-      "trim": "GLB 250+ (expected)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Mercedes-Benz GLB Electric, 2027, GLB 350 4MATIC (expected)",
-      "vehicle": "Mercedes-Benz GLB Electric",
-      "year": 2027,
-      "trim": "GLB 350 4MATIC (expected)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Lexus TZ, 2027, Premium AWD",
-      "vehicle": "Lexus TZ",
-      "year": 2027,
-      "trim": "Premium AWD",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Lexus TZ, 2027, Premium Touring AWD",
-      "vehicle": "Lexus TZ",
-      "year": 2027,
-      "trim": "Premium Touring AWD",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Lexus TZ, 2027, Luxury AWD",
-      "vehicle": "Lexus TZ",
-      "year": 2027,
-      "trim": "Luxury AWD",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Mercedes-Benz EQS SUV, 2026, Maybach EQS 680 4MATIC",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Tesla Model Y L, 2026, Launch Series",
-      "vehicle": "Tesla Model Y L",
-      "year": 2026,
-      "trim": "Launch Series",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Cadillac VISTIQ, 2027, Luxury",
-      "vehicle": "Cadillac VISTIQ",
-      "year": 2027,
-      "trim": "Luxury",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Cadillac VISTIQ, 2027, Sport",
-      "vehicle": "Cadillac VISTIQ",
-      "year": 2027,
-      "trim": "Sport",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Cadillac VISTIQ, 2027, Premium Luxury",
-      "vehicle": "Cadillac VISTIQ",
-      "year": 2027,
-      "trim": "Premium Luxury",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "Cadillac VISTIQ, 2027, Platinum",
-      "vehicle": "Cadillac VISTIQ",
-      "year": 2027,
-      "trim": "Platinum",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "VinFast VF9, 2027, Plus (7-seat)",
-      "vehicle": "VinFast VF9",
-      "year": 2027,
-      "trim": "Plus (7-seat)",
-      "preowned_range": "No meaningful used market yet"
-    },
-    {
-      "name": "VinFast VF9, 2027, Plus (6-seat)",
-      "vehicle": "VinFast VF9",
-      "year": 2027,
-      "trim": "Plus (6-seat)",
-      "preowned_range": "No meaningful used market yet"
     }
   ],
   "glossary": [
