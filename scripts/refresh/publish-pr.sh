@@ -8,12 +8,17 @@
 # Run it from a checkout of the default branch, with the producer's edits in the working tree.
 #   1. Reads the pause flag live (can-publish.sh); paused -> writes nothing.
 #   2. Commits the changed files (only those matching --allow) to data-refresh/<producer>-<date>-<run>.
-#   3. Opens the PR, then runs the two required checks on it: a PR opened with GITHUB_TOKEN
-#      starts no workflows, so `ci.yml` (build) and `data-contract.yml` are dispatched.
-#   4. Waits for both on that exact commit.
+#   3. Pushes the branch and opens the PR with the owner's publishing token (PUBLISH_TOKEN, the
+#      DATA_PUBLISH_TOKEN secret), so the PR's own workflows start as they do for any PR: `ci.yml`
+#      (build) and `data-contract.yml`. A PR opened with GITHUB_TOKEN gets a CI run that waits
+#      for approval, which blocks the merge (Rollout, rehearsal of 2026-11-20).
+#   4. Waits for both on that exact commit. A check that hasn't appeared after
+#      PUBLISH_DISPATCH_AFTER seconds (default 240) is dispatched once, as a fallback.
 #   5. intent auto, both passed, no `needs-owner-review` label, still not paused:
 #        merge, bound to the checked commit (--match-head-commit).
-#      intent owner, or the label: assign the owner and request their review; leave it open.
+#      The merge itself uses GITHUB_TOKEN, which can't bypass the branch rules.
+#      intent owner, or the label: assign the owner and mention them in a comment (they are the
+#      PR's author, through the token, so GitHub won't take a review request); leave it open.
 #      A failed check, a timeout or a refused merge: close the PR and exit 1, so the run does not
 #      count as done and the backup schedule retries (ran-since.sh).
 #
@@ -22,7 +27,8 @@
 # without touching any data or the watch's observations.
 #
 # Writes outcome=merged|owner|none|paused|failed (and pr=<url>) to $GITHUB_OUTPUT.
-# Needs GH_TOKEN with contents/pull-requests/actions write and checks/statuses read,
+# Needs GH_TOKEN (GITHUB_TOKEN) with contents/pull-requests/actions write and checks/statuses read;
+# PUBLISH_TOKEN (fine-grained, this repo: contents and pull requests read/write);
 # and GITHUB_REPOSITORY, GITHUB_REPOSITORY_OWNER, RUNNER_TEMP.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
@@ -51,6 +57,7 @@ out="${GITHUB_OUTPUT:-/dev/null}"
 summary="${GITHUB_STEP_SUMMARY:-/dev/null}"
 poll="${PUBLISH_POLL_SECONDS:-20}"
 limit="${PUBLISH_WAIT_SECONDS:-1500}"
+dispatch_after="${PUBLISH_DISPATCH_AFTER:-240}"
 say() { echo "$*"; echo "$*" >> "$summary"; }
 finish() { echo "outcome=$1" >> "$out"; if [ -n "${2:-}" ]; then echo "pr=$2" >> "$out"; fi; }
 paused() { mkdir -p "$tmp/paused" && echo "$1" > "$tmp/paused/reason.txt"; }
@@ -77,6 +84,11 @@ if [ -n "$unexpected" ]; then
   finish failed; exit 1
 fi
 
+if [ -z "${PUBLISH_TOKEN:-}" ]; then
+  say "The DATA_PUBLISH_TOKEN secret is not set (docs/runbooks/migration.md); nothing published."
+  finish failed; exit 1
+fi
+
 # 3. Branch from the default branch as it is now (publishers run one at a time)
 default=$(gh api "repos/$repo" --jq .default_branch)
 base=$(git rev-parse HEAD)
@@ -93,9 +105,9 @@ git checkout -q -b "$branch"
 echo "$changed" | xargs git add -A --
 git commit -qm "$title"
 head=$(git rev-parse HEAD)
-git push -q origin "$branch"
+bash "$HERE/lib/push-as-owner.sh" "$branch"
 { cat "$body"; echo; echo "<!-- publish-intent: $intent -->"; } > "$tmp/pr-body.md"
-url=$(gh pr create --base "$default" --head "$branch" --title "$title" --body-file "$tmp/pr-body.md")
+url=$(GH_TOKEN="$PUBLISH_TOKEN" gh pr create --base "$default" --head "$branch" --title "$title" --body-file "$tmp/pr-body.md")
 num=${url##*/}
 say "Opened $url ($intent)."
 
@@ -115,14 +127,20 @@ on_exit() {
 }
 trap on_exit EXIT
 
-# 4. Run the required checks on this exact commit, and wait for them
-gh workflow run ci.yml --ref "$branch"
-gh workflow run data-contract.yml -f base_sha="$base" -f head_sha="$head" -f pr="$num"
-build='' contract='' waited=0
+# 4. Wait for the PR's required checks on this exact commit; run any that never started
+build='' contract='' waited=0 dispatched=no
 while :; do
   build=$(build_state "$repo" "$head")
   contract=$(contract_state "$repo" "$head")
   if [[ "$build" == completed:* ]] && [[ "$contract" =~ ^(success|failure|error)$ ]]; then break; fi
+  if [ "$dispatched" = no ] && [ "$waited" -ge "$dispatch_after" ]; then
+    dispatched=yes
+    if [ -z "$build" ]; then gh workflow run ci.yml --ref "$branch"; say "The build check hadn't started; ran it."; fi
+    if [ -z "$contract" ]; then
+      gh workflow run data-contract.yml -f base_sha="$base" -f head_sha="$head" -f pr="$num"
+      say "The data contract hadn't started; ran it."
+    fi
+  fi
   if [ "$waited" -ge "$limit" ]; then break; fi
   sleep "$poll"; waited=$((waited + poll))
 done
@@ -151,7 +169,9 @@ if [ "$intent" = auto ] && [[ ",$labels," != *",needs-owner-review,"* ]]; then
   handled=yes; finish failed "$url"; exit 1
 fi
 owner="${GITHUB_REPOSITORY_OWNER:?}"
-gh pr edit "$num" --add-assignee "$owner" --add-reviewer "$owner" >/dev/null \
-  || say "Could not request a review on $url; it is still open."
+# The comment comes from github-actions, so it notifies the owner (their own token opened the PR)
+gh pr edit "$num" --add-assignee "$owner" >/dev/null || say "Could not assign $url; it is still open."
+gh pr comment "$num" --body "@$owner this PR waits for your review${labels:+ (labels: $labels)}. Merging it is the approval." >/dev/null \
+  || say "Could not comment on $url; it is still open."
 say "$url waits for the owner's review${labels:+ (labels: $labels)}."
 handled=yes; finish owner "$url"

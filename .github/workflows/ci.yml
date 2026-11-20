@@ -7,9 +7,8 @@ on:
   pull_request:
   push:
     branches: [master]
-  # The data publishers open PRs with GITHUB_TOKEN, which starts no workflows; they
-  # dispatch this on the PR branch so `build` reports on its head commit
-  # (scripts/refresh/publish-pr.sh; docs/plans/resume-publishing.md §1).
+  # The data publishers dispatch this on a PR branch whose `build` never started, as a fallback
+  # (scripts/refresh/publish-pr.sh; docs/plans/resume-publishing.md, Rehearsal findings).
   workflow_dispatch: {}
 
 permissions:

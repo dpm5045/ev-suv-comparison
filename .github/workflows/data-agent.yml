@@ -238,7 +238,7 @@ jobs:
       group: data-publish
       cancel-in-progress: false
     permissions:
-      actions: write         # dispatches the required checks on its PR
+      actions: write         # runs a required check that never started on its PR
       checks: read           # waits for the `build` check
       statuses: read         # waits for the `data-contract` status
       contents: write
@@ -258,19 +258,34 @@ jobs:
           path: ${{ runner.temp }}/handover
       # No npm here: this job can write to the repo, so no package code runs in it.
       - name: Tidy leftover deferral PRs
+        env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
         run: bash scripts/refresh/tidy-prs.sh deferrals
       - name: Open the PR (owner review for site data; deferrals merge themselves)
         id: publish
+        env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
         run: |
           H="$RUNNER_TEMP/handover"
           mode="${{ needs.plan.outputs.mode }}"
           issue="${{ needs.plan.outputs.issue }}"
-          if [ -s "$H/agent.patch" ]; then git apply "$H/agent.patch"; fi
+          allow='lib/ev-data\.json|lib/ev-data\.provenance\.json|lib/watchlist\.ts|lib/data-stories\.ts|scripts/refresh/accepted\.json|scripts/refresh/sources\.json|scripts/refresh/state/deferred\.json'
+          if [ -s "$H/agent.patch" ]; then
+            # This step holds the publishing token: check the patch's paths before it touches the
+            # tree (the scripts run below come from this checkout). Fails closed: an unreadable patch,
+            # a rename, copy or symlink, or any path outside the allowlist stops the job.
+            paths=$(git apply --numstat "$H/agent.patch") || { echo "The agent's patch could not be read." >&2; exit 1; }
+            if grep -qE '^(rename|copy) (from|to) |^(new file |old |new )?mode 120000' "$H/agent.patch"; then
+              echo "The agent's patch renames, copies or links files; refused." >&2; exit 1
+            fi
+            bad=$(printf '%s\n' "$paths" | cut -f3 | grep -vxE "$allow" || true)
+            if [ -n "$bad" ]; then echo "The agent's patch touches files outside its allowlist:" >&2; echo "$bad" >&2; exit 1; fi
+            git apply "$H/agent.patch"
+          fi
           { cat "$H/changelog.md"; echo; [ -n "$issue" ] && echo "Works through #$issue."; echo; echo '🤖 Generated with [Claude Code](https://claude.com/claude-code)'; } > "$RUNNER_TEMP/body.md"
           site=$(git status --porcelain --untracked-files=all | awk '{print $NF}' | grep -vxE 'scripts/refresh/state/deferred\.json' || true)
           if [ -n "$site" ]; then
-            bash scripts/refresh/publish-pr.sh --producer agent --intent owner \
-              --allow 'lib/ev-data\.json|lib/ev-data\.provenance\.json|lib/watchlist\.ts|lib/data-stories\.ts|scripts/refresh/accepted\.json|scripts/refresh/sources\.json|scripts/refresh/state/deferred\.json' \
+            bash scripts/refresh/publish-pr.sh --producer agent --intent owner --allow "$allow" \
               --title "Data agent: $mode pass $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md"
           else
             # Only deferrals (or nothing): bookkeeping, no site change
@@ -281,6 +296,8 @@ jobs:
 
       - name: Keep owner PRs current after this merge
         if: steps.publish.outputs.outcome == 'merged'
+        env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
         run: bash scripts/refresh/tidy-prs.sh deferrals --owner-prs-only
 
       # Only once the work has a home: an owner PR whose checks passed, merged deferrals, or nothing to do.

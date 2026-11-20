@@ -9,17 +9,17 @@
 #   - an `auto` PR of this producer, not flagged for the owner: closed. This run regenerates the
 #     change from fresh data (a leftover from a run that was cut short).
 #   - a PR for the owner (intent owner, or labelled needs-owner-review): never closed.
-#     If it is behind the default branch, it is brought up to date ("Update branch"), and both
-#     required checks are run on the new commit. If a check is missing on its current commit
-#     (an update whose new commit appeared late), that check is run. So the owner never has
+#     If it is behind the default branch, it is brought up to date ("Update branch") with the
+#     owner's publishing token (PUBLISH_TOKEN), so its checks start on their own as on any PR.
+#     If a check is missing on its current commit, that check is run. So the owner never has
 #     to click "Update branch" or re-run anything. A conflict is reported.
 #   - this producer's own PR waiting for the owner, or (with --wait-for-agent) an agent data PR:
 #     this run skips writing until it's merged or closed, since it edits the same files.
 # The intent is the `<!-- publish-intent: ... -->` marker publish-pr.sh puts in the PR body;
 # older agent PRs without one count as owner PRs.
 #
-# Writes skip=yes|no to $GITHUB_OUTPUT. Needs GH_TOKEN with pull-requests/contents/actions write
-# and checks/statuses read.
+# Writes skip=yes|no to $GITHUB_OUTPUT. Needs GH_TOKEN (GITHUB_TOKEN) with pull-requests/contents/
+# actions write and checks/statuses read, and PUBLISH_TOKEN for updating branches.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 # shellcheck source=lib/checks.sh
@@ -81,20 +81,12 @@ while IFS=$'\x1f' read -r num ref head labels intent url; do
 
   # A PR for the owner: keep it current and checked
   behind=$(gh api "repos/$repo/compare/$default...$head" --jq .behind_by)
-  if [ "${behind:-0}" != 0 ]; then
-    if gh pr update-branch "$num" >/dev/null 2>&1; then
-      new=$head
-      for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
-        new=$(gh pr view "$num" --json headRefOid --jq .headRefOid)
-        [ "$new" != "$head" ] && break
-        sleep "${TIDY_POLL_SECONDS:-5}"
-      done
-      if [ "$new" != "$head" ]; then
-        ensure_checks "$num" "$ref" "$new"
-        say "Brought $url up to date."
-      else
-        say "Asked GitHub to update $url; its new commit hasn't appeared yet. The next run checks it."
-      fi
+  if [ "${behind:-0}" != 0 ] && [ -z "${PUBLISH_TOKEN:-}" ]; then
+    say "$url is behind, but the DATA_PUBLISH_TOKEN secret is not set; left as is (docs/runbooks/migration.md)."
+  elif [ "${behind:-0}" != 0 ]; then
+    # As the owner: an update made with GITHUB_TOKEN would start CI runs that wait for approval
+    if GH_TOKEN="$PUBLISH_TOKEN" gh pr update-branch "$num" >/dev/null 2>&1; then
+      say "Brought $url up to date; its checks start on their own (the next run fills in any that don't)."
     else
       say "Could not bring $url up to date automatically (probably a conflict). It needs the owner, or closing (the agent then redoes it)."
     fi

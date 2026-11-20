@@ -3,8 +3,10 @@
 // (one JSON array per line to $FAKE_GH_LOG) and answers from the scenario in $FAKE_GH_STATE.
 // Answers are what the real command prints AFTER its --jq filter.
 //   paused:   [bool, ...]  successive reads of publish-control.json (the last value repeats)
-//   build:    "completed:success" (check-runs), contract: "success" (commit status)
-//   labels:   "a,b"        heads: [sha, ...] successive headRefOid reads
+//   build:    "completed:success" (check-runs), contract: "success" (commit status); either may be
+//             a list of successive reads
+//   labels:   "a,b"
+// It records the GH_TOKEN each `pr create` / `pr update-branch` ran with in tokens[sub].
 //   mergeFails, updateFails, dispatchFails: bool    prs: lines of fields joined by \x1f (gh pr list)
 //   behind: {sha: n} commits behind the default branch   builds: {sha: "status:conclusion"}   contracts: {sha: state}
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs'
@@ -23,16 +25,16 @@ if (cmd === 'api') {
   if (path.includes('/contents/scripts/refresh/publish-control.json')) print(JSON.stringify({ paused: next('paused', false), reason: 'test' }))
   else if (path.includes('/compare/')) print(st.behind?.[path.split('...')[1]] ?? 0)
   else if (path.endsWith('/check-runs') && st.builds) print(st.builds[path.split('/')[4]] ?? '')
-  else if (path.endsWith('/check-runs')) print(st.build ?? 'completed:success')
+  else if (path.endsWith('/check-runs')) print(next('build', 'completed:success'))
   else if (path.endsWith('/status') && st.contracts) print(st.contracts[path.split('/')[4]] ?? '')
-  else if (path.endsWith('/status')) print(st.contract ?? 'success')
+  else if (path.endsWith('/status')) print(next('contract', 'success'))
   else if (/\/commits\/[^/]+$/.test(path)) print('0123456789abcdef0123456789abcdef01234567')
   else if (/^repos\/[^/]+\/[^/]+$/.test(path)) print('master')
   else print('')
 } else if (cmd === 'pr') {
+  if (sub === 'create' || sub === 'update-branch') { st.tokens = { ...st.tokens, [sub]: process.env.GH_TOKEN ?? '' }; save() }
   if (sub === 'create') print('https://github.com/o/r/pull/7')
   else if (sub === 'view' && args.includes('labels')) print(st.labels ?? '')
-  else if (sub === 'view' && args.includes('headRefOid')) print(next('heads', 'aaa'))
   else if (sub === 'merge') process.exit(st.mergeFails ? 1 : 0)
   else if (sub === 'update-branch') process.exit(st.updateFails ? 1 : 0)
   else if (sub === 'list') { if (st.prs) print(st.prs) }

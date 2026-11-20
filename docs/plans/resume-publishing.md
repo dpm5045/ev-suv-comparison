@@ -26,6 +26,7 @@ Every change goes through a PR that passes the two required checks, `build` and 
 ## What changes
 
 ### 1. Bot PRs trigger the checks themselves (from WP-I, simplified)
+*As built after the rehearsal (2026-11-20):* the PR is now opened with the owner's publishing token, so its own `pull_request` runs report both checks, and dispatching is only a fallback. See "Rehearsal findings" below.
 - `ci.yml` gains a `workflow_dispatch` trigger. A dispatched run of the `build` job on the PR branch posts a `build` check on the PR's head commit, from the GitHub Actions app, so it satisfies the required check.
 - `data-contract.yml` already accepts dispatch with `base_sha`, `head_sha` and `pr`. It labels the PR and posts the `data-contract` status on the head commit.
 - **The publisher's one shared step** (`scripts/refresh/publish-pr.sh <intent>`, used by all three workflows) states its **intent** explicitly:
@@ -114,7 +115,7 @@ Every change goes through a PR that passes the two required checks, `build` and 
 
 1. **The ruleset setting `require_extra_approval_for_unattributed_changes: true`** (on `protect-main`'s pull-request rule) might require an approval on PRs whose commits aren't from a person. The rehearsal (below) shows whether a bot PR merges with zero approvals. If it doesn't, the fix is to turn that one setting off, since it guards nothing here that the required checks don't. That is a settings change the owner makes once, or I make with `gh api` on the owner's say-so.
 2. **A dispatched `build` run satisfies the required `build` check.** The check name and the app (integration 15368) match; the rehearsal proves it.
-3. **No extra click on bot PRs.** GitHub may hold workflow runs on bot-created PRs for approval. We don't depend on `pull_request` runs (both checks are dispatched), and the rehearsal confirms that nothing waits on the owner.
+3. **No extra click on bot PRs.** GitHub may hold workflow runs on bot-created PRs for approval. We don't depend on `pull_request` runs (both checks are dispatched), and the rehearsal confirms that nothing waits on the owner. *Wrong; see "Rehearsal findings".*
 
 ## Rollout
 
@@ -161,3 +162,11 @@ WP-H; WP-J.1, J.2 and J.3; the WP-G derived count tables; WP-K.2 and K.3 (CSP, p
 | P1: Watch's provenance refresh writes partial records the contract rejects | Watch publishes only `watch.json` for now; EPA findings stay in the inbox (§2). |
 | P1: the stale-PR rule could close an unlabelled agent PR; behind PRs relied on the owner clicking Update branch | Explicit intent (`auto`/`owner`) decides; `owner` PRs are never closed by automation and are brought up to date automatically. Deferral-only agent PRs are `auto` (§1, §4). |
 | P1: retry, inbox and rollback outcomes were implicit | §6: failures fail the job (so the backup retries), the pause is re-read right before merging, the inbox closes only on a viable outcome, and rollback is by revert PR. |
+
+## Rehearsal findings (2026-11-20)
+
+Three rehearsals (PRs #67, #68, #69) each opened their PR and passed both required checks; GitHub counted the dispatched `build` and the `data-contract` status as the required ones (item 2 held). The merge was refused every time ("the base branch policy prohibits the merge"), and the PR stayed `BLOCKED`:
+- Item 1 was not the cause: the owner turned `require_extra_approval_for_unattributed_changes` off, and #68 was still refused.
+- Item 3 was: a PR opened with `GITHUB_TOKEN` *does* get a `ci.yml` `pull_request` run, held as `action_required` (approval needed), as GitHub now documents. No reviews, threads or other rules were involved.
+
+**Fix:** a fine-grained token of the owner's (`DATA_PUBLISH_TOKEN`; this repo only, Contents and Pull requests read/write). `publish-pr.sh` pushes the branch and opens the PR with it, and `tidy-prs.sh` updates behind PRs with it, so the PR's own `ci.yml` and `data-contract.yml` (`pull_request_target`) runs start as on any PR. The merge stays on `GITHUB_TOKEN`, which can't use the admin bypass, so the ruleset still applies to it. A check that hasn't appeared after 4 minutes is dispatched once, as before. Only the steps that open or update PRs get the token; the agent's patch is checked against its allowlist before it is applied in that step. Codex recommended the same split (token to open, `GITHUB_TOKEN` to merge) over a GitHub App, a bypass actor, auto-merge or changing CI's triggers.
