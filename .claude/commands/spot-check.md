@@ -38,7 +38,7 @@ Status values:
 6. When applying corrections:
    - Edit `lib/ev-data.json` details entries
    - **Never modify these protected fields**: `seats`, `cargo_behind_3rd_cu_ft`, `cargo_behind_2nd_cu_ft`, `cargo_behind_1st_cu_ft`, `fold_flat`, `cargo_floor_width_in`
-   - If `preowned_range` changed, update both the `details` entry and the matching `preowned` entry (they must stay in sync).
+   - `preowned_range` is repriced by the pre-owned script, not by hand (refresh.md, Phase 1).
    - Do NOT write `otd_new`/`otd_preowned` — OTD is computed at load in `lib/data.ts` from `msrp`/`destination`/`preowned_range` (the validator errors on stored OTD).
 
 7. Summarize what was changed.

@@ -22,6 +22,8 @@ import { fileURLToPath } from 'node:url'
 import { checkState, applyBaseline, DETAIL_FIELDS, PROTECTED, PUBLISHED, IDENTITY, FIELDS } from './schema/ev-data.schema.mjs'
 import { DATA_FILES, changedPaths } from './refresh/lib/hashes.mjs'
 import { NO_MARKET } from './schema/ev-data.schema.mjs'
+// The repricing rules, from the same (trusted, base) revision as this file
+import { scaleRange, parseRange, THRESHOLD, MAX_MOVE } from './refresh/lib/preowned-plan.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 
@@ -29,7 +31,7 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 export const GATE_FILES = [
   'scripts/validate-data.js', 'scripts/validate-diff.mjs', 'scripts/schema/',
   'scripts/refresh/source-policy.json', 'scripts/refresh/compat.json', 'scripts/refresh/publish-control.json',
-  'scripts/refresh/lib/hashes.mjs',
+  'scripts/refresh/lib/hashes.mjs', 'scripts/refresh/lib/preowned-plan.mjs',
   '.github/workflows/ci.yml', '.github/workflows/data-contract.yml', '.github/CODEOWNERS',
 ]
 const BASELINE = 'scripts/schema/known-violations.json'
@@ -185,6 +187,7 @@ export function evaluate({ repo, base, head }) {
   for (const id of bRetired) if (!hRetired.has(id)) err('retired-append-only', id, 'retired-ids.json', 'retired ids are append-only')
 
   const checked = new Set()
+  const scaledOk = new Set() // rows whose cargurus_scaled record passed every check
   const evidence = (row, field, newValue) => {
     const rec = H.prov.fields?.[row.id]?.[field]
     const old = B.prov.fields?.[row.id]?.[field]
@@ -225,6 +228,7 @@ export function evaluate({ repo, base, head }) {
       for (const msg of problems) err('evidence-moved', row.id, field, msg)
       return
     }
+    if (rec.method === 'derived' && field === 'preowned_range' && rec.derivation === 'cargurus_scaled') return checkScaled(row, rec, newValue)
     if (rec.method === 'derived' && field === 'msrp' && rec.derivation === 'quoted_total_minus_destination') {
       // Car and Driver quotes a destination-inclusive price (refresh.md): msrp = quoted_total - destination,
       // with destination carrying its own record
@@ -245,6 +249,50 @@ export function evaluate({ repo, base, head }) {
     }
     if (!evidenceSupports(newValue, rec.evidence)) err('evidence-quote', row.id, field, `the quoted evidence does not contain ${JSON.stringify(newValue)}`)
   }
+  /**
+   * A repriced used range (docs/plans/resume-publishing.md §3): the row's CarGurus average moved
+   * from prev_avg to new_avg, and the stored range was scaled by that move. Every link is checked
+   * against this row, the base and head baselines, and the base revision's repricing rules.
+   */
+  function checkScaled(row, rec, newValue) {
+    const before_ = errors.length
+    checkScaledInner(row, rec, newValue)
+    if (errors.length === before_) scaledOk.add(row.id)
+  }
+  function checkScaledInner(row, rec, newValue) {
+    const bad = (msg) => err('evidence-scaled', row.id, 'preowned_range', msg)
+    const before = bRows.get(row.id)?.preowned_range
+    const year = String(row.year)
+    const bb = B.prov.preowned?.[row.vehicle]
+    const hb = H.prov.preowned?.[row.vehicle]
+    const by = bb?.years?.[year]
+    const hy = hb?.years?.[year]
+    if (rec.vehicle !== row.vehicle || String(rec.year) !== year) return bad(`the record is for ${rec.vehicle} ${rec.year}, not this row (${row.vehicle} ${row.year})`)
+    if (!domainOk(hostOf(rec.source_url), ['cargurus.com'])) return bad('a repricing must come from cargurus.com')
+    if (!bb || !hb || !by || !hy) return bad(`no CarGurus baseline for ${row.vehicle} ${year} in both revisions`)
+    if (rec.source_url !== bb.source_url || rec.source_url !== hb.source_url) return bad('the record, base baseline and head baseline must name the same CarGurus page')
+    if (rec.basis !== by.basis || rec.basis !== hy.basis) return bad(`basis ${rec.basis} must equal the baseline's in both revisions (a basis change restarts the baseline; it is not a repricing)`)
+    if (by.avg_price !== rec.prev_avg) return bad(`prev_avg ${rec.prev_avg} is not the base baseline average ${by.avg_price}`)
+    if (hy.avg_price !== rec.new_avg) return bad(`new_avg ${rec.new_avg} is not the head baseline average ${hy.avg_price}`)
+    // The evidence is the CarGurus table row itself: "<label>: $<average>". A model-year row's
+    // label starts with that year ("2024 EV9"); the model-wide row's has no year ("EV9").
+    const m = /^(.+): \$([\d,]+)$/.exec(String(rec.evidence ?? ''))
+    if (!m || Number(m[2].replace(/,/g, '')) !== rec.new_avg) return bad(`the evidence must be the CarGurus row "<label>: $<average>" stating ${rec.new_avg}`)
+    const labelYear = /^(\d{4})\s/.exec(m[1])?.[1]
+    if (rec.basis === 'model_year' ? labelYear !== year : labelYear !== undefined) return bad(`the quoted row "${m[1]}" is not the ${rec.basis === 'model_year' ? `${year} model-year` : 'model-wide'} row`)
+    // ...and names this model: CarGurus' label ("EV9", "ID.Buzz", "EQS SUV") is how our vehicle
+    // name ends, ignoring punctuation and any "(...)" note, so a brand alone ("Tesla") never matches
+    const norm = (t) => String(t).toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z0-9]/g, '')
+    const model = norm(m[1].replace(/^\d{4}\s+/, ''))
+    if (!model || !norm(row.vehicle).endsWith(model)) return bad(`the quoted row "${m[1]}" does not name ${row.vehicle}`)
+    if (!parseRange(before)) return bad(`only a priced range can be scaled (was ${JSON.stringify(before ?? null)})`)
+    const move = rec.new_avg / rec.prev_avg - 1
+    if (Math.abs(move) < THRESHOLD) return bad(`a ${(move * 100).toFixed(2)}% move is under the ${THRESHOLD * 100}% repricing threshold`)
+    if (Math.abs(move) > MAX_MOVE) need(row.id, 'preowned_range', before, newValue, `CarGurus average moved ${(move * 100).toFixed(1)}%, over the ${MAX_MOVE * 100}% automatic limit`)
+    const expected = scaleRange(before, 1 + move) // the producer's exact expression
+    if (expected !== newValue) bad(`scaling ${before} by ${rec.new_avg}/${rec.prev_avg} gives ${expected}, not ${newValue}`)
+  }
+
   // A "blank" value carries no claim to source: null, TBD, N/A, and (for the used price only) the no-market sentinel
   const isBlank = (v, f) => v === null || v === 'TBD' || v === 'N/A' || (f === 'preowned_range' && v === NO_MARKET)
 
@@ -323,8 +371,35 @@ export function evaluate({ repo, base, head }) {
       if (r && f in r) checkRecord(r, f, r[f], rec) // source policy and quote, even when the spec itself didn't change
     }
   }
+  // CarGurus baselines. Routine (no review): as_of / last_repriced / last_move_pct, and an
+  // avg_price that moved together with every priced row of that vehicle and year (each row
+  // carries a cargurus_scaled record from the old to the new average, checked above).
+  // Anything else (page, basis, added or removed vehicle or year, an average moved alone) is reviewed.
   for (const veh of new Set([...Object.keys(B.prov.preowned ?? {}), ...Object.keys(H.prov.preowned ?? {})])) {
-    reviewDiff(`preowned baseline ${veh}`, B.prov.preowned?.[veh], H.prov.preowned?.[veh]) // source_url and years
+    const bb = B.prov.preowned?.[veh]
+    const hb = H.prov.preowned?.[veh]
+    if (!bb || !hb) { reviewDiff(`preowned baseline ${veh}`, bb, hb); continue }
+    if (bb.source_url !== hb.source_url) need('-', `preowned baseline ${veh}.source_url`, bb.source_url, hb.source_url, 'CarGurus page changed')
+    for (const k of new Set([...Object.keys(bb), ...Object.keys(hb)])) {
+      if (k !== 'source_url' && k !== 'years' && !same(bb[k], hb[k])) need('-', `preowned baseline ${veh}.${k}`, bb[k], hb[k], `preowned baseline ${veh}.${k} changed`)
+    }
+    for (const year of new Set([...Object.keys(bb.years ?? {}), ...Object.keys(hb.years ?? {})])) {
+      const by = bb.years?.[year]
+      const hy = hb.years?.[year]
+      const label = `preowned baseline ${veh}.years.${year}`
+      if (!by || !hy || by.basis !== hy.basis) { need('-', label, by, hy, !by ? 'baseline added' : !hy ? 'baseline removed' : 'basis changed (baseline restarted)'); continue }
+      for (const k of Object.keys({ ...by, ...hy })) {
+        if (['as_of', 'last_repriced', 'last_move_pct', 'avg_price', 'basis'].includes(k) || same(by[k], hy[k])) continue
+        need('-', `${label}.${k}`, by[k], hy[k], `${label}.${k} changed`)
+      }
+      if (by.avg_price === hy.avg_price) continue
+      const priced = [...hRows.values()].filter((r) => r.vehicle === veh && String(r.year) === year && parseRange(bRows.get(r.id)?.preowned_range))
+      const moved = priced.length > 0 && priced.every((r) => {
+        const rec = H.prov.fields?.[r.id]?.preowned_range
+        return scaledOk.has(r.id) && rec.prev_avg === by.avg_price && rec.new_avg === hy.avg_price
+      })
+      if (!moved) need('-', `${label}.avg_price`, by.avg_price, hy.avg_price, 'baseline average changed without repricing every priced row of that year')
+    }
   }
 
   // Attach the source and quote behind each change, for the owner's review

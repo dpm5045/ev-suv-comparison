@@ -26,7 +26,7 @@ Add a new 3-row electric vehicle to the dataset.
    - **Cargo**: frunk_cu_ft, cargo_behind_3rd_cu_ft, cargo_behind_2nd_cu_ft, cargo_behind_1st_cu_ft, fold_flat, cargo_floor_width_in
    - **Tech**: self_driving, sae_level, self_driving_tier, car_software, center_display, gauge_cluster, hud, other_displays, audio, driver_profiles
    - **Driver-assist hardware**: adas_hardware, adas_hardware_gen, adas_hardware_note — set only where the hardware generation changes capability (see refresh.md Phase 5); otherwise null. Copied rows of a new model year usually keep the previous year's values; a new generation means the older rows become `previous`.
-   - **Pricing**: preowned_range (research used market; use "No meaningful used market yet" for unreleased/new vehicles)
+   - **Pricing**: preowned_range (research used market; use "No used market yet" for unreleased/new vehicles)
    - **Notes**: anything distinctive about the trim
 
 5. The `name` field MUST follow the convention: `"Vehicle Name, YYYY, Trim"` — add `(N-seat)` suffix only when the same trim has multiple seat configurations.
@@ -44,7 +44,7 @@ Add a new 3-row electric vehicle to the dataset.
 
 8. **`lib/ev-data.json`** — Add to these sections:
    - `details` array: One entry per trim with all fields. Use `null` for genuinely unknown values, `"TBD"` for values that should be available but weren't found.
-   - `preowned` array: One entry per trim with fields: `name`, `vehicle`, `year`, `trim`, `preowned_range`. (Never store `otd_new`/`otd_preowned` — they are computed at load in `lib/data.ts`.)
+   - Never store `otd_new`/`otd_preowned`: they are computed at load in `lib/data.ts`. (There is no separate `preowned` array any more; each row's `preowned_range` is the used price.)
    - `count_data`: Add a new row for this vehicle with year columns (`y2021`–`y2026`). Set count to the number of trims available for each year.
    - `count_totals`: Recalculate all year totals and the grand total by summing the `count_data` rows.
 

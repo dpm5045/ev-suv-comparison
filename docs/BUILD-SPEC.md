@@ -74,10 +74,10 @@ flowchart LR
 | **D** | Upgrade to Next 16.x (supported) with React 19 | F1 | **Done** (#47) | 2–3 days |
 | **E** | Stable IDs; availability, price status and range basis; migration with review table; compatibility gate | F3, F4, F6, F7 | Revised design | 3–4 days |
 | **F** | Schema; diff validator; trusted approvals | F3 | Revised design | 3 days |
-| **G** | Pre-owned producer provenance; derived counts and pre-owned table | F3, F9 | Revised design | 2 days |
-| **H** | Agent containment, verified with canaries | F2 | Revised design | 3–5 days |
-| **I** | Proposal → verify → writer flow; one required check; serialized writers. **Needs F, G and H.** | F8, F9 | Revised design (v3) | 3–4 days |
-| **J** | Inbox item lifecycle; `data-state`; EPA auto-fix on reviewed mappings | F4, F9 | Revised design (v3) | 3 days |
+| **G** | Pre-owned producer provenance; derived counts and pre-owned table | F3, F9 | **Superseded** by docs/plans/resume-publishing.md (simplified) | 2 days |
+| **H** | Agent containment, verified with canaries | F2 | **Superseded** by docs/plans/resume-publishing.md (simplified) | 3–5 days |
+| **I** | Proposal → verify → writer flow; one required check; serialized writers. **Needs F, G and H.** | F8, F9 | **Superseded** by docs/plans/resume-publishing.md (simplified) | 3–4 days |
+| **J** | Inbox item lifecycle; `data-state`; EPA auto-fix on reviewed mappings | F4, F9 | **Superseded** by docs/plans/resume-publishing.md (simplified) | 3 days |
 | **K** | Accessible drawer; CSP; performance baseline; cleanup | F10 | **In progress**: K.4 (#48), K.1 (#49) | 3–5 days |
 
 **Publication pause window.** From the moment WP-E's migration is about to merge until WP-F, WP-G and WP-I have all landed, the data publishers do not write (E.3). Data Watch may keep running in **report-only** mode: it reads sources and posts to the inbox, with no repository writes. The agent stays off.
@@ -354,6 +354,8 @@ CODEOWNERS assigns the approval workflow to the owner.
 ---
 
 ## WP-G: Pre-owned provenance, derived tables (revised)
+
+> **Superseded (2026-11-19).** WP-G, WP-H, WP-I and WP-J are replaced by the simplified [docs/plans/resume-publishing.md](plans/resume-publishing.md), sized for a single-maintainer site: no manual inputs, the owner's merge is the only approval. What remains of them: sourced repricing (`cargurus_scaled` records, G), and bot PRs that run the two required checks and merge themselves (I). Dropped: derived count tables, containment canaries (H), patch manifests, the `data-state` branch and the inbox lifecycle (J.1, J.2). The text below is kept for the record.
 
 - **Producer change** (`preowned.mjs` and `lib/preowned-plan.mjs`). For each configuration whose range it changes, it writes a provenance record:
   - `method: "derived"`, `method_version`;

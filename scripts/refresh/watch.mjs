@@ -8,15 +8,16 @@
  *      registered page and reports prices that appeared or disappeared.
  *
  *   node scripts/refresh/watch.mjs                  # dry run: report only
- *   node scripts/refresh/watch.mjs --apply          # also save state + range sources
+ *   node scripts/refresh/watch.mjs --apply          # also save state
  *   node scripts/refresh/watch.mjs --report out.md
- *   node scripts/refresh/watch.mjs --apply --fix-ranges   # also correct range_mi where EPA settles it
+ *   node scripts/refresh/watch.mjs --apply --fix-ranges   # DISABLED (see below): would correct range_mi from EPA
  *   node scripts/refresh/watch.mjs --attention out.md     # the "Needs a look" items alone, for the inbox
  *   node scripts/refresh/watch.mjs --save-snapshots dir | --from-snapshots dir
  *
  * --apply writes scripts/refresh/state/watch.json (what was seen, for the next
- * run to compare against) and range_mi entries in lib/ev-data.provenance.json.
- * With --fix-ranges it also writes lib/ev-data.json, changing only range_mi
+ * run to compare against). It no longer writes range sources to
+ * lib/ev-data.provenance.json (docs/plans/resume-publishing.md §2).
+ * --fix-ranges is disabled for now (no source records yet). It would write lib/ev-data.json, changing only range_mi
  * (and last_updated) on rows planRangeFixes can settle from EPA alone.
  *
  * Items listed in scripts/refresh/state/deferred.json are left out of the
@@ -28,12 +29,11 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { unzipFirst } from './lib/zip.mjs'
-import { buildEpaIndex, checkRanges, diffEpa, updateRangeProvenance, planRangeFixes, applyRangeFixes } from './lib/epa.mjs'
+import { buildEpaIndex, checkRanges, diffEpa, planRangeFixes, applyRangeFixes } from './lib/epa.mjs'
 import { extractAmounts, storedMsrps, pageEntry, checkPage, extractHeadline, storedPriceSpan, checkHeadline, priceGaps, fmt } from './lib/pages.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const DATA_PATH = join(ROOT, 'lib/ev-data.json')
-const PROVENANCE_PATH = join(ROOT, 'lib/ev-data.provenance.json')
 const SOURCES_PATH = join(ROOT, 'scripts/refresh/sources.json')
 const STATE_PATH = join(ROOT, 'scripts/refresh/state/watch.json')
 const ACCEPTED_PATH = join(ROOT, 'scripts/refresh/accepted.json')
@@ -49,7 +49,13 @@ const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : n
 const apply = flag('--apply')
 const reportPath = option('--report')
 const attentionPath = option('--attention')
-const fixRanges = flag('--fix-ranges') && apply // without --apply the report shows what would change
+// Range fixes stay off until they write a sourced, id-keyed provenance record with each change
+// (reviewed EPA mappings; docs/plans/resume-publishing.md §5). A fix without one fails the data contract.
+if (flag('--fix-ranges') && apply) {
+  console.error('--fix-ranges is disabled: it would change range_mi without a valid source record. The report lists what it would fix.')
+  process.exit(2)
+}
+const fixRanges = false
 const saveDir = option('--save-snapshots')
 const fromDir = option('--from-snapshots')
 const today = option('--today') ?? new Date().toISOString().slice(0, 10)
@@ -98,7 +104,6 @@ if (!COMPAT.accepts_schema.includes(data.schema_version)) {
   process.exit(1)
 }
 const sources = readJson(SOURCES_PATH)
-const provenance = existsSync(PROVENANCE_PATH) ? readJson(PROVENANCE_PATH) : { schema_version: 1, preowned: {}, fields: {} }
 const state = existsSync(STATE_PATH) ? readJson(STATE_PATH) : { schema_version: 1, epa: null, pages: {} }
 const accepted = existsSync(ACCEPTED_PATH) ? readJson(ACCEPTED_PATH).range_mi ?? {} : {}
 const deferred = (existsSync(DEFERRED_PATH) ? readJson(DEFERRED_PATH).items ?? [] : []).filter((d) => d.until >= today)
@@ -300,10 +305,9 @@ if (apply) {
     writeJson(STATE_PATH, nextState)
   }
   if (dataChanged) writeJson(DATA_PATH, data)
-  if (epa) {
-    const nextProvenance = { ...provenance, fields: updateRangeProvenance(provenance.fields, epa.rows, today) }
-    if (JSON.stringify(nextProvenance) !== JSON.stringify(provenance)) writeJson(PROVENANCE_PATH, nextProvenance)
-  }
+  // EPA range sources are not written to provenance for now: updateRangeProvenance() makes partial
+  // records (no value/method) that the data contract rejects, and Watch publishes only its state
+  // file (docs/plans/resume-publishing.md §2). Range mismatches still go to the inbox.
   console.error('\nState saved.')
 } else {
   console.error('\nDry run — nothing written. Re-run with --apply to save state.')

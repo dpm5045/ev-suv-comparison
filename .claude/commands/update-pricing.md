@@ -7,7 +7,7 @@ Research and update pre-owned and/or MSRP pricing for vehicles in the dataset.
 
 1. Read `lib/ev-data.json`. Filter entries based on the scope argument:
    - If a vehicle name: match all trims of that vehicle
-   - If "all": process all vehicles that have pre-owned data (where `preowned_range` is not "No meaningful used market yet")
+   - If "all": process all vehicles that have pre-owned data (where `preowned_range` is a price range, not "No used market yet")
    - If a year: match all entries for that model year
 
 2. Research current pricing for each in-scope vehicle **individually** — never combine vehicles into one broad query, which averages away per-vehicle movement:
@@ -41,6 +41,5 @@ After pricing changes are applied and committed:
 
 ## Important
 
-- The `preowned` array and `details` array must always stay in sync — same `name` field, same `preowned_range` value.
 - Never hardcode vehicle or trim counts. Always derive from the data.
-- For brand-new vehicles with no used market yet, leave `preowned_range` as `"No meaningful used market yet"`.
+- For brand-new vehicles with no used market yet, leave `preowned_range` as `"No used market yet"`.

@@ -44,12 +44,16 @@ const money = (n) => `$${n.toLocaleString('en-US')}`
  * @param {string} args.today         YYYY-MM-DD
  * @param {string[]} [args.allowLarge] "Vehicle|Year" groups whose move over MAX_MOVE was
  *                                    checked by a person or the agent and may be applied
- * @returns {{ decisions: object[], rowChanges: object[], baselines: object }}
+ * @returns {{ decisions: object[], rowChanges: object[], records: object[], baselines: object }}
+ *   records: one source record per priced row of every repriced group (changed or not), for
+ *   lib/ev-data.provenance.json `fields[id].preowned_range` (method derived, cargurus_scaled).
+ *   The data contract recomputes each one (scripts/validate-diff.mjs, checkScaled).
  */
 export function planPreowned({ data, baselines, observations, today, allowLarge = [] }) {
   const next = structuredClone(baselines ?? {})
   const decisions = []
   const rowChanges = []
+  const records = []
 
   // Group priced detail rows by vehicle + model year.
   const groups = new Map()
@@ -88,22 +92,27 @@ export function planPreowned({ data, baselines, observations, today, allowLarge 
       continue
     }
 
+    // A different CarGurus page (sources.json changed) restarts the vehicle's baselines: an
+    // average from one page is never compared with another page's. The contract flags the change.
+    // Every year's old average goes, observed on the new page or not.
+    const pageChanged = Boolean(baselines?.[g.vehicle]) && baselines[g.vehicle].source_url !== obs.url
+    if (pageChanged && next[g.vehicle]?.source_url !== obs.url) next[g.vehicle] = { source_url: obs.url, years: {} }
     const vehicleBase = (next[g.vehicle] ??= { source_url: obs.url, years: {} })
-    vehicleBase.source_url = obs.url
-    const base = vehicleBase.years[String(g.year)]
+    const was = baselines?.[g.vehicle]?.years?.[String(g.year)]
+    const base = pageChanged ? undefined : vehicleBase.years[String(g.year)]
 
     if (!base || base.basis !== basis) {
       vehicleBase.years[String(g.year)] = {
         basis,
         avg_price: seen.avgPrice,
         as_of: today,
-        last_repriced: base?.last_repriced ?? null,
-        last_move_pct: base?.last_move_pct ?? null,
+        last_repriced: was?.last_repriced ?? null,
+        last_move_pct: was?.last_move_pct ?? null,
       }
       decisions.push({
         ...d,
         state: 'baseline_set',
-        reason: base ? `Basis changed from ${base.basis} to ${basis}; baseline restarted` : 'First observation; baseline recorded',
+        reason: pageChanged ? 'CarGurus page changed; baselines restarted from the new page' : base ? `Basis changed from ${base.basis} to ${basis}; baseline restarted` : 'First observation; baseline recorded',
       })
       continue
     }
@@ -123,6 +132,23 @@ export function planPreowned({ data, baselines, observations, today, allowLarge 
     let changed = 0
     for (const row of g.rows) {
       const proposed = scaleRange(row.preowned_range, 1 + move)
+      records.push({
+        id: row.id,
+        record: {
+          source_url: obs.url,
+          verified_on: today,
+          evidence: d.evidence,
+          value: proposed,
+          method: 'derived',
+          method_version: 1,
+          derivation: 'cargurus_scaled',
+          vehicle: g.vehicle,
+          year: g.year,
+          basis,
+          prev_avg: base.avg_price,
+          new_avg: seen.avgPrice,
+        },
+      })
       if (proposed === row.preowned_range) continue
       rowChanges.push({ id: row.id, name: row.name, vehicle: g.vehicle, year: g.year, old: row.preowned_range, new: proposed })
       changed++
@@ -137,7 +163,7 @@ export function planPreowned({ data, baselines, observations, today, allowLarge 
     decisions.push({ ...d, state: 'repriced', rowsChanged: changed, reason: `${pct(move)} since ${base.as_of}` })
   }
 
-  return { decisions, rowChanges, baselines: next }
+  return { decisions, rowChanges, records, baselines: next }
 }
 
 /** Apply row changes to a copy of the data: details and preowned stay in sync. */

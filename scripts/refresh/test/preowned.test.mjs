@@ -132,3 +132,33 @@ test('rows that share a name but hold different ranges are each repriced', () =>
   assert.equal(out.details[0].preowned_range, '$29,000 - $34,000')
   assert.equal(out.details.at(-1).preowned_range, '$48,000 - $58,000')
 })
+
+test('a reprice writes a source record for every priced row of the group, changed or not', () => {
+  const data = makeData()
+  const plan = planPreowned({ data, baselines: baseline({ 2024: b(43000), 2025: b(40000, 'model') }), observations: obs({ 2024: { label: '2024 EV9', avgPrice: 41280, pct30: 0 } }), today: '2026-11-15' })
+  const ids = data.details.filter((r) => r.year === 2024).map((r) => r.id)
+  assert.deepEqual(plan.records.map((x) => x.id), ids)
+  for (const { id, record } of plan.records) {
+    assert.deepEqual(record, {
+      source_url: URL_EV9, verified_on: '2026-11-15', evidence: '2024 EV9: $41,280',
+      value: plan.rowChanges.find((c) => c.id === id)?.new ?? data.details.find((r) => r.id === id).preowned_range,
+      method: 'derived', method_version: 1, derivation: 'cargurus_scaled',
+      vehicle: 'Kia EV9', year: 2024, basis: 'model_year', prev_avg: 43000, new_avg: 41280,
+    })
+  }
+  // No reprice, no records
+  assert.deepEqual(planPreowned({ data, baselines: baseline({ 2024: b(41280) }), observations: obs({ 2024: { label: '2024 EV9', avgPrice: 41280, pct30: 0 } }), today: '2026-11-15' }).records, [])
+})
+
+test('a changed CarGurus page restarts the baselines instead of repricing across pages', () => {
+  const data = makeData()
+  const NEW = 'https://www.cargurus.com/research/price-trends/Kia-EV9-new'
+  // 2025 has a baseline from the old page but no row on the new one: it must not survive
+  const plan = planPreowned({ data, baselines: baseline({ 2024: b(43000), 2025: b(40000) }), observations: { 'Kia EV9': { url: NEW, parsed: { model: null, years: { 2024: { label: '2024 EV9', avgPrice: 35000, pct30: 0 } } } } }, today: '2026-11-15' })
+  assert.equal(state(plan, 2024), 'baseline_set')
+  assert.deepEqual(plan.rowChanges, [])
+  assert.deepEqual(plan.records, [])
+  assert.equal(plan.baselines['Kia EV9'].source_url, NEW)
+  assert.equal(plan.baselines['Kia EV9'].years['2024'].avg_price, 35000)
+  assert.deepEqual(Object.keys(plan.baselines['Kia EV9'].years), ['2024'])
+})

@@ -17,6 +17,9 @@ Read CLAUDE.md for project context.
 - `range_basis`: "EPA" may appear in generated text only for `epa` rows, which need a reviewed EPA mapping. A manufacturer estimate or an unverified range described as EPA is P0.
 - Protected fields (`seats`, `cargo_behind_*`, `fold_flat`, `cargo_floor_width_in`) must not be changed by automation.
 
+### Bot data PRs (`data-refresh/*` branches)
+The weekly workflows open these and merge them themselves once `build` and `data-contract` pass (docs/plans/resume-publishing.md). An open review conversation blocks that merge, so comment only on a real problem: a P0 or P1 under the rules above (for example a price or source the contract should not have accepted). Repriced `preowned_range` values with `cargurus_scaled` records, and `scripts/refresh/state/*.json` bookkeeping, are routine; don't comment on them otherwise.
+
 ## Plan Review Rules
 Files in docs/plans/ are design plans, not code. Review them as an architect:
 - Does the approach fit the existing structure, or reinvent something that exists?

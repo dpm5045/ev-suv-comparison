@@ -140,7 +140,10 @@ if (failed === Object.keys(observations).length) {
 if (apply) {
   const nextData = applyRowChanges(data, plan.rowChanges, today)
   if (nextData !== data) writeJson(DATA_PATH, nextData)
-  const nextProvenance = { ...provenance, preowned: plan.baselines }
+  // The baselines, plus a source record for every row of each repriced group (the data contract checks them)
+  const fields = structuredClone(provenance.fields ?? {})
+  for (const { id, record } of plan.records) (fields[id] ??= {}).preowned_range = record
+  const nextProvenance = { ...provenance, preowned: plan.baselines, fields }
   if (JSON.stringify(nextProvenance) !== JSON.stringify(provenance)) writeJson(PROVENANCE_PATH, nextProvenance)
   const nextState = { schema_version: 1, unavailable }
   const unchanged = JSON.stringify(nextState) === JSON.stringify({ schema_version: 1, unavailable: state.unavailable ?? {} })

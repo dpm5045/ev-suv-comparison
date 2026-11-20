@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url'
 import { evaluate, evidenceSupports, renderReport } from '../../validate-diff.mjs'
 import { checkState, applyBaseline } from '../../schema/ev-data.schema.mjs'
 import { patchSha256 } from '../lib/hashes.mjs'
+import { planPreowned, applyRowChanges } from '../lib/preowned-plan.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
 const FILES = ['lib/ev-data.json', 'lib/ev-data.provenance.json', 'scripts/refresh/accepted.json', 'scripts/refresh/retired-ids.json', 'scripts/schema/known-violations.json', 'scripts/refresh/source-policy.json']
@@ -263,12 +264,82 @@ test('top-level changes show the actual entries that changed', () => {
   assert.equal(item.new.value, 'CHANGED')
   assert.notEqual(item.old.value, 'CHANGED')
 })
-test('pre-owned baselines are validated, and changes show the values', () => {
+test('pre-owned baselines are validated; an average moved on its own is shown for review', () => {
   const bad = run((f) => { const p = f['lib/ev-data.provenance.json'].preowned; const v = Object.keys(p)[0]; const y = Object.keys(p[v].years)[0]; p[v].years[y].avg_price = -5 })
   assert.ok(rules(bad).includes('prov-baseline'))
-  const ok = run((f) => { const p = f['lib/ev-data.provenance.json'].preowned; const v = Object.keys(p)[0]; const y = Object.keys(p[v].years)[0]; p[v].years[y].avg_price += 100 })
-  // The whole baseline is compared: a changed year shows as the vehicle's `years` block, with real values
-  assert.ok(ok.review.some((x) => x.field.startsWith('preowned baseline') && x.field.endsWith('.years') && Object.values(x.new).some((y) => typeof y.avg_price === 'number')))
+  const ok = run((f) => { f['lib/ev-data.provenance.json'].preowned['Kia EV9'].years['2024'].avg_price += 100 })
+  assert.deepEqual(ok.errors, [])
+  assert.ok(ok.review.some((x) => x.field === 'preowned baseline Kia EV9.years.2024.avg_price' && x.old === 41280 && x.new === 41380))
+})
+
+// ── Repricing (docs/plans/resume-publishing.md §3): the producer's own output must pass ──
+const CG = 'https://www.cargurus.com/research/price-trends/Kia-EV9-d3322'
+/** Run the real producer logic on the head files, as scripts/refresh/preowned.mjs --apply does. */
+const reprice = (f, avgByYear, { allowLarge = [], url = CG } = {}) => {
+  const years = Object.fromEntries(Object.entries(avgByYear).map(([y, avg]) => [y, { label: `${y} Kia EV9`, avgPrice: avg, pct30: null }]))
+  const prov = f['lib/ev-data.provenance.json']
+  const plan = planPreowned({ data: f['lib/ev-data.json'], baselines: prov.preowned, observations: { 'Kia EV9': { url, parsed: { model: null, years } } }, today: '2026-11-23', allowLarge })
+  f['lib/ev-data.json'] = applyRowChanges(f['lib/ev-data.json'], plan.rowChanges, '2026-11-23')
+  prov.preowned = plan.baselines
+  for (const { id, record } of plan.records) (prov.fields[id] ??= {}).preowned_range = record
+  return plan
+}
+const EV9_2024 = (f) => f['lib/ev-data.json'].details.filter((r) => r.vehicle === 'Kia EV9' && r.year === 2024)
+const firstRec = (f) => f['lib/ev-data.provenance.json'].fields[EV9_2024(f)[0].id].preowned_range
+
+test('a weekly repricing by the producer passes with no review items (it can merge itself)', () => {
+  let plan
+  const r = run((f) => { plan = reprice(f, { 2024: 39216 }) }) // -5%
+  assert.ok(plan.rowChanges.length > 0)
+  assert.deepEqual(r.errors, [])
+  assert.deepEqual(r.review, [])
+  assert.ok(r.changes.some((c) => c.field === 'preowned_range' && c.source === CG && /39,216/.test(c.quote)))
+})
+test('a repricing record must match its row, its baseline and the math', () => {
+  const cases = {
+    'another model year': (f) => { firstRec(f).year = 2025 },
+    'another vehicle': (f) => { firstRec(f).vehicle = 'Rivian R1S' },
+    'a different page': (f) => { firstRec(f).source_url = 'https://www.cargurus.com/research/price-trends/other' },
+    'not CarGurus': (f) => { firstRec(f).source_url = 'https://www.kbb.com/kia/ev9/' },
+    'a wrong previous average': (f) => { firstRec(f).prev_avg = 40000 },
+    'a basis that differs': (f) => { firstRec(f).basis = 'model' },
+    'evidence without the new average': (f) => { firstRec(f).evidence = '2024 Kia EV9: $41,000' },
+    'evidence quoting another year\'s row': (f) => { firstRec(f).evidence = '2025 Kia EV9: $39,216' },
+    'evidence quoting the model-wide row': (f) => { firstRec(f).evidence = 'Kia EV9: $39,216' },
+    'evidence that is not a table row': (f) => { firstRec(f).evidence = 'CarGurus says 2024 Kia EV9 averages $39,216 now' },
+    'evidence quoting another model': (f) => { firstRec(f).evidence = '2024 Model X: $39,216' },
+    'evidence naming only the brand': (f) => { firstRec(f).evidence = '2024 Kia: $39,216' },
+    'a range that is not the scaled one': (f) => { const x = EV9_2024(f)[0]; x.preowned_range = '$1,000 - $2,000'; firstRec(f).value = x.preowned_range },
+  }
+  for (const [name, spoil] of Object.entries(cases)) {
+    const r = run((f) => { reprice(f, { 2024: 39216 }); spoil(f) })
+    assert.ok(rules(r).includes('evidence-scaled'), `${name}: ${JSON.stringify(r.errors.slice(0, 2))}`)
+  }
+})
+test('a repricing under the 3% threshold is rejected; one over 15% passes only for the owner', () => {
+  const small = run((f) => {
+    const p = f['lib/ev-data.provenance.json']; p.preowned['Kia EV9'].years['2024'].avg_price = 41500
+    for (const x of EV9_2024(f)) (p.fields[x.id] ??= {}).preowned_range = { source_url: CG, verified_on: '2026-11-23', evidence: '2024 Kia EV9: $41,500', value: x.preowned_range, method: 'derived', method_version: 1, derivation: 'cargurus_scaled', vehicle: 'Kia EV9', year: 2024, basis: 'model_year', prev_avg: 41280, new_avg: 41500 }
+  })
+  assert.ok(rules(small).includes('evidence-scaled'))
+  const large = run((f) => { reprice(f, { 2024: 33024 }, { allowLarge: ['Kia EV9|2024'] }) }) // -20%, allowed by the agent
+  assert.deepEqual(large.errors, [])
+  assert.ok(large.review.some((x) => x.field === 'preowned_range' && /over the 15% automatic limit/.test(x.why)))
+})
+test('a baseline average moves without review only when every row passed the repricing check', () => {
+  // Rows keep their prices with "observed" records that merely carry the repricing fields
+  const r = run((f) => {
+    const p = f['lib/ev-data.provenance.json']; p.preowned['Kia EV9'].years['2024'].avg_price = 39216
+    for (const x of EV9_2024(f)) (p.fields[x.id] ??= {}).preowned_range = { source_url: CG, verified_on: '2026-11-23', evidence: `2024 Kia EV9: ${x.preowned_range}`, value: x.preowned_range, method: 'observed', method_version: 1, derivation: 'cargurus_scaled', vehicle: 'Kia EV9', year: 2024, basis: 'model_year', prev_avg: 41280, new_avg: 39216 }
+  })
+  assert.ok(r.review.some((x) => x.field === 'preowned baseline Kia EV9.years.2024.avg_price'), JSON.stringify(r.errors.slice(0, 2)))
+})
+test('a baseline restart (basis change) or a new year is reviewed', () => {
+  const basis = run((f) => { reprice(f, { 2025: 45000 }) }) // 2025 was model-wide; a year row restarts the baseline
+  assert.deepEqual(basis.errors, [])
+  assert.ok(basis.review.some((x) => x.field === 'preowned baseline Kia EV9.years.2025' && /basis changed/.test(x.why)))
+  const removed = run((f) => { delete f['lib/ev-data.provenance.json'].preowned['Kia EV9'].years['2024'] })
+  assert.ok(removed.review.some((x) => x.field === 'preowned baseline Kia EV9.years.2024' && x.why === 'baseline removed'))
 })
 test('the report says the PR passed and lists review items, with no forms to fill in', () => {
   const r = run((f) => { row(f, EV9).cargo_behind_3rd_cu_ft = 25; rec(f, EV9, 'cargo_behind_3rd_cu_ft', 25) })

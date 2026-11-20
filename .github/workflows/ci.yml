@@ -1,13 +1,16 @@
 name: CI
 
 # Baseline checks for every pull request and every push to master
-# (build spec WP-A.1). Advisory until the required-check design in WP-I lands;
-# merge only when it is green.
+# (build spec WP-A.1). The `build` job is a required check on master.
 
 on:
   pull_request:
   push:
     branches: [master]
+  # The data publishers open PRs with GITHUB_TOKEN, which starts no workflows; they
+  # dispatch this on the PR branch so `build` reports on its head commit
+  # (scripts/refresh/publish-pr.sh; docs/plans/resume-publishing.md §1).
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -41,6 +44,15 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Lint workflows (actionlint)
+        run: |
+          v=1.7.7
+          curl -fsSL -o "$RUNNER_TEMP/al.tgz" "https://github.com/rhysd/actionlint/releases/download/v${v}/actionlint_${v}_linux_amd64.tar.gz"
+          echo "023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757  $RUNNER_TEMP/al.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/al.tgz" -C "$RUNNER_TEMP" actionlint
+          # Expressions, inputs, permissions and job wiring; shellcheck is not run on the scripts
+          "$RUNNER_TEMP/actionlint" -color -shellcheck=
 
       - name: Type check
         run: npm run typecheck
