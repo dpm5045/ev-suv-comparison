@@ -16,7 +16,7 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  actions: write       # dispatches the required checks on its PR; the Tuesday backup reads Monday's run
+  actions: write       # runs a required check that never started on its PR; the Tuesday backup reads Monday's run
   checks: read         # waits for the `build` check
   statuses: read       # waits for the `data-contract` status
   contents: write
@@ -76,6 +76,8 @@ jobs:
 
       - name: Tidy open data PRs
         id: tidy
+        env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
         run: bash scripts/refresh/tidy-prs.sh preowned --wait-for-agent
 
       - name: Fetch and reprice
@@ -95,6 +97,8 @@ jobs:
       - name: Publish (PR, required checks, merge)
         id: publish
         if: steps.tidy.outputs.skip != 'yes'
+        env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
         run: |
           bash scripts/refresh/publish-pr.sh --producer preowned --intent auto \
             --allow 'lib/ev-data\.json|lib/ev-data\.provenance\.json|scripts/refresh/state/preowned\.json' \
@@ -102,6 +106,8 @@ jobs:
 
       - name: Keep owner PRs current after this merge
         if: steps.publish.outputs.outcome == 'merged'
+        env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
         run: bash scripts/refresh/tidy-prs.sh preowned --owner-prs-only
 
       - name: Mark the run as paused (the backup schedule retries it)

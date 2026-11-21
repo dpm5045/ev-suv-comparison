@@ -31,7 +31,7 @@ on:
         default: false
 
 permissions:
-  actions: write       # dispatches the required checks on its PR; the Tuesday backup reads Monday's run
+  actions: write       # runs a required check that never started on its PR; the Tuesday backup reads Monday's run
   checks: read         # waits for the `build` check
   statuses: read       # waits for the `data-contract` status
   contents: write
@@ -92,6 +92,8 @@ jobs:
       - name: Tidy open data PRs
         id: tidy
         if: '!inputs.rehearsal'   # a rehearsal touches nothing but its own bookkeeping PR
+        env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
         run: bash scripts/refresh/tidy-prs.sh watch
 
       - name: Check EPA and price pages
@@ -118,6 +120,7 @@ jobs:
         id: publish
         if: steps.tidy.outputs.skip != 'yes'
         env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
           REHEARSAL: ${{ inputs.rehearsal && '--rehearsal' || '' }}
         run: |
           # REHEARSAL is empty or the one flag --rehearsal (left unquoted on purpose)
@@ -127,6 +130,8 @@ jobs:
 
       - name: Keep owner PRs current after this merge
         if: steps.publish.outputs.outcome == 'merged' && !inputs.rehearsal
+        env:
+          PUBLISH_TOKEN: ${{ secrets.DATA_PUBLISH_TOKEN }}   # opens/updates PRs as the owner
         run: bash scripts/refresh/tidy-prs.sh watch --owner-prs-only
 
       - name: Mark the run as paused (the backup schedule retries it)
