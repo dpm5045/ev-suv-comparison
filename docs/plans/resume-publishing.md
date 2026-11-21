@@ -2,7 +2,7 @@
 
 **Context:** a single-maintainer hobby site about three-row EVs. The owner's direction (2026-11-18): **no manual inputs**. Routine updates publish themselves; the owner's only job is to read and merge the PRs that need a person. This plan replaces BUILD-SPEC's WP-G, WP-H, WP-I and WP-J with the smallest change that gets the weekly jobs publishing again **through the data contract** (WP-F, merged).
 
-Publication has been paused since 2026-11-17 (`scripts/refresh/publish-control.json`).
+Publication was paused from 2026-11-17 to 2026-11-21 (`scripts/refresh/publish-control.json`). It resumed after the fourth rehearsal (#71) opened its PR with the publishing token and merged itself.
 
 ## Goal
 
@@ -170,3 +170,5 @@ Three rehearsals (PRs #67, #68, #69) each opened their PR and passed both requir
 - Item 3 was: a PR opened with `GITHUB_TOKEN` *does* get a `ci.yml` `pull_request` run, held as `action_required` (approval needed), as GitHub now documents. No reviews, threads or other rules were involved.
 
 **Fix:** a fine-grained token of the owner's (`DATA_PUBLISH_TOKEN`; this repo only, Contents and Pull requests read/write). `publish-pr.sh` pushes the branch and opens the PR with it, and `tidy-prs.sh` updates behind PRs with it, so the PR's own `ci.yml` and `data-contract.yml` (`pull_request_target`) runs start as on any PR. The merge stays on `GITHUB_TOKEN`, which can't use the admin bypass, so the ruleset still applies to it. A check that hasn't appeared after 4 minutes is dispatched once, as before. Only the steps that open or update PRs get the token; the agent's patch is checked against its allowlist before it is applied in that step. Codex recommended the same split (token to open, `GITHUB_TOKEN` to merge) over a GitHub App, a bypass actor, auto-merge or changing CI's triggers.
+
+**Fourth rehearsal (#71, 2026-11-21):** opened by the owner's token, its own `pull_request` CI and `pull_request_target` data contract passed, no fallback dispatch was needed, and `github-actions` merged it with `GITHUB_TOKEN` about 5½ minutes after it opened. It changed only `scripts/refresh/state/rehearsal.json`. Publication resumed with the next PR.
