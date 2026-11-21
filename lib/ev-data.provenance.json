@@ -344,6 +344,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 EV9 Standard Range RWD: 230 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.kia.com/us/en/ev9",
+        "verified_on": "2026-11-21",
+        "evidence": "2027 EV9 trims: \"name\":\"Light\",\"code\":\"Light\",\"baseMsrp\":54990",
+        "value": 54990,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "kia-ev9-2027-light-long-range-rwd": {
@@ -352,6 +360,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 EV9 Long Range RWD: 305 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.kia.com/us/en/ev9",
+        "verified_on": "2026-11-21",
+        "evidence": "2027 EV9 trims: \"name\":\"Light Long Range\",\"code\":\"Light Long Range\",\"baseMsrp\":57990",
+        "value": 57990,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "kia-ev9-2027-wind": {
@@ -360,6 +376,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 EV9 Long Range AWD: 283 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.kia.com/us/en/ev9",
+        "verified_on": "2026-11-21",
+        "evidence": "2027 EV9 trims: \"name\":\"Wind AWD\",\"code\":\"Wind AWD\",\"baseMsrp\":64090",
+        "value": 64090,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "kia-ev9-2027-land": {
@@ -368,6 +392,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 EV9 Long Range AWD: 283 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.kia.com/us/en/ev9",
+        "verified_on": "2026-11-21",
+        "evidence": "2027 EV9 trims: \"name\":\"Land AWD\",\"code\":\"Land AWD\",\"baseMsrp\":69990",
+        "value": 69990,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "kia-ev9-2027-gt-line": {
@@ -376,6 +408,14 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2027 EV9 Long Range AWD GT-Line: 280 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.kia.com/us/en/ev9",
+        "verified_on": "2026-11-21",
+        "evidence": "2027 EV9 trims: \"name\":\"GT-Line AWD\",\"code\":\"GT-Line AWD\",\"baseMsrp\":71990",
+        "value": 71990,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "hyundai-ioniq-9-2026-performance-calligraphy": {
