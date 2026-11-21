@@ -4,7 +4,7 @@
 
 
 **Responds to:** "ThreeRowEV architecture and codebase audit" (2026-11-16, revision `0704645`), "Review of ThreeRowEV remediation build spec" (2026-11-16), and the reviewer's notes on v2 (2026-11-17).
-**Status:** v3.1. **Design approved to proceed** (reviewer, 2026-11-17), with the two safeguards in "What changed in v3.1". **WP-A, WP-B, WP-C and WP-D are built and live**. The reviewer's approval covers the design only, not those implementations, which still need review of their changes and test results (PRs #44–#47, #50). WP-K is in progress.
+**Status:** v3.1. **Design approved to proceed** (reviewer, 2026-11-17), with the two safeguards in "What changed in v3.1". **WP-A to WP-F are built and live**, and WP-G to WP-J were replaced by a simpler plan (docs/plans/resume-publishing.md), live since 2026-11-21 (#66, #70, #72). The reviewer's approval covers the design only, not those implementations (PRs #44–#47, #50, #53, #58, #64–#66, #70). In WP-K, K.1 and K.4 are done; K.2 (CSP) and K.3 (performance) are optional and not started.
 
 **Decisions taken:**
 - **D1: no 5-seat configurations in Speed Dating.** The reviewer recommended this and it was the original proposal. It is easy to reverse: one constant.
@@ -72,15 +72,15 @@ flowchart LR
 | **B** | Speed Dating scores real configurations; condition is independent of budget | F5, F6 | **Done** (#45) | 1–2 days |
 | **C** | Tie-aware text; honest range basis (interim); visible FAQ | F7 | **Done** (#46); unverified-default correction in #50 | 1 day |
 | **D** | Upgrade to Next 16.x (supported) with React 19 | F1 | **Done** (#47) | 2–3 days |
-| **E** | Stable IDs; availability, price status and range basis; migration with review table; compatibility gate | F3, F4, F6, F7 | Revised design | 3–4 days |
-| **F** | Schema; diff validator; trusted approvals | F3 | Revised design | 3 days |
+| **E** | Stable IDs; availability, price status and range basis; migration with review table; compatibility gate | F3, F4, F6, F7 | **Done** (#53) | 3–4 days |
+| **F** | Schema; diff validator; trusted approvals | F3 | **Done** (#58, #65); approvals replaced by the owner's merge (#64) | 3 days |
 | **G** | Pre-owned producer provenance; derived counts and pre-owned table | F3, F9 | **Superseded** by docs/plans/resume-publishing.md (simplified) | 2 days |
 | **H** | Agent containment, verified with canaries | F2 | **Superseded** by docs/plans/resume-publishing.md (simplified) | 3–5 days |
 | **I** | Proposal → verify → writer flow; one required check; serialized writers. **Needs F, G and H.** | F8, F9 | **Superseded** by docs/plans/resume-publishing.md (simplified) | 3–4 days |
 | **J** | Inbox item lifecycle; `data-state`; EPA auto-fix on reviewed mappings | F4, F9 | **Superseded** by docs/plans/resume-publishing.md (simplified) | 3 days |
-| **K** | Accessible drawer; CSP; performance baseline; cleanup | F10 | **In progress**: K.4 (#48), K.1 (#49) | 3–5 days |
+| **K** | Accessible drawer; CSP; performance baseline; cleanup | F10 | K.1 (#49) and K.4 (#48) **done**; K.2 and K.3 optional, not started | 3–5 days |
 
-**Publication pause window.** From the moment WP-E's migration is about to merge until WP-F, WP-G and WP-I have all landed, the data publishers do not write (E.3). Data Watch may keep running in **report-only** mode: it reads sources and posts to the inbox, with no repository writes. The agent stays off.
+**Publication pause window** (2026-11-17 to 2026-11-21; ended by docs/plans/resume-publishing.md). From the moment WP-E's migration is about to merge until WP-F, WP-G and WP-I have all landed, the data publishers do not write (E.3). Data Watch may keep running in **report-only** mode: it reads sources and posts to the inbox, with no repository writes. The agent stays off.
 
 ---
 
