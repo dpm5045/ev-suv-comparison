@@ -51,7 +51,16 @@ Work in this order and stop adding work once you have used about two thirds of y
 3. **Prices.** `msrp` and `destination` for the two newest model years of each vehicle, except where the watch report shows the stored price on the manufacturer page with no change and the provenance entry is under 180 days old.
 4. **TBD and gaps** (refresh.md Phases 2 and 5), oldest `verified_on` first.
 5. **Watch List.** Check each vehicle in `WATCHLIST_META` (`lib/watchlist.ts`) for official news: pricing published, a firm on-sale date, cancellation. Update `status`, `window`, `windowLabel` and `blurb` only from a fetched official or major-press source.
-6. **New vehicles** (refresh.md Phase 4) — list them in the changelog only. Adding a vehicle needs theme colors and a person's decision.
+6. **Used-price pages CarGurus has added.** Run `node scripts/refresh/preowned.mjs` (a dry run; it writes nothing) and find the vehicles marked `no_source`. For each one:
+   - Get its CarGurus ID from the vehicle's CarGurus listings page: the `d` number in a URL like `cargurus.com/Cars/l-Used-Lucid-Gravity-d3439`.
+   - Fetch `https://www.cargurus.com/research/price-trends/<Make>-<Model>-<id>`. If it redirects to the general price-trends index, CarGurus has no page yet. Say so in one line under Summary and change nothing.
+   - **Check it is this vehicle's page:** the final URL (after any redirect) still names this make and model, and the page's heading and price text name it too (for example "the average used Lucid Gravity sells for…"), not a similarly named model. If not, change nothing and say so. Quote the final URL and that line under Changes, so the owner can check the match.
+   - Otherwise, add it to `cargurus_price_trends` in `scripts/refresh/sources.json`, keyed by the vehicle name exactly as it appears in the data, and re-run the dry run. A page with only a model-wide average is fine; the script falls back to it.
+   - **Keep the entry only if** at least one of that vehicle's groups now shows `baseline_set`. If they show `source_unavailable` or `rejected`, or are all still `no_source`, remove the entry again and say why in one line under Summary. Don't use `--apply`: the weekly pricing job records the first baseline.
+   - Under "For a person", say that merging this PR only registers the page: the next weekly pricing run opens a second PR with the first baseline, flagged `needs-owner-review`, and repricing starts only once the owner merges that one too.
+
+   As of 2026-11-21 the only such vehicle is Lucid Gravity (`d3439`), which has no trends page yet.
+7. **New vehicles** (refresh.md Phase 4) — list them in the changelog only. Adding a vehicle needs theme colors and a person's decision.
 
 ## Rules that are different when unattended
 
