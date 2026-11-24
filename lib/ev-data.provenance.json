@@ -117,10 +117,10 @@
         },
         "2024": {
           "basis": "model_year",
-          "avg_price": 71014,
-          "as_of": "2026-11-15",
-          "last_repriced": null,
-          "last_move_pct": null
+          "avg_price": 73743,
+          "as_of": "2026-11-24",
+          "last_repriced": "2026-11-24",
+          "last_move_pct": 3.84
         },
         "2025": {
           "basis": "model",
@@ -1842,6 +1842,20 @@
         "verified_on": "2026-11-16",
         "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
         "legacy": "name_keyed"
+      },
+      "preowned_range": {
+        "source_url": "https://www.cargurus.com/research/price-trends/Tesla-Model-X-d2132",
+        "verified_on": "2026-11-24",
+        "evidence": "2024 Model X: $73,743",
+        "value": "$67,000 - $77,000",
+        "method": "derived",
+        "method_version": 1,
+        "derivation": "cargurus_scaled",
+        "vehicle": "Tesla Model X",
+        "year": 2024,
+        "basis": "model_year",
+        "prev_avg": 71014,
+        "new_avg": 73743
       }
     },
     "tesla-model-x-2024-base-6s": {
@@ -1856,6 +1870,20 @@
         "verified_on": "2026-11-16",
         "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
         "legacy": "name_keyed"
+      },
+      "preowned_range": {
+        "source_url": "https://www.cargurus.com/research/price-trends/Tesla-Model-X-d2132",
+        "verified_on": "2026-11-24",
+        "evidence": "2024 Model X: $73,743",
+        "value": "$63,000 - $73,000",
+        "method": "derived",
+        "method_version": 1,
+        "derivation": "cargurus_scaled",
+        "vehicle": "Tesla Model X",
+        "year": 2024,
+        "basis": "model_year",
+        "prev_avg": 71014,
+        "new_avg": 73743
       }
     },
     "tesla-model-x-2024-base-7s": {
@@ -1870,6 +1898,20 @@
         "verified_on": "2026-11-16",
         "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
         "legacy": "name_keyed"
+      },
+      "preowned_range": {
+        "source_url": "https://www.cargurus.com/research/price-trends/Tesla-Model-X-d2132",
+        "verified_on": "2026-11-24",
+        "evidence": "2024 Model X: $73,743",
+        "value": "$63,000 - $73,000",
+        "method": "derived",
+        "method_version": 1,
+        "derivation": "cargurus_scaled",
+        "vehicle": "Tesla Model X",
+        "year": 2024,
+        "basis": "model_year",
+        "prev_avg": 71014,
+        "new_avg": 73743
       }
     },
     "tesla-model-x-2024-plaid": {
@@ -1884,6 +1926,20 @@
         "verified_on": "2026-11-16",
         "evidence": "Derived: HW4 in Model S/X production from early 2023, so MY2024 has HW4. Feb 22 2023: \"A couple of Tesla Model S and Model X vehicles have been spotted with the new Hardware 4.0 suite of cameras.\"",
         "legacy": "name_keyed"
+      },
+      "preowned_range": {
+        "source_url": "https://www.cargurus.com/research/price-trends/Tesla-Model-X-d2132",
+        "verified_on": "2026-11-24",
+        "evidence": "2024 Model X: $73,743",
+        "value": "$81,000 - $93,000",
+        "method": "derived",
+        "method_version": 1,
+        "derivation": "cargurus_scaled",
+        "vehicle": "Tesla Model X",
+        "year": 2024,
+        "basis": "model_year",
+        "prev_avg": 71014,
+        "new_avg": 73743
       }
     },
     "lucid-gravity-2026-dream-edition": {
