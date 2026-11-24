@@ -34,6 +34,7 @@ import {
   trimsByYear,
   USED_DEK,
   usedHeadline,
+  usedHighlight,
   usedVsNew,
 } from '@/lib/data-stories'
 
@@ -219,7 +220,7 @@ export function RangeStory({ n }: StoryNumber) {
       headline={RANGE_STORY_HEADLINE}
       dek={rangeDek()!}
       source={`Vertical axis: rated range in miles. One dot per model, plotted at its best-value AWD trim with at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom. Source: 3RowEV dataset, model years ${recentYearsLabel()}.${leftOut()}`}
-      label={`Scatter plot of range against MSRP for ${pts.length} models; most sit between ${RANGE_BAND[0]} and ${RANGE_BAND[1]} miles.`}
+      label={`Scatter plot of range against MSRP for ${pts.length} models; ${pts.filter((p) => p.range >= RANGE_BAND[0] && p.range <= RANGE_BAND[1]).length} sit between ${RANGE_BAND[0]} and ${RANGE_BAND[1]} miles.`}
     >
       <div className="ds-scatter">
         <div className="ds-scatter-y">
@@ -334,11 +335,7 @@ export function ValueStory({ n }: StoryNumber) {
 /** Best new trim against best used trim, per model. Reused on the home page when the Value story is empty. */
 export function UsedChart() {
   const rows = usedVsNew()
-  const both = rows.filter((r) => r.newBest)
-  const top = both.reduce<(typeof both)[number] | null>(
-    (a, b) => (!a || b.newBest!.perMile - b.used.perMile > a.newBest!.perMile - a.used.perMile ? b : a),
-    null,
-  )
+  const top = usedHighlight()
   // Headroom past the largest value so its dot and the last tick label stay inside the chart
   const hi = Math.ceil((Math.max(...rows.map((r) => Math.max(r.used.perMile, r.newBest?.perMile ?? 0))) + 10) / 50) * 50
   const x = (v: number) => (v / hi) * 100
@@ -391,7 +388,7 @@ export function UsedChart() {
 }
 
 export const usedSource = () =>
-  `Used prices are estimated ranges for each trim, refreshed weekly from CarGurus market averages; each dot uses the middle of the range. Range is the rating when new, before any battery wear. New: MSRP excludes destination. AWD trims with at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom.${leftOut()}`
+  `Used prices are our estimated ranges for each trim, scaled weekly to CarGurus market averages where CarGurus tracks that model year; each dot uses the middle of the range. Range is the rating when new, before any battery wear. New: MSRP excludes destination. AWD trims with at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom.${leftOut()}`
 
 export function UsedStory({ n }: StoryNumber) {
   const rows = usedVsNew()

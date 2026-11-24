@@ -68,7 +68,8 @@ test('market insights page renders stories and the explorer chart', async ({ pag
   await page.goto('/market-insights')
   const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
   const stories = await page.locator('.ds-story').count()
-  expect(stories).toBeGreaterThanOrEqual(4)
+  // Stories with thin data are skipped by design; the title must count what renders
+  expect(stories).toBeGreaterThanOrEqual(1)
   await expect(page.locator('main.main')).toContainText(`in ${WORDS[stories]} charts`)
   await expect(page.locator('.explorer')).toBeVisible()
   // Plot renders <svg> today; Chart.js renders <canvas> after the chart port — accept either
@@ -88,7 +89,7 @@ test('market insights fits a phone screen and shows every story headline', async
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/market-insights')
   const headlines = page.locator('.ds-story .ds-headline')
-  expect(await headlines.count()).toBeGreaterThanOrEqual(4)
+  expect(await headlines.count()).toBeGreaterThanOrEqual(1)
   for (const h of await headlines.all()) await expect(h).toBeVisible()
   const { scrollWidth, clientWidth } = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }))
   expect(scrollWidth).toBeLessThanOrEqual(clientWidth)

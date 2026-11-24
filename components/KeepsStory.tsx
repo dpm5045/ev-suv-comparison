@@ -1,5 +1,5 @@
 /**
- * "What a car keeps": used price as a share of a sourced original MSRP.
+ * "What a car keeps": used price as a share of the sourced MSRP on record for that model year.
  * Server-only (reads provenance through lib/msrp-sources.ts); never import it from
  * a client component. Same chart conventions as DataStories.tsx.
  */
@@ -24,7 +24,7 @@ function Panel({ vehicle, points, axisMax, hiYear }: KeepsData['panels'][number]
         ))}
         <div className="ds-keeps-cols" style={{ gridTemplateColumns: `repeat(${points.length}, minmax(0, 1fr))` }}>
           {points.map((p) => (
-            <div key={p.year} className="ds-col" title={`${vehicle} ${p.year}: about ${p.pct}% of original MSRP (${p.n} trim${p.n === 1 ? '' : 's'})`}>
+            <div key={p.year} className="ds-col" title={`${vehicle} ${p.year}: about ${p.pct}% of MSRP on record (${p.n} trim${p.n === 1 ? '' : 's'})`}>
               <span className="ds-col-value">{p.pct}%</span>
               <div className={`ds-col-bar${p.year === hiYear ? ' ds-mark--hi' : ''}`} style={{ height: pct((p.pct / axisMax) * 100) }} />
             </div>
@@ -50,9 +50,9 @@ export default function KeepsStory({ n }: StoryNumber) {
     <Story
       kicker={`${n} · Keeps`}
       headline={keepsHeadline(k)}
-      dek="What each model year sells for today, as a share of what it cost new. A snapshot of today's prices, not one car's value over time."
-      source={`Used prices: CarGurus market averages, refreshed weekly (middle of each trim's range). Original MSRP: the maker's published price for that model year, excluding destination. Based on ${k.covered} of ${k.total} used trims (AWD, at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom); the rest have no sourced original MSRP. n = trims behind each bar; seat layouts of one trim count once.`}
-      label={`Column charts of used price as a share of original MSRP by model year, for ${k.panels.map((p) => p.vehicle).join(', ')}.`}
+      dek="What each model year sells for today, as a share of its MSRP on record for that model year. A snapshot of today's prices, not one car's value over time."
+      source={`Used prices: CarGurus market averages, refreshed weekly (middle of each trim's range). MSRP: the maker's published price for that model year as recorded in our data, excluding destination; a price revised during the year shows the revised price. Based on ${k.covered} of ${k.total} used trims (AWD, at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom); the rest have no sourced MSRP. n = trims behind each bar; seat layouts of one trim count once.`}
+      label={`Column charts of used price as a share of MSRP on record by model year, for ${k.panels.map((p) => p.vehicle).join(', ')}.`}
     >
       <div className="ds-keeps">
         {k.panels.map((p, i) => (

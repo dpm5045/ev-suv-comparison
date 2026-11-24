@@ -266,11 +266,17 @@ export function usedVsNew(rows: Rows = DATA.details): UsedVsNew[] {
     .sort((a, b) => a.used.perMile - b.used.perMile || a.vehicle.localeCompare(b.vehicle))
 }
 
-export function usedHeadline(rows: Rows = DATA.details): string | null {
-  const both = usedVsNew(rows).filter((u) => u.newBest)
+/** The model the used headline names and the chart highlights: the biggest new-minus-used gap per mile. */
+export function usedHighlight(rows: Rows = DATA.details): (UsedVsNew & { newBest: ValueTrim }) | null {
+  const both = usedVsNew(rows).filter((u): u is UsedVsNew & { newBest: ValueTrim } => u.newBest !== null)
   if (!both.length) return null
-  const top = both.reduce((a, b) => (b.newBest!.perMile - b.used.perMile > a.newBest!.perMile - a.used.perMile ? b : a), both[0])
-  return `The best-value used ${top.vehicle} costs $${top.used.perMile} per mile of range. The best-value new one, $${top.newBest!.perMile}.`
+  return both.reduce((a, b) => (b.newBest.perMile - b.used.perMile > a.newBest.perMile - a.used.perMile ? b : a), both[0])
+}
+
+export function usedHeadline(rows: Rows = DATA.details): string | null {
+  const top = usedHighlight(rows)
+  if (!top) return null
+  return `The best-value used ${top.vehicle} costs $${top.used.perMile} per mile of range. The best-value new one, $${top.newBest.perMile}.`
 }
 
 export const USED_DEK = "Cost per mile of rated range, each model's best-value new trim against its best-value used trim."
@@ -279,7 +285,7 @@ export const USED_DEK = "Cost per mile of rated range, each model's best-value n
 
 export interface KeepsPoint {
   year: number
-  /** Median over trims of used price as a share of original MSRP, in percent */
+  /** Median over trims of used price as a share of the MSRP on record, in percent */
   pct: number
   /** Trims behind the point */
   n: number
@@ -289,25 +295,31 @@ export interface KeepsData {
   panels: { vehicle: string; points: KeepsPoint[] }[]
   strip: ({ vehicle: string } & KeepsPoint)[]
   axisMax: number
-  /** Used trims with a sourced original MSRP, of all used trims in the comparison set */
+  /** Used trims with a sourced MSRP, of all used trims in the comparison set */
   covered: number
   total: number
 }
 
 /**
- * Used price as a share of a sourced original MSRP, per model and model year.
+ * Used price as a share of the sourced MSRP on record for that model year, per model.
+ * The record is the maker's published price; it is not proven to be the launch price
+ * (a price revised during the year shows the revised price), so copy never says "original".
  * `hasSourcedMsrp` says whether a row's stored MSRP has a matching source record
  * (lib/msrp-sources.ts; passed in so this module never imports the provenance file).
  */
 export function keepsData(rows: Rows, hasSourcedMsrp: (r: DetailRow) => boolean): KeepsData | null {
-  const usedTrims = new Map<string, DetailRow>()
+  const isEligible = (r: DetailRow) =>
+    (r.msrp_status === 'historical' || r.msrp_status === 'current') && isNum(r.msrp) && r.msrp > 0 && hasSourcedMsrp(r)
+  // Every distinct used trim counts toward coverage; each trim's observation comes
+  // from its first eligible seat layout (by id), so an unsourced sibling can't hide it.
+  const usedTrims = new Set<string>()
+  const chosen = new Map<string, DetailRow>()
   for (const r of [...baseRows(rows)].sort((a, b) => a.id.localeCompare(b.id))) {
     if (!inComparisonSet(r) || usedMid(r) === null) continue
-    if (!usedTrims.has(trimKey(r))) usedTrims.set(trimKey(r), r)
+    usedTrims.add(trimKey(r))
+    if (isEligible(r) && !chosen.has(trimKey(r))) chosen.set(trimKey(r), r)
   }
-  const eligible = [...usedTrims.values()].filter(
-    (r) => (r.msrp_status === 'historical' || r.msrp_status === 'current') && isNum(r.msrp) && r.msrp > 0 && hasSourcedMsrp(r),
-  )
+  const eligible = [...chosen.values()]
   const by = new Map<string, Map<number, number[]>>()
   for (const r of eligible) {
     const years = by.get(r.vehicle) ?? new Map<number, number[]>()
@@ -332,7 +344,7 @@ export function keepsData(rows: Rows, hasSourcedMsrp: (r: DetailRow) => boolean)
 export function keepsHeadline(k: KeepsData): string {
   const m = k.panels[0]
   const p = m.points[0]
-  return `A ${p.year} ${m.vehicle} sells for about ${p.pct}% of its original sticker price.`
+  return `A ${p.year} ${m.vehicle} sells for about ${p.pct}% of its MSRP on record for that model year.`
 }
 
 /* ── Story 7: the third row ── */

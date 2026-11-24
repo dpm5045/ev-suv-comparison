@@ -19,6 +19,7 @@ import {
   thirdRowHeadline,
   trimsByYear,
   usedHeadline,
+  usedHighlight,
   usedVsNew,
 } from '@/lib/data-stories'
 
@@ -127,6 +128,11 @@ describe('used: best new vs best used cost per mile', () => {
   it('headline names the model with the biggest gap', () =>
     expect(usedHeadline(rows)).toBe('The best-value used Kia EV9 costs $118 per mile of range. The best-value new one, $225.'))
   it('returns null with no model that has both', () => expect(usedHeadline(rows.slice(3, 4))).toBeNull())
+  it('the chart highlight and the headline name the same model', () => {
+    expect(usedHighlight(rows)?.vehicle).toBe('Kia EV9')
+    expect(usedHeadline(rows)).toContain(usedHighlight(rows)!.vehicle)
+    expect(usedHighlight(rows.slice(3, 4))).toBeNull()
+  })
 })
 
 describe('keeps: used price as a share of a sourced original MSRP', () => {
@@ -157,7 +163,14 @@ describe('keeps: used price as a share of a sourced original MSRP', () => {
   it('extends the axis past 100% when a model year sells above sticker', () => expect(k.axisMax).toBe(125))
   it('counts coverage over distinct used trims', () => expect([k.covered, k.total]).toEqual([5, 8]))
   it('headline uses the model with the most years, oldest year', () =>
-    expect(keepsHeadline(k)).toBe('A 2023 Mercedes-Benz EQS SUV sells for about 45% of its original sticker price.'))
+    expect(keepsHeadline(k)).toBe('A 2023 Mercedes-Benz EQS SUV sells for about 45% of its MSRP on record for that model year.'))
+  it('uses a sourced seat layout when an unsourced sibling sorts first', () => {
+    const a = row({ vehicle: 'Volvo EX90', year: 2024, trim: 'Plus', id: 'aaa-6s', availability: 'used_only', msrp_status: 'historical', msrp: 80000, ...used(40000) })
+    const b = row({ vehicle: 'Volvo EX90', year: 2024, trim: 'Plus', id: 'zzz-7s', availability: 'used_only', msrp_status: 'historical', msrp: 80000, ...used(40000) })
+    const k2 = keepsData([...rows, a, b], (x) => sourced.has(x.id) || x.id === 'zzz-7s')!
+    expect(k2.panels.find((p) => p.vehicle === 'Volvo EX90')?.points).toEqual([{ year: 2024, pct: 50, n: 1 }, { year: 2025, pct: 75, n: 1 }])
+    expect([k2.covered, k2.total]).toEqual([6, 9])
+  })
   it('returns null when no model has two eligible years', () => expect(keepsData(rows.slice(5), (x) => sourced.has(x.id))).toBeNull())
 })
 
