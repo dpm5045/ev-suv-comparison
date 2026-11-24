@@ -16,15 +16,11 @@ Runs CLAUDE.md workflow steps 3 and 4. Opening the PR (step 5) stays a separate,
 ## 2. Check suite (in order, stop at the first failure)
 
 ```bash
-npm run validate
-npm run lint
-npm run typecheck
-npm run test:refresh
-npm run test:unit
-npm run build
-npm run test:output
-npx playwright test
+npm run validate && npm run lint && npm run typecheck && npm run test:refresh && \
+  npm run test:unit && npm run build && npm run test:output && npx playwright test
 ```
+
+The `&&` chain stops at the first failure; don't split it into separate lines in one shell call (a later passing command would hide an earlier failure).
 
 On a failure, report the command and the relevant output, fix it if the cause is in this branch's change, and rerun from that command. Don't skip a step.
 

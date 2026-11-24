@@ -24,18 +24,25 @@ Work out "this week" as the most recent Monday (UTC) up to now. The monthly agen
 
 ```bash
 date -u
+MON=<this week's Monday, YYYY-MM-DD>; FIRST=<the 1st of this month, YYYY-MM-DD>
 for w in preowned-refresh.yml data-watch.yml data-agent.yml; do
   echo "== $w"
-  gh run list --workflow "$w" -L 6 --json databaseId,event,status,conclusion,createdAt,displayTitle \
+  gh run list --workflow "$w" --created ">=$MON" -L 20 --json databaseId,event,status,conclusion,createdAt,displayTitle \
     -q '.[] | "\(.databaseId) \(.event) \(.status) \(.conclusion) \(.createdAt) \(.displayTitle)"'
 done
-gh pr list --state all -L 15 --json number,title,state,headRefName,labels,assignees,createdAt,mergedAt,url
+echo "== monthly agent"; gh run list --workflow data-agent.yml --created ">=$FIRST" -L 50 --json databaseId,conclusion,createdAt,displayTitle \
+  -q '.[] | select(.displayTitle | contains("monthly")) | "\(.databaseId) \(.conclusion) \(.createdAt)"'
+echo "== open data PRs"; gh pr list --state open --json number,title,headRefName,labels,assignees,createdAt,url \
+  -q '.[] | select(.headRefName | startswith("data-refresh/"))'
+echo "== this week's data PRs"; gh pr list --state all --search "created:>=$MON head:data-refresh/" --json number,title,state,headRefName,labels,mergedAt,url
 gh issue list --label data-inbox --state all -L 3 --json number,state,title,updatedAt,url
 git fetch -q origin && git show origin/master:scripts/refresh/publish-control.json
 grep -o 'expires \*\*[0-9-]*\*\*' docs/runbooks/migration.md
 ```
 
 For each workflow, use this week's runs (`schedule` or `workflow_dispatch`); for the Data Agent, tell inbox and monthly runs apart by the run title (`Data Agent (inbox)` / `Data Agent (monthly)`). A successful inbox run doesn't cover a monthly backup, or the reverse.
+- **Did the job actually run?** A run can conclude `success` with its main job skipped. `gh run view <id> --json jobs --jq '.jobs[] | "\(.name) \(.conclusion)"'` shows each job: a skipped main job after the gate means a backup with nothing to do; skipped steps or an inbox note (e.g. the agent had no Claude credentials and asks the owner to run `/refresh` locally) mean something needs the owner. Read the run's summary (`gh run view <id>`) before calling it a no-op.
+- **Rehearsals:** a manual Data Watch run with the `rehearsal` input skips the watch and only publishes `scripts/refresh/state/rehearsal.json` (its PR is titled "Data watch: rehearsal record state ..."; the run shows a "Write the rehearsal marker" step). It is not a watch run; list it separately.
 - **Blocked, not empty:** a run that "succeeded" may have published nothing because publication was blocked (paused, or the data schema not accepted). Such runs upload a `publication-paused` artifact: check `gh api repos/{owner}/{repo}/actions/runs/<id>/artifacts --jq '.artifacts[].name'`. A blocked run doesn't count, and its backup retries (`scripts/refresh/ran-since.sh`).
 - **What it published:** a run's PR has head branch `data-refresh/<producer>-<date>-<run id>-<attempt>`. A successful, unblocked run with no PR found nothing to publish (normal for pricing most weeks). If unsure, `gh run view <id> --log | grep -i outcome` shows the publisher's outcome (`merged`, `owner`, `none`, `paused`, `failed`).
 - **Backup runs that skipped:** a successful backup run with no PR, after a successful unblocked main run, just confirmed it.
