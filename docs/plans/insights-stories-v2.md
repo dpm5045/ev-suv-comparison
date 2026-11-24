@@ -19,7 +19,7 @@ All numbers below come from the data as of `last_updated` 2026-11-19. They are i
 |---|---|---|
 | Choice | Historical offerings | Watch-list vehicles out (as today); model years ≤ the data year (as today); `availability` in `new` or `used_only` (an `announced` or `needs_review` row was never offered) |
 | Price, Range, Value, Used | **The comparison set** (below) | `inComparisonSet(r)` |
-| Keeps | Comparison set, plus a sourced original MSRP | See story 5 |
+| Keeps | Third row of at least 28 in, **any drivetrain**, plus a sourced MSRP | See story 5 (changed 2026-11-24) |
 | Third row | Every on-sale model, including the Model Y (3-Row) | This is the chart that explains the cutoff |
 
 **The comparison set**, one function in `lib/data-stories.ts`:
@@ -42,7 +42,7 @@ This fits the existing structure: `data-stories.ts` is already the one place sto
 |---|---|---|
 | Price | "Only six models start under $65,000." | "Only three models start under $65,000." (Model Y L, IONIQ 9, EV9; the VF9 drops out on unknown legroom) |
 | Value / home teaser | "$157 in the Tesla Model Y (3-Row), $288 in the Mercedes-Benz EQS SUV" | "$191 in the Tesla Model Y L, $299 in the Volkswagen ID. Buzz" |
-| Range | best-value dots include RWD trims | comparison-set dots only; `RANGE_BAND` re-checked against them |
+| Range | best-value dots include RWD trims; hand-written "Between $50,000 and $90,000, range barely moves." | comparison-set dots only; headline computed (2026-11-24): "Under $90,000, no model tops 325 miles. Above it, every one gets at least 410." (split at `RANGE_PRICE_SPLIT`, falls back to the longest range when the split doesn't hold) |
 
 **Not changed:** Speed Dating, the comparison tables and the Data Explorer keep showing RWD, the Model Y (3-Row) and the VF9, because those are real cars a shopper can buy.
 
@@ -96,6 +96,8 @@ This needs the site build to read one fact from the provenance file (which `msrp
 ### Decision (owner, 2026-11-23): Option A
 
 The owner chose Option A. The first backfill (branch `chore/msrp-sources-eqs-ex90`, 2026-11-24) sourced the Mercedes EQS SUV 2023 and 2025 and the Volvo EX90 2025 from the makers' press releases. Tesla Model X is deferred: Car and Driver quotes destination-inclusive prices and no allowed page states the destination fee. With that PR merged, Keeps renders one panel (EQS SUV, 2023 and 2025) and a strip (EX90 2025, ID. Buzz 2025).
+
+**Follow-up (2026-11-24, owner delegated the call):** with #83 merged, the comparison set still left every model with one eligible year, because the 2025 EQS SUV 4MATIC rows are the standard 5-seat configurations (`third_row_legroom_in: "N/A"`, correct as stored). Keeps now uses `hasThirdRow(r)` (≥ 28 in, any drivetrain): it compares model years within a model, so the AWD rule, which keeps value comparisons between models fair, isn't needed. Codex also flagged that a matching record doesn't prove a launch price, so the copy says "MSRP on record for that model year", never "original". Result: one panel (EQS SUV 2023 ~41%, 2025 ~81%) and a strip (EX90 2025), 8 of 77 used trims.
 
 #### Options considered
 

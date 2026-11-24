@@ -18,7 +18,7 @@ import {
 } from '@/lib/speed-dating'
 import { MIN_SPEED_DATING_SEATS, budgetBuckets as bucketsFor, eligibleRows } from '@/lib/selection'
 import { dataYear } from '@/lib/data-stories'
-import { COST_PER_MILE_DEK, RANGE_STORY_HEADLINE, USED_DEK, choiceHeadline, priceHeadline } from '@/lib/data-stories'
+import { COST_PER_MILE_DEK, USED_DEK, choiceHeadline, priceHeadline, rangeHeadline } from '@/lib/data-stories'
 import { CostPerMileChart, UsedChart, costPerMileHeadline, costPerMileSource, usedHeadline, usedSource } from '../DataStories'
 
 type Row = (typeof DATA.details)[number]
@@ -260,7 +260,7 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
     : usedLine
       ? { headline: usedLine, dek: USED_DEK, source: usedSource(), chart: <UsedChart />, label: 'Dumbbell chart of cost per mile of range, best used trim against best new trim, for each model.' }
       : null
-  const moreLinks = [choiceHeadline(), priceHeadline(), RANGE_STORY_HEADLINE, valueHeadline ? usedLine : null].filter(
+  const moreLinks = [choiceHeadline(), priceHeadline(), rangeHeadline(), valueHeadline ? usedLine : null].filter(
     (h): h is string => !!h,
   )
 

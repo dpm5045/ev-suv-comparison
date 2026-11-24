@@ -25,8 +25,9 @@ import {
   priceHeadline,
   priceRanges,
   RANGE_BAND,
-  RANGE_STORY_HEADLINE,
+  RANGE_PRICE_SPLIT,
   rangeDek,
+  rangeHeadline,
   recentYearsLabel,
   THIRD_ROW_DEK,
   thirdRowData,
@@ -217,7 +218,7 @@ export function RangeStory({ n }: StoryNumber) {
   return (
     <Story
       kicker={`${n} · Range`}
-      headline={RANGE_STORY_HEADLINE}
+      headline={rangeHeadline()!}
       dek={rangeDek()!}
       source={`Vertical axis: rated range in miles. One dot per model, plotted at its best-value AWD trim with at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom. Source: 3RowEV dataset, model years ${recentYearsLabel()}.${leftOut()}`}
       label={`Scatter plot of range against MSRP for ${pts.length} models; ${pts.filter((p) => p.range >= RANGE_BAND[0] && p.range <= RANGE_BAND[1]).length} sit between ${RANGE_BAND[0]} and ${RANGE_BAND[1]} miles.`}
@@ -236,6 +237,10 @@ export function RangeStory({ n }: StoryNumber) {
             className="ds-band"
             style={{ bottom: pct(y(RANGE_BAND[0])), height: pct(y(RANGE_BAND[1]) - y(RANGE_BAND[0])) }}
           />
+          <div className="ds-cutoff" style={{ left: pct(x(RANGE_PRICE_SPLIT)) }} />
+          <span className="ds-cutoff-label" style={{ left: `calc(${pct(x(RANGE_PRICE_SPLIT))} + 6px)` }}>
+            {dollarsK(RANGE_PRICE_SPLIT)}
+          </span>
           <span className="ds-band-label" style={{ bottom: `calc(${pct(y(RANGE_BAND[1]))} + 4px)` }}>
             {RANGE_BAND[0]}–{RANGE_BAND[1]} miles
           </span>

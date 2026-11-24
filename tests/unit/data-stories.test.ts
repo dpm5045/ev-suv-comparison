@@ -15,6 +15,7 @@ import {
   priceHeadline,
   priceRanges,
   rangeDek,
+  rangeHeadline,
   thirdRowData,
   thirdRowHeadline,
   trimsByYear,
@@ -95,12 +96,25 @@ describe('price, range and value use the comparison set', () => {
     expect(comparisonExclusions(rows)).toBe(
       'Left out: RWD trims; Tesla Model Y (3-Row), 26.5 in; VinFast VF9, legroom not published.',
     ))
+  it('range headline splits at the price where range jumps', () => {
+    const r2 = [
+      row({ vehicle: 'A', trim: 'a', msrp: 60000, range_mi: 300 }),
+      row({ vehicle: 'B', trim: 'b', msrp: 80000, range_mi: 320 }),
+      row({ vehicle: 'C', trim: 'c', msrp: 95000, range_mi: 410 }),
+      row({ vehicle: 'D', trim: 'd', msrp: 120000, range_mi: 460 }),
+    ]
+    expect(rangeHeadline(r2)).toBe('Under $90,000, no model tops 320 miles. Above it, every one gets at least 410.')
+  })
+  it('range headline falls back when the split does not hold', () =>
+    expect(rangeHeadline(rows)).toBe('The longest range here is 410 miles, in the Rivian R1S.'))
+  it('range dek no longer claims range ignores price', () => expect(rangeDek(rows)).not.toMatch(/whatever they cost/))
   it('every builder returns null, never throws, with no eligible rows', () => {
     const none = [rows[0], rows[1]]
     expect(priceHeadline(none)).toBeNull()
     expect(priceDek(none)).toBeNull()
     expect(costPerMileHeadline(none)).toBeNull()
     expect(rangeDek(none)).toBeNull()
+    expect(rangeHeadline(none)).toBeNull()
     expect(usedHeadline(none)).toBeNull()
     expect(keepsData(none, () => true)).toBeNull()
     expect(thirdRowData([])).toBeNull()
@@ -170,6 +184,12 @@ describe('keeps: used price as a share of a sourced original MSRP', () => {
     const k2 = keepsData([...rows, a, b], (x) => sourced.has(x.id) || x.id === 'zzz-7s')!
     expect(k2.panels.find((p) => p.vehicle === 'Volvo EX90')?.points).toEqual([{ year: 2024, pct: 50, n: 1 }, { year: 2025, pct: 75, n: 1 }])
     expect([k2.covered, k2.total]).toEqual([6, 9])
+  })
+  it('counts RWD trims with a third row, and leaves out trims with none', () => {
+    const rwd = row({ vehicle: 'Volvo EX90', year: 2024, trim: 'Single', drivetrain: 'RWD', availability: 'used_only', msrp_status: 'historical', msrp: 70000, ...used(35000) })
+    const five = row({ vehicle: 'Volvo EX90', year: 2023, trim: 'Five', third_row_legroom_in: 'N/A', availability: 'used_only', msrp_status: 'historical', msrp: 70000, ...used(35000) })
+    const k3 = keepsData([...rows, rwd, five], (x) => sourced.has(x.id) || x === rwd || x === five)!
+    expect(k3.panels.find((p) => p.vehicle === 'Volvo EX90')?.points.map((p) => p.year)).toEqual([2024, 2025])
   })
   it('returns null when no model has two eligible years', () => expect(keepsData(rows.slice(5), (x) => sourced.has(x.id))).toBeNull())
 })

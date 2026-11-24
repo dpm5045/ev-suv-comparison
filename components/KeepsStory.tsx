@@ -18,8 +18,10 @@ function Panel({ vehicle, points, axisMax, hiYear }: KeepsData['panels'][number]
       <div className="ds-chart-title">{vehicle}</div>
       <div className="ds-keeps-plot">
         {ticks.map((t) => (
-          <div key={t} className={`ds-gridline-h${t === 100 ? ' ds-gridline-h--strong' : ''}`} style={{ bottom: pct((t / axisMax) * 100) }}>
-            <span className="ds-keeps-tick">{t}%</span>
+          // Label is a sibling, not a child: gridlines are drawn at reduced opacity
+          <div key={t}>
+            <div className={`ds-gridline-h${t === 100 ? ' ds-gridline-h--strong' : ''}`} style={{ bottom: pct((t / axisMax) * 100) }} />
+            <span className="ds-keeps-tick" style={{ bottom: pct((t / axisMax) * 100) }}>{t}%</span>
           </div>
         ))}
         <div className="ds-keeps-cols" style={{ gridTemplateColumns: `repeat(${points.length}, minmax(0, 1fr))` }}>
@@ -51,7 +53,7 @@ export default function KeepsStory({ n }: StoryNumber) {
       kicker={`${n} · Keeps`}
       headline={keepsHeadline(k)}
       dek="What each model year sells for today, as a share of its MSRP on record for that model year. A snapshot of today's prices, not one car's value over time."
-      source={`Used prices: CarGurus market averages, refreshed weekly (middle of each trim's range). MSRP: the maker's published price for that model year as recorded in our data, excluding destination; a price revised during the year shows the revised price. Based on ${k.covered} of ${k.total} used trims (AWD, at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom); the rest have no sourced MSRP. n = trims behind each bar; seat layouts of one trim count once.`}
+      source={`Used prices: our estimated ranges for each trim, scaled weekly to CarGurus market averages where CarGurus tracks that model year (middle of each trim's range). MSRP: the maker's published price for that model year as recorded in our data, excluding destination; a price revised during the year shows the revised price. Based on ${k.covered} of ${k.total} used trims with at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom, any drivetrain; the rest have no sourced MSRP. n = trims behind each bar; seat layouts of one trim count once.`}
       label={`Column charts of used price as a share of MSRP on record by model year, for ${k.panels.map((p) => p.vehicle).join(', ')}.`}
     >
       <div className="ds-keeps">

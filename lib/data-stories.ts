@@ -37,6 +37,15 @@ export function inComparisonSet(r: Pick<DetailRow, 'drivetrain' | 'third_row_leg
   return r.drivetrain.startsWith('AWD') && isNum(r.third_row_legroom_in) && r.third_row_legroom_in >= MIN_THIRD_ROW_LEGROOM_IN
 }
 
+/**
+ * A published third row of at least the cutoff, any drivetrain. The Keeps story uses
+ * this instead of the comparison set: it compares model years within one model, so
+ * the AWD rule (which keeps value comparisons between models fair) isn't needed.
+ */
+export function hasThirdRow(r: Pick<DetailRow, 'third_row_legroom_in'>): boolean {
+  return isNum(r.third_row_legroom_in) && r.third_row_legroom_in >= MIN_THIRD_ROW_LEGROOM_IN
+}
+
 /** The rows the price, range and value stories compare: sold new, priced, in the comparison set. */
 const comparisonRows = (rows: Rows): Priced[] => onSaleRows(rows).filter(inComparisonSet)
 
@@ -217,7 +226,24 @@ export function rangeDek(rows: Rows = DATA.details): string | null {
   if (vs.length < 2) return null
   const inBand = vs.filter((v) => v.range >= RANGE_BAND[0] && v.range <= RANGE_BAND[1]).length
   const over400 = vs.filter((v) => v.range >= 400).length
-  return `${capitalize(numberWord(inBand))} of ${numberWord(vs.length)} models land between ${RANGE_BAND[0]} and ${RANGE_BAND[1]} miles whatever they cost. Only ${numberWord(over400)} break 400.`
+  return `${capitalize(numberWord(inBand))} of ${numberWord(vs.length)} models land between ${RANGE_BAND[0]} and ${RANGE_BAND[1]} miles. Only ${numberWord(over400)} break 400.`
+}
+
+/**
+ * "Under $90,000, no model tops 325 miles. Above it, every one gets at least 410."
+ * when every model above RANGE_PRICE_SPLIT out-ranges every model below it;
+ * otherwise names the longest range.
+ */
+export function rangeHeadline(rows: Rows = DATA.details): string | null {
+  const vs = bestValueTrims(rows)
+  if (vs.length < 2) return null
+  const below = vs.filter((v) => v.msrp < RANGE_PRICE_SPLIT).map((v) => v.range)
+  const above = vs.filter((v) => v.msrp >= RANGE_PRICE_SPLIT).map((v) => v.range)
+  if (below.length && above.length && Math.min(...above) > Math.max(...below)) {
+    return `Under ${dollars(RANGE_PRICE_SPLIT)}, no model tops ${Math.max(...below)} miles. Above it, every one gets at least ${Math.min(...above)}.`
+  }
+  const longest = vs.reduce((a, b) => (b.range > a.range ? b : a), vs[0])
+  return `The longest range here is ${longest.range} miles, in the ${longest.vehicle}.`
 }
 
 export function costPerMileHeadline(rows: Rows = DATA.details): string | null {
@@ -295,7 +321,7 @@ export interface KeepsData {
   panels: { vehicle: string; points: KeepsPoint[] }[]
   strip: ({ vehicle: string } & KeepsPoint)[]
   axisMax: number
-  /** Used trims with a sourced MSRP, of all used trims in the comparison set */
+  /** Used trims with a sourced MSRP, of all used trims with a third row */
   covered: number
   total: number
 }
@@ -315,7 +341,7 @@ export function keepsData(rows: Rows, hasSourcedMsrp: (r: DetailRow) => boolean)
   const usedTrims = new Set<string>()
   const chosen = new Map<string, DetailRow>()
   for (const r of [...baseRows(rows)].sort((a, b) => a.id.localeCompare(b.id))) {
-    if (!inComparisonSet(r) || usedMid(r) === null) continue
+    if (!hasThirdRow(r) || usedMid(r) === null) continue
     usedTrims.add(trimKey(r))
     if (isEligible(r) && !chosen.has(trimKey(r))) chosen.set(trimKey(r), r)
   }
@@ -402,5 +428,6 @@ export const THIRD_ROW_DEK = 'Legroom in the third row against the cargo space l
 
 export const PRICE_THRESHOLD = 65000
 export const RANGE_BAND: [number, number] = [300, 335]
-export const RANGE_STORY_HEADLINE = 'Between $50,000 and $90,000, range barely moves.'
+/** Price where the range headline splits the models (see rangeHeadline). */
+export const RANGE_PRICE_SPLIT = 90000
 export const CHOICE_STORY_NOTE = 'The jump came in 2024 and 2025, when Kia, Volvo, Cadillac and Volkswagen arrived.'
