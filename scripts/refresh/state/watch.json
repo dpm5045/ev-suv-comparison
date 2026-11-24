@@ -478,6 +478,12 @@
           "model": "Model Y RWD",
           "drive": "Rear-Wheel Drive",
           "range": 321
+        },
+        {
+          "id": 51208,
+          "model": "Model Y RWD",
+          "drive": "Rear-Wheel Drive",
+          "range": 348
         }
       ]
     },
@@ -1678,6 +1684,28 @@
           "model": "TZ 450e 19kW (20 inch Wheels)",
           "drive": "All-Wheel Drive",
           "range": 255
+        }
+      ]
+    },
+    "Mercedes-Benz GLB Electric": {
+      "2027": [
+        {
+          "id": 51204,
+          "model": "GLB 250 Plus electric",
+          "drive": "Rear-Wheel Drive",
+          "range": 286
+        },
+        {
+          "id": 51205,
+          "model": "GLB 250 Plus electric (83R)",
+          "drive": "Rear-Wheel Drive",
+          "range": 328
+        },
+        {
+          "id": 51206,
+          "model": "GLB 350 4matic electric",
+          "drive": "All-Wheel Drive",
+          "range": 282
         }
       ]
     }
