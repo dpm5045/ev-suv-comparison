@@ -91,6 +91,17 @@ for (const width of [320, 390]) test(`market insights fits a ${width}px phone sc
   const headlines = page.locator('.ds-story .ds-headline')
   expect(await headlines.count()).toBeGreaterThanOrEqual(1)
   for (const h of await headlines.all()) await expect(h).toBeVisible()
-  const { scrollWidth, clientWidth } = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }))
-  expect(scrollWidth).toBeLessThanOrEqual(clientWidth)
+  // Measure after the explorer chart has drawn: Chart.js sizes its canvas after load
+  await expect(page.locator('.explorer canvas, .explorer svg').first()).toBeVisible({ timeout: 15_000 })
+  // Empty when the page fits; otherwise names the elements that stick out, so a CI failure says what to fix
+  const overflowing = () =>
+    page.evaluate(() => {
+      const vw = document.documentElement.clientWidth
+      if (document.documentElement.scrollWidth <= vw) return []
+      return [...document.querySelectorAll('body *')]
+        .filter((e) => e.getBoundingClientRect().right > vw + 0.5 && !e.closest('.ds-scroll'))
+        .slice(0, 8)
+        .map((e) => `${e.tagName.toLowerCase()}.${String(e.className).split(' ')[0]} right=${Math.round(e.getBoundingClientRect().right)} "${(e.textContent ?? '').trim().slice(0, 40)}"`)
+    })
+  await expect.poll(overflowing, { timeout: 3_000 }).toEqual([])
 })

@@ -3135,6 +3135,13 @@ tr[data-clickable='true']:hover td.col-sticky {
 .explorer-chart-container {
   position: relative;
   height: 560px;
+  /* Chart.js sizes the canvas after load; never let it push the page wider than the screen */
+  min-width: 0;
+  overflow: hidden;
+}
+.explorer-chart-container canvas { max-width: 100%; }
+@media (max-width: 600px) {
+  .explorer-chart-area { padding: 1rem 0.75rem 1rem; }
 }
 @media (min-width: 1200px) {
   .explorer-chart-container { height: 700px; }
