@@ -85,8 +85,8 @@ test('speed dating fits a phone screen with a long self-driving label', async ({
   expect(scrollWidth).toBeLessThanOrEqual(clientWidth)
 })
 
-test('market insights fits a phone screen and shows every story headline', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 })
+for (const width of [320, 390]) test(`market insights fits a ${width}px phone screen and shows every story headline`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 844 })
   await page.goto('/market-insights')
   const headlines = page.locator('.ds-story .ds-headline')
   expect(await headlines.count()).toBeGreaterThanOrEqual(1)

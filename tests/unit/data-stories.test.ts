@@ -16,8 +16,10 @@ import {
   priceRanges,
   rangeDek,
   rangeHeadline,
+  rangeSplit,
   thirdRowData,
   thirdRowHeadline,
+  thirdRowHighlights,
   trimsByYear,
   usedHeadline,
   usedHighlight,
@@ -113,6 +115,10 @@ describe('price, range and value use the comparison set', () => {
       row({ vehicle: 'D', trim: 'd', msrp: 120000, range_mi: 460 }),
     ]
     expect(rangeHeadline(r2)).toBe("Under $90,000, no model's best-value trim tops 320 miles. Above it, each one gets at least 410.")
+  })
+  it('range split is null when it does not hold, so the chart draws no line', () => {
+    expect(rangeSplit(rows)).toBeNull()
+    expect(rangeSplit([row({ vehicle: 'A', trim: 'a', msrp: 60000, range_mi: 300 }), row({ vehicle: 'C', trim: 'c', msrp: 95000, range_mi: 410 })])).toEqual({ maxBelow: 300, minAbove: 410 })
   })
   it('range headline falls back when the split does not hold', () =>
     expect(rangeHeadline(rows)).toBe("Among each model's best-value trim, the longest range is 410 miles, in the Rivian R1S."))
@@ -224,6 +230,11 @@ describe('third row: legroom against cargo', () => {
     expect(thirdRowHeadline(t)).toBe(
       'Of the models we plot, the Volkswagen ID. Buzz has the most third-row legroom, 10 in more than the next. The Mercedes-Benz EQS SUV has the least cargo space behind its third row.',
     ))
+  it('headline and chart share one selection', () => {
+    const h = thirdRowHighlights(t)
+    expect([h.mostLegroom.vehicle, h.leastCargo.vehicle]).toEqual(['Volkswagen ID. Buzz', 'Mercedes-Benz EQS SUV'])
+    expect(thirdRowHeadline(t)).toContain(h.mostLegroom.vehicle)
+  })
   it('returns null with fewer than three models', () => expect(thirdRowData(rows.slice(0, 3))).toBeNull())
 })
 

@@ -239,13 +239,21 @@ export function rangeDek(rows: Rows = DATA.details): string | null {
  * when every model above RANGE_PRICE_SPLIT out-ranges every model below it;
  * otherwise names the longest range.
  */
+/** The split the range headline claims, or null when it doesn't hold (the chart then draws no line). */
+export function rangeSplit(rows: Rows = DATA.details): { maxBelow: number; minAbove: number } | null {
+  const vs = bestValueTrims(rows)
+  const below = vs.filter((v) => v.msrp < RANGE_PRICE_SPLIT).map((v) => v.range)
+  const above = vs.filter((v) => v.msrp >= RANGE_PRICE_SPLIT).map((v) => v.range)
+  if (!below.length || !above.length || Math.min(...above) <= Math.max(...below)) return null
+  return { maxBelow: Math.max(...below), minAbove: Math.min(...above) }
+}
+
 export function rangeHeadline(rows: Rows = DATA.details): string | null {
   const vs = bestValueTrims(rows)
   if (vs.length < 2) return null
-  const below = vs.filter((v) => v.msrp < RANGE_PRICE_SPLIT).map((v) => v.range)
-  const above = vs.filter((v) => v.msrp >= RANGE_PRICE_SPLIT).map((v) => v.range)
-  if (below.length && above.length && Math.min(...above) > Math.max(...below)) {
-    return `Under ${dollars(RANGE_PRICE_SPLIT)}, no model's best-value trim tops ${Math.max(...below)} miles. Above it, each one gets at least ${Math.min(...above)}.`
+  const split = rangeSplit(rows)
+  if (split) {
+    return `Under ${dollars(RANGE_PRICE_SPLIT)}, no model's best-value trim tops ${split.maxBelow} miles. Above it, each one gets at least ${split.minAbove}.`
   }
   const longest = vs.reduce((a, b) => (b.range > a.range ? b : a), vs[0])
   return `Among each model's best-value trim, the longest range is ${longest.range} miles, in the ${longest.vehicle}.`
@@ -421,10 +429,16 @@ export function thirdRowData(rows: Rows = DATA.details): ThirdRowData | null {
   return points.length >= 3 ? { points, notPublished, noThirdRow } : null
 }
 
+/** The models the third-row headline names; the chart highlights the same ones. Ties go to the first by name. */
+export function thirdRowHighlights(t: ThirdRowData) {
+  const byLeg = [...t.points].sort((a, b) => b.legroom - a.legroom || a.vehicle.localeCompare(b.vehicle))
+  const leastCargo = [...t.points].sort((a, b) => a.cargo - b.cargo || a.vehicle.localeCompare(b.vehicle))[0]
+  return { mostLegroom: byLeg[0], nextLegroom: byLeg[1], leastCargo }
+}
+
 export function thirdRowHeadline(t: ThirdRowData): string {
-  const byLeg = [...t.points].sort((a, b) => b.legroom - a.legroom)
-  const leastCargo = t.points.reduce((a, b) => (b.cargo < a.cargo ? b : a), t.points[0])
-  return `Of the models we plot, the ${byLeg[0].vehicle} has the most third-row legroom, ${inches(byLeg[0].legroom - byLeg[1].legroom)} in more than the next. The ${leastCargo.vehicle} has the least cargo space behind its third row.`
+  const { mostLegroom, nextLegroom, leastCargo } = thirdRowHighlights(t)
+  return `Of the models we plot, the ${mostLegroom.vehicle} has the most third-row legroom, ${inches(mostLegroom.legroom - nextLegroom.legroom)} in more than the next. The ${leastCargo.vehicle} has the least cargo space behind its third row.`
 }
 
 export const THIRD_ROW_DEK = 'Legroom in the third row against the cargo space left behind it, one dot per model at its cheapest current trim.'

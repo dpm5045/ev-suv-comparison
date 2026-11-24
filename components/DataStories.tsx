@@ -26,12 +26,14 @@ import {
   priceRanges,
   RANGE_BAND,
   RANGE_PRICE_SPLIT,
+  rangeSplit,
   rangeDek,
   rangeHeadline,
   recentYearsLabel,
   THIRD_ROW_DEK,
   thirdRowData,
   thirdRowHeadline,
+  thirdRowHighlights,
   trimsByYear,
   USED_DEK,
   usedHeadline,
@@ -206,6 +208,8 @@ export function RangeStory({ n }: StoryNumber) {
   const xTicks: number[] = []
   for (let t = 50000; t <= xHi; t += 25000) xTicks.push(t)
   const yTicks = [250, 300, 350, 400, 450]
+  // The $90k line only when the headline claims the split and it falls inside the axis
+  const splitShown = rangeSplit() !== null && RANGE_PRICE_SPLIT > xLo && RANGE_PRICE_SPLIT < xHi
 
   // Label the three longest ranges, the shortest range and the cheapest.
   const byRange = [...pts].sort((a, b) => b.range - a.range)
@@ -237,10 +241,14 @@ export function RangeStory({ n }: StoryNumber) {
             className="ds-band"
             style={{ bottom: pct(y(RANGE_BAND[0])), height: pct(y(RANGE_BAND[1]) - y(RANGE_BAND[0])) }}
           />
-          <div className="ds-cutoff" style={{ left: pct(x(RANGE_PRICE_SPLIT)) }} />
-          <span className="ds-cutoff-label" style={{ left: `calc(${pct(x(RANGE_PRICE_SPLIT))} + 6px)` }}>
-            {dollarsK(RANGE_PRICE_SPLIT)}
-          </span>
+          {splitShown && (
+            <>
+              <div className="ds-cutoff" style={{ left: pct(x(RANGE_PRICE_SPLIT)) }} />
+              <span className="ds-cutoff-label" style={{ left: `calc(${pct(x(RANGE_PRICE_SPLIT))} + 6px)` }}>
+                {dollarsK(RANGE_PRICE_SPLIT)}
+              </span>
+            </>
+          )}
           <span className="ds-band-label" style={{ bottom: `calc(${pct(y(RANGE_BAND[1]))} + 4px)` }}>
             {RANGE_BAND[0]}–{RANGE_BAND[1]} miles
           </span>
@@ -425,9 +433,8 @@ export function ThirdRowStory({ n }: StoryNumber) {
   const yTicks: number[] = []
   for (let v = 5; v < yHi; v += 5) yTicks.push(v)
 
-  const byLeg = [...pts].sort((a, b) => b.legroom - a.legroom)
-  const leastCargo = pts.reduce((a, b) => (b.cargo < a.cargo ? b : a), pts[0])
-  const hi = new Set([byLeg[0].vehicle, leastCargo.vehicle])
+  const { mostLegroom, leastCargo } = thirdRowHighlights(t)
+  const hi = new Set([mostLegroom.vehicle, leastCargo.vehicle])
   const labelled = new Set([...hi, ...pts.filter((p) => p.legroom < MIN_THIRD_ROW_LEGROOM_IN).map((p) => p.vehicle)])
 
   const missing = [
@@ -455,7 +462,7 @@ export function ThirdRowStory({ n }: StoryNumber) {
           ))}
           <div className="ds-cutoff" style={{ left: pct(x(MIN_THIRD_ROW_LEGROOM_IN)) }} />
           <span className="ds-cutoff-label" style={{ left: `calc(${pct(x(MIN_THIRD_ROW_LEGROOM_IN))} + 6px)` }}>
-            {MIN_THIRD_ROW_LEGROOM_IN} in cutoff used in the other charts
+            {MIN_THIRD_ROW_LEGROOM_IN} in cutoff
           </span>
           {pts.map((p) => {
             const px = x(p.legroom)
@@ -492,7 +499,9 @@ export function ThirdRowStory({ n }: StoryNumber) {
           <span className="ds-axis-title">Third-row legroom (in)</span>
         </div>
       </div>
-      <div className="ds-axis-note">Vertical axis: cargo behind the third row (cu ft)</div>
+      <div className="ds-axis-note">
+        Vertical axis: cargo behind the third row (cu ft). Dashed line: the {MIN_THIRD_ROW_LEGROOM_IN} in cutoff the price, range, value and used charts apply.
+      </div>
     </Story>
   )
 }
