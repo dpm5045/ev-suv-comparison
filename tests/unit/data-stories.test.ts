@@ -66,6 +66,15 @@ describe('choice: trims by model year', () => {
   it('counts seat layouts of one trim once', () => expect(ys[0]).toMatchObject({ year: 2021, trims: 2, models: 1 }))
   it('counts Rivian (N-seat) variants once, and leaves out announced and watch-list rows', () =>
     expect(ys[1]).toMatchObject({ year: 2022, trims: 2, models: 1 }))
+  it('leaves out trims with no third row, but keeps a trim with a three-row layout', () => {
+    const r3 = [
+      ...rows,
+      row({ vehicle: 'Mercedes-Benz EQS SUV', year: 2022, trim: 'Maybach', seats: 5, third_row_legroom_in: 'N/A' }),
+      row({ vehicle: 'Mercedes-Benz EQS SUV', year: 2022, trim: '450', seats: 5, third_row_legroom_in: 'N/A' }),
+      row({ vehicle: 'Mercedes-Benz EQS SUV', year: 2022, trim: '450', seats: 7, third_row_legroom_in: 32 }),
+    ]
+    expect(trimsByYear(r3)[1]).toMatchObject({ year: 2022, trims: 3, models: 2 })
+  })
   it('leaves out model years after the data year', () => expect(ys.map((y) => y.year)).toEqual([2021, 2022]))
   it('names model years in the headline', () =>
     expect(choiceHeadline(rows)).toBe('Model year 2021 offered two trims. Model year 2022 offered two.'))
@@ -103,10 +112,10 @@ describe('price, range and value use the comparison set', () => {
       row({ vehicle: 'C', trim: 'c', msrp: 95000, range_mi: 410 }),
       row({ vehicle: 'D', trim: 'd', msrp: 120000, range_mi: 460 }),
     ]
-    expect(rangeHeadline(r2)).toBe('Under $90,000, no model tops 320 miles. Above it, every one gets at least 410.')
+    expect(rangeHeadline(r2)).toBe("Under $90,000, no model's best-value trim tops 320 miles. Above it, each one gets at least 410.")
   })
   it('range headline falls back when the split does not hold', () =>
-    expect(rangeHeadline(rows)).toBe('The longest range here is 410 miles, in the Rivian R1S.'))
+    expect(rangeHeadline(rows)).toBe("Among each model's best-value trim, the longest range is 410 miles, in the Rivian R1S."))
   it('range dek no longer claims range ignores price', () => expect(rangeDek(rows)).not.toMatch(/whatever they cost/))
   it('every builder returns null, never throws, with no eligible rows', () => {
     const none = [rows[0], rows[1]]
@@ -177,7 +186,7 @@ describe('keeps: used price as a share of a sourced original MSRP', () => {
   it('extends the axis past 100% when a model year sells above sticker', () => expect(k.axisMax).toBe(125))
   it('counts coverage over distinct used trims', () => expect([k.covered, k.total]).toEqual([5, 8]))
   it('headline uses the model with the most years, oldest year', () =>
-    expect(keepsHeadline(k)).toBe('A 2023 Mercedes-Benz EQS SUV sells for about 45% of its MSRP on record for that model year.'))
+    expect(keepsHeadline(k)).toBe('Used, a 2023 Mercedes-Benz EQS SUV is estimated at about 45% of its MSRP on record for that model year (median of two trims).'))
   it('uses a sourced seat layout when an unsourced sibling sorts first', () => {
     const a = row({ vehicle: 'Volvo EX90', year: 2024, trim: 'Plus', id: 'aaa-6s', availability: 'used_only', msrp_status: 'historical', msrp: 80000, ...used(40000) })
     const b = row({ vehicle: 'Volvo EX90', year: 2024, trim: 'Plus', id: 'zzz-7s', availability: 'used_only', msrp_status: 'historical', msrp: 80000, ...used(40000) })

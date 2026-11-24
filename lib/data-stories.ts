@@ -134,6 +134,9 @@ export function trimsByYear(rows: Rows = DATA.details): YearCount[] {
   const by = new Map<number, { trims: Set<string>; vehicles: Set<string> }>()
   for (const r of baseRows(rows)) {
     if (r.year > dataYear || (r.availability !== 'new' && r.availability !== 'used_only')) continue
+    // A configuration known to have no third row isn't a three-row trim; a trim with a
+    // three-row layout still counts through that layout. Unknown legroom (null) stays in.
+    if (r.third_row_legroom_in === 'N/A') continue
     const y = by.get(r.year) ?? { trims: new Set(), vehicles: new Set() }
     y.trims.add(trimKey(r))
     y.vehicles.add(r.vehicle)
@@ -230,7 +233,9 @@ export function rangeDek(rows: Rows = DATA.details): string | null {
 }
 
 /**
- * "Under $90,000, no model tops 325 miles. Above it, every one gets at least 410."
+ * "Under $90,000, no model's best-value trim tops 325 miles. Above it, each one gets at least 410."
+ * Scoped to best-value trims (one per model): other trims can contradict it, and the
+ * headline also appears on the home page without the chart's source note.
  * when every model above RANGE_PRICE_SPLIT out-ranges every model below it;
  * otherwise names the longest range.
  */
@@ -240,10 +245,10 @@ export function rangeHeadline(rows: Rows = DATA.details): string | null {
   const below = vs.filter((v) => v.msrp < RANGE_PRICE_SPLIT).map((v) => v.range)
   const above = vs.filter((v) => v.msrp >= RANGE_PRICE_SPLIT).map((v) => v.range)
   if (below.length && above.length && Math.min(...above) > Math.max(...below)) {
-    return `Under ${dollars(RANGE_PRICE_SPLIT)}, no model tops ${Math.max(...below)} miles. Above it, every one gets at least ${Math.min(...above)}.`
+    return `Under ${dollars(RANGE_PRICE_SPLIT)}, no model's best-value trim tops ${Math.max(...below)} miles. Above it, each one gets at least ${Math.min(...above)}.`
   }
   const longest = vs.reduce((a, b) => (b.range > a.range ? b : a), vs[0])
-  return `The longest range here is ${longest.range} miles, in the ${longest.vehicle}.`
+  return `Among each model's best-value trim, the longest range is ${longest.range} miles, in the ${longest.vehicle}.`
 }
 
 export function costPerMileHeadline(rows: Rows = DATA.details): string | null {
@@ -370,7 +375,7 @@ export function keepsData(rows: Rows, hasSourcedMsrp: (r: DetailRow) => boolean)
 export function keepsHeadline(k: KeepsData): string {
   const m = k.panels[0]
   const p = m.points[0]
-  return `A ${p.year} ${m.vehicle} sells for about ${p.pct}% of its MSRP on record for that model year.`
+  return `Used, a ${p.year} ${m.vehicle} is estimated at about ${p.pct}% of its MSRP on record for that model year (median of ${numberWord(p.n)} trim${p.n === 1 ? '' : 's'}).`
 }
 
 /* ── Story 7: the third row ── */

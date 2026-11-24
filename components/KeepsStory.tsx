@@ -52,7 +52,7 @@ export default function KeepsStory({ n }: StoryNumber) {
     <Story
       kicker={`${n} · Keeps`}
       headline={keepsHeadline(k)}
-      dek="What each model year sells for today, as a share of its MSRP on record for that model year. A snapshot of today's prices, not one car's value over time."
+      dek="What each model year is estimated to sell for used today, as a share of its MSRP on record for that model year; each bar is the median across that year's trims. A snapshot of today's prices, not one car's value over time."
       source={`Used prices: our estimated ranges for each trim, scaled weekly to CarGurus market averages where CarGurus tracks that model year (middle of each trim's range). MSRP: the maker's published price for that model year as recorded in our data, excluding destination; a price revised during the year shows the revised price. Based on ${k.covered} of ${k.total} used trims with at least ${MIN_THIRD_ROW_LEGROOM_IN} in of third-row legroom, any drivetrain; the rest have no sourced MSRP. n = trims behind each bar; seat layouts of one trim count once.`}
       label={`Column charts of used price as a share of MSRP on record by model year, for ${k.panels.map((p) => p.vehicle).join(', ')}.`}
     >
