@@ -2225,6 +2225,16 @@
         "evidence": "PREMIUM SPORT From: $148,205",
         "legacy": "name_keyed"
       }
+    },
+    "mercedes-benz-glb-electric-2027-glb-350-4matic-expected": {
+      "range_mi": {
+        "source_url": "https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=51206",
+        "verified_on": "2026-11-24",
+        "evidence": "2027 Mercedes-Benz GLB 350 4matic electric ... 282 miles Total Range",
+        "value": 282,
+        "method": "observed",
+        "method_version": 1
+      }
     }
   }
 }
