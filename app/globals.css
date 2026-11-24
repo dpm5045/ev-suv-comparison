@@ -3002,7 +3002,11 @@ tr[data-clickable='true']:hover td.col-sticky {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  /* A select is as wide as its longest option; let it shrink to the screen instead */
+  min-width: 0;
+  max-width: 100%;
 }
+.explorer-control-group .explorer-select { min-width: 0; max-width: 100%; text-overflow: ellipsis; }
 
 .explorer-control-group label {
   font-weight: 500;
