@@ -478,6 +478,14 @@
         "verified_on": "2026-11-16",
         "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/media/press-releases/9DB757CF7B2C698C/",
+        "verified_on": "2026-11-24",
+        "evidence": "EX90 Twin Motor Performance, Plus, 6-Seater · $85,495 … Stated pricing does not include delivery and destination fee.",
+        "value": 85495,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "volvo-ex90-2025-twin-motor-performance-plus-7s": {
@@ -492,6 +500,14 @@
         "verified_on": "2026-11-16",
         "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/media/press-releases/9DB757CF7B2C698C/",
+        "verified_on": "2026-11-24",
+        "evidence": "EX90 Twin Motor Performance, Plus, 7-Seater · $84,995 … Stated pricing does not include delivery and destination fee.",
+        "value": 84995,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "volvo-ex90-2025-twin-motor-performance-ultra-6s": {
@@ -506,6 +522,14 @@
         "verified_on": "2026-11-16",
         "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/media/press-releases/9DB757CF7B2C698C/",
+        "verified_on": "2026-11-24",
+        "evidence": "EX90 Twin Motor Performance, Ultra, 6-Seater · $89,845 … Stated pricing does not include delivery and destination fee.",
+        "value": 89845,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "volvo-ex90-2025-twin-motor-performance-ultra-7s": {
@@ -520,6 +544,14 @@
         "verified_on": "2026-11-16",
         "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/media/press-releases/9DB757CF7B2C698C/",
+        "verified_on": "2026-11-24",
+        "evidence": "EX90 Twin Motor Performance, Ultra, 7-Seater · $89,345 … Stated pricing does not include delivery and destination fee.",
+        "value": 89345,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "volvo-ex90-2025-twin-motor-plus-6s": {
@@ -534,6 +566,14 @@
         "verified_on": "2026-11-16",
         "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/media/press-releases/9DB757CF7B2C698C/",
+        "verified_on": "2026-11-24",
+        "evidence": "EX90 Twin Motor, Plus, 6-Seater · $80,495 … Stated pricing does not include delivery and destination fee.",
+        "value": 80495,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "volvo-ex90-2025-twin-motor-plus-7s": {
@@ -548,6 +588,14 @@
         "verified_on": "2026-11-16",
         "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/media/press-releases/9DB757CF7B2C698C/",
+        "verified_on": "2026-11-24",
+        "evidence": "EX90 Twin Motor, Plus, 7-Seater · $79,995 … Stated pricing does not include delivery and destination fee.",
+        "value": 79995,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "volvo-ex90-2025-twin-motor-ultra-6s": {
@@ -562,6 +610,14 @@
         "verified_on": "2026-11-16",
         "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/media/press-releases/9DB757CF7B2C698C/",
+        "verified_on": "2026-11-24",
+        "evidence": "EX90 Twin Motor, Ultra, 6-Seater · $84,845 … Stated pricing does not include delivery and destination fee.",
+        "value": 84845,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "volvo-ex90-2025-twin-motor-ultra-7s": {
@@ -576,6 +632,14 @@
         "verified_on": "2026-11-16",
         "evidence": "Now it will also get a hardware upgrade with a dual NVIDIA DRIVE AGX Orin chip. This free upgrade ... will be available throughout 2026 at authorized Volvo workshops.",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://www.volvocars.com/us/media/press-releases/9DB757CF7B2C698C/",
+        "verified_on": "2026-11-24",
+        "evidence": "EX90 Twin Motor, Ultra, 7-Seater · $84,345 … Stated pricing does not include delivery and destination fee.",
+        "value": 84345,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "rivian-r1s-2022-launch-edition-quad-motor-large": {
@@ -1386,6 +1450,22 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 EQS 450 Plus (SUV): 323 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://media.mbusa.com/news/2025-mercedes-benz-model-line-updates",
+        "verified_on": "2026-11-24",
+        "evidence": "EQS SUV · EQS 450+ · $105,250 … Above pricing excludes $1,150 destination and delivery charge",
+        "value": 105250,
+        "method": "observed",
+        "method_version": 1
+      },
+      "destination": {
+        "source_url": "https://media.mbusa.com/news/2025-mercedes-benz-model-line-updates",
+        "verified_on": "2026-11-24",
+        "evidence": "Above pricing excludes $1,150 destination and delivery charge",
+        "value": 1150,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2025-eqs-450-4matic": {
@@ -1394,6 +1474,22 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 EQS 450 4matic (SUV): 312 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://media.mbusa.com/news/2025-mercedes-benz-model-line-updates",
+        "verified_on": "2026-11-24",
+        "evidence": "EQS SUV · EQS 450 4MATIC · $108,250 … Above pricing excludes $1,150 destination and delivery charge",
+        "value": 108250,
+        "method": "observed",
+        "method_version": 1
+      },
+      "destination": {
+        "source_url": "https://media.mbusa.com/news/2025-mercedes-benz-model-line-updates",
+        "verified_on": "2026-11-24",
+        "evidence": "Above pricing excludes $1,150 destination and delivery charge",
+        "value": 1150,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2025-eqs-580-4matic": {
@@ -1402,6 +1498,22 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2025 EQS 580 4matic (SUV): 317 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://media.mbusa.com/news/2025-mercedes-benz-model-line-updates",
+        "verified_on": "2026-11-24",
+        "evidence": "EQS SUV · EQS 580 4MATIC · $128,200 … Above pricing excludes $1,150 destination and delivery charge",
+        "value": 128200,
+        "method": "observed",
+        "method_version": 1
+      },
+      "destination": {
+        "source_url": "https://media.mbusa.com/news/2025-mercedes-benz-model-line-updates",
+        "verified_on": "2026-11-24",
+        "evidence": "Above pricing excludes $1,150 destination and delivery charge",
+        "value": 1150,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2023-eqs-450-plus": {
@@ -1410,6 +1522,22 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2023 EQS 450 Plus (SUV): 305 mi",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://media.mbusa.com/news/mercedes-benz-usa-announces-pricing-and-packaging-structures-for-all-new-eqs-suv",
+        "verified_on": "2026-11-24",
+        "evidence": "EQS 450+ SUV: $104,400* … *Above prices exclude $1,150 destination and delivery charge.",
+        "value": 104400,
+        "method": "observed",
+        "method_version": 1
+      },
+      "destination": {
+        "source_url": "https://media.mbusa.com/news/mercedes-benz-usa-announces-pricing-and-packaging-structures-for-all-new-eqs-suv",
+        "verified_on": "2026-11-24",
+        "evidence": "*Above prices exclude $1,150 destination and delivery charge.",
+        "value": 1150,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2023-eqs-450-4matic": {
@@ -1418,6 +1546,22 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2023 EQS 450 4matic (SUV): 285 mi (and 1 other EPA variant(s) with the same range)",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://media.mbusa.com/news/mercedes-benz-usa-announces-pricing-and-packaging-structures-for-all-new-eqs-suv",
+        "verified_on": "2026-11-24",
+        "evidence": "EQS 450 4MATIC SUV: $107,400 … *Above prices exclude $1,150 destination and delivery charge.",
+        "value": 107400,
+        "method": "observed",
+        "method_version": 1
+      },
+      "destination": {
+        "source_url": "https://media.mbusa.com/news/mercedes-benz-usa-announces-pricing-and-packaging-structures-for-all-new-eqs-suv",
+        "verified_on": "2026-11-24",
+        "evidence": "*Above prices exclude $1,150 destination and delivery charge.",
+        "value": 1150,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2023-eqs-580-4matic": {
@@ -1426,6 +1570,22 @@
         "verified_on": "2026-11-15",
         "evidence": "EPA 2023 EQS 450 4matic (SUV): 285 mi (and 1 other EPA variant(s) with the same range)",
         "legacy": "name_keyed"
+      },
+      "msrp": {
+        "source_url": "https://media.mbusa.com/news/mercedes-benz-usa-announces-pricing-and-packaging-structures-for-all-new-eqs-suv",
+        "verified_on": "2026-11-24",
+        "evidence": "EQS 580 4MATIC SUV: $125,950* … *Above prices exclude $1,150 destination and delivery charge.",
+        "value": 125950,
+        "method": "observed",
+        "method_version": 1
+      },
+      "destination": {
+        "source_url": "https://media.mbusa.com/news/mercedes-benz-usa-announces-pricing-and-packaging-structures-for-all-new-eqs-suv",
+        "verified_on": "2026-11-24",
+        "evidence": "*Above prices exclude $1,150 destination and delivery charge.",
+        "value": 1150,
+        "method": "observed",
+        "method_version": 1
       }
     },
     "mercedes-benz-eqs-suv-2024-eqs-450-plus": {
@@ -1480,6 +1640,22 @@
         "verified_on": "2026-11-19",
         "evidence": "Max Seating Capacity 5",
         "value": 5,
+        "method": "observed",
+        "method_version": 1
+      },
+      "msrp": {
+        "source_url": "https://media.mbusa.com/news/2025-mercedes-benz-model-line-updates",
+        "verified_on": "2026-11-24",
+        "evidence": "Maybach EQS SUV · Maybach EQS 680 · $179,900 … Above pricing excludes $1,150 destination and delivery charge",
+        "value": 179900,
+        "method": "observed",
+        "method_version": 1
+      },
+      "destination": {
+        "source_url": "https://media.mbusa.com/news/2025-mercedes-benz-model-line-updates",
+        "verified_on": "2026-11-24",
+        "evidence": "Above pricing excludes $1,150 destination and delivery charge",
+        "value": 1150,
         "method": "observed",
         "method_version": 1
       }
