@@ -10,7 +10,7 @@ All numbers below come from the data as of `last_updated` 2026-11-19. They are i
 2. **Value stories compare cars with a 28-inch-plus third row.** The home-page headline ("A mile of range costs $157 in the Tesla Model Y (3-Row)") features a car with 26.5" of third-row legroom, which the dataset's own note calls child-sized.
 3. **Value stories compare AWD trims.** The site is about AWD SUVs, but the best-value trim for the IONIQ 9, EV9 and ID. Buzz is the RWD one.
 4. **New story: the used market**: cost per mile of range, new vs pre-owned.
-5. **New story: what a car keeps**: estimated used price as a share of a sourced original MSRP, by model year. **Gated on sourced MSRPs (see "Open decision").**
+5. **New story: what a car keeps**: estimated used price as a share of a sourced original MSRP, by model year. **Gated on sourced MSRPs (see "Decision (owner, 2026-11-23): Option A").**
 6. **New story: the third row**: third-row legroom against cargo space behind the third row.
 
 ## Which rows each story uses
@@ -31,6 +31,7 @@ export function inComparisonSet(r: DetailRow): boolean
 
 - **AWD:** `r.drivetrain.startsWith('AWD')` (covers `AWD` and `AWD (dual motor)`).
 - **Third row:** `third_row_legroom_in` is a number ≥ `MIN_THIRD_ROW_LEGROOM_IN` (28, in the editorial block with the other thresholds). Unknown legroom (null: VinFast VF9) is **out**, because we can't say it meets the cutoff. `"N/A"` (no third row in that configuration, e.g. the 5-seat Maybach) is out.
+- **Decision (owner, 2026-11-23):** confirmed: AWD trims with at least 28 in of third-row legroom.
 - **Wording:** charts call this "AWD trims with at least 28 in of third-row legroom", never "adult-size": the cutoff is our line, not a fit test. Each chart's source line lists, computed, what was left out and why ("RWD trims; Tesla Model Y (3-Row), 26.5 in; VinFast VF9, legroom not published").
 
 This fits the existing structure: `data-stories.ts` is already the one place story data and headlines are derived, with thresholds in its editorial block. No data format change.
