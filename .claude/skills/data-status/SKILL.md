@@ -20,7 +20,7 @@ A backup runs its job only if the main run never succeeded (`scripts/refresh/ran
 
 ## Gather
 
-Work out "this week" as the most recent Monday (UTC) up to now. Then:
+Work out "this week" as the most recent Monday (UTC) up to now. The monthly agent pass is tracked separately: its window starts on the 1st of the month. Then:
 
 ```bash
 date -u
@@ -35,9 +35,10 @@ git fetch -q origin && git show origin/master:scripts/refresh/publish-control.js
 grep -o 'expires \*\*[0-9-]*\*\*' docs/runbooks/migration.md
 ```
 
-For each workflow, use this week's runs (`schedule` or `workflow_dispatch`):
-- **What it published:** a run's PR has head branch `data-refresh/<producer>-<date>-<run id>-<attempt>`. No PR from a successful run means it found nothing to publish (normal for pricing most weeks). If unsure, `gh run view <id> --log | grep -i outcome` shows the publisher's outcome (`merged`, `owner`, `none`, `paused`, `failed`).
-- **Backup runs that skipped:** a successful Tuesday run with no PR, after a successful Monday run, just confirmed Monday's.
+For each workflow, use this week's runs (`schedule` or `workflow_dispatch`); for the Data Agent, tell inbox and monthly runs apart by the run title (`Data Agent (inbox)` / `Data Agent (monthly)`). A successful inbox run doesn't cover a monthly backup, or the reverse.
+- **Blocked, not empty:** a run that "succeeded" may have published nothing because publication was blocked (paused, or the data schema not accepted). Such runs upload a `publication-paused` artifact: check `gh api repos/{owner}/{repo}/actions/runs/<id>/artifacts --jq '.artifacts[].name'`. A blocked run doesn't count, and its backup retries (`scripts/refresh/ran-since.sh`).
+- **What it published:** a run's PR has head branch `data-refresh/<producer>-<date>-<run id>-<attempt>`. A successful, unblocked run with no PR found nothing to publish (normal for pricing most weeks). If unsure, `gh run view <id> --log | grep -i outcome` shows the publisher's outcome (`merged`, `owner`, `none`, `paused`, `failed`).
+- **Backup runs that skipped:** a successful backup run with no PR, after a successful unblocked main run, just confirmed it.
 - **Failures:** `gh run view <id> --log-failed | tail -40`; say in one sentence what failed and whether the backup will retry it.
 
 ## Report
@@ -46,6 +47,6 @@ For each workflow, use this week's runs (`schedule` or `workflow_dispatch`):
 2. **Each job, one line:** ran when (ET, and how late), what it did (published PR #n which merged itself; nothing to publish; waiting for your review; failed because ...).
 3. **Waiting for the owner:** open `data-refresh/*` PRs labelled `needs-owner-review` or assigned to the owner, with links, and what the owner should look at. An agent PR that changes site data always waits for the owner.
 4. **Data inbox:** open or closed, and whether the agent dealt with it.
-5. **Publishing paused?** Only mention if `"paused": true` (nothing publishes while paused).
+5. **Publishing paused?** Mention if `"paused": true` now (nothing publishes while paused), or if any run this week was blocked (its artifact), and whether its backup has retried.
 6. **Token:** if the expiry date recorded in `docs/runbooks/migration.md` is within 30 days (or past), warn: replace the `DATA_PUBLISH_TOKEN` secret and update the date (runbook, "The publishing token"). Otherwise one short line with the date. If no date is recorded, say so.
 7. **Not run yet:** if a slot hasn't come or GitHub is running late, say when the backup is due and that nothing is needed from the owner yet. Offer to start a run by hand, but only start one if the owner says so.
