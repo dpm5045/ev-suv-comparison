@@ -17,6 +17,18 @@
       "until": "2026-12-14",
       "reason": "mbusa.com lists the 2027 Electric GLB under Future Vehicles with no price; the GLB class page shows only the 2026 gas GLB 250. No official US price yet.",
       "needs_local": false
+    },
+    {
+      "item": "EPA added 2027 GLB 250 Plus electric (286 mi) — Mercedes-Benz GLB Electric",
+      "until": "2026-12-22",
+      "reason": "EPA rates two 2027 GLB 250+ variants: GLB 250 Plus electric 286 mi (fueleconomy.gov id 51204) and GLB 250 Plus electric (83R) 328 mi (id 51205). Neither EPA nor mbusa.com says which one the 7-seat GLB 250+ is, so the row stays TBD until Mercedes publishes US range by configuration.",
+      "needs_local": false
+    },
+    {
+      "item": "EPA added 2027 GLB 250 Plus electric (83R) (328 mi) — Mercedes-Benz GLB Electric",
+      "until": "2026-12-22",
+      "reason": "EPA rates two 2027 GLB 250+ variants: GLB 250 Plus electric 286 mi (fueleconomy.gov id 51204) and GLB 250 Plus electric (83R) 328 mi (id 51205). Neither EPA nor mbusa.com says which one the 7-seat GLB 250+ is, so the row stays TBD until Mercedes publishes US range by configuration.",
+      "needs_local": false
     }
   ]
 }
