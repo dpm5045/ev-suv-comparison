@@ -22,7 +22,7 @@ npm run validate && npm run lint && npm run typecheck && npm run test:refresh &&
 
 The `&&` chain stops at the first failure; don't split it into separate lines in one shell call (a later passing command would hide an earlier failure).
 
-On a failure, report the command and the relevant output, fix it if the cause is in this branch's change, and rerun from that command. Don't skip a step.
+On a failure, report the command and the relevant output, and fix it if the cause is in this branch's change. After any fix, here or after the Codex review, rerun the **whole** chain: a fix for one check can break an earlier one. Report the branch ready only when the full chain has passed on the final code. Don't skip a step.
 
 ## 3. Generated files
 
