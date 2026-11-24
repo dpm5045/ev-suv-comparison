@@ -66,7 +66,10 @@ test('compare page renders', async ({ page }) => {
 
 test('market insights page renders stories and the explorer chart', async ({ page }) => {
   await page.goto('/market-insights')
-  await expect(page.locator('main.main')).toContainText('in four charts')
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+  const stories = await page.locator('.ds-story').count()
+  expect(stories).toBeGreaterThanOrEqual(4)
+  await expect(page.locator('main.main')).toContainText(`in ${WORDS[stories]} charts`)
   await expect(page.locator('.explorer')).toBeVisible()
   // Plot renders <svg> today; Chart.js renders <canvas> after the chart port — accept either
   await expect(page.locator('.explorer svg, .explorer canvas').first()).toBeVisible({ timeout: 15_000 })
@@ -77,6 +80,16 @@ test('speed dating fits a phone screen with a long self-driving label', async ({
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?condition=preowned&budget=under40&pref1=selfdriving&pref2=sixseat')
   await expect(page.locator('.sd-bar-value', { hasText: 'older hardware' }).first()).toBeVisible()
+  const { scrollWidth, clientWidth } = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }))
+  expect(scrollWidth).toBeLessThanOrEqual(clientWidth)
+})
+
+test('market insights fits a phone screen and shows every story headline', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/market-insights')
+  const headlines = page.locator('.ds-story .ds-headline')
+  expect(await headlines.count()).toBeGreaterThanOrEqual(4)
+  for (const h of await headlines.all()) await expect(h).toBeVisible()
   const { scrollWidth, clientWidth } = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }))
   expect(scrollWidth).toBeLessThanOrEqual(clientWidth)
 })

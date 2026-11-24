@@ -7,7 +7,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { DATA } from '@/lib/data'
-import { dataYear } from '@/lib/data-stories'
+import { dataYear, numberWord } from '@/lib/data-stories'
 import { getTrimsForVehicle, getUniqueVehicles, parseComparisonSlug, getVehicleBySlug, toSlug } from '@/lib/slugs'
 import { comparisonFaq, rangeBasis, representativeTrim, vehicleFaq, type Faq } from '@/lib/compare-text'
 
@@ -96,5 +96,21 @@ describe('vehicle pages', () => {
     // "starts at … MSRP" only when the vehicle has a configuration sold new
     const soldNew = DATA.details.some((r) => r.vehicle === vehicle && typeof r.msrp === 'number' && r.year >= dataYear - 1)
     if (!soldNew) expect(jsonFaq.map((f) => f.a).join(' ')).not.toMatch(/starts at/)
+  })
+})
+
+describe('market insights', () => {
+  it('the page title counts the stories that render', () => {
+    const html = readFileSync(join(APP, 'market-insights.html'), 'utf8')
+    const stories = (html.match(/<section class="ds-story">/g) ?? []).length
+    expect(stories).toBeGreaterThanOrEqual(1)
+    expect(html).toContain(`The three-row EV market, in ${numberWord(stories)} charts.`)
+  })
+
+  it('story kickers are numbered 1..n in order', () => {
+    const html = readFileSync(join(APP, 'market-insights.html'), 'utf8')
+    const kickers = [...html.matchAll(/<div class="ds-kicker">(\d+)(?: |&nbsp;)·/g)].map((m) => Number(m[1]))
+    expect(kickers).toEqual(kickers.map((_, i) => i + 1))
+    expect(kickers.length).toBe((html.match(/<section class="ds-story">/g) ?? []).length)
   })
 })

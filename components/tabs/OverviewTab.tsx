@@ -18,8 +18,8 @@ import {
 } from '@/lib/speed-dating'
 import { MIN_SPEED_DATING_SEATS, budgetBuckets as bucketsFor, eligibleRows } from '@/lib/selection'
 import { dataYear } from '@/lib/data-stories'
-import { COST_PER_MILE_DEK, RANGE_STORY_HEADLINE, choiceHeadline, priceHeadline } from '@/lib/data-stories'
-import { CostPerMileChart, costPerMileHeadline, costPerMileSource } from '../DataStories'
+import { COST_PER_MILE_DEK, RANGE_STORY_HEADLINE, USED_DEK, choiceHeadline, priceHeadline } from '@/lib/data-stories'
+import { CostPerMileChart, UsedChart, costPerMileHeadline, costPerMileSource, usedHeadline, usedSource } from '../DataStories'
 
 type Row = (typeof DATA.details)[number]
 
@@ -252,6 +252,18 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
   const rest = ranked.slice(3)
   const topColor = top ? chartColor(top.match.vehicle, isLight) : ''
 
+  // Chart teaser: the Value story, falling back to the Used story; null hides the section
+  const valueHeadline = costPerMileHeadline()
+  const usedLine = usedHeadline()
+  const teaser = valueHeadline
+    ? { headline: valueHeadline, dek: COST_PER_MILE_DEK, source: costPerMileSource(), chart: <CostPerMileChart />, label: 'Bar chart of MSRP per mile of rated range for each model.' }
+    : usedLine
+      ? { headline: usedLine, dek: USED_DEK, source: usedSource(), chart: <UsedChart />, label: 'Dumbbell chart of cost per mile of range, best used trim against best new trim, for each model.' }
+      : null
+  const moreLinks = [choiceHeadline(), priceHeadline(), RANGE_STORY_HEADLINE, valueHeadline ? usedLine : null].filter(
+    (h): h is string => !!h,
+  )
+
   return (
     <>
       <div className="overview-hero">
@@ -434,26 +446,28 @@ export default function OverviewTab({ condition, budget, pref1, pref2, onFilters
         </div>
       </div>
 
-      {/* ── Chart teaser ── */}
+      {/* ── Chart teaser: the Value story, or the Used story when Value has too little data ── */}
+      {teaser && (
       <section className="sd-teaser">
         <div className="sd-teaser-story">
           <div className="ds-rule" />
           <div className="ds-kicker">Something we noticed</div>
-          <h2 className="ds-headline">{costPerMileHeadline()}</h2>
-          <p className="ds-dek">{COST_PER_MILE_DEK}</p>
-          <figure className="ds-figure" role="img" aria-label="Bar chart of MSRP per mile of rated range for each model.">
-            <CostPerMileChart />
+          <h2 className="ds-headline">{teaser.headline}</h2>
+          <p className="ds-dek">{teaser.dek}</p>
+          <figure className="ds-figure" role="img" aria-label={teaser.label}>
+            {teaser.chart}
           </figure>
-          <p className="ds-source">{costPerMileSource()}</p>
+          <p className="ds-source">{teaser.source}</p>
         </div>
         <div className="sd-teaser-more">
           <div className="ds-kicker">More in Market Insights</div>
-          <Link href="/market-insights" className="sd-more-link">{choiceHeadline()}</Link>
-          <Link href="/market-insights" className="sd-more-link">{priceHeadline()}</Link>
-          <Link href="/market-insights" className="sd-more-link">{RANGE_STORY_HEADLINE}</Link>
+          {moreLinks.map((h) => (
+            <Link key={h} href="/market-insights" className="sd-more-link">{h}</Link>
+          ))}
           <Link href="/market-insights" className="sd-open-data">Open Market Insights</Link>
         </div>
       </section>
+      )}
     </>
   )
 }

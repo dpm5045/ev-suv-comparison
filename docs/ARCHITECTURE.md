@@ -119,7 +119,7 @@ components/
   pages/                 route-level client wrappers (Home, Comparison, SpecSelect)
   tabs/                  feature UIs: OverviewTab (Speed Dating), ComparisonV2Tab, SideBySideTab,
                          SpecSelectTab, WatchListTab (News Radar), GlossaryTab
-  DataStories, DataExplorer   Market Insights charts
+  MarketStories (DataStories, KeepsStory), DataExplorer   Market Insights charts
   DetailPanel, VehicleSummaryPanel, VehicleTrimSection, SpecSection   shared detail views
   Header, DashboardNav, Footer, Breadcrumb, PageHeader, VehicleBadge, JsonLd, GoogleAnalytics
 lib/
@@ -176,7 +176,7 @@ The largest components are `SpecSelectTab` (~700 lines), `DataExplorer` (~660), 
 
 ### 4.2 Provenance: "no source, no change"
 
-`lib/ev-data.provenance.json` (~75 KB) is the audit trail. The site does not import it.
+`lib/ev-data.provenance.json` (~75 KB) is the audit trail. The site reads it only server-side, in `lib/msrp-sources.ts` (which MSRPs have a matching source record, for the Market Insights "Keeps" story); it is never shipped to the browser.
 
 - **`fields`**: for each row and field, a `{ source_url, verified_on, evidence }` record. The evidence is a verbatim quote from the source page.
 - **`preowned`**: the CarGurus baselines the used-price script compares against.
