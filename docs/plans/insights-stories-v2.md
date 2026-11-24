@@ -86,13 +86,17 @@ Count distinct trims per model year from `DATA.details` with the rules in the ta
 
 **Observation unit:** a distinct trim (seat layouts collapsed as in story 1, taking the layouts' shared values), so a trim sold in three seat layouts counts once. Per `vehicle, year`, the median over trims of `midpoint(preowned_range) / msrp`.
 
-**Eligible MSRP (the denominator), strictly:** `msrp_status` is `historical` or `current`, **and** the row has a provenance record for `msrp` in `lib/ev-data.provenance.json` whose evidence quotes the base MSRP for that model year and trim (destination separate). `current` is allowed because a current-model-year price is that year's original MSRP. `announced` and `unknown` are out.
+**Eligible MSRP (the denominator), strictly:** `msrp_status` is `historical` or `current`, **and** the row has a non-legacy provenance record for `msrp` in `lib/ev-data.provenance.json` whose `value` equals the stored `msrp` and whose evidence quotes the base MSRP for that model year and trim (destination separate). A record that merely exists is not enough: some older records cite other sites or record a withdrawn (null) price. `current` is allowed because a current-model-year price is that year's original MSRP. `announced` and `unknown` are out.
 
 This needs the site build to read one fact from the provenance file (which `msrp` rows have a record). `data-stories.ts` imports it at build time, server-only; the file is not shipped to the browser. That changes the CLAUDE.md line "The site does not import this file": the docs change with it.
 
 **Framing:** a cross-section (today's prices for each model year), not a curve over time. Dek: "What each model year sells for today, as a share of what it cost new." The source line gives coverage: "Based on N of M used trims; the rest have no sourced original MSRP."
 
-### Open decision (owner): where historical MSRPs may come from
+### Decision (owner, 2026-11-23): Option A
+
+The owner chose Option A. The first backfill (branch `chore/msrp-sources-eqs-ex90`, 2026-11-24) sourced the Mercedes EQS SUV 2023 and 2025 and the Volvo EX90 2025 from the makers' press releases. Tesla Model X is deferred: Car and Driver quotes destination-inclusive prices and no allowed page states the destination fee. With that PR merged, Keeps renders one panel (EQS SUV, 2023 and 2025) and a strip (EX90 2025, ID. Buzz 2025).
+
+#### Options considered
 
 Today only **4** of the 63 rows with a used price and an MSRP have an MSRP source (ID. Buzz 2025). The source policy allows MSRP only from the maker's own site (plus Car and Driver for Tesla). Makers rarely keep old model-year price pages, so under today's policy the Keeps story would likely **not render at all**.
 
