@@ -99,7 +99,7 @@ export default function TechStackPage() {
 ├── /side-by-side      SideBySideTab — compare up to 3 trims
 ├── /spec-select       SpecSelectTab — guided filtering
 ├── /glossary          GlossaryTab — field definitions
-├── /market-insights   DataStories + DataExplorer — charts
+├── /market-insights   MarketStories + DataExplorer — charts
 └── DetailPanel        slide-in sidebar for full specs`}</code></pre>
         </section>
 

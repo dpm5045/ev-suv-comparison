@@ -66,7 +66,11 @@ test('compare page renders', async ({ page }) => {
 
 test('market insights page renders stories and the explorer chart', async ({ page }) => {
   await page.goto('/market-insights')
-  await expect(page.locator('main.main')).toContainText('in four charts')
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+  const stories = await page.locator('.ds-story').count()
+  // Stories with thin data are skipped by design; the title must count what renders
+  expect(stories).toBeGreaterThanOrEqual(1)
+  await expect(page.locator('main.main')).toContainText(`in ${WORDS[stories]} charts`)
   await expect(page.locator('.explorer')).toBeVisible()
   // Plot renders <svg> today; Chart.js renders <canvas> after the chart port — accept either
   await expect(page.locator('.explorer svg, .explorer canvas').first()).toBeVisible({ timeout: 15_000 })
@@ -79,4 +83,25 @@ test('speed dating fits a phone screen with a long self-driving label', async ({
   await expect(page.locator('.sd-bar-value', { hasText: 'older hardware' }).first()).toBeVisible()
   const { scrollWidth, clientWidth } = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }))
   expect(scrollWidth).toBeLessThanOrEqual(clientWidth)
+})
+
+for (const width of [320, 390]) test(`market insights fits a ${width}px phone screen and shows every story headline`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 844 })
+  await page.goto('/market-insights')
+  const headlines = page.locator('.ds-story .ds-headline')
+  expect(await headlines.count()).toBeGreaterThanOrEqual(1)
+  for (const h of await headlines.all()) await expect(h).toBeVisible()
+  // Measure after the explorer chart has drawn: Chart.js sizes its canvas after load
+  await expect(page.locator('.explorer canvas, .explorer svg').first()).toBeVisible({ timeout: 15_000 })
+  // Empty when the page fits; otherwise names the elements that stick out, so a CI failure says what to fix
+  const overflowing = () =>
+    page.evaluate(() => {
+      const vw = document.documentElement.clientWidth
+      if (document.documentElement.scrollWidth <= vw) return []
+      return [...document.querySelectorAll('body *')]
+        .filter((e) => e.getBoundingClientRect().right > vw + 0.5 && !e.closest('.ds-scroll'))
+        .slice(0, 8)
+        .map((e) => `${e.tagName.toLowerCase()}.${String(e.className).split(' ')[0]} right=${Math.round(e.getBoundingClientRect().right)} "${(e.textContent ?? '').trim().slice(0, 40)}"`)
+    })
+  await expect.poll(overflowing, { timeout: 3_000 }).toEqual([])
 })

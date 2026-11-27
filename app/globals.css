@@ -804,6 +804,35 @@ a.wl-make:hover { filter: brightness(1.15); }
 .ds-scatter-x { position: relative; height: 34px; font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
 .ds-scatter-x span { position: absolute; transform: translateX(-50%); }
 .ds-scatter-x .ds-axis-title { right: 0; left: auto; top: 18px; transform: none; font-family: var(--font); }
+.ds-axis-note { margin-top: 4px; font-size: 12px; color: var(--text-muted); }
+.ds-dot--muted { background: var(--chart-muted); }
+.ds-cutoff { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--text-muted); }
+.ds-cutoff-label { position: absolute; top: 6px; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+
+/* used market: dumbbells */
+.ds-hbars--used { min-width: 560px; }
+.ds-legend { display: flex; gap: 20px; font-size: 13px; color: var(--text-muted); padding-left: 182px; }
+.ds-key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 4px; }
+.ds-key--used { background: var(--chart-muted); }
+.ds-key--new { border: 2px solid var(--chart-muted); }
+.ds-dumbbell-line { position: absolute; top: 7px; height: 2px; background: var(--chart-muted); }
+.ds-dumbbell-dot {
+  position: absolute; top: 2px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%;
+  background: var(--chart-muted); box-shadow: 0 0 0 2px var(--bg);
+}
+.ds-dumbbell-dot--new { background: var(--bg); border: 2px solid var(--chart-muted); }
+.ds-dumbbell-dot--hi { border-color: var(--accent); }
+
+/* what a car keeps: small multiples */
+.ds-keeps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 32px 48px; }
+.ds-keeps-panel { display: flex; flex-direction: column; gap: 12px; }
+.ds-keeps-plot { position: relative; height: 200px; margin-left: 40px; border-bottom: 1px solid var(--border-light); }
+.ds-keeps-tick { position: absolute; right: calc(100% + 6px); transform: translateY(50%); font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+.ds-gridline-h--strong { opacity: 1; background: var(--text-muted); }
+.ds-keeps-cols { position: absolute; inset: 0; display: grid; gap: 10px; align-items: end; }
+.ds-keeps-cols .ds-col-bar { max-height: none; }
+.ds-keeps-axis { margin-left: 40px; line-height: 1.4; }
+.ds-keeps-strip { font-size: 14px; color: var(--text-muted); margin-top: 16px; }
 
 /* explore section */
 .ds-explore { margin-top: 88px; border-top: 1px solid var(--border); padding-top: 28px; display: flex; flex-direction: column; gap: 14px; }
@@ -2246,6 +2275,7 @@ tr[data-clickable='true']:hover td.col-sticky {
   .ds-headline { font-size: 26px; }
   .ds-scatter-y, .ds-scatter-plot { height: 320px; }
   .ds-hbar-row { grid-template-columns: 120px minmax(0, 1fr); }
+  .ds-legend { padding-left: 132px; }
   .overview-hero { grid-template-columns: 1fr; gap: 20px; padding: 1rem 0 1.5rem; }
   .sd-panel { max-width: none; flex-basis: 100%; }
   .sd-score-big { font-size: 64px; }
@@ -2972,7 +3002,11 @@ tr[data-clickable='true']:hover td.col-sticky {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  /* A select is as wide as its longest option; let it shrink to the screen instead */
+  min-width: 0;
+  max-width: 100%;
 }
+.explorer-control-group .explorer-select { min-width: 0; max-width: 100%; text-overflow: ellipsis; }
 
 .explorer-control-group label {
   font-weight: 500;
@@ -3105,6 +3139,13 @@ tr[data-clickable='true']:hover td.col-sticky {
 .explorer-chart-container {
   position: relative;
   height: 560px;
+  /* Chart.js sizes the canvas after load; never let it push the page wider than the screen */
+  min-width: 0;
+  overflow: hidden;
+}
+.explorer-chart-container canvas { max-width: 100%; }
+@media (max-width: 600px) {
+  .explorer-chart-area { padding: 1rem 0.75rem 1rem; }
 }
 @media (min-width: 1200px) {
   .explorer-chart-container { height: 700px; }
